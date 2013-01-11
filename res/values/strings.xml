@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">PIXEL PileDriver</string>
+
+  
+    <string name="menu_about_title">About</string> 
+    <string name="menu_about_summary">http://ledpixelart.html\n\nDesigned by Open Gadgets LLC</string>
+    <string name="versionString">Version</string> 
+    
+   <string name="oneTimeSetupString">One Time Setup: Copying animations to your SD card.</string> 
+   <string name="bluetoothPairingString">Please ensure Bluetooth pairing has been completed prior. The Bluetooth pairing code is: 4545."</string> 
+    
+   
+   <string name="menu_instructions_title">Instructions</string>
+   <string name="setupInstructionsString">Pair your Android device to PIXEL which will show up as \'IOIO\' in Bluetooth using code 4545.\n\nTap an animation to display it on PIXEL.</string>
+   <string name="setupInstructionsStringTitle">Instructions</string>   
+     
+     
+    <string name="prefTitle">PIXEL PileDriver Settings</string>
+    <string name="menu_prefs_title">Settings</string>
+    <string name="prefSummary">PIXEL PileDriver Settings</string>
+    
+    <string name="scanAll">Show All Album Pics</string>
+    <string name="pref_scanAll_default">false</string>
+    <string name="scanAllSummary">Only animations in the pixel/pixelpiledriver directory of your SD card will be displayed. Checking this box displays all SD card pictures.</string>
+  
+    <string name="OKText">OK</string>   
+    <string name="notFoundString">PIXEL Not Found</string>   
+   
+    <string name="selected_matrix">selected_matrix</string>
+    <string name="matrix">LED Panel Selection</string>
+    <string name="matrixSummary">Select your LED Panel model</string>    
+    <string name="dialogTitleMatrix">LED Panel Selection</string>
+    <string name="matrix_default_value">3</string>   
+    
+    <string name="fps_override">fps_override</string>
+    <string name="FPSOverrideTitle">Frames per Second</string>
+    <string name="FPSOverrideSummary">Normally you won\'t need to change this, only if you want to override the frames per second of the animations. Restart app after changing.</string>    
+    <string name="dialogTitleFPSOverride">Frames per Second</string>
+    <string name="FPSOverrideDefault">0</string>  
+    
+    <string name="bluetooth_pair">Blueooth Pairing</string>
+    <string name="bluetooth_pairSummary">Shortcut to the Bluetooth settings screen. Pair to IOIO using code: 4545</string>
+    
+    <string name="slideShowtitle">Slide Show Settings</string>
+    <string name="slideShowtitleSummary">Slide Show Settings</string>
+   
+    <string name="slideShowMode">Slide Show Mode</string>    
+    <string name="slideShowModeDefault">false</string>
+    <string name="slideShowModeSummary">Slide Show Mode</string>
+    
+    <string name="noSleep">Disable Power Savings</string>    
+    <string name="pref_noSleepDefault">false</string>
+    <string name="noSleepSummary">Forces the app to be always on, your device will not go into power savings mode while this app is running. Good if using as a Kiosk for example. </string>
+    
+    <string name="menu_rescan_title">Rescan</string>
+    <string name="rescan_screen_verbage">Now scanning your SD card or internal memory for new animations or deletions, just a moment&#8230;</string>
+    
+    <string name="startup_verbage_1">One Time Setup</string>
+    <string name="startup_verbage_2">Copying animations to your SD card or internal memory&#8230;</string>
+    <string name="firstTime_instructions"></string>
+  
+    <string name="loadingImagesPlsWaitTitle">Please Wait</string>
+    <string name="loadingImagesPlsWait">Loading animations, just a moment&#8230;</string>
+    
+    <string name="stopSlideShowMessage">You\'re still in slide show mode, swipe from right to left to end the slide show and then you can select a single image</string>
+    <string name="loadingImagesPlsWaitTitle">Please Wait</string>
+    <string name="loadingImagesPlsWait">Loading animations, just a moment&#8230;</string>
+    
+    <string name="debugMode">Debug Mode</string>    
+    <string name="pref_debugMode">pref_debugMode</string>
+    <string name="pref_debugModeDefault">false</string>    
+    <string name="debugModeSummary">Displays debug messages, use to see how often the Bluetooth connections are getting disconnected and connected as well as other debug messages</string>
+    
+    
+    <string name="StartInstructions">Tap to Animate</string>
+    
+
+   
+    
+</resources>
