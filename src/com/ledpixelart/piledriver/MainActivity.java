@@ -49,6 +49,7 @@ import java.util.Arrays;
 
 
 
+import ioio.lib.api.AnalogInput;
 import ioio.lib.api.exception.ConnectionLostException;
 import ioio.lib.util.BaseIOIOLooper;
 import ioio.lib.util.IOIOLooper;
@@ -913,12 +914,23 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener  {
     
     class IOIOThread extends BaseIOIOLooper {
   		//private ioio.lib.api.RgbLedMatrix matrix_;
+    	//public AnalogInput prox_;  //just for testing , REMOVE later
 
   		@Override
   		protected void setup() throws ConnectionLostException {
   			matrix_ = ioio_.openRgbLedMatrix(KIND);
   			deviceFound = 1; //if we went here, then we are connected over bluetooth or USB
   			connectTimer.cancel(); //we can stop this since it was found
+  		//	prox_ = ioio_.openAnalogInput(32);	 //just for testing , REMOVE later
+  			
+  		
+  	  		//public float proxValue;
+
+  	  		
+  	  		
+  	  		
+  			
+  			
   			
   			if (debug_ == true) {  			
 	  			showToast("Bluetooth Connected");

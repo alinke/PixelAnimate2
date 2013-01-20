@@ -23,6 +23,7 @@ resolution of LED matrix, total frames, time delay
 
 so
 
+
 32,105,60
 
 32: which means 32x32 matrix (as opposed to 16x32), we know if it's 32x32 or 16x32 from the apps prefs

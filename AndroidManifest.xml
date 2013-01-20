@@ -15,7 +15,7 @@
         
           <uses-library android:name="com.android.future.usb.accessory" android:required="false" />	     
           
-           <activity android:name="SplashActivity"
+           <activity android:name="PixelPileDriver"
                   android:screenOrientation="portrait"
                   android:label="@string/app_name"
                   android:theme="@android:style/Theme.NoTitleBar">
