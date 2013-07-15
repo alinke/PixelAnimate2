@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="app_name">PIXEL PileDriver</string>
+  <string name="app_name">PIXEL Animations</string>
 
   
     <string name="menu_about_title">About</string> 
     <string name="menu_about_summary">http://ledpixelart.html\n\nDesigned by Open Gadgets LLC</string>
-    <string name="versionString">Version</string> 
+    <string name="versionString">App Version</string> 
+    <string name="BootloaderVersionString">Bootloader Version</string> 
+    <string name="FirmwareVersionString">Firmware Version</string> 
+    <string name="LibraryVersionString">Library Version</string> 
+    <string name="HardwareVersionString">Hardware Version</string> 
     
    <string name="oneTimeSetupString">One Time Setup: Copying animations to your SD card.</string> 
    <string name="bluetoothPairingString">Please ensure Bluetooth pairing has been completed prior. The Bluetooth pairing code is: 4545."</string> 
     
    
    <string name="menu_instructions_title">Instructions</string>
-   <string name="setupInstructionsString">Pair your Android device to PIXEL which will show up as \'IOIO\' in Bluetooth using code 4545.\n\nTap an animation to display it on PIXEL.</string>
+   <string name="setupInstructionsString">Pair your Android device to PIXEL which will show up as \'PIXEL\' in Bluetooth using code 4545.\n\nTap an animation to display it on PIXEL.</string>
    <string name="setupInstructionsStringTitle">Instructions</string>   
      
      

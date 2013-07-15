@@ -36,6 +36,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -46,10 +47,8 @@ import java.nio.ByteBuffer;
 import java.nio.ShortBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
-
-
-
 import ioio.lib.api.AnalogInput;
+import ioio.lib.api.IOIO.VersionType;
 import ioio.lib.api.exception.ConnectionLostException;
 import ioio.lib.util.BaseIOIOLooper;
 import ioio.lib.util.IOIOLooper;
@@ -114,8 +113,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener  {
 	private static ioio.lib.api.RgbLedMatrix matrix_;
 	private static ioio.lib.api.RgbLedMatrix.Matrix KIND;  //have to do it this way because there is a matrix library conflict
 	private static android.graphics.Matrix matrix2;
-    private static final String TAG = "PixelPileDriver";	  	
-  	//private static short[] frame_ = new short[512];
+    private static final String TAG = "PixelAnimations";	
 	private static short[] frame_;
   	public static final Bitmap.Config FAST_BITMAP_CONFIG = Bitmap.Config.RGB_565;
   	private static byte[] BitmapBytes;
@@ -136,7 +134,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener  {
 	private String app_ver;	
 	private int matrix_model;
 	private final String tag = "";	
-	private final String LOG_TAG = "PixelPileDriver";
+	private final String LOG_TAG = "PixelAnimations";
 	private String imagePath;
 	private static int resizedFlag = 0;
 	
@@ -147,7 +145,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener  {
 	
 	private String extStorageDirectory = Environment.getExternalStorageDirectory().toString();
     private String basepath = extStorageDirectory;
-    private static String decodedDirPath =  Environment.getExternalStorageDirectory() + "/pixel/pixelpiledriver/decoded"; 
+    private static String decodedDirPath =  Environment.getExternalStorageDirectory() + "/pixel/pixelanimations/decoded"; 
     private String artpath = "/media";
     private static Context context;
     private Context frameContext;
@@ -180,6 +178,11 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener  {
 	private static int Playing = 0;
 	private static int selectedFileResolution;
 	private static int currentResolution;
+	private static String pixelFirmware = "Not Found";
+	private static String pixelBootloader = "Not Found";
+	private static String pixelHardwareID = "Not Found";
+	private static String IOIOLibVersion = "Not Found";
+	private static VersionType v;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -231,15 +234,19 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener  {
             extStorageDirectory = Environment.getExternalStorageDirectory().toString();
 	           
             	// File artdir = new File(basepath + "/Android/data/com.ioiomint./files");
-            	File artdir = new File(basepath + "/pixel/pixelpiledriver");
+            	File artdir = new File(basepath + "/pixel/pixelanimations");
 	            if (!artdir.exists()) { //no directory so let's now start the one time setup
 	            	sdcardImages.setVisibility(View.INVISIBLE); //hide the images as they're not loaded so we can show a splash screen instead
 	            	//showToast(getResources().getString(R.string.oneTimeSetupString)); //replaced by direct text on view screen
-	            	artdir.mkdirs();
-	                copyArt(); 
-	                countdownCounter = (countdownDuration - 2);
-	                mediascanTimer = new MediaScanTimer(countdownDuration*1000,1000); //pop up a message if it's not connected by this timer
- 		            mediascanTimer.start(); //we need a delay here to give the me
+	            	
+	            	new copyFilesAsync().execute();
+	            	
+	            	
+	            	//artdir.mkdirs();
+	               /// copyArt(); 
+	                //countdownCounter = (countdownDuration - 2);
+	               // mediascanTimer = new MediaScanTimer(countdownDuration*1000,1000); //pop up a message if it's not connected by this timer
+ 		           // mediascanTimer.start(); //we need a delay here to give the me
 	               
 	            }
 	            else { //the directory was already there so no need to copy files or do a media re-scan so just continue on
@@ -260,6 +267,317 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener  {
         
 	}
 	
+	
+	 private class copyFilesAsync extends AsyncTask<Void, Integer, Void>{
+		 
+	     int progress_status;
+	      
+	     @Override
+	  protected void onPreExecute() {
+	   // update the UI immediately after the task is executed
+	   super.onPreExecute();
+	    
+	 //   Toast.makeText(AsyncTaskActivity.this,
+	            //"Invoke onPreExecute()", Toast.LENGTH_SHORT).show();
+	 
+	    progress_status = 0;
+	  //  txt_percentage.setText("downloading 0%");
+	    firstTimeSetupCounter_.setText("0%");
+	    
+	  }
+	      
+	  @Override
+	  protected Void doInBackground(Void... params) {
+		  	
+			File artdir = new File(basepath + "/pixel/pixelanimations");
+			artdir.mkdirs();			
+			SystemClock.sleep(100);
+            File decodeddir = new File(basepath + "/pixel/pixelanimations/decoded");
+		  	decodeddir.mkdirs();
+			SystemClock.sleep(100);
+		  	copyArt(); //copy the .gif files
+			SystemClock.sleep(100);
+			
+			copyDecodedThread("0rain");
+			progress_status += 2;
+		    publishProgress(progress_status);
+		    
+        	copyDecodedThread("arrows");
+        	progress_status += 2;
+		    publishProgress(progress_status);
+		    
+		    copyDecodedThread("ybikini");
+        	progress_status += 2;
+		    publishProgress(progress_status);
+		    
+        	copyDecodedThread("boat");
+        	progress_status += 2;
+		    publishProgress(progress_status);
+		    
+        	copyDecodedThread("bubbles");
+        	progress_status += 2;
+		    publishProgress(progress_status);
+		    
+        	copyDecodedThread("colortiles");
+        	progress_status += 2;
+		    publishProgress(progress_status);
+		    
+        	copyDecodedThread("crosshatch");
+        	progress_status += 2;
+		    publishProgress(progress_status);
+		    
+		    copyDecodedThread("earth");
+        	progress_status += 2;
+		    publishProgress(progress_status);
+		    
+            copyDecodedThread("farmer");
+            progress_status += 2;
+		    publishProgress(progress_status);
+		    
+		    copyDecodedThread("sfighting");
+            progress_status += 2;
+		    publishProgress(progress_status);
+		    
+            copyDecodedThread("fire");
+            progress_status += 2;            
+		    publishProgress(progress_status);
+		    
+            copyDecodedThread("fliptile");
+            progress_status += 2;
+		    publishProgress(progress_status);
+		    
+            copyDecodedThread("float");
+            progress_status += 2;
+		    publishProgress(progress_status);
+		    
+            copyDecodedThread("flow");
+            progress_status += 2;
+		    publishProgress(progress_status);
+		    
+            copyDecodedThread("fuji");
+            progress_status += 2;
+		    publishProgress(progress_status);
+		    
+            copyDecodedThread("lines");
+            progress_status += 2;
+		    publishProgress(progress_status);
+		    
+		    copyDecodedThread("orangeball");
+            progress_status += 2;
+		    publishProgress(progress_status);
+		    
+		    copyDecodedThread("pacman");
+            progress_status += 2;
+		    publishProgress(progress_status);
+		    
+		    copyDecodedThread("pattern");
+            progress_status += 2;
+		    publishProgress(progress_status);
+		    
+            copyDecodedThread("rainfast");
+            progress_status += 2;
+		    publishProgress(progress_status);
+		    
+            copyDecodedThread("sboxergreen");
+            progress_status += 2;
+		    publishProgress(progress_status);
+		    
+            copyDecodedThread("sboxerpink");
+            progress_status += 2;
+		    publishProgress(progress_status);
+		    
+            copyDecodedThread("scmakeout");
+            progress_status += 4;
+		    publishProgress(progress_status);
+		    
+		    copyDecodedThread("screddance");
+            progress_status += 4;
+		    publishProgress(progress_status);
+		    
+            copyDecodedThread("scrowd");
+            progress_status += 4;
+		    publishProgress(progress_status);
+		    
+            copyDecodedThread("sgorangedancer");
+            progress_status += 2;
+		    publishProgress(progress_status);
+		    
+            copyDecodedThread("sgreendancer");
+            progress_status += 2;
+		    publishProgress(progress_status);
+		    
+            copyDecodedThread("sjumpblue");
+            progress_status += 2;
+		    publishProgress(progress_status);
+		    
+		    copyDecodedThread("sjumppink");
+            progress_status += 2;
+		    publishProgress(progress_status);
+		    
+		    copyDecodedThread("paoloworm");
+            progress_status += 2;
+		    publishProgress(progress_status);
+		    
+		    copyDecodedThread("sponytail");
+            progress_status += 4;
+		    publishProgress(progress_status);
+		    
+		    copyDecodedThread("rspray");
+            progress_status += 4;
+		    publishProgress(progress_status);
+		    
+		    copyDecodedThread("spraying");
+            progress_status += 4;
+		    publishProgress(progress_status);
+		    
+		    copyDecodedThread("rstarburst");
+            progress_status += 2;
+		    publishProgress(progress_status);
+		    
+		    copyDecodedThread("rstarfield");
+            progress_status += 2;
+		    publishProgress(progress_status);
+		    
+		    copyDecodedThread("rshifter");
+            progress_status += 2;
+		    publishProgress(progress_status);
+		    
+		    copyDecodedThread("rwaterflow");
+            progress_status += 4;
+		    publishProgress(progress_status);
+		    
+		    copyDecodedThread("rwhiteball");
+            progress_status += 4;
+		    publishProgress(progress_status);
+		    
+		    copyDecodedThread("zaquarium");
+            progress_status += 4;
+		    publishProgress(progress_status);
+		    
+		    copyDecodedThread("zarcade");
+            progress_status += 4;
+		    publishProgress(progress_status);
+		  
+		  
+			//  while(progress_status<100){
+		     
+		   // progress_status += 2;
+		     
+		   // publishProgress(progress_status);
+		   // SystemClock.sleep(300);
+		     
+		  // }
+		    
+	   return null;
+	  }
+	  
+	  @Override
+	  protected void onProgressUpdate(Integer... values) {
+	   super.onProgressUpdate(values);
+	    
+	  // progressBar.setProgress(values[0]);
+	   firstTimeSetupCounter_.setText(values[0]+"%");
+	  // firstTimeSetupCounter_.setText("0%");
+	    
+	  }
+	   
+	  @Override
+	  protected void onPostExecute(Void result) {
+	   super.onPostExecute(result);
+	   continueOnCreate();
+   	//	decoding = 0; 
+	   // Toast.makeText(AsyncTaskActivity.this,
+	           // "Invoke onPostExecute()", Toast.LENGTH_SHORT).show();
+	     
+	   firstTimeSetupCounter_.setText("Complete");
+	   // btn_start.setEnabled(true);
+	  }
+	  
+	  private void copyDecodedThread(final String decodedDir) {  
+			
+					AssetManager assetManager = getResources().getAssets();
+			        String[] files = null;
+			        try {
+			            files = assetManager.list("pixelanimations/decoded/" + decodedDir);
+			        } catch (Exception e) {
+			            Log.e("read clipart ERROR", e.toString());
+			            e.printStackTrace();
+			        }
+			        
+			        File dir = new File(basepath + "/pixel/pixelanimations/decoded/" + decodedDir);
+	                if (!dir.exists())
+	                    dir.mkdir();
+	                
+			        for(int i=0; i<files.length; i++) {
+			            InputStream in = null;
+			            OutputStream out = null;
+			            try {
+			              in = assetManager.open("pixelanimations/decoded/" + decodedDir + "/" + files[i]);
+			              out = new FileOutputStream(basepath + "/pixel/pixelanimations/decoded/" + decodedDir + "/" + files[i]);
+			              copyFile(in, out);
+			              in.close();
+			              in = null;
+			              out.flush();
+			              out.close();
+			              out = null;   
+			           
+			            } catch(Exception e) {
+			                Log.e("copy clipart ERROR", e.toString());
+			                e.printStackTrace();
+			            }       
+			        }
+				
+		}
+	  
+		@SuppressLint("NewApi")
+		private void copyArt() {
+	    	
+	    	AssetManager assetManager = getResources().getAssets();
+	        String[] files = null;
+	        try {
+	            files = assetManager.list("pixelanimations");
+	        } catch (Exception e) {
+	            Log.e("read clipart ERROR", e.toString());
+	            e.printStackTrace();
+	        }
+	        for(int i=0; i<files.length; i++) {
+	            InputStream in = null;
+	            OutputStream out = null;
+	            try {
+	              in = assetManager.open("pixelanimations/" + files[i]);
+	              out = new FileOutputStream(basepath + "/pixel/pixelanimations/" + files[i]);
+	              copyFile(in, out);
+	              in.close();
+	              in = null;
+	              out.flush();
+	              out.close();
+	              out = null;    
+	            
+	             
+	           MediaScannerConnection.scanFile(context,  //here is where we register the newly copied file to the android media content DB via forcing a media scan
+		                        new String[] { basepath + "/pixel/pixelanimations/" + files[i] }, null,
+		                        new MediaScannerConnection.OnScanCompletedListener() {
+		                    public void onScanCompleted(String path, Uri uri) {
+		                        Log.i("ExternalStorage", "Scanned " + path + ":");
+		                        Log.i("ExternalStorage", "-> uri=" + uri);
+		                        
+		                    }
+		          });
+	           
+	            } catch(Exception e) {
+	                Log.e("copy clipart ERROR", e.toString());
+	                e.printStackTrace();
+	            }       
+	        }
+	        
+	    }
+	  
+	  
+	  
+}
+	
+	
+	
 	 private void MediaScanCompleted() {
          
 	    	continueOnCreate();
@@ -277,48 +595,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener  {
     }
 	    
 	   // @SuppressLint("NewApi")
-		@SuppressLint("NewApi")
-		private void copyArt() {
-	    	
-	    	AssetManager assetManager = getResources().getAssets();
-	        String[] files = null;
-	        try {
-	            files = assetManager.list("pixelpiledriver");
-	        } catch (Exception e) {
-	            Log.e("read clipart ERROR", e.toString());
-	            e.printStackTrace();
-	        }
-	        for(int i=0; i<files.length; i++) {
-	            InputStream in = null;
-	            OutputStream out = null;
-	            try {
-	              in = assetManager.open("pixelpiledriver/" + files[i]);
-	              out = new FileOutputStream(basepath + "/pixel/pixelpiledriver/" + files[i]);
-	              copyFile(in, out);
-	              in.close();
-	              in = null;
-	              out.flush();
-	              out.close();
-	              out = null;    
-	            
-	             
-	           MediaScannerConnection.scanFile(context,  //here is where we register the newly copied file to the android media content DB via forcing a media scan
-		                        new String[] { basepath + "/pixel/pixelpiledriver/" + files[i] }, null,
-		                        new MediaScannerConnection.OnScanCompletedListener() {
-		                    public void onScanCompleted(String path, Uri uri) {
-		                        Log.i("ExternalStorage", "Scanned " + path + ":");
-		                        Log.i("ExternalStorage", "-> uri=" + uri);
-		                        
-		                    }
-		          });
-	           
-	            } catch(Exception e) {
-	                Log.e("copy clipart ERROR", e.toString());
-	                e.printStackTrace();
-	            }       
-	        }
-	        
-	    }
+		
 	    
 	    private void copyFile(InputStream in, OutputStream out) throws IOException {
 	        byte[] buffer = new byte[1024];
@@ -471,7 +748,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener  {
              cursor = managedQuery(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, 
              projection, 
              MediaStore.Images.Media.DATA + " like ? ",
-             new String[] {"%pixelpiledriver%"},  
+             new String[] {"%pixelanimations%"},  
              null);
            
             
@@ -611,7 +888,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener  {
         	cursor = managedQuery(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 projection, 
                 MediaStore.Images.Media.DATA + " like ? ",
-                new String[] {"%pixelpiledriver%"},  
+                new String[] {"%pixelanimations%"},  
                 null);
 	        
 	        
@@ -781,7 +1058,11 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener  {
 		  if (item.getItemId() == R.id.menu_about) {
 			  
 			    AlertDialog.Builder alert=new AlertDialog.Builder(this);
-		      	alert.setTitle(getString(R.string.menu_about_title)).setIcon(R.drawable.icon).setMessage(getString(R.string.menu_about_summary) + "\n\n" + getString(R.string.versionString) + " " + app_ver).setNeutralButton(getResources().getString(R.string.OKText), null).show();	
+		      	alert.setTitle(getString(R.string.menu_about_title)).setIcon(R.drawable.icon).setMessage(getString(R.string.menu_about_summary) + "\n\n" + getString(R.string.versionString) + " " + app_ver + "\n"
+		      			+ getString(R.string.FirmwareVersionString) + " " + pixelFirmware + "\n"
+		      			+ getString(R.string.HardwareVersionString) + " " + pixelHardwareID + "\n"
+		      			+ getString(R.string.BootloaderVersionString) + " " + pixelBootloader + "\n"
+		      			+ getString(R.string.LibraryVersionString) + " " + IOIOLibVersion).setNeutralButton(getResources().getString(R.string.OKText), null).show();	
 		   }
 	    	
 	    	if (item.getItemId() == R.id.menu_prefs)
@@ -922,16 +1203,13 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener  {
   			matrix_ = ioio_.openRgbLedMatrix(KIND);
   			deviceFound = 1; //if we went here, then we are connected over bluetooth or USB
   			connectTimer.cancel(); //we can stop this since it was found
-  		//	prox_ = ioio_.openAnalogInput(32);	 //just for testing , REMOVE later
-  			
-  		
-  	  		//public float proxValue;
-
-  	  		
-  	  		
-  	  		
-  			
-  			
+  	
+  			//**** let's get IOIO version info for the About Screen ****
+  			pixelFirmware = ioio_.getImplVersion(v.APP_FIRMWARE_VER);
+  			pixelBootloader = ioio_.getImplVersion(v.BOOTLOADER_VER);
+  			pixelHardwareID = ioio_.getImplVersion(v.HARDWARE_VER);
+  			IOIOLibVersion = ioio_.getImplVersion(v.IOIOLIB_VER);
+  			//**********************************************************
   			
   			if (debug_ == true) {  			
 	  			showToast("Bluetooth Connected");
@@ -950,12 +1228,21 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener  {
   			
   		}
 
-  		//@Override
+  	//	@Override
   		//public void loop() throws ConnectionLostException {
   		
-  		//	matrix_.frame(frame_); //doesn't work as well on older hardware if we keep in this loop, bad performance especially on animations
+  			//matrix_.frame(frame_); //doesn't work as well on older hardware if we keep in this loop, bad performance especially on animations
+  			//try {
+			//	pixelFirmware = ioio_.getImplVersion(v);
+			//	showToast(pixelFirmware);
+			//} catch (ConnectionLostException e) {
+				// TODO Auto-generated catch block
+			//	e.printStackTrace();
+			//}
   					
-  			//}	
+  		//}	
+  		
+  		
   		
   		@Override
 		public void disconnected() {   			
