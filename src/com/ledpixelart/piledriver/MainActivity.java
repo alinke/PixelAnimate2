@@ -316,8 +316,12 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener  {
             File decodeddir = new File(basepath + "/pixel/pixelanimations/decoded");
 		  	decodeddir.mkdirs();
 			SystemClock.sleep(100);
+			File leavealoneddir = new File(basepath + "/pixel/pixelanimations/leavealone");
+			leavealoneddir.mkdirs();
+			SystemClock.sleep(100);
 		  	copyArt(); //copy the .gif files
 			SystemClock.sleep(100);
+			copyArt2();
 			
 			copyDecodedThread("0rain");
 			progress_status ++;
@@ -604,6 +608,39 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener  {
 	        }
 	        
 	    }
+		
+		
+		private void copyArt2() {
+	    	
+	    	AssetManager assetManager = getResources().getAssets();
+	        String[] files2 = null;
+	        try {
+	            files2 = assetManager.list("pixelanimations/leavealone");
+	        } catch (Exception e) {
+	            Log.e("read clipart ERROR", e.toString());
+	            e.printStackTrace();
+	        }
+	        for(int i=0; i<files2.length; i++) {
+	            InputStream in = null;
+	            OutputStream out = null;
+	            try {
+	              in = assetManager.open("pixelanimations/leavealone/" + files2[i]);
+	              out = new FileOutputStream(basepath + "/pixel/pixelanimations/leavealone/" + files2[i]);
+	              copyFile(in, out);
+	              in.close();
+	              in = null;
+	              out.flush();
+	              out.close();
+	              out = null;  
+	              
+	              //no need to register these with mediascanner as these are internal gifs , the workaround for the gifs with a black frame as the first frame
+	           
+	            } catch(Exception e) {
+	                Log.e("copy clipart ERROR", e.toString());
+	                e.printStackTrace();
+	            }       
+	        }
+	    }
 	  
 	  
 	  
@@ -675,8 +712,11 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener  {
             ((BitmapDrawable) v.getDrawable()).setCallback(null);
         }
         
-        connectTimer.cancel();  //if user closes the program, need to kill this timer or we'll get a crash
-        decodedtimer.cancel();
+        if (deviceFound == 1) {
+        	connectTimer.cancel();  //if user closes the program, need to kill this timer or we'll get a crash
+	        decodedtimer.cancel();
+        }
+        
      //   ioio_.disconnect();
       //  imagedisplaydurationTimer.cancel();
  		//pausebetweenimagesdurationTimer.cancel();
@@ -948,7 +988,24 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener  {
 	        String[] aFileName2 = selectedFileName.split(delims2);
 	        int aFileNameLength2 = aFileName2.length;
 	        //showToast(aFileName2[0]);
-	        selectedFileName = aFileName2[0];	//now we have just the short name     
+	        selectedFileName = aFileName2[0];	//now we have just the short name   
+	        
+	        //**** now let's handle the thumbnails
+	        String filenameArray[] = imagePath.split("\\.");
+	        String extension = filenameArray[filenameArray.length-1]; //.png
+	       
+	        
+	        if (extension.equals("png")) {  //then we use the thumbnail
+	        	String wholestring_no_extension = filenameArray[filenameArray.length-2]; // /storage/emulated/0/pixel/pixelanimate/tree
+	        	String filenameArray2[] = wholestring_no_extension.split("\\/");
+	        	String filename_no_extension = filenameArray2[filenameArray2.length-1]; //tree
+		       // showToast(filename_no_extension);
+	        	String newimagePath = wholestring_no_extension.replace(filename_no_extension, "leavealone/" + filename_no_extension + ".gif");
+	        	//showToast(newimagePath);
+	        	//showToast(String.valueOf(filenameArray2.length));
+	        	imagePath = newimagePath;
+	        }
+	        
 	        
 	        gifView.setGif(imagePath);
 	        
