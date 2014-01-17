@@ -712,10 +712,10 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener  {
             ((BitmapDrawable) v.getDrawable()).setCallback(null);
         }
         
-        if (deviceFound == 1) {
+       /* if (deviceFound == 1) {  //was causing crashes
         	connectTimer.cancel();  //if user closes the program, need to kill this timer or we'll get a crash
-	        decodedtimer.cancel();
-        }
+	       // decodedtimer.cancel();
+        }*/
         
      //   ioio_.disconnect();
       //  imagedisplaydurationTimer.cancel();
@@ -1081,12 +1081,15 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener  {
 		    			matrix_.writeFile(fps);
 		    			sendFramesToIOIO();
 		    			matrix_.playFile();*/
+		    			
 		    			if (pixelFirmware.equals("PIXL0003")) {
 		    				matrix_.interactive();
 			    			matrix_.writeFile(fps);
 		    				sendFramesToIOIO();
 			    			matrix_.playFile();
-		    			}else{
+		    			}
+		    			
+		    			else{
 		    				decodedtimer = myActivity.new DecodedTimer(300000,selectedFileDelay);
 							//Start the frames
 							decodedtimer.start();
