@@ -45,6 +45,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ShortBuffer;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import ioio.lib.api.AnalogInput;
@@ -59,6 +60,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
@@ -169,7 +171,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener  {
 	private boolean debug_;
 	private static int appAlreadyStarted = 0;
 	private int FPSOverride_ = 0;
-	private static int fps = 0;
+	private static float fps = 0;
 	private static int x = 0;
 	private static int u = 0;
 	private static String selectedFileName;
@@ -183,6 +185,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener  {
 	private static String pixelHardwareID = "Not Found";
 	private static String IOIOLibVersion = "Not Found";
 	private static VersionType v;
+	private static  ByteBuffer buffer; //Create a new buffer
+	private int appCode;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -202,8 +206,19 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener  {
 	      gifView.setGif(R.drawable.zzzblank);  //code will crash if a dummy gif is not loaded initially
 	     // proxTextView_ = (TextView)findViewById(R.id.proxTextView);
 	      
+	     //let's get the app version so we'll know if we need to add new animations to the user's app   
+	        PackageInfo pinfo;
+			try {
+				pinfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
+				  appCode = pinfo.versionCode;
+			     String appVersion = pinfo.versionName;
+			      
+			} catch (NameNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 	     
-        
+	    
         this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
         
         try
@@ -250,7 +265,15 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener  {
 	               
 	            }
 	            else { //the directory was already there so no need to copy files or do a media re-scan so just continue on
+	            	
+	            	//now let's check the app version
+	            	if (appCode < 23) {  //if true, we need to copy some more animations
+	            		
+	            	}
+	            	else {
+	            	
 	            	continueOnCreate();
+	            	}
 	            }
 
       //  } else if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED_READ_ONLY)) {
@@ -263,8 +286,6 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener  {
  	      	alert.setTitle("No SD Card").setIcon(R.drawable.icon).setMessage("Sorry, your device does not have an accessible SD card, this app needs to copy some images to your SD card and will not work without it.\n\nPlease exit this app and go to Android settings and check that your SD card is mounted and available and then restart this app.\n\nNote for devices that don't have external SD cards, this app will utilize the internal SD card memory but you are most likely seeing this message because your device does have an external SD card slot.").setNeutralButton("OK", null).show();
             //showToast("Sorry, your device does not have an accessible SD card, this app will not work");//Or use your own method ie: Toast
         }
-	 
-        
 	}
 	
 	
@@ -282,7 +303,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener  {
 	 
 	    progress_status = 0;
 	  //  txt_percentage.setText("downloading 0%");
-	    firstTimeSetupCounter_.setText("0%");
+	    firstTimeSetupCounter_.setText("0");
 	    
 	  }
 	      
@@ -299,164 +320,166 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener  {
 			SystemClock.sleep(100);
 			
 			copyDecodedThread("0rain");
-			progress_status += 2;
+			progress_status ++;
 		    publishProgress(progress_status);
 		    
         	copyDecodedThread("arrows");
-        	progress_status += 2;
+        	progress_status ++;
 		    publishProgress(progress_status);
 		    
 		    copyDecodedThread("ybikini");
-        	progress_status += 2;
+		    progress_status ++;
 		    publishProgress(progress_status);
 		    
         	copyDecodedThread("boat");
-        	progress_status += 2;
+        	progress_status ++;
 		    publishProgress(progress_status);
 		    
         	copyDecodedThread("bubbles");
-        	progress_status += 2;
+        	progress_status ++;
 		    publishProgress(progress_status);
 		    
         	copyDecodedThread("colortiles");
-        	progress_status += 2;
+        	progress_status ++;
 		    publishProgress(progress_status);
 		    
         	copyDecodedThread("crosshatch");
-        	progress_status += 2;
+        	progress_status ++;
 		    publishProgress(progress_status);
 		    
 		    copyDecodedThread("earth");
-        	progress_status += 2;
+		    progress_status ++;
 		    publishProgress(progress_status);
 		    
             copyDecodedThread("farmer");
-            progress_status += 2;
+            progress_status ++;
 		    publishProgress(progress_status);
 		    
 		    copyDecodedThread("sfighting");
-            progress_status += 2;
+		    progress_status ++;
 		    publishProgress(progress_status);
 		    
             copyDecodedThread("fire");
-            progress_status += 2;            
+            progress_status ++;         
 		    publishProgress(progress_status);
 		    
             copyDecodedThread("fliptile");
-            progress_status += 2;
+            progress_status ++;
 		    publishProgress(progress_status);
 		    
             copyDecodedThread("float");
-            progress_status += 2;
+            progress_status ++;
 		    publishProgress(progress_status);
 		    
             copyDecodedThread("flow");
-            progress_status += 2;
+            progress_status ++;
 		    publishProgress(progress_status);
 		    
             copyDecodedThread("fuji");
-            progress_status += 2;
+            progress_status ++;
 		    publishProgress(progress_status);
 		    
             copyDecodedThread("lines");
-            progress_status += 2;
+            progress_status ++;
 		    publishProgress(progress_status);
 		    
 		    copyDecodedThread("orangeball");
-            progress_status += 2;
+		    progress_status ++;
 		    publishProgress(progress_status);
 		    
 		    copyDecodedThread("pacman");
-            progress_status += 2;
+		    progress_status ++;
 		    publishProgress(progress_status);
 		    
 		    copyDecodedThread("pattern");
-            progress_status += 2;
+		    progress_status ++;
 		    publishProgress(progress_status);
 		    
             copyDecodedThread("rainfast");
-            progress_status += 2;
+            progress_status ++;
 		    publishProgress(progress_status);
 		    
             copyDecodedThread("sboxergreen");
-            progress_status += 2;
+            progress_status ++;
 		    publishProgress(progress_status);
 		    
             copyDecodedThread("sboxerpink");
-            progress_status += 2;
+            progress_status ++;
 		    publishProgress(progress_status);
 		    
             copyDecodedThread("scmakeout");
-            progress_status += 4;
+            progress_status ++;
 		    publishProgress(progress_status);
 		    
 		    copyDecodedThread("screddance");
-            progress_status += 4;
+		    progress_status ++;
 		    publishProgress(progress_status);
 		    
             copyDecodedThread("scrowd");
-            progress_status += 4;
+            progress_status ++;
 		    publishProgress(progress_status);
 		    
             copyDecodedThread("sgorangedancer");
-            progress_status += 2;
+            progress_status ++;
 		    publishProgress(progress_status);
 		    
             copyDecodedThread("sgreendancer");
-            progress_status += 2;
+            progress_status ++;
 		    publishProgress(progress_status);
 		    
             copyDecodedThread("sjumpblue");
-            progress_status += 2;
+            progress_status ++;
 		    publishProgress(progress_status);
 		    
 		    copyDecodedThread("sjumppink");
-            progress_status += 2;
+		    progress_status ++;
 		    publishProgress(progress_status);
 		    
 		    copyDecodedThread("paoloworm");
-            progress_status += 2;
+		    progress_status ++;
 		    publishProgress(progress_status);
 		    
 		    copyDecodedThread("sponytail");
-            progress_status += 4;
+		    progress_status ++;
 		    publishProgress(progress_status);
 		    
 		    copyDecodedThread("rspray");
-            progress_status += 4;
+		    progress_status ++;
 		    publishProgress(progress_status);
 		    
 		    copyDecodedThread("spraying");
-            progress_status += 4;
+		    progress_status ++;
 		    publishProgress(progress_status);
 		    
 		    copyDecodedThread("rstarburst");
-            progress_status += 2;
+		    progress_status ++;
 		    publishProgress(progress_status);
 		    
 		    copyDecodedThread("rstarfield");
-            progress_status += 2;
+		    progress_status ++;
 		    publishProgress(progress_status);
 		    
 		    copyDecodedThread("rshifter");
-            progress_status += 2;
+		    progress_status ++;
 		    publishProgress(progress_status);
 		    
 		    copyDecodedThread("rwaterflow");
-            progress_status += 4;
+		    progress_status ++;
 		    publishProgress(progress_status);
 		    
 		    copyDecodedThread("rwhiteball");
-            progress_status += 4;
+		    progress_status ++;
 		    publishProgress(progress_status);
 		    
 		    copyDecodedThread("zaquarium");
-            progress_status += 4;
+		    progress_status ++;
 		    publishProgress(progress_status);
 		    
 		    copyDecodedThread("zarcade");
-            progress_status += 4;
+		    progress_status ++;
 		    publishProgress(progress_status);
+		    
+		    copyNewAnimations();
 		  
 		  
 			//  while(progress_status<100){
@@ -469,6 +492,16 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener  {
 		  // }
 		    
 	   return null;
+	  }
+	  
+	  private void copyNewAnimations() {
+		    copyDecodedThread("zaquarium");
+		    progress_status ++;
+		    publishProgress(progress_status);
+		    
+		    copyDecodedThread("zarcade");
+		    progress_status ++;
+		    publishProgress(progress_status);
 	  }
 	  
 	  @Override
@@ -876,7 +909,10 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener  {
 	  	     x = 0;
 	  	     
 	  	     if (Playing == 1) {
-	  	    	 decodedtimer.cancel();
+	  	    	 //decodedtimer.cancel();
+	  	    	 if(!pixelFirmware.equals("PIXL0003")) {
+	  	    		decodedtimer.cancel();
+	  	    	 }
 	  	    	// is.close();
 	  	     }
 	  	     ///****************************
@@ -927,7 +963,10 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener  {
 	     x = 0;
 	     
 	     if (Playing == 1) {
-	    	 decodedtimer.cancel();
+	    	 //decodedtimer.cancel();
+	    	 if (!pixelFirmware.equals("PIXL0003")) { 
+	    		 decodedtimer.cancel();
+	    	 }
 	    	// is.close();
 	     }
 	     ///****************************
@@ -969,17 +1008,38 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener  {
 	    	
 	    	if (selectedFileResolution == currentResolution) {
 	    	
-			    	if (fps != 0) {  //then we're doing the FPS override which the user selected from settings
-			    		selectedFileDelay = 1000/fps;
-					}
-			    	
-			    	if (selectedFileDelay == 0) {  //had to add this as some animated gifs have 0 delay which was causing a crash
-			    		selectedFileDelay = 10;
+			    	if (selectedFileDelay != 0) {  //then we're doing the FPS override which the user selected from settings
+			    		fps = 1000.f / selectedFileDelay;
+					} else { 
+			    		fps = 0;
 			    	}
 			    	MainActivity myActivity = new MainActivity();  //had to add this due to some java requirement	    	
-					decodedtimer = myActivity.new DecodedTimer(300000,selectedFileDelay);
-					decodedtimer.start();
-					Playing = 1; //our isPlaying flag	        	
+					//decodedtimer = myActivity.new DecodedTimer(300000,selectedFileDelay);
+			    	
+			    	///Added By Manju
+			    	
+		    		try {
+		    			//showToast(pixelFirmware);
+		    			/*matrix_.interactive();
+		    			matrix_.writeFile(fps);
+		    			sendFramesToIOIO();
+		    			matrix_.playFile();*/
+		    			if (pixelFirmware.equals("PIXL0003")) {
+		    				matrix_.interactive();
+			    			matrix_.writeFile(fps);
+		    				sendFramesToIOIO();
+			    			matrix_.playFile();
+		    			}else{
+		    				decodedtimer = myActivity.new DecodedTimer(300000,selectedFileDelay);
+							//Start the frames
+							decodedtimer.start();
+		    			}
+		    			
+		    		} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+			    	Playing = 1; //our isPlaying flag	        	
 		   		}
 	    	else {
 	    		Toast toast6 = Toast.makeText(context, "LED panel model was changed, decoding again...", Toast.LENGTH_LONG);
@@ -992,7 +1052,6 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener  {
 	    		
 	    	}
 		}	
-		
 		else { //then we need to decode the gif first	
 			Toast toast7 = Toast.makeText(context, "One time decode in process, just a moment...", Toast.LENGTH_SHORT);
 	        toast7.show();
@@ -1001,6 +1060,100 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener  {
 		}
   }
   
+  
+  private static void sendFramesToIOIO() {
+	  
+	  int count;
+	 
+	  for (count=0;count<selectedFileTotalFrames-1;count++) {
+	  
+		  File file = new File(decodedDirPath + "/" + selectedFileName + "/" + selectedFileName + count + ".rgb565");
+			    FileInputStream raw565 = null;
+			try {
+				raw565 = new FileInputStream(file);
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+				 
+			x++;
+			
+			// Get the size of the file
+				long length = file.length();
+				 
+				if (length > Integer.MAX_VALUE) {
+				    try {
+					throw new IOException("The file is too big");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				}
+				 
+				// Create the byte array to hold the data
+				//byte[] bytes = new byte[(int)length];
+				BitmapBytes = new byte[(int)length];
+				 
+				// Read in the bytes
+				int offset = 0;
+				int numRead = 0;
+				try {
+				while (offset < BitmapBytes.length
+				       && (numRead=raw565.read(BitmapBytes, offset, BitmapBytes.length-offset)) >= 0) {
+				    offset += numRead;
+				}
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+				 
+				// Ensure all the bytes have been read in
+				if (offset < BitmapBytes.length) {
+				    try {
+					throw new IOException("The file was not completely read: "+file.getName());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				}
+				 
+				// Close the input stream, all file contents are in the bytes variable
+				try {
+					raw565.close();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}	
+				
+				//BitmapBytes = bos.toByteArray();
+				
+				//now that we have the byte array loaded, load it into the frame short array
+				
+				int y = 0;
+			for (int i = 0; i < frame_.length; i++) {
+				frame_[i] = (short) (((short) BitmapBytes[y] & 0xFF) | (((short) BitmapBytes[y + 1] & 0xFF) << 8));
+				y = y + 2;
+			}
+			
+			//we're done with the images so let's recycle them to save memory
+		   // canvasBitmap.recycle();
+		 //  bitmap.recycle(); 
+			
+	 		//and then load to the LED matrix
+			
+		   	try {
+		   	 Log.i("Testing ","Starting-->"+String.valueOf(selectedFileTotalFrames-1));
+		   		matrix_.frame(frame_);
+		   		Log.i("Testing2","Complete");	
+			} catch (ConnectionLostException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	  }
+	  
+	  
+	  
+  }
    
 	private static void showDecoding()  {
 		 
@@ -1211,6 +1364,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener  {
   			IOIOLibVersion = ioio_.getImplVersion(v.IOIOLIB_VER);
   			//**********************************************************
   			
+  			showToast(pixelFirmware);
+  			
   			if (debug_ == true) {  			
 	  			showToast("Bluetooth Connected");
   			}
@@ -1353,8 +1508,14 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener  {
    			 
 			x++;
 			
-			if (x == selectedFileTotalFrames - 1) {
+			if (x == selectedFileTotalFrames - 1) { // Manju - Reached End of the file.
    				x = 0;
+   				/*try {
+					matrix_.playFile();
+				} catch (ConnectionLostException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}*/
    			}
 			
 			  
@@ -1424,6 +1585,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener  {
      		
 		   	try {
 				matrix_.frame(frame_);
+				
 			} catch (ConnectionLostException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -1654,7 +1816,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener  {
 						 	 	   		 canvasIOIO = new Canvas(IOIOBitmap);
 						 	 	   		 canvasIOIO.drawRGB(0,0,0); //a black background
 						 	 	   		 canvasIOIO.drawBitmap(resizedBitmap, 0, 0, null);
-						 	 	   		 ByteBuffer buffer = ByteBuffer.allocate(KIND.width * KIND.height *2); //Create a new buffer
+						 	 	   		 //ByteBuffer buffer = ByteBuffer.allocate(KIND.width * KIND.height *2); //Create a new buffer
+						 	 	   		  buffer = ByteBuffer.allocate(KIND.width * KIND.height *2); //Create a new buffer
 						 	 	   		 IOIOBitmap.copyPixelsToBuffer(buffer); //copy the bitmap 565 to the buffer		
 						 	 	   		 BitmapBytes = buffer.array(); //copy the buffer into the type array
 						 	 	   		 canvas.drawBitmap(IOIOBitmap, 0, 0, null); //where the image gets drawn to the screen
@@ -1695,13 +1858,94 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener  {
 						   		}
 						   			
 					   			try {
-									//writeFile(BitmapBytes, Environment.getExternalStorageDirectory() + "/pixel/pixelpiledriver/decoded/" + selectedFileName + index + ".rgb565");
-									writeFile(BitmapBytes, decodedDirPath + "/" + selectedFileName + "/" + selectedFileName + index + ".rgb565");
-								//	u++;
+									
+									writeFile(BitmapBytes, decodedDirPath + "/" + selectedFileName + "/" + selectedFileName + index + ".rgb565");  //this one the original one
+									//File file = new File(decodedDirPath + "/" + selectedFileName + "/" + selectedFileName + ".rgb565");
+
+								
+									  // append or overwrite the file
+									
+									//           boolean append = true;
+									  //          FileChannel channel = new FileOutputStream(file, append).getChannel();
+									            // Flips this buffer.  The limit is set to the current position and then
+									
+									            // the position is set to zero.  If the mark is defined then it is discarded.
+									
+									    //       buffer.flip();
+									            // Writes a sequence of bytes to this channel from the given buffer.
+									
+									      //     channel.write(buffer);
+									           // close the channel
+									        //   channel.close();
+
+									
+									
+									
+									
 								} catch (IOException e1) {
 									// TODO Auto-generated catch block
 									e1.printStackTrace();
 								}
+					   			
+					   			
+					   			/*package com.javacodegeeks.snippets.core;
+
+					   			import java.io.File;
+					   			import java.io.FileInputStream;
+					   			import java.io.FileOutputStream;
+					   			import java.io.IOException;
+					   			import java.io.InputStream;
+					   			import java.nio.ByteBuffer;
+					   			import java.nio.channels.FileChannel;
+
+					   			public class WriteAppendToFileWithByteBuffer {
+
+					   				public static void main(String[] args) {
+
+					   					try {
+
+					   						File inFile = new File("in.xml");
+
+					   						// Allocate a direct (memory-mapped) byte buffer with a byte capacity equal to file's length
+					   						// DO NOT use this approach for copying large files
+					   					    ByteBuffer buf = ByteBuffer.allocateDirect((int)inFile.length());
+
+					   						InputStream is = new FileInputStream(inFile);
+
+					   					    int b;
+
+					   					    while ((b=is.read())!=-1) {
+					   					    	buf.put((byte)b);
+					   					    }
+
+					   						File file = new File("out.xml");
+
+					   						// append or overwrite the file
+					   						boolean append = false;
+
+					   						FileChannel channel = new FileOutputStream(file, append).getChannel();
+
+					   						// Flips this buffer.  The limit is set to the current position and then
+					   						// the position is set to zero.  If the mark is defined then it is discarded.
+					   						buf.flip();
+
+					   						// Writes a sequence of bytes to this channel from the given buffer.
+					   						channel.write(buf);
+
+					   						// close the channel
+					   						channel.close();
+
+					   					}
+					   					catch (IOException e) {
+					   						System.out.println("I/O Error: " + e.getMessage());
+					   					}
+
+					   				}
+
+					   			}*/
+					   			
+					   		
+					   			
 				   		}
 						   		
 				   		else {

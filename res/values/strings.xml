@@ -26,7 +26,7 @@
     
     <string name="scanAll">Show All Album Pics</string>
     <string name="pref_scanAll_default">false</string>
-    <string name="scanAllSummary">Only animations in the pixel/pixelpiledriver directory of your SD card will be displayed. Checking this box displays all SD card pictures.</string>
+    <string name="scanAllSummary">Only animations in the pixel/pixelanimations directory of your SD card will be displayed. Checking this box displays all SD card pictures.</string>
   
     <string name="OKText">OK</string>   
     <string name="notFoundString">PIXEL Not Found</string>   
@@ -44,7 +44,7 @@
     <string name="FPSOverrideDefault">0</string>  
     
     <string name="bluetooth_pair">Blueooth Pairing</string>
-    <string name="bluetooth_pairSummary">Shortcut to the Bluetooth settings screen. Pair to IOIO using code: 4545</string>
+    <string name="bluetooth_pairSummary">Shortcut to the Bluetooth settings screen. Pair to PIXEL using code: 4545</string>
     
     <string name="slideShowtitle">Slide Show Settings</string>
     <string name="slideShowtitleSummary">Slide Show Settings</string>
@@ -61,7 +61,7 @@
     <string name="rescan_screen_verbage">Now scanning your SD card or internal memory for new animations or deletions, just a moment&#8230;</string>
     
     <string name="startup_verbage_1">One Time Setup</string>
-    <string name="startup_verbage_2">Copying animations to your SD card or internal memory&#8230;</string>
+    <string name="startup_verbage_2">Copying animations to your local storage&#8230;</string>
     <string name="firstTime_instructions"></string>
   
     <string name="loadingImagesPlsWaitTitle">Please Wait</string>
