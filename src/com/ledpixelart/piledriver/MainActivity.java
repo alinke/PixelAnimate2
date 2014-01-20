@@ -10,8 +10,10 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.RandomAccessFile;
 
 import android.app.Activity;
 import android.content.Context;
@@ -213,6 +215,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	public static Context baseContext;
 	//private static MainActivity mainActivity2 = new MainActivity();  //had to add this due some context requirements
 	private  ProgressDialog progress;
+	public long frame_length;
+	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -231,6 +235,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	      gifView = (GifView) findViewById(R.id.gifView);
 	      gifView.setGif(R.drawable.zzzblank);  //code will crash if a dummy gif is not loaded initially
 	     // proxTextView_ = (TextView)findViewById(R.id.proxTextView);
+	      
+	     
 	      
 	     //let's get the app version so we'll know if we need to add new animations to the user's app   
 	        PackageInfo pinfo;
@@ -362,15 +368,15 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 			SystemClock.sleep(100);
             File decodeddir = new File(basepath + "/pixel/pixelanimations/decoded");
 		  	decodeddir.mkdirs();
+			//SystemClock.sleep(100);
+			//File leavealoneddir = new File(basepath + "/pixel/pixelanimations/leavealone");
+			//leavealoneddir.mkdirs();
 			SystemClock.sleep(100);
-			File leavealoneddir = new File(basepath + "/pixel/pixelanimations/leavealone");
-			leavealoneddir.mkdirs();
+		  	copyArt(); //copy the .png and .gif files (mainly png) because we want to decode first
 			SystemClock.sleep(100);
-		  	copyArt(); //copy the .gif files
-			SystemClock.sleep(100);
-			copyArt2();
+			copyArt2();  //copy the decoded files
 			
-			copyDecodedThread("0rain");
+			/*copyDecodedThread("0rain");
 			progress_status ++;
 		    publishProgress(progress_status);
 		    
@@ -528,9 +534,9 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 		    
 		    copyDecodedThread("zarcade");
 		    progress_status ++;
-		    publishProgress(progress_status);
+		    publishProgress(progress_status);*/
 		    
-		    copyNewAnimations();
+		    //copyNewAnimations();
 		  
 		  
 			//  while(progress_status<100){
@@ -577,7 +583,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	   // btn_start.setEnabled(true);
 	  }
 	  
-	  private void copyDecodedThread(final String decodedDir) {  
+	  private void copyDecodedThread(final String decodedDir) {  //no longer used
 			
 					AssetManager assetManager = getResources().getAssets();
 			        String[] files = null;
@@ -637,7 +643,9 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	              out.close();
 	              out = null;    
 	            
-	             
+	           progress_status ++;
+	  		   publishProgress(progress_status);  
+	  		   
 	           MediaScannerConnection.scanFile(context,  //here is where we register the newly copied file to the android media content DB via forcing a media scan
 		                        new String[] { basepath + "/pixel/pixelanimations/" + files[i] }, null,
 		                        new MediaScannerConnection.OnScanCompletedListener() {
@@ -662,17 +670,19 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	    	AssetManager assetManager = getResources().getAssets();
 	        String[] files2 = null;
 	        try {
-	            files2 = assetManager.list("pixelanimations/leavealone");
+	            files2 = assetManager.list("pixelanimations/decoded");
 	        } catch (Exception e) {
 	            Log.e("read clipart ERROR", e.toString());
 	            e.printStackTrace();
 	        }
 	        for(int i=0; i<files2.length; i++) {
+	        	progress_status ++;
+		  		publishProgress(progress_status);  
 	            InputStream in = null;
 	            OutputStream out = null;
 	            try {
-	              in = assetManager.open("pixelanimations/leavealone/" + files2[i]);
-	              out = new FileOutputStream(basepath + "/pixel/pixelanimations/leavealone/" + files2[i]);
+	              in = assetManager.open("pixelanimations/decoded/" + files2[i]);
+	              out = new FileOutputStream(basepath + "/pixel/pixelanimations/decoded/" + files2[i]);
 	              copyFile(in, out);
 	              in.close();
 	              in = null;
@@ -1052,25 +1062,22 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
        //**** now let's handle the thumbnails
        String filenameArray[] = imagePath.split("\\.");
        String extension = filenameArray[filenameArray.length-1]; //.png
-      
        
-       if (extension.equals("png")) {  //then we use the thumbnail
+       if (extension.equals("png")) {  //then we use the thumbnail, we just need to rename the image path to a gif
        	String wholestring_no_extension = filenameArray[filenameArray.length-2]; // /storage/emulated/0/pixel/pixelanimate/tree
        	String filenameArray2[] = wholestring_no_extension.split("\\/");
        	String filename_no_extension = filenameArray2[filenameArray2.length-1]; //tree
 	       // showToast(filename_no_extension);
-       	String newimagePath = wholestring_no_extension.replace(filename_no_extension, "leavealone/" + filename_no_extension + ".gif");
+       	String newimagePath = wholestring_no_extension.replace(filename_no_extension, filename_no_extension + ".gif");
        	//showToast(newimagePath);
        	//showToast(String.valueOf(filenameArray2.length));
        	imagePath = newimagePath;
        }
       else {
-    	   gifView.setGif(imagePath); 
+    	   gifView.setGif(imagePath); //just sets the image, that's all, doesn't do any decoding
        } 
-    	   
        
-       
-      // gifView.setGif(imagePath);  //need to add this back or only if gif was seleced
+      //gifView.setGif(imagePath);  //this crashes the code, look at this later
        
        animateAfterDecode(1);
 	   return true;  //VERY IMPORTANT this is true, otherwise we'll get a single click event too at the same time which will screw things up royally
@@ -1122,7 +1129,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	        String[] aFileName2 = selectedFileName.split(delims2);
 	        int aFileNameLength2 = aFileName2.length;
 	        //showToast(aFileName2[0]);
-	        selectedFileName = aFileName2[0];	//now we have just the short name   
+	        selectedFileName = aFileName2[0];	//now we have just the short name with no extension
 	        
 	        //**** now let's handle the thumbnails
 	        String filenameArray[] = imagePath.split("\\.");
@@ -1140,7 +1147,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	        	imagePath = newimagePath;
 	        }*/
 	        
-	        if (extension.equals("png")) {  //then we use the thumbnail
+	        if (extension.equals("png")) {  //then we use the thumbnail, we just need to rename the image path to a gif
 	        	String wholestring_no_extension = filenameArray[filenameArray.length-2]; // /storage/emulated/0/pixel/pixelanimate/tree
 	        	String filenameArray2[] = wholestring_no_extension.split("\\/");
 	        	String filename_no_extension = filenameArray2[filenameArray2.length-1]; //tree
@@ -1151,11 +1158,10 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	        	imagePath = newimagePath;
 	        }
 	        else {
-	     	   gifView.setGif(imagePath); 
+	     	   gifView.setGif(imagePath);  //just sets the image , no decoding, decoding happens in the animateafterdecode method
 	        } 
-	     	   
 	   
-	       // gifView.setGif(imagePath);   //put this back
+	       // gifView.setGif(imagePath);   //don't put this back, this does the decoding
 	        animateAfterDecode(0);  //0 means streaming mode, 1 means download mode
   		}
   
@@ -1167,15 +1173,11 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	     
 	     if (StreamModePlaying == 1) {
 	    	 decodedtimer.cancel();
-	    	// if (longpress == 0 && !pixelHardwareID.equals("PIXL")) { //long press = 0 means we're in streaming mode meaning we need to cancel the timer
-	    		// decodedtimer.cancel();
-	    	// }
-	    	// is.close();
 	     }
 	     ///****************************
      
-     //now let's check if this file was already decoded by looking for the xml file
- 	File decodedFile = new File(decodedDirPath + "/" + selectedFileName  + "/" + selectedFileName + ".txt"); //decoded/rain/rain.text
+     //now let's check if this file was already decoded by looking for the text meta data file
+ 	File decodedFile = new File(decodedDirPath + "/" + selectedFileName  + ".txt"); //decoded/rain.txt
 		if(decodedFile.exists()) {
 	   		    // ok good, now let's read it, we need to get the total numbers of frames and the frame speed
 	   		  //File sdcard = Environment.getExternalStorageDirectory();
@@ -1206,6 +1208,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	    	selectedFileDelay = Integer.parseInt(fileAttribs2[1].trim());
 	    	selectedFileResolution = Integer.parseInt(fileAttribs2[2].trim());
 	    	
+	    	//we need this for the decoder timer
 	    	//now we need to compare the current resoluiton with the encoded resolution
 	    	//if different, then we need to re-encode
 	    	
@@ -1216,74 +1219,21 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 					} else { 
 			    		fps = 0;
 			    	}
-			    	MainActivity myActivity = new MainActivity();  //had to add this due to some java requirement	    	
-					//decodedtimer = myActivity.new DecodedTimer(300000,selectedFileDelay);
-			    	
-			    	///Added By Manju
+			    	MainActivity myActivity = new MainActivity();  //had to add this due to some java requirement	  
 			    	
 		    		try {
-		    			//showToast(pixelFirmware);
-		    		   // matrix_.interactive();
-		    			//matrix_.writeFile(fps);
-		    			//sendFramesToIOIO();
-		    			//matrix_.playFile();*/
+		    		
 		    			
 		    			if (longpress == 1 && pixelHardwareID.substring(0,4).equals("PIXL")) {  //download mode
-
 		    				StreamModePlaying = 0;
-		    				//mThread = new pixelWriteThread();
-		    				//mThread.setPriority(Thread.MAX_PRIORITY);
-		    			    //mThread.start();
-		    			    
-		    			//	writePIXEL();
-		    				
-		    				//writePixelThread thread = new writePixelThread(myActivity);
-		    				//thread.start();
-		    				
-		    				//Toast toast20 = Toast.makeText(context, "Downloading, just a moment...", Toast.LENGTH_SHORT);
-		    		        //toast20.show();
-		    		        
-		    		        //this is our background service, we could not use async task because it was getting interruped by the gc and then screwing up the sd card writes to the IOIO
-		    		       // Intent msgIntent = new Intent(myActivity, SimpleIntentService.class);
-		    		       // msgIntent.putExtra(SimpleIntentService.PARAM_IN_MSG, strInputMsg);
-		    		       // msgIntent.putExtra(SimpleIntentService.PARAM_IN_MSG, "al");
-		    		       // myActivity.startService(msgIntent);
-		    		        
-		    		        
-		    		        //matrix_.interactive();
-		    				//matrix_.writeFile(fps);
-		    				//Thread.sleep(100);
-		    		        
-		    				//myActivity.new writePixelAsync().execute();
-		    				//baseContext.new writePixelAsync().execute();
-		    				//new writePixelAsync(myActivity, "hello").execute(); 
-		    				 
-		    				//new writePixelAsync(myActivity, "hello").execute(); 
-		    				
 		    				matrix_.interactive();
 			    			matrix_.writeFile(fps);
 			    			writePixelAsync loadApplication = new writePixelAsync();
 			    			loadApplication.execute();
-			    			//myActivity.new writePixelAsync().execute();
-			    			
-			    			
-			    			//writePixelAsync timeToWrite = new myActivity.writePixelAsync();
-			    			//timeToWrite.execute();
-		    				
-			    			//myActivity.new writePixelAsync().execute();
-		    		      
-		    				
-		    				//matrix_.interactive();
-			    			//matrix_.writeFile(fps);
-		    				//sendFramesToIOIO();
-			    			//matrix_.playFile();
 		    			}
 		    			else {
-		    				//Toast toast21 = Toast.makeText(context, "went here...", Toast.LENGTH_SHORT);
-		    		        //toast21.show();
 		    				matrix_.interactive(); //put PIXEL back in interactive mode, can't forget to do that! or we'll just be playing local animations
 		    				decodedtimer = myActivity.new DecodedTimer(300000,selectedFileDelay);  //stream mode
-							//Start the frames
 							decodedtimer.start();
 							StreamModePlaying = 1; //our isStreamModePlaying flag	
 		    			}
@@ -1313,189 +1263,13 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 		}
   }
   
-  
-  
-  /**
-   * Static inner classes don't hold implicit references to their
-   * enclosing class, so the Activity instance won't be leaked across
-   * configuration changes.
-   */
-  /*private static class pixelWriteThread extends Thread {
-  
-    boolean readyForLocalPlayBack = false;
-    int z;
-    int lastz; 
-    @Override
-    public void run() {
-    	mThread.setPriority(Thread.MAX_PRIORITY);
-    mRunning = true;
-    try {
-		matrix_.interactive();
-		matrix_.writeFile(fps);
-		
-		 int count = 0; //maybe this needs to change to a while to ensure we reached the end
-		 lastz = count;
-		 
-		
-			 for (count=0;count<selectedFileTotalFrames-1;count++) {
-				 
-				 if (downloadCounter < count) {
-					Log.i("PixelAnimations ","STARTING OVER!"+ downloadCounter + " " + String.valueOf(selectedFileTotalFrames-1));
-					matrix_.interactive();
-					matrix_.writeFile(fps); 
-					count = 0; //start it over
-					downloadCounter = 0;
-					
-					//break; //get out of the loop because we had a garbage evet
-				 }
-				 
-				  File file = new File(decodedDirPath + "/" + selectedFileName + "/" + selectedFileName + count + ".rgb565");
-					    FileInputStream raw565 = null;
-					try {
-						raw565 = new FileInputStream(file);
-					} catch (FileNotFoundException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-						 
-					//x++;
-					
-					
-					// Get the size of the file
-						long length = file.length();
-						 
-						if (length > Integer.MAX_VALUE) {
-						    try {
-							throw new IOException("The file is too big");
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						}
-						 
-						// Create the byte array to hold the data
-						//byte[] bytes = new byte[(int)length];
-						BitmapBytes = new byte[(int)length];
-						 
-						// Read in the bytes
-						int offset = 0;
-						int numRead = 0;
-						try {
-						while (offset < BitmapBytes.length
-						       && (numRead=raw565.read(BitmapBytes, offset, BitmapBytes.length-offset)) >= 0) {
-						    offset += numRead;
-						}
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-						 
-						// Ensure all the bytes have been read in
-						if (offset < BitmapBytes.length) {
-						    try {
-							throw new IOException("The file was not completely read: "+file.getName());
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						}
-						 
-						// Close the input stream, all file contents are in the bytes variable
-						try {
-							raw565.close();
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}	
-						
-						//now that we have the byte array loaded, load it into the frame short array
-						
-					int y = 0;
-					for (int i = 0; i < frame_.length; i++) {
-						frame_[i] = (short) (((short) BitmapBytes[y] & 0xFF) | (((short) BitmapBytes[y + 1] & 0xFF) << 8));
-						y = y + 2;
-					}
-					
-					//need to add something in here if the transfer got interruped, then go back to interactive mode and start over
-					downloadCounter++;
-				   	try {
-				   	 Log.i("PixelAnimations ","Starting-->"+ downloadCounter + " " + String.valueOf(selectedFileTotalFrames-1));
-				   		matrix_.frame(frame_);
-				   		
-				   		if (count == selectedFileTotalFrames-1) {
-				   			readyForLocalPlayBack = true;
-				   		}
-				   	
-					} catch (ConnectionLostException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				   	
-				   	//how about only set a flag if x reaches the total frames -1
-			  }  // end for
-		  
-		  mRunning = false;
-		  
-	} catch (ConnectionLostException e1) {
-		// TODO Auto-generated catch block
-		e1.printStackTrace();
-		//need to do something here too probably
-	}
-	
-      while (readyForLocalPlayBack == false) {  //stay in this loop until we're ready
-    	  //this will set mRunning to false when it's done
-    	  try {
-			Thread.sleep(10);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	
-      }
-      //we don't get out of the above loop until we've reached the end
-      
-      try {
-    	  Log.i("PixelAnimations ","Played File!!!!"+ downloadCounter + " " + String.valueOf(selectedFileTotalFrames-1));
-    	  matrix_.playFile();
-	} catch (ConnectionLostException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-   }
-
-    public void close() {
-      mRunning = false;
-    }
-  }*/
-  
-
-/*  protected void onDestroy1() {
-    super.onDestroy();
-    mThread.close();
-  }*/
-
- 
-	 //private class writePixelAsync extends AsyncTask<Void, Integer, Void>{
 	 public class writePixelAsync extends AsyncTask<Void, Integer, Void>{
 		
 		 int progress_status;
-		// Context context;
-		   
-		  //  ConfigurationContainer configuration = ConfigurationContainer.getInstance();
-
-		   /* public writePixelAsync(Context context) {
-		        this.context = context;
-		        progress = new ProgressDialog(this.context);
-		    }*/
-	  
-	    
 	      
 		  @Override
 		  protected void onPreExecute() {
 	      super.onPreExecute();
-		       
-	   // Toast toast20 = Toast.makeText(context, "Downloading, just a moment...", Toast.LENGTH_SHORT);  //this works
-	   // toast20.show();
 	    
 	     progress = new ProgressDialog(MainActivity.this);
 		        progress.setMax(selectedFileTotalFrames);
@@ -1520,10 +1294,9 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	  protected Void doInBackground(Void... params) {
 			
 	  int count;
-			 
- for (count=0;count<selectedFileTotalFrames-1;count++) {
+	  for (count=0;count<selectedFileTotalFrames-1;count++) {
 				 
-				/* if (downloadCounter < count) {
+				/* if (downloadCounter < count) {  //won't need this but just in case, some weird problem caused by a bug with an extra timer going, the gc was interrupting
 					Log.i("PixelAnimations ","STARTING OVER!"+ downloadCounter + " " + String.valueOf(selectedFileTotalFrames-1));
 					matrix_.interactive();
 					matrix_.writeFile(fps); 
@@ -1533,56 +1306,89 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 					//break; //get out of the loop because we had a garbage evet
 				 }*/
 				 
-				  File file = new File(decodedDirPath + "/" + selectedFileName + "/" + selectedFileName + count + ".rgb565");
-					    FileInputStream raw565 = null;
+				  //File file = new File(decodedDirPath + "/" + selectedFileName + "/" + selectedFileName + count + ".rgb565");
+				  File file = new File(decodedDirPath + "/" + selectedFileName + ".rgb565"); //this is one big file now, no longer separate files
+				  
+					RandomAccessFile raf = null;
+				  
+					//let's setup the seeker object
 					try {
-						raw565 = new FileInputStream(file);
-					} catch (FileNotFoundException e1) {
+						raf = new RandomAccessFile(file, "r");
+						
+					} catch (FileNotFoundException e2) {
 						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+						e2.printStackTrace();
+					}  // "r" means open the file for reading
 					
-					// Get the size of the file
-						long length = file.length();
-						 
-						if (length > Integer.MAX_VALUE) {
-							    try {
+					if (x == selectedFileTotalFrames) { // Manju - Reached End of the file.
+		   				x = 0;
+		   				try {
+							raf.seek(0); //move pointer back to the beginning of the file
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} 
+		   			}
+					
+					 switch (selectedFileResolution) { //16x32 matrix = 1024k frame size, 32x32 matrix = 2048k frame size
+			            case 16: frame_length = 1048;
+			                     break;
+			            case 32: frame_length = 2048;
+			                     break;
+			            case 64: frame_length = 4096;
+			                     break;
+			            default: frame_length = 2048;
+			                     break;
+			          }
+					 
+					//now let's see forward to a part of the file
+						try {
+							raf.seek(x*frame_length);
+						} catch (IOException e2) {
+							// TODO Auto-generated catch block
+							e2.printStackTrace();
+						} 
+						Log.d("PixelAnimations","from sd card write, x is: " + x);
+						x++;
+						
+						if (frame_length > Integer.MAX_VALUE) {
+			   			    try {
 								throw new IOException("The file is too big");
 							} catch (IOException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-						}
-						 
+			   			}
+						
 						// Create the byte array to hold the data
-						BitmapBytes = new byte[(int)length];
-						 
-						// Read in the bytes
-						int offset = 0;
-						int numRead = 0;
-						try {
-						while (offset < BitmapBytes.length
-						       && (numRead=raw565.read(BitmapBytes, offset, BitmapBytes.length-offset)) >= 0) {
-						    offset += numRead;
+			   			//byte[] bytes = new byte[(int)length];
+			   			BitmapBytes = new byte[(int)frame_length];
+			   			 
+			   			// Read in the bytes
+			   			int offset = 0;
+			   			int numRead = 0;
+			   			try {
+							while (offset < BitmapBytes.length && (numRead=raf.read(BitmapBytes, offset, BitmapBytes.length-offset)) >= 0) {
+							    offset += numRead;
+							}
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
 						}
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-						 
-						// Ensure all the bytes have been read in
-						if (offset < BitmapBytes.length) {
-							    try {
+			   			 
+			   			// Ensure all the bytes have been read in
+			   			if (offset < BitmapBytes.length) {
+			   			    try {
 								throw new IOException("The file was not completely read: "+file.getName());
 							} catch (IOException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-						}
-						 
-							// Close the input stream, all file contents are in the bytes variable
-							try {
-								raw565.close();
+			   			}
+			   			 
+			   			// Close the input stream, all file contents are in the bytes variable
+			   			try {
+			   				raf.close();
 						} catch (IOException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
@@ -1642,120 +1448,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 }
 	
 }
-  
-  
-  private static void sendFramesToIOIO() {
-	  
-	  int count;
-	 
-	  for (count=0;count<selectedFileTotalFrames-1;count++) {
-	  
-		  File file = new File(decodedDirPath + "/" + selectedFileName + "/" + selectedFileName + count + ".rgb565");
-			    FileInputStream raw565 = null;
-			try {
-				raw565 = new FileInputStream(file);
-			} catch (FileNotFoundException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-				 
-			x++;
-			
-			
-			// Get the size of the file
-				long length = file.length();
-				 
-				if (length > Integer.MAX_VALUE) {
-				    try {
-					throw new IOException("The file is too big");
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				}
-				 
-				// Create the byte array to hold the data
-				//byte[] bytes = new byte[(int)length];
-				BitmapBytes = new byte[(int)length];
-				 
-				// Read in the bytes
-				int offset = 0;
-				int numRead = 0;
-				try {
-				while (offset < BitmapBytes.length
-				       && (numRead=raw565.read(BitmapBytes, offset, BitmapBytes.length-offset)) >= 0) {
-				    offset += numRead;
-				}
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-				 
-				// Ensure all the bytes have been read in
-				if (offset < BitmapBytes.length) {
-				    try {
-					throw new IOException("The file was not completely read: "+file.getName());
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				}
-				 
-				// Close the input stream, all file contents are in the bytes variable
-				try {
-					raw565.close();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}	
-				
-				//BitmapBytes = bos.toByteArray();
-				
-				//now that we have the byte array loaded, load it into the frame short array
-				
-				int y = 0;
-			for (int i = 0; i < frame_.length; i++) {
-				frame_[i] = (short) (((short) BitmapBytes[y] & 0xFF) | (((short) BitmapBytes[y + 1] & 0xFF) << 8));
-				y = y + 2;
-			}
-			
-			//we're done with the images so let's recycle them to save memory
-		   // canvasBitmap.recycle();
-		 //  bitmap.recycle(); 
-			
-	 		//and then load to the LED matrix
-			
-		   	try {
-		   	 Log.i("PixelAnimations ","Starting-->"+ x + " " + String.valueOf(selectedFileTotalFrames-1));
-		   		matrix_.frame(frame_);
-		   		
-		   		if (x == selectedFileTotalFrames-1) {
-		   			readyForLocalPlayBack = true;
-		   		}
-		   		//Log.i("PixelAnimations","Complete");	
-		   		/*try {
-					Thread.sleep(100);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}*/
-			} catch (ConnectionLostException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		   	
-		   	//how about only set a flag if x reaches the total frames -1
-		   	
-		   	
-		   	
-	  }
-	  mRunning = false;
-  }
    
 	private static void showDecoding()  {
-		 
-		
-		//MainActivity myActivity = new MainActivity();  
 		
 		if (currentResolution == 32) {
 	        	BitmapInputStream = context.getResources().openRawResource(R.raw.decoding32);
@@ -2096,104 +1790,147 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
    			decodedtimer.start(); //re-start the timer to keep is going
    				
    			}
-
+   		
    		@Override
    		public void onTick(long millisUntilFinished)	{
    			
    			//now we need to read in the raw file, it's already in RGB565 format and scaled so we don't need to do any scaling
-   			//Log.d("Animations","I am here");
-   			File file = new File(decodedDirPath + "/" + selectedFileName + "/" + selectedFileName + x + ".rgb565");
-   		    FileInputStream raw565 = null;
-			try {
-				raw565 = new FileInputStream(file);
-			} catch (FileNotFoundException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-   			 
-			x++;
-			
-			if (x == selectedFileTotalFrames - 1) { // Manju - Reached End of the file.
-   				x = 0;
-   			}
-			
-			  
+   			//Log.d("Animations","inside the decoder timer");
    			
-			// Get the size of the file
-   			long length = file.length();
-   			 
-   			if (length > Integer.MAX_VALUE) {
-   			    try {
-					throw new IOException("The file is too big");
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-   			}
-   			 
-   			// Create the byte array to hold the data
-   			//byte[] bytes = new byte[(int)length];
-   			BitmapBytes = new byte[(int)length];
-   			 
-   			// Read in the bytes
-   			int offset = 0;
-   			int numRead = 0;
-   			try {
-				while (offset < BitmapBytes.length
-				       && (numRead=raw565.read(BitmapBytes, offset, BitmapBytes.length-offset)) >= 0) {
-				    offset += numRead;
-				}
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-   			 
-   			// Ensure all the bytes have been read in
-   			if (offset < BitmapBytes.length) {
-   			    try {
-					throw new IOException("The file was not completely read: "+file.getName());
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-   			}
-   			 
-   			// Close the input stream, all file contents are in the bytes variable
-   			try {
-   				raw565.close();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}	
-   			
-   			//BitmapBytes = bos.toByteArray();
-   			
-   			//now that we have the byte array loaded, load it into the frame short array
-   			
-   			int y = 0;
-     		for (int i = 0; i < frame_.length; i++) {
-     			frame_[i] = (short) (((short) BitmapBytes[y] & 0xFF) | (((short) BitmapBytes[y + 1] & 0xFF) << 8));
-     			y = y + 2;
-     		}
-     		
-     		//we're done with the images so let's recycle them to save memory
-    	   // canvasBitmap.recycle();
-    	 //  bitmap.recycle(); 
-   		
-	   		//and then load to the LED matrix
-     		
-		   	try {
-				matrix_.frame(frame_);
+   			File file = new File(decodedDirPath + "/" + selectedFileName + ".rgb565");
+   			if (file.exists()) {
+   				
 				
-			} catch (ConnectionLostException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+				RandomAccessFile raf = null;
 				
+				//let's setup the seeker object
+				try {
+					raf = new RandomAccessFile(file, "r");
+					
+				} catch (FileNotFoundException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}  // "r" means open the file for reading
+				
+				
+				//if (x == selectedFileTotalFrames - 1) { // Manju - Reached End of the file.
+	   			//	x = 0;
+	   		//	}
+				
+				if (x == selectedFileTotalFrames) { // Manju - Reached End of the file.
+	   				x = 0;
+	   				try {
+						raf.seek(0);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} //go to the beginning
+	   			}
+				
+				 switch (selectedFileResolution) {
+		            case 16: frame_length = 1048;
+		                     break;
+		            case 32: frame_length = 2048;
+		                     break;
+		            case 64: frame_length = 4096;
+		                     break;
+		            default: frame_length = 2048;
+		                     break;
+		          }
+				
+				//now let's see forward to a part of the file
+				try {
+					raf.seek(x*frame_length);
+				} catch (IOException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				} 
+				Log.d("PixelAnimations","x is: " + x);
+				x++;
+				
+	   			 
+	   			if (frame_length > Integer.MAX_VALUE) {
+	   			    try {
+						throw new IOException("The file is too big");
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	   			}
+	   			 
+	   			// Create the byte array to hold the data
+	   			//byte[] bytes = new byte[(int)length];
+	   			BitmapBytes = new byte[(int)frame_length];
 	   			
+	   			//BitmapBytes = raf.readFully(byte[] b, int off, int len);
+	   		//	readFully(BitmapBytes, 0, 2048);
+	   		 // read the full data into the buffer
+	         //   dis.readFully(buf);
+	   			//Reads exactly len bytes from this file into the byte array, starting at the current file pointer.
+	   			 
+	   			// Read in the bytes
+	   			int offset = 0;
+	   			int numRead = 0;
+	   			try {
+					while (offset < BitmapBytes.length && (numRead=raf.read(BitmapBytes, offset, BitmapBytes.length-offset)) >= 0) {
+					    offset += numRead;
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+	   			 
+	   			// Ensure all the bytes have been read in
+	   			if (offset < BitmapBytes.length) {
+	   			    try {
+						throw new IOException("The file was not completely read: "+file.getName());
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	   			}
+	   			 
+	   			// Close the input stream, all file contents are in the bytes variable
+	   			try {
+	   				raf.close();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}	
+	   			
+	   			//BitmapBytes = bos.toByteArray();
+	   			
+	   			//now that we have the byte array loaded, load it into the frame short array
+	   			
+	   			int y = 0;
+	     		for (int i = 0; i < frame_.length; i++) {
+	     			frame_[i] = (short) (((short) BitmapBytes[y] & 0xFF) | (((short) BitmapBytes[y + 1] & 0xFF) << 8));
+	     			y = y + 2;
+	     		}
+	     		
+	     		//we're done with the images so let's recycle them to save memory
+	    	   // canvasBitmap.recycle();
+	    	 //  bitmap.recycle(); 
+	   		
+		   		//and then load to the LED matrix
+	     		
+			   	try {
+					matrix_.frame(frame_);
+					
+				} catch (ConnectionLostException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+   			}
+   			
+   			else {
+   				showToast("We have a problem, couldn't find the decoded file");
+   			}
    		}
-   		
    	}
+
+   		
+   
     
     public class MediaScanTimer extends CountDownTimer
    	{
@@ -2224,10 +1961,6 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 		AlertDialog.Builder alert=new AlertDialog.Builder(this);
 		alert.setTitle(getResources().getString(R.string.notFoundString)).setIcon(R.drawable.icon).setMessage(getResources().getString(R.string.bluetoothPairingString)).setNeutralButton(getResources().getString(R.string.OKText), null).show();	
     }
-    
-   
-    
-   
 
 	
 	public static class GifView extends View {
@@ -2250,16 +1983,18 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 		private int height;
 
 		private long time;
-		private int index;
+		private int index = 0;
 
 		private int resId;
 		private String filePath;
 
 		private boolean playFlag = false;
+		//private FileOutputStream fos;  //true means append, false is over-write
 
 		public  GifView(Context context, AttributeSet attrs) {
 			super(context, attrs);
 		}
+		
 
 		/**
 		 * Constructor
@@ -2392,12 +2127,13 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 					canvas.drawBitmap(bitmap, 0, 0, null);
 				} else if (imageType == IMAGE_TYPE_DYNAMIC) {
 					if (playFlag) {
-						long now = System.currentTimeMillis();
+						//long now = System.currentTimeMillis();
+						index++;
 						//showToast("delay: " + decoder.getDelay(index)); //took out the time delay to make decoding faster
-						if (time + decoder.getDelay(index) < now) {
+						/*if (time + decoder.getDelay(index) < now) {
 							//time += decoder.getDelay(index);
-							incrementFrameIndex();
-						}
+							incrementFrameIndex(); //this increments the index, we started at 0, so now we start at 1
+						}*/
 						Bitmap bitmap = decoder.getFrame(index);
 						if (bitmap != null) {  //this is the main one, let's ioio here
 							//canvas.drawBitmap(bitmap, 0, 0, null); //removed this because we'll re-write to canvas ioioBitmap instead
@@ -2437,20 +2173,10 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 								 	    BitmapBytes = buffer.array(); //copy the buffer into the type array	
 								 	    canvas.drawBitmap(IOIOBitmap, 0, 0, null); //write the animated .gif to the screen
 						   		 } 
-						   		
 						   		 
-						   		 //loadImage();  //load IOIObitmap into byte array and write to the matrix
-						   		 //but do we have a sync issue here, how to ensure this finishes before gets called again
-				   		//Toast toast = Toast.makeText(context, String.valueOf(index), Toast.LENGTH_SHORT);
-		                // toast.show();		
-		                 
-		            	//Toast toast = Toast.makeText(context, String.valueOf(decoder.getDelay(index)), Toast.LENGTH_SHORT);
-		                // toast.show();		
-					
-		                
-				   		if (index < decoder.getFrameCount() - 1) { 	
-				   			
-						   		//File decodedDir = new File(Environment.getExternalStorageDirectory() + "/pixel/pixelpiledriver/decoded");
+				   		if (index <= decoder.getFrameCount()) { 	
+						   		
+						   		/*//File decodedDir = new File(decodedDirPath + "/" + selectedFileName);
 						   		File decodedDir = new File(decodedDirPath + "/" + selectedFileName);
 						   		if(decodedDir.exists() && decodedDir.isDirectory()) {
 						   		    // do something here
@@ -2458,111 +2184,35 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 						   		else { //make the directory						   			
 								   	// have the object build the directory structure, if needed.
 								   	decodedDir.mkdirs();
-						   		}
+						   		}*/
 						   			
 					   			try {
-									
-									writeFile(BitmapBytes, decodedDirPath + "/" + selectedFileName + "/" + selectedFileName + index + ".rgb565");  //this one the original one
-									//File file = new File(decodedDirPath + "/" + selectedFileName + "/" + selectedFileName + ".rgb565");
-
-								
-									  // append or overwrite the file
-									
-									//           boolean append = true;
-									  //          FileChannel channel = new FileOutputStream(file, append).getChannel();
-									            // Flips this buffer.  The limit is set to the current position and then
-									
-									            // the position is set to zero.  If the mark is defined then it is discarded.
-									
-									    //       buffer.flip();
-									            // Writes a sequence of bytes to this channel from the given buffer.
-									
-									      //     channel.write(buffer);
-									           // close the channel
-									        //   channel.close();
-
-									
-									
-									
+									//writeFile(BitmapBytes, decodedDirPath + "/" + selectedFileName + "/" + selectedFileName + index + ".rgb565");  //this one the original one
+									appendWrite(BitmapBytes, decodedDirPath + "/" + selectedFileName + ".rgb565"); //this writes one big file instead of individual ones
+									Log.d("PixelAnimate","initial write: " + index);
+									//Log.d("PixelAnimate", "frame count: " + decoder.getFrameCount());
+									//index++;
+								  
 									
 								} catch (IOException e1) {
 									// TODO Auto-generated catch block
+									Log.e("PixelAnimate", "Had a problem writing the original unified animation rgb565 field");
 									e1.printStackTrace();
 								}
-					   			
-					   			
-					   			/*package com.javacodegeeks.snippets.core;
-
-					   			import java.io.File;
-					   			import java.io.FileInputStream;
-					   			import java.io.FileOutputStream;
-					   			import java.io.IOException;
-					   			import java.io.InputStream;
-					   			import java.nio.ByteBuffer;
-					   			import java.nio.channels.FileChannel;
-
-					   			public class WriteAppendToFileWithByteBuffer {
-
-					   				public static void main(String[] args) {
-
-					   					try {
-
-					   						File inFile = new File("in.xml");
-
-					   						// Allocate a direct (memory-mapped) byte buffer with a byte capacity equal to file's length
-					   						// DO NOT use this approach for copying large files
-					   					    ByteBuffer buf = ByteBuffer.allocateDirect((int)inFile.length());
-
-					   						InputStream is = new FileInputStream(inFile);
-
-					   					    int b;
-
-					   					    while ((b=is.read())!=-1) {
-					   					    	buf.put((byte)b);
-					   					    }
-
-					   						File file = new File("out.xml");
-
-					   						// append or overwrite the file
-					   						boolean append = false;
-
-					   						FileChannel channel = new FileOutputStream(file, append).getChannel();
-
-					   						// Flips this buffer.  The limit is set to the current position and then
-					   						// the position is set to zero.  If the mark is defined then it is discarded.
-					   						buf.flip();
-
-					   						// Writes a sequence of bytes to this channel from the given buffer.
-					   						channel.write(buf);
-
-					   						// close the channel
-					   						channel.close();
-
-					   					}
-					   					catch (IOException e) {
-					   						System.out.println("I/O Error: " + e.getMessage());
-					   					}
-
-					   				}
-
-					   			}*/
-					   			
-					   		
-					   			
 				   		}
 						   		
-				   		else {
-				   		
-				         //now let's write the xml files with delay time and number frames				         
+				   		else {  //ok we're done, now let's write the text file meta data with delay time in between frames and number frames				         
 				        ///***************************************************************
-				        
-				        String filetag = String.valueOf(decoder.getFrameCount()) + "," + String.valueOf(decoder.getDelay(index)) + "," + String.valueOf(currentResolution);  //our format is number of frames,delay 32,60,32 equals 32 frames, 60 ms time delay, 32 resolution   resolution is 16 for 16x32 or 32 for 32x32 led matrix, we need this in case the user changes the resolution in the app, then we'd need to catch this mismatch and re-decode
+				   		Log.e("PixelAnimate", "Frame Count: " + decoder.getFrameCount());
+				       // String filetag = String.valueOf(decoder.getFrameCount()) + "," + String.valueOf(decoder.getDelay(index-1)) + "," + String.valueOf(currentResolution);  //our format is number of frames,delay 32,60,32 equals 32 frames, 60 ms time delay, 32 resolution   resolution is 16 for 16x32 or 32 for 32x32 led matrix, we need this in case the user changes the resolution in the app, then we'd need to catch this mismatch and re-decode
+				       //note here we're using the delay of the first frame, that becomes the delay for all the frames in the gif
+				   		String filetag = String.valueOf(decoder.getFrameCount()) + "," + String.valueOf(decoder.getDelay(1)) + "," + String.valueOf(currentResolution);  //our format is number of frames,delay 32,60,32 equals 32 frames, 60 ms time delay, 32 resolution   resolution is 16 for 16x32 or 32 for 32x32 led matrix, we need this in case the user changes the resolution in the app, then we'd need to catch this mismatch and re-decode
 				        
 				         String exStorageState = Environment.getExternalStorageState();
 				     	if (Environment.MEDIA_MOUNTED.equals(exStorageState)){
 				     		try {
 				     			
-				     		   File myFile = new File(decodedDirPath + "/" + selectedFileName + "/" + selectedFileName + ".txt");  //decoded/rain/rain.txt						       
+				     		   File myFile = new File(decodedDirPath + "/" + selectedFileName + ".txt");  //decoded/rain/rain.txt						       
 				     		   myFile.createNewFile();
 					           FileOutputStream fOut = null;
 							   fOut = new FileOutputStream(myFile);
@@ -2576,8 +2226,11 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 						      // toast1.show();	
 						       gifView.stop();
 						       MainActivity nonstaticCall = new MainActivity();
+						       //*****************************************************
+							   //we're done decoding and we've written our file so let's animate!
 						       nonstaticCall.letsAnimate();     // this is a hack to make a call to animateAfterDecode which needs to be non-static, didn't have time to make gifview non-static
-						      // animateAfterDecode(0);
+						     // Log.d("PixelAnimate","made it to the nonstatic call");
+						       // animateAfterDecode(0);
 				     			
 				     		} catch (IOException e) {
 				     			e.printStackTrace();
@@ -2588,12 +2241,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 					     		Toast toast2 = Toast.makeText(context, "Storage Not Available, Cannot Continue", Toast.LENGTH_LONG);
 						        toast2.show();	
 					     	}
-				   		}
-				   	   //*****************************************************
-				   	  //we're done decoding and we've written our file so let's animate!
-				   		 
-						   		
-						}
+				   		}	
+					}
 						
 						invalidate();
 					} else {
@@ -2617,18 +2266,24 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 		   
 		}
 		
-		public void writeFile(byte[] data, String fileName) throws IOException{
+		/*public void writeFile(byte[] data, String fileName) throws IOException{
 			  FileOutputStream out = new FileOutputStream(fileName);
 			  out.write(data);
 			  out.close();
+		}*/
+		
+		public void appendWrite(byte[] data, String filename) throws IOException {
+			 FileOutputStream fos = new FileOutputStream(filename, true);  //true means append, false is over-write
+		     fos.write(data);
+		     fos.close();
 		}
 
 
-		private void incrementFrameIndex() {
+		/*private void incrementFrameIndex() {
 			index++;
-			if (index >= decoder.getFrameCount()) {
-				index = 0;
-			}
+			//if (index >= decoder.getFrameCount()) {
+			//	index = 0;
+			//}
 		}
 
 		private void decrementFrameIndex() {
@@ -2636,7 +2291,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 			if (index < 0) {
 				index = decoder.getFrameCount() - 1;
 			}
-		}
+		}*/
 
 		public void play() {
 			time = System.currentTimeMillis();
@@ -2644,10 +2299,10 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 			invalidate();
 		}
 
-		public void pause() {
+		/*public void pause() {
 			playFlag = false;
 			invalidate();
-		}
+		}*/
 
 		public void stop() {
 			playFlag = false;
@@ -2656,19 +2311,19 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 			
 		}
 
-		public void nextFrame() {
+		/*public void nextFrame() {
 			if (decodeStatus == DECODE_STATUS_DECODED) {
 				incrementFrameIndex();
 				invalidate();
 			}
 		}
 
-		public void prevFrame() {
+		public void prevFrame() {  //not used
 			if (decodeStatus == DECODE_STATUS_DECODED) {
 				decrementFrameIndex();
 				invalidate();
 			}
-		}
+		}*/
 	}
 
 
