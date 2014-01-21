@@ -164,7 +164,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	
 	private String extStorageDirectory = Environment.getExternalStorageDirectory().toString();
     private String basepath = extStorageDirectory;
-    private static String decodedDirPath =  Environment.getExternalStorageDirectory() + "/pixel/pixelanimations/decoded"; 
+    private static String decodedDirPath =  Environment.getExternalStorageDirectory() + "/pixel/animatedgifs/decoded"; 
     private String artpath = "/media";
     private static Context context;
     private Context frameContext;
@@ -231,6 +231,11 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	      firstTimeSetup2_ = (TextView) findViewById(R.id.firstTimeSetup2);
 	      firstTimeInstructions_ = (TextView) findViewById(R.id.firstTimeInstructions);
 	      firstTimeSetupCounter_ = (TextView) findViewById(R.id.firstTimeSetupCounter);
+	      
+	      firstTimeSetup1_.setVisibility(View.INVISIBLE);
+	      firstTimeSetup2_.setVisibility(View.INVISIBLE);
+	      firstTimeInstructions_.setVisibility(View.INVISIBLE);
+	      firstTimeSetupCounter_.setVisibility(View.INVISIBLE);
 		 
 	      gifView = (GifView) findViewById(R.id.gifView);
 	      gifView.setGif(R.drawable.zzzblank);  //code will crash if a dummy gif is not loaded initially
@@ -287,19 +292,12 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
             extStorageDirectory = Environment.getExternalStorageDirectory().toString();
 	           
             	// File artdir = new File(basepath + "/Android/data/com.ioiomint./files");
-            	File artdir = new File(basepath + "/pixel/pixelanimations");
+            	File artdir = new File(basepath + "/pixel/animatedgifs");
 	            if (!artdir.exists()) { //no directory so let's now start the one time setup
 	            	sdcardImages.setVisibility(View.INVISIBLE); //hide the images as they're not loaded so we can show a splash screen instead
 	            	//showToast(getResources().getString(R.string.oneTimeSetupString)); //replaced by direct text on view screen
 	            	
 	            	new copyFilesAsync().execute();
-	            	
-	            	
-	            	//artdir.mkdirs();
-	               /// copyArt(); 
-	                //countdownCounter = (countdownDuration - 2);
-	               // mediascanTimer = new MediaScanTimer(countdownDuration*1000,1000); //pop up a message if it's not connected by this timer
- 		           // mediascanTimer.start(); //we need a delay here to give the me
 	               
 	            }
 	            else { //the directory was already there so no need to copy files or do a media re-scan so just continue on
@@ -326,210 +324,60 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
         }
 	}
 	
-	 /*public class ResponseReceiver extends BroadcastReceiver {
-	        public static final String ACTION_RESP = "com.mamlambo.intent.action.MESSAGE_PROCESSED";
-	        @Override
-	        public void onReceive(Context context, Intent intent) {
-	           
-	            // Update UI, new "message" processed by SimpleIntentService
-	           //TextView result = (TextView) findViewById(R.id.txt_result);
-	           //String text = intent.getStringExtra(SimpleIntentService.PARAM_OUT_MSG);
-	          // result.setText(text);
-	        }
-	        
-	    }*/
-	    
-	  
-	
-	
 	 private class copyFilesAsync extends AsyncTask<Void, Integer, Void>{
 		 
 	     int progress_status;
 	      
 	     @Override
 	  protected void onPreExecute() {
-	   // update the UI immediately after the task is executed
-	   super.onPreExecute();
-	    
-	 //   Toast.makeText(AsyncTaskActivity.this,
-	            //"Invoke onPreExecute()", Toast.LENGTH_SHORT).show();
+		   // update the UI immediately after the task is executed
+		   super.onPreExecute();
+		   
+		   progress = new ProgressDialog(MainActivity.this);
+	       //progress.setMax(selectedFileTotalFrames);
+	       progress.setTitle("Initial Setup");
+	       progress.setMessage("Copying animations to your local memory....");
+	       progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+	       progress.show();
 	 
 	    progress_status = 0;
 	  //  txt_percentage.setText("downloading 0%");
-	    firstTimeSetupCounter_.setText("0");
+	   // firstTimeSetupCounter_.setText("0");
 	    
 	  }
 	      
 	  @Override
 	  protected Void doInBackground(Void... params) {
 		  	
-			File artdir = new File(basepath + "/pixel/pixelanimations");
+			File artdir = new File(basepath + "/pixel/animatedgifs");
 			artdir.mkdirs();			
 			SystemClock.sleep(100);
-            File decodeddir = new File(basepath + "/pixel/pixelanimations/decoded");
+            File decodeddir = new File(basepath + "/pixel/animatedgifs/decoded");
 		  	decodeddir.mkdirs();
-			//SystemClock.sleep(100);
-			//File leavealoneddir = new File(basepath + "/pixel/pixelanimations/leavealone");
-			//leavealoneddir.mkdirs();
 			SystemClock.sleep(100);
 		  	copyArt(); //copy the .png and .gif files (mainly png) because we want to decode first
 			SystemClock.sleep(100);
 			copyArt2();  //copy the decoded files
 			
+			//had to add this delay , otherwise especially on older phones, all the images don't load the first time
+			try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+			
+			//while(progress_status<100)  {
+		     
+			 //  progress_status += 2;
+			     
+			 //   publishProgress(progress_status);
+			 //  SystemClock.sleep(1000);
+			     
+			// }
+			
 			/*copyDecodedThread("0rain");
 			progress_status ++;
-		    publishProgress(progress_status);
-		    
-        	copyDecodedThread("arrows");
-        	progress_status ++;
-		    publishProgress(progress_status);
-		    
-		    copyDecodedThread("ybikini");
-		    progress_status ++;
-		    publishProgress(progress_status);
-		    
-        	copyDecodedThread("boat");
-        	progress_status ++;
-		    publishProgress(progress_status);
-		    
-        	copyDecodedThread("bubbles");
-        	progress_status ++;
-		    publishProgress(progress_status);
-		    
-        	copyDecodedThread("colortiles");
-        	progress_status ++;
-		    publishProgress(progress_status);
-		    
-        	copyDecodedThread("crosshatch");
-        	progress_status ++;
-		    publishProgress(progress_status);
-		    
-		    copyDecodedThread("earth");
-		    progress_status ++;
-		    publishProgress(progress_status);
-		    
-            copyDecodedThread("farmer");
-            progress_status ++;
-		    publishProgress(progress_status);
-		    
-		    copyDecodedThread("sfighting");
-		    progress_status ++;
-		    publishProgress(progress_status);
-		    
-            copyDecodedThread("fire");
-            progress_status ++;         
-		    publishProgress(progress_status);
-		    
-            copyDecodedThread("fliptile");
-            progress_status ++;
-		    publishProgress(progress_status);
-		    
-            copyDecodedThread("float");
-            progress_status ++;
-		    publishProgress(progress_status);
-		    
-            copyDecodedThread("flow");
-            progress_status ++;
-		    publishProgress(progress_status);
-		    
-            copyDecodedThread("fuji");
-            progress_status ++;
-		    publishProgress(progress_status);
-		    
-            copyDecodedThread("lines");
-            progress_status ++;
-		    publishProgress(progress_status);
-		    
-		    copyDecodedThread("orangeball");
-		    progress_status ++;
-		    publishProgress(progress_status);
-		    
-		    copyDecodedThread("pacman");
-		    progress_status ++;
-		    publishProgress(progress_status);
-		    
-		    copyDecodedThread("pattern");
-		    progress_status ++;
-		    publishProgress(progress_status);
-		    
-            copyDecodedThread("rainfast");
-            progress_status ++;
-		    publishProgress(progress_status);
-		    
-            copyDecodedThread("sboxergreen");
-            progress_status ++;
-		    publishProgress(progress_status);
-		    
-            copyDecodedThread("sboxerpink");
-            progress_status ++;
-		    publishProgress(progress_status);
-		    
-            copyDecodedThread("scmakeout");
-            progress_status ++;
-		    publishProgress(progress_status);
-		    
-		    copyDecodedThread("screddance");
-		    progress_status ++;
-		    publishProgress(progress_status);
-		    
-            copyDecodedThread("scrowd");
-            progress_status ++;
-		    publishProgress(progress_status);
-		    
-            copyDecodedThread("sgorangedancer");
-            progress_status ++;
-		    publishProgress(progress_status);
-		    
-            copyDecodedThread("sgreendancer");
-            progress_status ++;
-		    publishProgress(progress_status);
-		    
-            copyDecodedThread("sjumpblue");
-            progress_status ++;
-		    publishProgress(progress_status);
-		    
-		    copyDecodedThread("sjumppink");
-		    progress_status ++;
-		    publishProgress(progress_status);
-		    
-		    copyDecodedThread("paoloworm");
-		    progress_status ++;
-		    publishProgress(progress_status);
-		    
-		    copyDecodedThread("sponytail");
-		    progress_status ++;
-		    publishProgress(progress_status);
-		    
-		    copyDecodedThread("rspray");
-		    progress_status ++;
-		    publishProgress(progress_status);
-		    
-		    copyDecodedThread("spraying");
-		    progress_status ++;
-		    publishProgress(progress_status);
-		    
-		    copyDecodedThread("rstarburst");
-		    progress_status ++;
-		    publishProgress(progress_status);
-		    
-		    copyDecodedThread("rstarfield");
-		    progress_status ++;
-		    publishProgress(progress_status);
-		    
-		    copyDecodedThread("rshifter");
-		    progress_status ++;
-		    publishProgress(progress_status);
-		    
-		    copyDecodedThread("rwaterflow");
-		    progress_status ++;
-		    publishProgress(progress_status);
-		    
-		    copyDecodedThread("rwhiteball");
-		    progress_status ++;
-		    publishProgress(progress_status);
-		    
-		    copyDecodedThread("zaquarium");
-		    progress_status ++;
 		    publishProgress(progress_status);
 		    
 		    copyDecodedThread("zarcade");
@@ -537,21 +385,11 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 		    publishProgress(progress_status);*/
 		    
 		    //copyNewAnimations();
-		  
-		  
-			//  while(progress_status<100){
-		     
-		   // progress_status += 2;
-		     
-		   // publishProgress(progress_status);
-		   // SystemClock.sleep(300);
-		     
-		  // }
 		    
 	   return null;
 	  }
 	  
-	  private void copyNewAnimations() {
+	 /* private void copyNewAnimations() {
 		    copyDecodedThread("zaquarium");
 		    progress_status ++;
 		    publishProgress(progress_status);
@@ -559,14 +397,15 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 		    copyDecodedThread("zarcade");
 		    progress_status ++;
 		    publishProgress(progress_status);
-	  }
+	  }*/
 	  
 	  @Override
 	  protected void onProgressUpdate(Integer... values) {
 	   super.onProgressUpdate(values);
 	    
 	  // progressBar.setProgress(values[0]);
-	   firstTimeSetupCounter_.setText(values[0]+"%");
+	  // firstTimeSetupCounter_.setText(values[0]+"%");
+	   progress.incrementProgressBy(1);
 	  // firstTimeSetupCounter_.setText("0%");
 	    
 	  }
@@ -574,27 +413,25 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	  @Override
 	  protected void onPostExecute(Void result) {
 	   super.onPostExecute(result);
+	   progress.dismiss(); //we're done so now hide the progress update box
 	   continueOnCreate();
-   	//	decoding = 0; 
-	   // Toast.makeText(AsyncTaskActivity.this,
-	           // "Invoke onPostExecute()", Toast.LENGTH_SHORT).show();
 	     
-	   firstTimeSetupCounter_.setText("Complete");
+	   //firstTimeSetupCounter_.setText("Complete");
 	   // btn_start.setEnabled(true);
 	  }
 	  
-	  private void copyDecodedThread(final String decodedDir) {  //no longer used
+	/*  private void copyDecodedThread(final String decodedDir) {  //no longer used
 			
 					AssetManager assetManager = getResources().getAssets();
 			        String[] files = null;
 			        try {
-			            files = assetManager.list("pixelanimations/decoded/" + decodedDir);
+			            files = assetManager.list("animatedgifs/decoded/" + decodedDir);
 			        } catch (Exception e) {
 			            Log.e("read clipart ERROR", e.toString());
 			            e.printStackTrace();
 			        }
 			        
-			        File dir = new File(basepath + "/pixel/pixelanimations/decoded/" + decodedDir);
+			        File dir = new File(basepath + "/pixel/animatedgifs/decoded/" + decodedDir);
 	                if (!dir.exists())
 	                    dir.mkdir();
 	                
@@ -602,8 +439,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 			            InputStream in = null;
 			            OutputStream out = null;
 			            try {
-			              in = assetManager.open("pixelanimations/decoded/" + decodedDir + "/" + files[i]);
-			              out = new FileOutputStream(basepath + "/pixel/pixelanimations/decoded/" + decodedDir + "/" + files[i]);
+			              in = assetManager.open("animatedgifs/decoded/" + decodedDir + "/" + files[i]);
+			              out = new FileOutputStream(basepath + "/pixel/animatedgifs/decoded/" + decodedDir + "/" + files[i]);
 			              copyFile(in, out);
 			              in.close();
 			              in = null;
@@ -617,7 +454,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 			            }       
 			        }
 				
-		}
+		}*/
 	  
 		@SuppressLint("NewApi")
 		private void copyArt() {
@@ -625,17 +462,21 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	    	AssetManager assetManager = getResources().getAssets();
 	        String[] files = null;
 	        try {
-	            files = assetManager.list("pixelanimations");
+	            files = assetManager.list("animatedgifs");
 	        } catch (Exception e) {
 	            Log.e("read clipart ERROR", e.toString());
 	            e.printStackTrace();
 	        }
+	        
+	        //let's get the total numbers of files here and set the progress bar
+	        progress.setMax(files.length*3);
+	        
 	        for(int i=0; i<files.length; i++) {
 	            InputStream in = null;
 	            OutputStream out = null;
 	            try {
-	              in = assetManager.open("pixelanimations/" + files[i]);
-	              out = new FileOutputStream(basepath + "/pixel/pixelanimations/" + files[i]);
+	              in = assetManager.open("animatedgifs/" + files[i]);
+	              out = new FileOutputStream(basepath + "/pixel/animatedgifs/" + files[i]);
 	              copyFile(in, out);
 	              in.close();
 	              in = null;
@@ -647,7 +488,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	  		   publishProgress(progress_status);  
 	  		   
 	           MediaScannerConnection.scanFile(context,  //here is where we register the newly copied file to the android media content DB via forcing a media scan
-		                        new String[] { basepath + "/pixel/pixelanimations/" + files[i] }, null,
+		                        new String[] { basepath + "/pixel/animatedgifs/" + files[i] }, null,
 		                        new MediaScannerConnection.OnScanCompletedListener() {
 		                    public void onScanCompleted(String path, Uri uri) {
 		                        Log.i("ExternalStorage", "Scanned " + path + ":");
@@ -661,7 +502,6 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	                e.printStackTrace();
 	            }       
 	        }
-	        
 	    }
 		
 		
@@ -670,7 +510,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	    	AssetManager assetManager = getResources().getAssets();
 	        String[] files2 = null;
 	        try {
-	            files2 = assetManager.list("pixelanimations/decoded");
+	            files2 = assetManager.list("animatedgifs/decoded");
 	        } catch (Exception e) {
 	            Log.e("read clipart ERROR", e.toString());
 	            e.printStackTrace();
@@ -681,8 +521,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	            InputStream in = null;
 	            OutputStream out = null;
 	            try {
-	              in = assetManager.open("pixelanimations/decoded/" + files2[i]);
-	              out = new FileOutputStream(basepath + "/pixel/pixelanimations/decoded/" + files2[i]);
+	              in = assetManager.open("animatedgifs/decoded/" + files2[i]);
+	              out = new FileOutputStream(basepath + "/pixel/animatedgifs/decoded/" + files2[i]);
 	              copyFile(in, out);
 	              in.close();
 	              in = null;
@@ -697,11 +537,9 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	                e.printStackTrace();
 	            }       
 	        }
-	    }
-	  
-	  
-	  
-}
+	    } //end method
+		
+} //end async task
 	
 	
 	
@@ -771,6 +609,11 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
             v = (ImageView) grid.getChildAt(i);
             ((BitmapDrawable) v.getDrawable()).setCallback(null);
         }
+        
+        if (deviceFound == 0) {  
+    	     connectTimer.cancel();  //if user closes the program, need to kill this timer or we'll get a crash
+        }
+    
         
        /* if (deviceFound == 1) {  //was causing crashes
         	connectTimer.cancel();  //if user closes the program, need to kill this timer or we'll get a crash
@@ -886,7 +729,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
              cursor = managedQuery(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, 
              projection, 
              MediaStore.Images.Media.DATA + " like ? ",
-             new String[] {"%pixelanimations%"},  
+             new String[] {"%animatedgifs%"},  
              null);
            
             
@@ -1015,154 +858,155 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 
 	@Override
  public  boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id) {  
-		   //********we need to reset everything because the user could have been already running an animation
- 	     x = 0;
- 	     
- 	     if (StreamModePlaying == 1) {
- 	    	 //decodedtimer.cancel();
- 	    	// if(!pixelHardwareID.equals("PIXL")) {  //not PIXEL V2
- 	    		decodedtimer.cancel();  //it's a lon
- 	    	// }
- 	     }
- 	     ///****************************
-	
-   	// Get the data location of the image
-       String[] projection = {MediaStore.Images.Media.DATA};
-       
-     
-   	cursor = managedQuery(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-           projection, 
-           MediaStore.Images.Media.DATA + " like ? ",
-           new String[] {"%pixelanimations%"},  
-           null);
-       
-       
-      // showToast("on click");
-       
-       columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-       cursor.moveToPosition(position);
-       // Get image filename
-       imagePath = cursor.getString(columnIndex);
-       System.gc();	        
-       //showToast(imagePath);
-       
-       selectedFileName = imagePath;
-       //here we need to get the file name to see if the file has already been decoded
-       //file name will be in a format like this sdcard/pixel/pixerinteractive/rain.gif , we want to extra just rain
-       String delims = "[/]";
-       String[] aFileName = selectedFileName.split(delims);
-       int aFileNameLength = aFileName.length;
-       selectedFileName = aFileName[aFileNameLength-1];
-       String delims2 = "[.]";
-       String[] aFileName2 = selectedFileName.split(delims2);
-       int aFileNameLength2 = aFileName2.length;
-       //showToast(aFileName2[0]);
-       selectedFileName = aFileName2[0];	//now we have just the short name   
-       
-       //**** now let's handle the thumbnails
-       String filenameArray[] = imagePath.split("\\.");
-       String extension = filenameArray[filenameArray.length-1]; //.png
-       
-       if (extension.equals("png")) {  //then we use the thumbnail, we just need to rename the image path to a gif
-       	String wholestring_no_extension = filenameArray[filenameArray.length-2]; // /storage/emulated/0/pixel/pixelanimate/tree
-       	String filenameArray2[] = wholestring_no_extension.split("\\/");
-       	String filename_no_extension = filenameArray2[filenameArray2.length-1]; //tree
-	       // showToast(filename_no_extension);
-       	String newimagePath = wholestring_no_extension.replace(filename_no_extension, filename_no_extension + ".gif");
-       	//showToast(newimagePath);
-       	//showToast(String.valueOf(filenameArray2.length));
-       	imagePath = newimagePath;
-       }
-      else {
-    	   gifView.setGif(imagePath); //just sets the image, that's all, doesn't do any decoding
-       } 
-       
-      //gifView.setGif(imagePath);  //this crashes the code, look at this later
-       
-       animateAfterDecode(1);
-	   return true;  //VERY IMPORTANT this is true, otherwise we'll get a single click event too at the same time which will screw things up royally
+		   if (deviceFound == 1) {   
+		
+			//********we need to reset everything because the user could have been already running an animation
+	 	     x = 0;
+	 	     
+	 	     if (StreamModePlaying == 1) {
+	 	    	 //decodedtimer.cancel();
+	 	    	// if(!pixelHardwareID.equals("PIXL")) {  //not PIXEL V2
+	 	    		decodedtimer.cancel();  //it's a lon
+	 	    	// }
+	 	     }
+	 	     ///****************************
+		
+	   	// Get the data location of the image
+	       String[] projection = {MediaStore.Images.Media.DATA};
+	       
+	     
+	   	cursor = managedQuery(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+	           projection, 
+	           MediaStore.Images.Media.DATA + " like ? ",
+	           new String[] {"%animatedgifs%"},  
+	           null);
+	       
+	       
+	      // showToast("on click");
+	       
+	       columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+	       cursor.moveToPosition(position);
+	       // Get image filename
+	       imagePath = cursor.getString(columnIndex);
+	       System.gc();	        
+	       //showToast(imagePath);
+	       
+	       selectedFileName = imagePath;
+	       //here we need to get the file name to see if the file has already been decoded
+	       //file name will be in a format like this sdcard/pixel/pixerinteractive/rain.gif , we want to extra just rain
+	       String delims = "[/]";
+	       String[] aFileName = selectedFileName.split(delims);
+	       int aFileNameLength = aFileName.length;
+	       selectedFileName = aFileName[aFileNameLength-1];
+	       String delims2 = "[.]";
+	       String[] aFileName2 = selectedFileName.split(delims2);
+	       int aFileNameLength2 = aFileName2.length;
+	       //showToast(aFileName2[0]);
+	       selectedFileName = aFileName2[0];	//now we have just the short name   
+	       
+	       //**** now let's handle the thumbnails
+	       String filenameArray[] = imagePath.split("\\.");
+	       String extension = filenameArray[filenameArray.length-1]; //.png
+	       
+	       if (extension.equals("png")) {  //then we use the thumbnail, we just need to rename the image path to a gif
+	       	String wholestring_no_extension = filenameArray[filenameArray.length-2]; // /storage/emulated/0/pixel/pixelanimate/tree
+	       	String filenameArray2[] = wholestring_no_extension.split("\\/");
+	       	String filename_no_extension = filenameArray2[filenameArray2.length-1]; //tree
+		       // showToast(filename_no_extension);
+	       	String newimagePath = wholestring_no_extension.replace(filename_no_extension, filename_no_extension + ".gif");
+	       	//showToast(newimagePath);
+	       	//showToast(String.valueOf(filenameArray2.length));
+	       	imagePath = newimagePath;
+	       }
+	      else {
+	    	   gifView.setGif(imagePath); //just sets the image, that's all, doesn't do any decoding
+	       } 
+	       
+	      //gifView.setGif(imagePath);  //this crashes the code, look at this later
+	       
+	       animateAfterDecode(1);
+		   return true;  //VERY IMPORTANT this is true, otherwise we'll get a single click event too at the same time which will screw things up royally
+		   }
+		   
+	   else {
+		   showToast("PIXEL was not found, did you Bluetooth pair to PIXEL?");
+		   return true;
+	   }
 	}
     
   public void onItemClick(AdapterView<?> parent, View v, int position, long id) {    //we go here when the user tapped an image from the initial grid    
         
-	         //********we need to reset everything because the user could have been already running an animation
-	  	     x = 0;
-	  	     
-	  	     
-	  	     if (StreamModePlaying == 1) {
-	  	    	 //decodedtimer.cancel();
-	  	    	// if(!pixelHardwareID.equals("PIXL")) {
-	  	    		decodedtimer.cancel();
-	  	    	// }
-	  	    	// is.close();
-	  	     }
-	  	     ///****************************
-    	
-	    	// Get the data location of the image
-	        String[] projection = {MediaStore.Images.Media.DATA};
-	        
-	      
-        	cursor = managedQuery(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                projection, 
-                MediaStore.Images.Media.DATA + " like ? ",
-                new String[] {"%pixelanimations%"},  
-                null);
-	        
-	        
-	       // showToast("on click");
-	        
-	        columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-	        cursor.moveToPosition(position);
-	        // Get image filename
-	        imagePath = cursor.getString(columnIndex);
-	        System.gc();	        
-	        //showToast(imagePath);
-	        
-	        selectedFileName = imagePath;
-	        //here we need to get the file name to see if the file has already been decoded
-	        //file name will be in a format like this sdcard/pixel/pixerinteractive/rain.gif , we want to extra just rain
-	        String delims = "[/]";
-	        String[] aFileName = selectedFileName.split(delims);
-	        int aFileNameLength = aFileName.length;
-	        selectedFileName = aFileName[aFileNameLength-1];
-	        String delims2 = "[.]";
-	        String[] aFileName2 = selectedFileName.split(delims2);
-	        int aFileNameLength2 = aFileName2.length;
-	        //showToast(aFileName2[0]);
-	        selectedFileName = aFileName2[0];	//now we have just the short name with no extension
-	        
-	        //**** now let's handle the thumbnails
-	        String filenameArray[] = imagePath.split("\\.");
-	        String extension = filenameArray[filenameArray.length-1]; //.png
-	       
-	        
-	       /* if (extension.equals("png")) {  //then we use the thumbnail
-	        	String wholestring_no_extension = filenameArray[filenameArray.length-2]; // /storage/emulated/0/pixel/pixelanimate/tree
-	        	String filenameArray2[] = wholestring_no_extension.split("\\/");
-	        	String filename_no_extension = filenameArray2[filenameArray2.length-1]; //tree
-		       // showToast(filename_no_extension);
-	        	String newimagePath = wholestring_no_extension.replace(filename_no_extension, "leavealone/" + filename_no_extension + ".gif");
-	        	//showToast(newimagePath);
-	        	//showToast(String.valueOf(filenameArray2.length));
-	        	imagePath = newimagePath;
-	        }*/
-	        
-	        if (extension.equals("png")) {  //then we use the thumbnail, we just need to rename the image path to a gif
-	        	String wholestring_no_extension = filenameArray[filenameArray.length-2]; // /storage/emulated/0/pixel/pixelanimate/tree
-	        	String filenameArray2[] = wholestring_no_extension.split("\\/");
-	        	String filename_no_extension = filenameArray2[filenameArray2.length-1]; //tree
-		       // showToast(filename_no_extension);
-	        	String newimagePath = wholestring_no_extension.replace(filename_no_extension, filename_no_extension + ".gif");
-	        	//showToast(newimagePath);
-	        	//showToast(String.valueOf(filenameArray2.length));
-	        	imagePath = newimagePath;
+	        if (deviceFound == 1) { 
+			  		//********we need to reset everything because the user could have been already running an animation
+			  	     x = 0;
+			  	     
+			  	     
+			  	     if (StreamModePlaying == 1) {
+			  	    	 //decodedtimer.cancel();
+			  	    	// if(!pixelHardwareID.equals("PIXL")) {
+			  	    		decodedtimer.cancel();
+			  	    	// }
+			  	    	// is.close();
+			  	     }
+			  	     ///****************************
+		    	
+			    	// Get the data location of the image
+			        String[] projection = {MediaStore.Images.Media.DATA};
+			        
+			      
+		        	cursor = managedQuery(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+		                projection, 
+		                MediaStore.Images.Media.DATA + " like ? ",
+		                new String[] {"%animatedgifs%"},  
+		                null);
+			        
+			        
+			       // showToast("on click");
+			        
+			        columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+			        cursor.moveToPosition(position);
+			        // Get image filename
+			        imagePath = cursor.getString(columnIndex);
+			        System.gc();	        
+			        //showToast(imagePath);
+			        
+			        selectedFileName = imagePath;
+			        //here we need to get the file name to see if the file has already been decoded
+			        //file name will be in a format like this sdcard/pixel/pixerinteractive/rain.gif , we want to extra just rain
+			        String delims = "[/]";
+			        String[] aFileName = selectedFileName.split(delims);
+			        int aFileNameLength = aFileName.length;
+			        selectedFileName = aFileName[aFileNameLength-1];
+			        String delims2 = "[.]";
+			        String[] aFileName2 = selectedFileName.split(delims2);
+			        int aFileNameLength2 = aFileName2.length;
+			        //showToast(aFileName2[0]);
+			        selectedFileName = aFileName2[0];	//now we have just the short name with no extension
+			        
+			        //**** now let's handle the thumbnails
+			        String filenameArray[] = imagePath.split("\\.");
+			        String extension = filenameArray[filenameArray.length-1]; //.png
+			        
+			        if (extension.equals("png")) {  //then we use the thumbnail, we just need to rename the image path to a gif
+			        	String wholestring_no_extension = filenameArray[filenameArray.length-2]; // /storage/emulated/0/pixel/pixelanimate/tree
+			        	String filenameArray2[] = wholestring_no_extension.split("\\/");
+			        	String filename_no_extension = filenameArray2[filenameArray2.length-1]; //tree
+				       // showToast(filename_no_extension);
+			        	String newimagePath = wholestring_no_extension.replace(filename_no_extension, filename_no_extension + ".gif");
+			        	//showToast(newimagePath);
+			        	//showToast(String.valueOf(filenameArray2.length));
+			        	imagePath = newimagePath;
+			        }
+			        else {
+			     	   gifView.setGif(imagePath);  //just sets the image , no decoding, decoding happens in the animateafterdecode method
+			        } 
+			   
+			       // gifView.setGif(imagePath);   //don't put this back, this does the decoding
+			        animateAfterDecode(0);  //0 means streaming mode, 1 means download mode
 	        }
 	        else {
-	     	   gifView.setGif(imagePath);  //just sets the image , no decoding, decoding happens in the animateafterdecode method
-	        } 
-	   
-	       // gifView.setGif(imagePath);   //don't put this back, this does the decoding
-	        animateAfterDecode(0);  //0 means streaming mode, 1 means download mode
+	        	showToast("PIXEL was not found, did you Bluetooth pair to PIXEL?");
+	        }
   		}
   
   public void animateAfterDecode(int longpress) {
@@ -1348,7 +1192,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 							// TODO Auto-generated catch block
 							e2.printStackTrace();
 						} 
-						Log.d("PixelAnimations","from sd card write, x is: " + x);
+						//Log.d("PixelAnimations","from sd card write, x is: " + x);
 						x++;
 						
 						if (frame_length > Integer.MAX_VALUE) {
@@ -1523,14 +1367,14 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	    				this.startActivityForResult(intent, 0);
 	       }
 	    	
-	    	if (item.getItemId() == R.id.menu_rescan)
+	    	/*if (item.getItemId() == R.id.menu_rescan)
 	        {
 	     		
 	    		Intent intent = new Intent()
 	        				.setClass(this,
 	        						com.ledpixelart.piledriver.rescan.class);   
 	     				this.startActivityForResult(intent, 1);
-	        }   	
+	        }   	*/
 	    	
 	       return true;
 	    }
@@ -1563,15 +1407,6 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	     //slideShowMode = prefs.getBoolean("pref_slideshowMode", false);
 	     noSleep = prefs.getBoolean("pref_noSleep", false);
 	     debug_ = prefs.getBoolean("pref_debugMode", false);
-	  //   dimDuringSlideShow = prefs.getBoolean("pref_dimDuringSlideShow", true);
-	     
-	    // imageDisplayDuration = Integer.valueOf(prefs.getString(   
-	  	      //  resources.getString(R.string.pref_imageDisplayDuration),
-	  	      //  resources.getString(R.string.imageDisplayDurationDefault)));   
-	     
-	    // pauseBetweenImagesDuration = Integer.valueOf(prefs.getString(   
-	  	        //resources.getString(R.string.pref_pauseBetweenImagesDuration),
-	  	        //resources.getString(R.string.pauseBetweenImagesDurationDefault)));  
 	     
 	     matrix_model = Integer.valueOf(prefs.getString(   //the selected RGB LED Matrix Type
 	    	        resources.getString(R.string.selected_matrix),
@@ -1585,9 +1420,12 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	    	 currentResolution = 32;
 	     }
 	     
-	     FPSOverride_ = Integer.valueOf(prefs.getString(   //the selected RGB LED Matrix Type
+	   /*  FPSOverride_ = Integer.valueOf(prefs.getString(   //the selected RGB LED Matrix Type
 	    	        resources.getString(R.string.fps_override),
-	    	        resources.getString(R.string.FPSOverrideDefault))); 
+	    	        resources.getString(R.string.FPSOverrideDefault))); */
+	    //this wasn't adding any value so removed it
+	     
+	     FPSOverride_ = 0;
 	     
 	     switch (FPSOverride_) {  //get this from the preferences
 	     case 0:
@@ -1845,7 +1683,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 					// TODO Auto-generated catch block
 					e2.printStackTrace();
 				} 
-				Log.d("PixelAnimations","x is: " + x);
+				//Log.d("PixelAnimations","x is: " + x);
 				x++;
 				
 	   			 
@@ -2175,21 +2013,11 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 						   		 } 
 						   		 
 				   		if (index <= decoder.getFrameCount()) { 	
-						   		
-						   		/*//File decodedDir = new File(decodedDirPath + "/" + selectedFileName);
-						   		File decodedDir = new File(decodedDirPath + "/" + selectedFileName);
-						   		if(decodedDir.exists() && decodedDir.isDirectory()) {
-						   		    // do something here
-						   		}
-						   		else { //make the directory						   			
-								   	// have the object build the directory structure, if needed.
-								   	decodedDir.mkdirs();
-						   		}*/
 						   			
 					   			try {
 									//writeFile(BitmapBytes, decodedDirPath + "/" + selectedFileName + "/" + selectedFileName + index + ".rgb565");  //this one the original one
 									appendWrite(BitmapBytes, decodedDirPath + "/" + selectedFileName + ".rgb565"); //this writes one big file instead of individual ones
-									Log.d("PixelAnimate","initial write: " + index);
+									//Log.d("PixelAnimate","initial write: " + index);
 									//Log.d("PixelAnimate", "frame count: " + decoder.getFrameCount());
 									//index++;
 								  
@@ -2325,16 +2153,4 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 			}
 		}*/
 	}
-
-
-
-
-
-
-
-	
-	
-	
-	
-	
 }

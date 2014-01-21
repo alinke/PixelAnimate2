@@ -32,7 +32,7 @@
       <!-- <CheckBoxPreference
     android:title="Call Taxi"
     android:key="pref_taxi"
-    android:summary="Call Taxi when Tipsy or Drunk"/> -->
+    android:summary="Call Taxi when Tipsy or Drunk"/>
    
      <ListPreference
     android:key="@string/fps_override"
@@ -41,7 +41,7 @@
     android:entries="@array/FPSOverride_options"
     android:entryValues="@array/FPSOverride_values"
     android:dialogTitle="@string/dialogTitleFPSOverride"
-    android:defaultValue="@string/FPSOverrideDefault" />
+    android:defaultValue="@string/FPSOverrideDefault" />  -->
     
         
     <ListPreference

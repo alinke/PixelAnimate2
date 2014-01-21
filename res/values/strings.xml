@@ -12,21 +12,21 @@
     <string name="HardwareVersionString">Hardware Version</string> 
     
    <string name="oneTimeSetupString">One Time Setup: Copying animations to your SD card.</string> 
-   <string name="bluetoothPairingString">Please ensure Bluetooth pairing has been completed prior. The Bluetooth pairing code is: 4545."</string> 
+   <string name="bluetoothPairingString">Did you Bluetooth pair to PIXEL? The pairing code is: 0000 or 4545 for PIXEL V1."</string> 
     
    
    <string name="menu_instructions_title">Instructions</string>
-   <string name="setupInstructionsString">Pair your Android device to PIXEL which will show up as \'PIXEL\' in Bluetooth using code 4545.\n\nTap an animation to display it on PIXEL.</string>
+   <string name="setupInstructionsString">Bluetooth pair to PIXEL using code 0000 or 4545 for PIXEL V1.\n\nTap animations to display them.\n\nPIXEL V2 users may long tap to write animations to PIXEL for stand alone operation.\n\nCopy your animated gifs to the pixel/animatedgifs folder on your Android device.</string>
    <string name="setupInstructionsStringTitle">Instructions</string>   
      
      
-    <string name="prefTitle">PIXEL PileDriver Settings</string>
+    <string name="prefTitle">PIXEL Animations Settings</string>
     <string name="menu_prefs_title">Settings</string>
-    <string name="prefSummary">PIXEL PileDriver Settings</string>
+    <string name="prefSummary">PIXEL Animations Settings</string>
     
     <string name="scanAll">Show All Album Pics</string>
     <string name="pref_scanAll_default">false</string>
-    <string name="scanAllSummary">Only animations in the pixel/pixelanimations directory of your SD card will be displayed. Checking this box displays all SD card pictures.</string>
+    <string name="scanAllSummary">Only animations in the pixel/animatedgifs directory of your SD card will be displayed. Checking this box displays all SD card pictures.</string>
   
     <string name="OKText">OK</string>   
     <string name="notFoundString">PIXEL Not Found</string>   
@@ -44,7 +44,7 @@
     <string name="FPSOverrideDefault">0</string>  
     
     <string name="bluetooth_pair">Blueooth Pairing</string>
-    <string name="bluetooth_pairSummary">Shortcut to the Bluetooth settings screen. Pair to PIXEL using code: 4545</string>
+    <string name="bluetooth_pairSummary">Shortcut to the Bluetooth settings screen. Pair to PIXEL using code: 0000 or 4545 for PIXEL V1 units</string>
     
     <string name="slideShowtitle">Slide Show Settings</string>
     <string name="slideShowtitleSummary">Slide Show Settings</string>
@@ -60,7 +60,7 @@
     <string name="menu_rescan_title">Rescan</string>
     <string name="rescan_screen_verbage">Now scanning your SD card or internal memory for new animations or deletions, just a moment&#8230;</string>
     
-    <string name="startup_verbage_1">One Time Setup</string>
+    <string name="startup_verbage_1">Initial Setup</string>
     <string name="startup_verbage_2">Copying animations to your local storage&#8230;</string>
     <string name="firstTime_instructions"></string>
   

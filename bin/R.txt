@@ -27,7 +27,6 @@ int id mainStatus 0x7f090006
 int id menu_about 0x7f09000a
 int id menu_instructions 0x7f09000b
 int id menu_prefs 0x7f090009
-int id menu_rescan 0x7f09000c
 int id sdcard 0x7f090005
 int layout main 0x7f030000
 int layout rescan 0x7f030001

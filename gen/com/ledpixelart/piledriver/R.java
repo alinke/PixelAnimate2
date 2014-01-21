@@ -44,7 +44,6 @@ public final class R {
         public static final int menu_about=0x7f09000a;
         public static final int menu_instructions=0x7f09000b;
         public static final int menu_prefs=0x7f090009;
-        public static final int menu_rescan=0x7f09000c;
         public static final int sdcard=0x7f090005;
     }
     public static final class layout {

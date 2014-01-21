@@ -27,11 +27,6 @@ public class PixelPileDriver extends Activity
 	protected void onResume()
 	{
 		super.onResume();
-		//SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-		// Obtain the sharedPreference, default to true if not available
-		//boolean isSplashEnabled = sp.getBoolean("isSplashEnabled", true);
-		//boolean isSplashEnabled = true;
-
 		
 			new Handler().postDelayed(new Runnable()
 			{

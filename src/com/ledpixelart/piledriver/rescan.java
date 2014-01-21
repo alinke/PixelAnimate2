@@ -72,7 +72,7 @@ public class rescan extends Activity  {
 
     //look into internet loads
 	//make an ledalbum directory, copy some files in there
-   	private final String tag = "LEDAlbum";	
+   	private final String tag = "PixelAnimations";	
 	private RescanTimer rescanTimer; 
 	private boolean scanAllPics;
 	private int countdownCounter;
@@ -94,11 +94,8 @@ public class rescan extends Activity  {
                
         rescanTimer = new RescanTimer(countdownDuration*1000,1000); //pop up a message if it's not connected by this timer
  		rescanTimer.start(); //this timer will pop up a message box if the device is not found
- 		 		
-      
+ 		 	
     }
-    
-       
           
     public class RescanTimer extends CountDownTimer
 	{
