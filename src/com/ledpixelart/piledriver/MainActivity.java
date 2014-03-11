@@ -2167,7 +2167,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 						 	 	   		 matrix2 = new Matrix();
 						 	 	   		 // resize the bit map
 						 	 	   		 matrix2.postScale(scaleWidth, scaleHeight);
-						 	 	   		 resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, width_original, height_original, matrix2, true);
+						 	 	   		 //resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, width_original, height_original, matrix2, true);
+						 	 	   		 resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, width_original, height_original, matrix2, false);
 						 	 	   		 IOIOBitmap = Bitmap.createBitmap(KIND.width, KIND.height, Config.RGB_565); 
 						 	 	   		 canvasIOIO = new Canvas(IOIOBitmap);
 						 	 	   		 canvasIOIO.drawRGB(0,0,0); //a black background
@@ -2228,17 +2229,18 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 				   		}
 				   		
 				   		//the 64x64 configuration skips frame is the speed is greater than 70 so we need to reset the frame speed here if below 70
-				   		if (currentResolution == 128 && decoder.getDelay(1) < 70) {  //70ms is the fastest for 64x64
+				   		/*if (currentResolution == 128 && decoder.getDelay(1) < 70) {  //70ms is the fastest for 64x64
 				   			frameDelay = 70; //if it's too fast, then we need to slow down to 70ms frame delay
-				   		}
+				   		}*/
+				   		
 				   		
 				   		Log.v("PixelAnimate", "Frame Delay: " + frameDelay);
 				   		
 				   		//String filetag = String.valueOf(decoder.getFrameCount()) + "," + String.valueOf(decoder.getDelay(1)) + "," + String.valueOf(currentResolution);  //our format is number of frames,delay 121,60,32 equals 121 frames, 60 ms time delay, 32 resolution   resolution is 16 for 16x32 or 32 for 32x32 led matrix, we need this in case the user changes the resolution in the app, then we'd need to catch this mismatch and re-decode
 				   		String filetag = String.valueOf(decoder.getFrameCount()) + "," + String.valueOf(frameDelay) + "," + String.valueOf(currentResolution); //current resolution may need to change to led panel type
 				   		
-				   	   // Toast toast14 = Toast.makeText(context, "delay is: " + String.valueOf(frameDelay), Toast.LENGTH_LONG);
-					   // toast14.show();	
+				   	   Toast toast14 = Toast.makeText(context, "delay is: " + String.valueOf(frameDelay), Toast.LENGTH_LONG);
+					   toast14.show();	
 				   	
 				        String exStorageState = Environment.getExternalStorageState();
 				     	if (Environment.MEDIA_MOUNTED.equals(exStorageState)){
