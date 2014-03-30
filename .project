@@ -30,11 +30,4 @@
 		<nature>com.android.ide.eclipse.adt.AndroidNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>robospice</name>
-			<type>2</type>
-			<location>/Users/al/Documents/workspace/robospice</location>
-		</link>
-	</linkedResources>
 </projectDescription>

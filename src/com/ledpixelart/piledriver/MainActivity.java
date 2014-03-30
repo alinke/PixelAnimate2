@@ -38,6 +38,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+//import android.os.Parcel;
+//import android.os.Parcelable;
 import android.os.SystemClock;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -62,6 +64,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -85,11 +88,12 @@ import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
-import android.speech.tts.TextToSpeech;
+import android.provider.OpenableColumns;
+//import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.Display;
-import android.view.GestureDetector;
-import android.view.GestureDetector.SimpleOnGestureListener;
+//import android.view.GestureDetector;
+//import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -114,7 +118,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.graphics.Matrix;
 import android.graphics.Bitmap.Config;
 import android.graphics.drawable.BitmapDrawable;
-import android.hardware.SensorManager;
+//import android.hardware.SensorManager;
 
 //import android.app.IntentService;
 //import android.content.Intent;
@@ -171,20 +175,15 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
     private GridView sdcardImages;
 	
 	///********** Timers
-    private MediaScanTimer mediascanTimer; 	
+    //private MediaScanTimer mediascanTimer; 	
 	private boolean noSleep = false;	
 	private int countdownCounter;
 	private static final int countdownDuration = 30;
 	private Display display;
-	private ImageAdapter imageAdapter;
 	private Cursor cursor;
 	private int size;  //the number of pictures
 	private ProgressDialog pDialog = null;
 	private int columnIndex; 
-	private TextView firstTimeSetup1_;
-	private TextView firstTimeSetup2_;
-	private TextView firstTimeInstructions_;
-	private TextView firstTimeSetupCounter_;
 	private boolean debug_;
 	private static int appAlreadyStarted = 0;
 	private int FPSOverride_ = 0;
@@ -204,14 +203,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	private static VersionType v;
 	private static  ByteBuffer buffer; //Create a new buffer
 	private int appCode;
-	//protected static SpiceManager spiceManager = new SpiceManager(UncachedSpiceService.class);
-	//private SpiceManager spiceManager = new SpiceManager(
-		      //  UncachedSpiceService.class);
-	//private static pixelWriteThread mThread;
 	private static boolean mRunning = true;
 	private static boolean readyForLocalPlayBack = false;
-	//private ResponseReceiver receiver;
-	//private ProgressDialog progressDoalog;
 	public static Context baseContext;
 	//private static MainActivity mainActivity2 = new MainActivity();  //had to add this due some context requirements
 	private  ProgressDialog progress;
@@ -220,6 +213,9 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	private File file;
 	private int readytoWrite = 0;
 	private static int matrix_number;
+	private  AsyncTaskLoadFiles myAsyncTaskLoadFiles;
+	private ImageAdapter2 myImageAdapter;
+	private GridView gridview;
 	
 
 	@Override
@@ -230,22 +226,41 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 		 setContentView(R.layout.main);
 	      display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
 	        
-	      sdcardImages = (GridView) findViewById(R.id.sdcard);
-	      firstTimeSetup1_ = (TextView) findViewById(R.id.firstTimeSetup1);
-	      firstTimeSetup2_ = (TextView) findViewById(R.id.firstTimeSetup2);
-	      firstTimeInstructions_ = (TextView) findViewById(R.id.firstTimeInstructions);
-	      firstTimeSetupCounter_ = (TextView) findViewById(R.id.firstTimeSetupCounter);
-	      
-	      firstTimeSetup1_.setVisibility(View.INVISIBLE);
-	      firstTimeSetup2_.setVisibility(View.INVISIBLE);
-	      firstTimeInstructions_.setVisibility(View.INVISIBLE);
-	      firstTimeSetupCounter_.setVisibility(View.INVISIBLE);
+	      ///new gridview code
+	     gridview = (GridView) findViewById(R.id.gridview);
+	     myImageAdapter = new ImageAdapter2(this);
+	     gridview.setAdapter(myImageAdapter);
+	      ///*******************
 		 
-	      gifView = (GifView) findViewById(R.id.gifView);
+	      gifView = (GifView) findViewById(R.id.gifView); //gifview takes care of the gif decoding
 	      gifView.setGif(R.drawable.zzzblank);  //code will crash if a dummy gif is not loaded initially
 	     // proxTextView_ = (TextView)findViewById(R.id.proxTextView);
 	      
-	     
+	      
+	      
+	   // Get intent, action and MIME type
+	      Intent intent = getIntent();
+	      String action = intent.getAction();
+	      String type = intent.getType();
+
+	      if (Intent.ACTION_SEND.equals(action) && type != null) {
+	        /*  if ("text/plain".equals(type)) {
+	              handleSendText(intent); // Handle text being sent
+	          } */
+	          
+	       if (type.startsWith("image/")) {
+	              handleSendImage(intent); // Handle single image being sent
+	          }
+	      } else if (Intent.ACTION_SEND_MULTIPLE.equals(action) && type != null) {
+	          if (type.startsWith("image/")) {
+	              handleSendMultipleImages(intent); // Handle multiple images being sent
+	          }
+	      } 
+	      
+	      //else {
+	          // Handle other intents, such as being started from the home screen
+	     // }
+
 	      
 	     //let's get the app version so we'll know if we need to add new animations to the user's app   
 	        PackageInfo pinfo;
@@ -298,7 +313,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
             	// File artdir = new File(basepath + "/Android/data/com.ioiomint./files");
             	File artdir = new File(basepath + "/pixel/animatedgifs");
 	            if (!artdir.exists()) { //no directory so let's now start the one time setup
-	            	sdcardImages.setVisibility(View.INVISIBLE); //hide the images as they're not loaded so we can show a splash screen instead
+	            	//sdcardImages.setVisibility(View.INVISIBLE); //hide the images as they're not loaded so we can show a splash screen instead
 	            	//showToast(getResources().getString(R.string.oneTimeSetupString)); //replaced by direct text on view screen
 	            	
 	            	new copyFilesAsync().execute();
@@ -328,6 +343,191 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
         }
 	}
 	
+	/*private void handleSendText(Intent intent) {  //not used
+	    String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
+	    if (sharedText != null) {
+	        // Update UI to reflect text being shared
+	    }
+	}*/
+
+	private void handleSendImage(Intent intent) { //another app has passed us on image so let's copy it to our sd card directory
+	    Uri imageUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
+	    InputStream incomingStream = null;
+	    if (imageUri != null) {
+	        // Update UI to reflect image being shared
+	    	String hello = imageUri.toString();
+	    	showToast(hello);
+	    	
+	    	/*
+	         * Get the file's content URI from the incoming Intent, then
+	         * get the file's MIME type
+	         */
+	        //Uri returnUri = returnIntent.getData();
+	        String mimeType = getContentResolver().getType(imageUri);
+	        
+	        showToast("mimeType= " + mimeType);  // image/gif
+	        
+	       
+	    	
+	    	 /*
+	         * Get the file's content URI from the incoming Intent,
+	         * then query the server app to get the file's display name
+	         * and size.
+	         */
+	       // Uri returnUri = returnIntent.getData();
+	        /*Cursor returnCursor =
+	                getContentResolver().query(imageUri, null, null, null, null);
+	        
+	         * Get the column indexes of the data in the Cursor,
+	         * move to the first row in the Cursor, get the data,
+	         * and display it.
+	         
+	        int nameIndex = imageUri.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+	        int sizeIndex =  imageUri.getColumnIndex(OpenableColumns.SIZE);
+	        returnCursor.moveToFirst();
+	       // TextView nameView = (TextView) findViewById(R.id.filename_text);
+	       // TextView sizeView = (TextView) findViewById(R.id.filesize_text);
+	        String fname = returnCursor.getString(nameIndex);
+	        String fsize = Long.toString(returnCursor.getLong(sizeIndex));
+	    	
+	    	showToast("file name is: " + fname);
+	    	showToast("file size is: " + fsize);*/
+	    	
+	    	
+	    //	picView.setImageURI(imageUri); //this works according to Internet
+	    	
+	    	ContentResolver cr = getContentResolver();
+	    	
+	    	try {
+	    		incomingStream = cr.openInputStream(imageUri);
+
+	    	Bitmap bitmap = BitmapFactory.decodeStream(incomingStream);
+	    	}
+
+	    	catch (FileNotFoundException e) {
+	    	// TODO Auto-generated catch block
+	    	e.printStackTrace();
+
+	    	}
+
+	    	}
+	    	
+	    	Bitmap b;
+	        InputStream stream = null;
+			try {
+				stream = context.getContentResolver().openInputStream(imageUri); //may need to replace this with the context or full actiity name
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	        b = BitmapFactory.decodeStream(stream);
+	        
+	        int saveSharedBMPs = 1;
+	        
+	        if (saveSharedBMPs == 1) {
+	        	
+		    	FileOutputStream out = null;
+		  
+	           try {
+				out = new FileOutputStream(basepath + "/pixel/animatedgifs/al.png");
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	          
+	           
+	           try {
+				copyFile(incomingStream, out);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	           try {
+	        	   incomingStream.close();
+	        	   incomingStream = null;
+		         out.flush();
+		         out.close();
+		         out = null;    
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	        	
+	        }
+	        
+	        //now we need to add the newly copied file to the itemlist
+	        //myTaskAdapter.add(out);
+	        //myTaskAdapter.notifyDataSetChanged();
+	        
+	        
+	        
+	    	//showToast(hello);
+	    	//Parcel fileParcel = null;
+	    	
+	    //	InputStream in = null;
+	    	//FileOutputStream out = null;
+	    	
+	    	//Parcelable sharedParse = imageUri;
+	    //	;jkl;j;l
+	    	
+	    //	in.read(imageUri.);
+	    	
+	    	
+	    	//imageUri.writeToParcel(fileParcel,1);
+	    	
+	    //	imageUri.writeToParcel(out, uri);
+	    	//writeToParcel(fileParcel, imageUri);
+	    	
+	    	
+	    /*
+	    	//byte[] sharedByte = fileParcel.createByteArray();
+	    	byte[] sharedByte = null;
+	    	fileParcel.writeByteArray(sharedByte);
+	    	InputStream in = null;
+	    	FileOutputStream out = null;
+	    	try {
+				in.read(sharedByte);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    	
+	    //	  in = assetManager.open("animatedgifs/" + files[i]);
+           try {
+			out = new FileOutputStream(basepath + "/pixel/animatedgifs/al.png");
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+          
+           
+           try {
+			copyFile(in, out);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+           try {
+			in.close();
+			 in = null;
+	         out.flush();
+	         out.close();
+	         out = null;    
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
+           
+	   // }
+	}
+
+	private void handleSendMultipleImages(Intent intent) {
+	    ArrayList<Uri> imageUris = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
+	    if (imageUris != null) {
+	        // Update UI to reflect multiple images being shared
+	    }
+	}
+	
 	 private class copyFilesAsync extends AsyncTask<Void, Integer, Void>{
 		 
 	     int progress_status;
@@ -345,8 +545,6 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	       progress.show();
 	 
 	    progress_status = 0;
-	  //  txt_percentage.setText("downloading 0%");
-	   // firstTimeSetupCounter_.setText("0");
 	    
 	  }
 	      
@@ -355,62 +553,55 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 		  	
 			File artdir = new File(basepath + "/pixel/animatedgifs");
 			artdir.mkdirs();			
-			SystemClock.sleep(100);
+			//SystemClock.sleep(100);
             File decodeddir = new File(basepath + "/pixel/animatedgifs/decoded");
 		  	decodeddir.mkdirs();
-			SystemClock.sleep(100);
+			//SystemClock.sleep(100);
+			
 		  	copyArt(); //copy the .png and .gif files (mainly png) because we want to decode first
-			SystemClock.sleep(100);
+		  	
+		  	AssetManager assetManager = getResources().getAssets();
+	        String[] files = null;
+	        try {
+	            files = assetManager.list("animatedgifs");
+	        } catch (Exception e) {
+	            Log.e("read clipart ERROR", e.toString());
+	            e.printStackTrace();
+	        }
+	        
+	        //let's get the total numbers of files here and set the progress bar
+	        progress.setMax(files.length*3);  //it's 3x because each animation has 3 files with it: .png file, the raw rgb565, and a text file containing the speed/frame rate of the animation
+	        
+	        for(int i=0; i<files.length; i++) {
+	            InputStream in = null;
+	            OutputStream out = null;
+	            try {
+	              in = assetManager.open("animatedgifs/" + files[i]);
+	              out = new FileOutputStream(basepath + "/pixel/animatedgifs/" + files[i]);
+	              copyFile(in, out);
+	              in.close();
+	              in = null;
+	              out.flush();
+	              out.close();
+	              out = null;    
+	            
+	           progress_status ++;
+	  		   publishProgress(progress_status);  
+	           
+	            } catch(Exception e) {
+	                Log.e("copy clipart ERROR", e.toString());
+	                e.printStackTrace();
+	            }       
+	        }
+	        
 			copyArt2();  //copy the decoded files
-			
-			//had to add this delay , otherwise especially on older phones, all the images don't load the first time
-			try {
-				Thread.sleep(3000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} 
-			
-			//while(progress_status<100)  {
-		     
-			 //  progress_status += 2;
-			     
-			 //   publishProgress(progress_status);
-			 //  SystemClock.sleep(1000);
-			     
-			// }
-			
-			/*copyDecodedThread("0rain");
-			progress_status ++;
-		    publishProgress(progress_status);
-		    
-		    copyDecodedThread("zarcade");
-		    progress_status ++;
-		    publishProgress(progress_status);*/
-		    
-		    //copyNewAnimations();
-		    
 	   return null;
 	  }
-	  
-	 /* private void copyNewAnimations() {
-		    copyDecodedThread("zaquarium");
-		    progress_status ++;
-		    publishProgress(progress_status);
-		    
-		    copyDecodedThread("zarcade");
-		    progress_status ++;
-		    publishProgress(progress_status);
-	  }*/
 	  
 	  @Override
 	  protected void onProgressUpdate(Integer... values) {
 	   super.onProgressUpdate(values);
-	    
-	  // progressBar.setProgress(values[0]);
-	  // firstTimeSetupCounter_.setText(values[0]+"%");
 	   progress.incrementProgressBy(1);
-	  // firstTimeSetupCounter_.setText("0%");
 	    
 	  }
 	   
@@ -419,46 +610,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	   super.onPostExecute(result);
 	   progress.dismiss(); //we're done so now hide the progress update box
 	   continueOnCreate();
-	     
-	   //firstTimeSetupCounter_.setText("Complete");
 	   // btn_start.setEnabled(true);
 	  }
-	  
-	/*  private void copyDecodedThread(final String decodedDir) {  //no longer used
-			
-					AssetManager assetManager = getResources().getAssets();
-			        String[] files = null;
-			        try {
-			            files = assetManager.list("animatedgifs/decoded/" + decodedDir);
-			        } catch (Exception e) {
-			            Log.e("read clipart ERROR", e.toString());
-			            e.printStackTrace();
-			        }
-			        
-			        File dir = new File(basepath + "/pixel/animatedgifs/decoded/" + decodedDir);
-	                if (!dir.exists())
-	                    dir.mkdir();
-	                
-			        for(int i=0; i<files.length; i++) {
-			            InputStream in = null;
-			            OutputStream out = null;
-			            try {
-			              in = assetManager.open("animatedgifs/decoded/" + decodedDir + "/" + files[i]);
-			              out = new FileOutputStream(basepath + "/pixel/animatedgifs/decoded/" + decodedDir + "/" + files[i]);
-			              copyFile(in, out);
-			              in.close();
-			              in = null;
-			              out.flush();
-			              out.close();
-			              out = null;   
-			           
-			            } catch(Exception e) {
-			                Log.e("copy clipart ERROR", e.toString());
-			                e.printStackTrace();
-			            }       
-			        }
-				
-		}*/
 	  
 		@SuppressLint("NewApi")
 		private void copyArt() {
@@ -490,16 +643,6 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	            
 	           progress_status ++;
 	  		   publishProgress(progress_status);  
-	  		   
-	           MediaScannerConnection.scanFile(context,  //here is where we register the newly copied file to the android media content DB via forcing a media scan
-		                        new String[] { basepath + "/pixel/animatedgifs/" + files[i] }, null,
-		                        new MediaScannerConnection.OnScanCompletedListener() {
-		                    public void onScanCompleted(String path, Uri uri) {
-		                        Log.i("ExternalStorage", "Scanned " + path + ":");
-		                        Log.i("ExternalStorage", "-> uri=" + uri);
-		                        
-		                    }
-		          });
 	           
 	            } catch(Exception e) {
 	                Log.e("copy clipart ERROR", e.toString());
@@ -544,27 +687,35 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	    } //end method
 		
 } //end async task
-	
-	
-	
-	 private void MediaScanCompleted() {
-         
-	    	continueOnCreate();
-	    }
 	    
     private void continueOnCreate() {
-    	 firstTimeSetup1_.setVisibility(View.GONE);
-	     firstTimeSetup2_.setVisibility(View.GONE);
-	     firstTimeInstructions_.setVisibility(View.GONE);
-	     firstTimeSetupCounter_.setVisibility(View.GONE);
-    	 sdcardImages.setVisibility(View.VISIBLE);
-    	 setupViews();
-         setProgressBarIndeterminateVisibility(true); 
-         loadImages();
+         
+         myAsyncTaskLoadFiles = new AsyncTaskLoadFiles(myImageAdapter);
+         myAsyncTaskLoadFiles.execute();
+
+        // gridview.setOnItemClickListener(myOnItemClickListener);
+         
+         gridview.setOnItemClickListener(MainActivity.this);
+         gridview.setOnItemLongClickListener(MainActivity.this);
+         
+        /* Button buttonReload = (Button)findViewById(R.id.reload);
+         buttonReload.setOnClickListener(new OnClickListener(){
+
+          @Override
+          public void onClick(View arg0) { //the button
+           
+           //Cancel the previous running task, if exist.
+           myAsyncTaskLoadFiles.cancel(true);
+           
+           //new another ImageAdapter, to prevent the adapter have
+           //mixed files
+           myImageAdapter = new ImageAdapter2(MainActivity.this);
+           gridview.setAdapter(myImageAdapter);
+           myAsyncTaskLoadFiles = new AsyncTaskLoadFiles(myImageAdapter);
+           myAsyncTaskLoadFiles.execute();
+          }});*/
+         
     }
-	    
-	   // @SuppressLint("NewApi")
-		
 	    
 	    private void copyFile(InputStream in, OutputStream out) throws IOException {
 	        byte[] buffer = new byte[1024];
@@ -606,7 +757,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
         super.onDestroy();
        // mThread.close();
        
-        final GridView grid = sdcardImages;
+        final GridView grid = gridview;
         final int count = grid.getChildCount();
         ImageView v = null;
         for (int i = 0; i < count; i++) {
@@ -633,232 +784,153 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
        // mediascanTimer.cancel(); 
         
     }
-    /**
-     * Setup the grid view.
-     */
-    private void setupViews() {
-        //sdcardImages = (GridView) findViewById(R.id.sdcard);
-        sdcardImages.setClipToPadding(false);
-        sdcardImages.setNumColumns(5);
-      //  sdcardImages.setstretchMode(5);
-       // android:stretchMode="columnWidth"
-        //sdcardImages.setNumColumns(display.getWidth()/130);  //75 looked good
-        //sdcardImages.setScaleType(FIT_XY);
-        sdcardImages.setOnItemClickListener(MainActivity.this);
-        sdcardImages.setOnItemLongClickListener(MainActivity.this);
-        
-      //  sdcardImages.setOnClickListener((OnClickListener) MainActivity.this);
-        //sdcardImages.setOnTouchListener(gestureListener);
-        
-        imageAdapter = new ImageAdapter(getApplicationContext()); 
-        sdcardImages.setAdapter(imageAdapter);
-    }
-    /**
-     * Load images.
-     */
-    private void loadImages() {
-        final Object data = getLastNonConfigurationInstance();
-        if (data == null) {
-        	//new LoadImagesfromSDCard.set
-        	//static Test t = new Test();
-        	//public static void main(String[] args){
-        	//t.Set(3);
-        	
-            new LoadImagesFromSDCard().execute();
-        } else {
-            final LoadedImage[] photos = (LoadedImage[]) data;
-            if (photos.length == 0) {
-                new LoadImagesFromSDCard().execute();
-            }
-            for (LoadedImage photo : photos) {
-                addImage(photo);
-            }
-        }
-    }
-    /**
-     * Add image(s) to the grid view adapter.
-     * 
-     * @param value Array of LoadedImages references
-     */
-    private void addImage(LoadedImage... value) {
-        for (LoadedImage image : value) {
-            imageAdapter.addPhoto(image);
-            imageAdapter.notifyDataSetChanged();
-        }
-    }
+   
     
-    /**
-     * Save bitmap images into a list and return that list. 
-     * 
-     * @see android.app.Activity#onRetainNonConfigurationInstance()
-     */
-    @Override
-    public Object onRetainNonConfigurationInstance() {
-        final GridView grid = sdcardImages;
-        final int count = grid.getChildCount();
-        final LoadedImage[] list = new LoadedImage[count];
+    public class AsyncTaskLoadFiles extends AsyncTask<Void, String, Void> {
+    	  
+    	  File targetDirector;
+    	  ImageAdapter2 myTaskAdapter;
 
-        for (int i = 0; i < count; i++) {
-            final ImageView v = (ImageView) grid.getChildAt(i);
-            list[i] = new LoadedImage(((BitmapDrawable) v.getDrawable()).getBitmap());
-        }
+    	  public AsyncTaskLoadFiles(ImageAdapter2 adapter) {
+    	   myTaskAdapter = adapter;
+    	  }
 
-        return list;
-    }
+    	  @Override
+    	  protected void onPreExecute() {
+    	   String ExternalStorageDirectoryPath = Environment
+    	     .getExternalStorageDirectory().getAbsolutePath();
+
+    	   String targetPath = ExternalStorageDirectoryPath + "/pixel/animatedgifs";
+    	   targetDirector = new File(targetPath);
+    	   myTaskAdapter.clear();
+    	   
+    	   super.onPreExecute();
+    	  }
+
+    	  @Override
+    	  protected Void doInBackground(Void... params) {
+    	   
+    	   File[] files = targetDirector.listFiles();
+    	   for (File file : files) {
+    	    publishProgress(file.getAbsolutePath());
+    	    if (isCancelled()) break;
+    	   }
+    	   return null;
+    	  }
+
+    	  @Override
+    	  protected void onProgressUpdate(String... values) {
+    	   myTaskAdapter.add(values[0]);
+    	   super.onProgressUpdate(values);
+    	  }
+
+    	  @Override
+    	  protected void onPostExecute(Void result) {
+    	   myTaskAdapter.notifyDataSetChanged();
+    	   super.onPostExecute(result);
+    	  }
+
+    	 }
     
-    /**
-     * Async task for loading the images from the SD card. 
-     * 
-     * @author Mihai Fonoage
-     *
-     */
-    class LoadImagesFromSDCard extends AsyncTask<Object, LoadedImage, Object> {
-        
-        /**
-         * Load images from SD Card in the background, and display each image on the screen. 
-         *  
-         * @see android.os.AsyncTask#doInBackground(Params[])
-         */
-        @SuppressLint("NewApi")
-		@Override
-        protected Object doInBackground(Object... params) {
-            //setProgressBarIndeterminateVisibility(true); 
-            Bitmap bitmap = null;
-            Bitmap newBitmap = null;
-            Uri uri = null;  
-            
-            String[] projection = {MediaStore.Images.Thumbnails._ID};
-           
-           
-             cursor = managedQuery(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, 
-             projection, 
-             MediaStore.Images.Media.DATA + " like ? ",
-             new String[] {"%animatedgifs%"},  
-             null);
-           
-            
-            int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Thumbnails._ID);
-            size = cursor.getCount();
-          //  showToast("numbr of pics: " + size);
-            // If size is 0, there are no images on the SD Card.
-            if (size == 0) {
-                showToast("No images were found");//No Images available, post some message to the user
-            }
-            int imageID = 0;
-            
-            
-            showPleaseWait( getString(R.string.loadingImagesPlsWait));
-            //pDialog = ProgressDialog.show(MainActivity.this,getString(R.string.loadingImagesPlsWaitTitle), getString(R.string.loadingImagesPlsWait), true);
-			//pDialog.setCancelable(true);
-            
-            
-            for (int i = 0; i < size; i++) {
-                cursor.moveToPosition(i);
-                imageID = cursor.getInt(columnIndex);
-                uri = Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "" + imageID);
-                try {
-                    bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
-                    if (bitmap != null) {
-                        newBitmap = Bitmap.createScaledBitmap(bitmap, 70, 70, true);
-                        bitmap.recycle();
-                        if (newBitmap != null) {
-                            publishProgress(new LoadedImage(newBitmap));
-                         
-                        }
-                    }
-                } catch (IOException e) {
-                    //Error fetching image, try to recover
-                }
-            }
-          //  cursor.close(); //this was causing crashing
-            return null;
-        }
-        /**
-         * Add a new LoadedImage in the images grid.
-         *
-         * @param value The image.
-         */
-        @Override
-        public void onProgressUpdate(LoadedImage... value) {
-            addImage(value);
-        }
-        /**
-         * Set the visibility of the progress bar to false.
-         * 
-         * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
-         */
-        @Override
-        protected void onPostExecute(Object result) {
-            setProgressBarIndeterminateVisibility(false);
-            pDialog.dismiss();
-            //showToast(getString(R.string.StartInstructions));  //Tap to Animate
-        }
-    }
+   /* public class ImageAdapter2 extends BaseAdapter {  //added this one into a separate class file
 
-    /**
-     * Adapter for our image files. 
-     * 
-     * @author Mihai Fonoage
-     *
-     */
-    class ImageAdapter extends BaseAdapter {
+    	  private Context mContext;
+    	  ArrayList<String> itemList = new ArrayList<String>();
 
-        private Context mContext; 
-        private ArrayList<LoadedImage> photos = new ArrayList<LoadedImage>();
+    	  public ImageAdapter2(Context c) {
+    	   mContext = c;
+    	  }
 
-        public ImageAdapter(Context context) { 
-            mContext = context; 
-        } 
+    	  void add(String path) {
+    	   itemList.add(path);
+    	  }
+    	  
+    	  void clear() {
+    	   itemList.clear();
+    	  }
+    	  
+    	  void remove(int index){
+    	   itemList.remove(index);
+    	  }
 
-        public void addPhoto(LoadedImage photo) { 
-            photos.add(photo); 
-        } 
+    	  @Override
+    	  public int getCount() {
+    	   return itemList.size();
+    	  }
 
-        public int getCount() { 
-            return photos.size(); 
-        } 
+    	  @Override
+    	  public Object getItem(int position) {
+    	   // TODO Auto-generated method stub
+    	   return itemList.get(position);
+    	  }
 
-        public Object getItem(int position) { 
-            return photos.get(position); 
-        } 
+    	  @Override
+    	  public long getItemId(int position) {
+    	   // TODO Auto-generated method stub
+    	   return 0;
+    	  }
 
-        public long getItemId(int position) { 
-            return position; 
-        } 
+    	  @Override
+    	  public View getView(int position, View convertView, ViewGroup parent) {
+    	   ImageView imageView;
+    	   if (convertView == null) { // if it's not recycled, initialize some
+    	          // attributes
+    	    imageView = new ImageView(mContext);
+    	    imageView.setLayoutParams(new GridView.LayoutParams(220, 220));
+    	    imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+    	    imageView.setPadding(8, 8, 8, 8);
+    	   } else {
+    	    imageView = (ImageView) convertView;
+    	   }
 
-        public View getView(int position, View convertView, ViewGroup parent) { 
-            final ImageView imageView; 
-            if (convertView == null) { 
-                imageView = new ImageView(mContext); 
-            } else { 
-                imageView = (ImageView) convertView; 
-            } 
-            imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            imageView.setPadding(8, 8, 8, 8);
-            imageView.setImageBitmap(photos.get(position).getBitmap());
-            return imageView; 
-        } 
-    }
+    	   Bitmap bm = decodeSampledBitmapFromUri(itemList.get(position), 220,
+    	     220);
 
-    /**
-     * A LoadedImage contains the Bitmap loaded for the image.
-     */
-    private static class LoadedImage {
-        Bitmap mBitmap;
+    	   imageView.setImageBitmap(bm);
+    	   return imageView;
+    	  }
 
-        LoadedImage(Bitmap bitmap) {
-            mBitmap = bitmap;
-        }
+    	  public Bitmap decodeSampledBitmapFromUri(String path, int reqWidth,
+    	    int reqHeight) {
 
-        public Bitmap getBitmap() {
-            return mBitmap;
-        }
-    }
-    
-  //public void OnItemLongClick(AdapterView<?> parent, View v, int position, long id) {  
-   // showToast("went here");
-  // }
-  
+    	   Bitmap bm = null;
+    	   // First decode with inJustDecodeBounds=true to check dimensions
+    	   final BitmapFactory.Options options = new BitmapFactory.Options();
+    	   options.inJustDecodeBounds = true;
+    	   BitmapFactory.decodeFile(path, options);
+
+    	   // Calculate inSampleSize
+    	   options.inSampleSize = calculateInSampleSize(options, reqWidth,
+    	     reqHeight);
+
+    	   // Decode bitmap with inSampleSize set
+    	   options.inJustDecodeBounds = false;
+    	   bm = BitmapFactory.decodeFile(path, options);
+
+    	   return bm;
+    	  }
+
+    	  public int calculateInSampleSize(
+
+    	  BitmapFactory.Options options, int reqWidth, int reqHeight) {
+    	   // Raw height and width of image
+    	   final int height = options.outHeight;
+    	   final int width = options.outWidth;
+    	   int inSampleSize = 1;
+
+    	   if (height > reqHeight || width > reqWidth) {
+    	    if (width > height) {
+    	     inSampleSize = Math.round((float) height
+    	       / (float) reqHeight);
+    	    } else {
+    	     inSampleSize = Math.round((float) width / (float) reqWidth);
+    	    }
+    	   }
+
+    	   return inSampleSize;
+    	  }
+
+    	 }*/
 
 	@Override
  public  boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id) {  
@@ -875,26 +947,10 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	 	     }
 	 	     ///****************************
 		
-	   	// Get the data location of the image
-	       String[] projection = {MediaStore.Images.Media.DATA};
-	       
-	     
-	   	cursor = managedQuery(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-	           projection, 
-	           MediaStore.Images.Media.DATA + " like ? ",
-	           new String[] {"%animatedgifs%"},  
-	           null);
-	       
-	       
-	      // showToast("on click");
-	       
-	       columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-	       cursor.moveToPosition(position);
-	       // Get image filename
-	       imagePath = cursor.getString(columnIndex);
-	       System.gc();	        
-	       //showToast(imagePath);
-	       
+	
+	 	   String imagePath = (String) parent.getItemAtPosition(position);
+	       //Toast.makeText(getApplicationContext(), imagePath, Toast.LENGTH_LONG).show();  
+	    	   
 	       selectedFileName = imagePath;
 	       //here we need to get the file name to see if the file has already been decoded
 	       //file name will be in a format like this sdcard/pixel/pixerinteractive/rain.gif , we want to extra just rain
@@ -913,14 +969,14 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	       String extension = filenameArray[filenameArray.length-1]; //.png
 	       
 	       if (extension.equals("png")) {  //then we use the thumbnail, we just need to rename the image path to a gif
-	       	String wholestring_no_extension = filenameArray[filenameArray.length-2]; // /storage/emulated/0/pixel/pixelanimate/tree
-	       	String filenameArray2[] = wholestring_no_extension.split("\\/");
-	       	String filename_no_extension = filenameArray2[filenameArray2.length-1]; //tree
-		       // showToast(filename_no_extension);
-	       	String newimagePath = wholestring_no_extension.replace(filename_no_extension, filename_no_extension + ".gif");
-	       	//showToast(newimagePath);
-	       	//showToast(String.valueOf(filenameArray2.length));
-	       	imagePath = newimagePath;
+		       	String wholestring_no_extension = filenameArray[filenameArray.length-2]; // /storage/emulated/0/pixel/pixelanimate/tree
+		       	String filenameArray2[] = wholestring_no_extension.split("\\/");
+		       	String filename_no_extension = filenameArray2[filenameArray2.length-1]; //tree
+			       // showToast(filename_no_extension);
+		       	String newimagePath = wholestring_no_extension.replace(filename_no_extension, filename_no_extension + ".gif");
+		       	//showToast(newimagePath);
+		       	//showToast(String.valueOf(filenameArray2.length));
+		       	imagePath = newimagePath;
 	       }
 	      else {
 	    	   gifView.setGif(imagePath); //just sets the image, that's all, doesn't do any decoding
@@ -940,6 +996,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
     
   public void onItemClick(AdapterView<?> parent, View v, int position, long id) {    //we go here when the user tapped an image from the initial grid    
         
+	     
 	        if (deviceFound == 1) { 
 			  		//********we need to reset everything because the user could have been already running an animation
 			  	     x = 0;
@@ -953,26 +1010,9 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 			  	    	// is.close();
 			  	     }
 			  	     ///****************************
-		    	
-			    	// Get the data location of the image
-			        String[] projection = {MediaStore.Images.Media.DATA};
-			        
-			      
-		        	cursor = managedQuery(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-		                projection, 
-		                MediaStore.Images.Media.DATA + " like ? ",
-		                new String[] {"%animatedgifs%"},  
-		                null);
-			        
-			        
-			       // showToast("on click");
-			        
-			        columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-			        cursor.moveToPosition(position);
-			        // Get image filename
-			        imagePath = cursor.getString(columnIndex);
-			        System.gc();	        
-			        //showToast(imagePath);
+		    		  
+			    	   String imagePath = (String) parent.getItemAtPosition(position);
+			    	  // Toast.makeText(getApplicationContext(), imagePath, Toast.LENGTH_LONG).show();
 			        
 			        selectedFileName = imagePath;
 			        //here we need to get the file name to see if the file has already been decoded
@@ -984,7 +1024,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 			        String delims2 = "[.]";
 			        String[] aFileName2 = selectedFileName.split(delims2);
 			        int aFileNameLength2 = aFileName2.length;
-			        //showToast(aFileName2[0]);
+			       // showToast(aFileName2[0]);
 			        selectedFileName = aFileName2[0];	//now we have just the short name with no extension
 			        
 			        //**** now let's handle the thumbnails
@@ -1005,8 +1045,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 			     	   gifView.setGif(imagePath);  //just sets the image , no decoding, decoding happens in the animateafterdecode method
 			        } 
 			   
-			       // gifView.setGif(imagePath);   //don't put this back, this does the decoding
-			        animateAfterDecode(0);  //0 means streaming mode, 1 means download mode
+			        animateAfterDecode(0);  //0 means streaming mode, 1 means download mode 
 	        }
 	        else {
 	        	showToast("PIXEL was not found, did you Bluetooth pair to PIXEL?");
@@ -1101,8 +1140,6 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 		    				
 							decodedtimer.start();
 							StreamModePlaying = 1; //our isStreamModePlaying flag	
-						//	streamPixelAsync streamNow = new streamPixelAsync(); //this didn't work as you can't call async task from a background thread already
-						//	streamNow.execute();
 		    			}
 		    			
 		    		} catch (Exception e) {
@@ -1401,17 +1438,6 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	     default:	    		 
 	    	 BitmapInputStream = context.getResources().openRawResource(R.raw.decoding32);
 	     }
-		 
-	 
-
-		
-		/*if (currentResolution == 32) {  //this needs to change later
-	        	BitmapInputStream = context.getResources().openRawResource(R.raw.decoding32);
-	        }
-        else {
-        	BitmapInputStream = context.getResources().openRawResource(R.raw.decoding16);
-        }	*/	        
-		
 		
 	        loadRGB565(); //show the one time decoding message to the user
 	        try {
@@ -1478,16 +1504,6 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	       						com.ledpixelart.piledriver.preferences.class);   
 	    				this.startActivityForResult(intent, 0);
 	       }
-	    	
-	    	/*if (item.getItemId() == R.id.menu_rescan)
-	        {
-	     		
-	    		Intent intent = new Intent()
-	        				.setClass(this,
-	        						com.ledpixelart.piledriver.rescan.class);   
-	     				this.startActivityForResult(intent, 1);
-	        }   	*/
-	    	
 	       return true;
 	    }
 	    
@@ -1503,11 +1519,10 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	    	//if (reqCode == 0 || reqCode == 1) //then we came back from the preferences menu so re-load all images from the sd card, 1 is a re-scan
 	    	if (reqCode == 1)
 	    	{
-	    		//imagedisplaydurationTimer.cancel(); //we may have been running a slideshow so kill it
-	    	    //pausebetweenimagesdurationTimer.cancel();
-	    		setupViews();
-	    	    setProgressBarIndeterminateVisibility(true); 
-	    	    loadImages();      
+	    		
+	    		//setupViews();
+	    	    //setProgressBarIndeterminateVisibility(true); 
+	    	    //loadImages();      
 	        }
 	    } 
 	    
@@ -1747,15 +1762,6 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 		});
 	} 
     
-    
-    private void setfirstTimeSetupCounter(final String str) {
-		runOnUiThread(new Runnable() {
-			public void run() {
-				firstTimeSetupCounter_.setText(str);
-			}
-		});
-	}
-    
     public class ConnectTimer extends CountDownTimer
    	{
 
@@ -1778,7 +1784,6 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
    			//not used
    		}
    	}
-    
 	 
     public class DecodedTimer extends CountDownTimer
    	{
@@ -1858,9 +1863,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 					// TODO Auto-generated catch block
 					e2.printStackTrace();
 				} 
-				Log.d("PixelAnimations","x is: " + x);
-				Log.d("seeker","seeker is: " + x*frame_length);
-				//x++;
+				//Log.d("PixelAnimations","x is: " + x);
+				//Log.d("seeker","seeker is: " + x*frame_length);
 				
 	   			 
 	   			if (frame_length > Integer.MAX_VALUE) {
@@ -1944,33 +1948,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
    		}
    	}
 
-   		
-   
-    
-    public class MediaScanTimer extends CountDownTimer
-   	{
-
-   		public MediaScanTimer(long startTime, long interval)
-   			{
-   				super(startTime, interval);
-   			}
-
-   		@Override
-   		public void onFinish()
-   			{
-   				
-   				MediaScanCompleted();
-   				countdownCounter = countdownDuration; //reset the counter
-   			}
-
-   		@Override
-   		public void onTick(long millisUntilFinished)				{
-   			//showToastShort("ONE TIME SETUP: Copying stock pictures to your SD card. Please Wait..." + countdownCounter);
-   			setfirstTimeSetupCounter(Integer.toString(countdownCounter));
-   			//showToastShort(getResources().getString(R.string.oneTimeSetupString) + " " + countdownCounter);
-   			countdownCounter--;
-   		}
-   	}
+   	
     
     private void showNotFound() {	
 		AlertDialog.Builder alert=new AlertDialog.Builder(this);
@@ -2205,7 +2183,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 									//writeFile(BitmapBytes, decodedDirPath + "/" + selectedFileName + "/" + selectedFileName + index + ".rgb565");  //this one the original one
 									appendWrite(BitmapBytes, decodedDirPath + "/" + selectedFileName + ".rgb565"); //this writes one big file instead of individual ones
 									//Log.d("PixelAnimate","initial write: " + index);
-									Log.d("PixelAnimate", "frame count: " + decoder.getFrameCount());
+									//Log.d("PixelAnimate", "frame count: " + decoder.getFrameCount());
 									//index++;
 								  
 									
@@ -2224,7 +2202,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 				   		
 				   		int frameDelay = decoder.getDelay(1); //we'll use the second frame as some animated gifs have a longer frame rate for the first frame
 				   		
-				   		if (decoder.getDelay(1) == 0) {  //the code crashes on a 0 frame delay so we'll need to check that and change to 100 ms if 0
+				   		if (decoder.getDelay(1) == 0 || decoder.getFrameCount() == 1) {  //the code crashes on a 0 frame delay so we'll need to check that and change to 100 ms if 0 and also if it's a single frame gif, we'll hardcode the frame delay
 				   			frameDelay = 100;
 				   		}
 				   		
@@ -2233,14 +2211,13 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 				   			frameDelay = 70; //if it's too fast, then we need to slow down to 70ms frame delay
 				   		}*/
 				   		
-				   		
 				   		Log.v("PixelAnimate", "Frame Delay: " + frameDelay);
 				   		
 				   		//String filetag = String.valueOf(decoder.getFrameCount()) + "," + String.valueOf(decoder.getDelay(1)) + "," + String.valueOf(currentResolution);  //our format is number of frames,delay 121,60,32 equals 121 frames, 60 ms time delay, 32 resolution   resolution is 16 for 16x32 or 32 for 32x32 led matrix, we need this in case the user changes the resolution in the app, then we'd need to catch this mismatch and re-decode
 				   		String filetag = String.valueOf(decoder.getFrameCount()) + "," + String.valueOf(frameDelay) + "," + String.valueOf(currentResolution); //current resolution may need to change to led panel type
 				   		
-				   	   Toast toast14 = Toast.makeText(context, "delay is: " + String.valueOf(frameDelay), Toast.LENGTH_LONG);
-					   toast14.show();	
+				   	 //  Toast toast14 = Toast.makeText(context, "delay is: " + String.valueOf(frameDelay), Toast.LENGTH_LONG);
+					 //  toast14.show();	
 				   	
 				        String exStorageState = Environment.getExternalStorageState();
 				     	if (Environment.MEDIA_MOUNTED.equals(exStorageState)){
@@ -2283,7 +2260,9 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 						Bitmap bitmap = decoder.getFrame(index);
 						canvas.drawBitmap(bitmap, 0, 0, null);
 					}
-				} else {
+				} 
+				
+				else {
 					canvas.drawBitmap(bitmap, 0, 0, null);
 				}
 			}
