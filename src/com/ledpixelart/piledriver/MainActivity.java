@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.FilenameFilter;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
@@ -239,14 +240,14 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	      
 	      
 	   // Get intent, action and MIME type
-	      Intent intent = getIntent();
+	   /*   Intent intent = getIntent();
 	      String action = intent.getAction();
 	      String type = intent.getType();
 
 	      if (Intent.ACTION_SEND.equals(action) && type != null) {
-	        /*  if ("text/plain".equals(type)) {
+	          if ("text/plain".equals(type)) {
 	              handleSendText(intent); // Handle text being sent
-	          } */
+	          } 
 	          
 	       if (type.startsWith("image/")) {
 	              handleSendImage(intent); // Handle single image being sent
@@ -255,7 +256,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	          if (type.startsWith("image/")) {
 	              handleSendMultipleImages(intent); // Handle multiple images being sent
 	          }
-	      } 
+	      } */
 	      
 	      //else {
 	          // Handle other intents, such as being started from the home screen
@@ -810,7 +811,14 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
     	  @Override
     	  protected Void doInBackground(Void... params) {
     	   
-    	   File[] files = targetDirector.listFiles();
+    	 //  File[] files = targetDirector.listFiles();
+    	   
+    	   File[] files = targetDirector.listFiles(new FilenameFilter() {
+    		    public boolean accept(File dir, String name) {
+    		        return name.toLowerCase().endsWith(".gif") || name.toLowerCase().endsWith(".png") ;
+    		    }
+    		});
+    	   
     	   for (File file : files) {
     	    publishProgress(file.getAbsolutePath());
     	    if (isCancelled()) break;
@@ -935,59 +943,67 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	@Override
  public  boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id) {  
 		   if (deviceFound == 1) {   
+			   if (pixelFirmware.substring(0,5).equals("PIXLD")) { //then it's a demo unit and we shouldn't support writing 
+				   
+				   showToast("This demo unit does not support writing");
+				   return true;
+			   }
+			   
+			   else {
 		
-			//********we need to reset everything because the user could have been already running an animation
-	 	     x = 0;
-	 	     
-	 	     if (StreamModePlaying == 1) {
-	 	    	 //decodedtimer.cancel();
-	 	    	// if(!pixelHardwareID.equals("PIXL")) {  //not PIXEL V2
-	 	    		decodedtimer.cancel();  //it's a lon
-	 	    	// }
-	 	     }
-	 	     ///****************************
-		
-	
-	 	   String imagePath = (String) parent.getItemAtPosition(position);
-	       //Toast.makeText(getApplicationContext(), imagePath, Toast.LENGTH_LONG).show();  
-	    	   
-	       selectedFileName = imagePath;
-	       //here we need to get the file name to see if the file has already been decoded
-	       //file name will be in a format like this sdcard/pixel/pixerinteractive/rain.gif , we want to extra just rain
-	       String delims = "[/]";
-	       String[] aFileName = selectedFileName.split(delims);
-	       int aFileNameLength = aFileName.length;
-	       selectedFileName = aFileName[aFileNameLength-1];
-	       String delims2 = "[.]";
-	       String[] aFileName2 = selectedFileName.split(delims2);
-	       int aFileNameLength2 = aFileName2.length;
-	       //showToast(aFileName2[0]);
-	       selectedFileName = aFileName2[0];	//now we have just the short name   
-	       
-	       //**** now let's handle the thumbnails
-	       String filenameArray[] = imagePath.split("\\.");
-	       String extension = filenameArray[filenameArray.length-1]; //.png
-	       
-	       if (extension.equals("png")) {  //then we use the thumbnail, we just need to rename the image path to a gif
-		       	String wholestring_no_extension = filenameArray[filenameArray.length-2]; // /storage/emulated/0/pixel/pixelanimate/tree
-		       	String filenameArray2[] = wholestring_no_extension.split("\\/");
-		       	String filename_no_extension = filenameArray2[filenameArray2.length-1]; //tree
-			       // showToast(filename_no_extension);
-		       	String newimagePath = wholestring_no_extension.replace(filename_no_extension, filename_no_extension + ".gif");
-		       	//showToast(newimagePath);
-		       	//showToast(String.valueOf(filenameArray2.length));
-		       	imagePath = newimagePath;
-	       }
-	      else {
-	    	   gifView.setGif(imagePath); //just sets the image, that's all, doesn't do any decoding
-	       } 
-	       
-	      //gifView.setGif(imagePath);  //this crashes the code, look at this later
-	       
-	       animateAfterDecode(1);
-		   return true;  //VERY IMPORTANT this is true, otherwise we'll get a single click event too at the same time which will screw things up royally
-		   }
-		   
+					//********we need to reset everything because the user could have been already running an animation
+			 	     x = 0;
+			 	     
+			 	     if (StreamModePlaying == 1) {
+			 	    	 //decodedtimer.cancel();
+			 	    	// if(!pixelHardwareID.equals("PIXL")) {  //not PIXEL V2
+			 	    		decodedtimer.cancel();  //it's a lon
+			 	    	// }
+			 	     }
+			 	     ///****************************
+				
+			
+			 	   String imagePath = (String) parent.getItemAtPosition(position);
+			       //Toast.makeText(getApplicationContext(), imagePath, Toast.LENGTH_LONG).show();  
+			    	   
+			       selectedFileName = imagePath;
+			       //here we need to get the file name to see if the file has already been decoded
+			       //file name will be in a format like this sdcard/pixel/pixerinteractive/rain.gif , we want to extra just rain
+			       String delims = "[/]";
+			       String[] aFileName = selectedFileName.split(delims);
+			       int aFileNameLength = aFileName.length;
+			       selectedFileName = aFileName[aFileNameLength-1];
+			       String delims2 = "[.]";
+			       String[] aFileName2 = selectedFileName.split(delims2);
+			       int aFileNameLength2 = aFileName2.length;
+			       //showToast(aFileName2[0]);
+			       selectedFileName = aFileName2[0];	//now we have just the short name   
+			       
+			       //**** now let's handle the thumbnails
+			       String filenameArray[] = imagePath.split("\\.");
+			       String extension = filenameArray[filenameArray.length-1]; //.png
+			       
+			       if (extension.equals("png")) {  //then we use the thumbnail, we just need to rename the image path to a gif
+				       	String wholestring_no_extension = filenameArray[filenameArray.length-2]; // /storage/emulated/0/pixel/pixelanimate/tree
+				       	String filenameArray2[] = wholestring_no_extension.split("\\/");
+				       	String filename_no_extension = filenameArray2[filenameArray2.length-1]; //tree
+					       // showToast(filename_no_extension);
+				       	String newimagePath = wholestring_no_extension.replace(filename_no_extension, filename_no_extension + ".gif");
+				       	//showToast(newimagePath);
+				       	//showToast(String.valueOf(filenameArray2.length));
+				       	imagePath = newimagePath;
+			       }
+			      else {
+			    	   gifView.setGif(imagePath); //just sets the image, that's all, doesn't do any decoding
+			       } 
+			       
+			      //gifView.setGif(imagePath);  //this crashes the code, look at this later
+			       
+			       animateAfterDecode(1);
+				   return true;  //VERY IMPORTANT this is true, otherwise we'll get a single click event too at the same time which will screw things up royally
+			   }  
+		 } 
+		     
 	   else {
 		   showToast("PIXEL was not found, did you Bluetooth pair to PIXEL?");
 		   return true;
