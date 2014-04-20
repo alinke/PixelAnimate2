@@ -28,6 +28,11 @@
     android:summary="@string/noSleepSummary"/>
     
     
+    <CheckBoxPreference
+    android:title="@string/kioskMode"
+    android:key="pref_kioskMode"
+    android:defaultValue="@string/pref_kioskModeDefault"
+    android:summary="@string/kioskModeSummary"/>
     
       <!-- <CheckBoxPreference
     android:title="Call Taxi"

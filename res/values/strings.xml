@@ -56,9 +56,19 @@
     <string name="noSleep">Disable Power Savings</string>    
     <string name="pref_noSleepDefault">false</string>
     <string name="noSleepSummary">Forces the app to be always on, your device will not go into power savings mode while this app is running. Good if using as a Kiosk for example. </string>
+       
+    <string name="kioskMode">Kiosk Mode</string>    
+    <string name="pref_kioskMode">pref_kioskMode</string>
+    <string name="pref_kioskModeDefault">false</string>    
+    <string name="kioskModeSummary">Writing to PIXEL is disabled</string>
+    
+    
     
     <string name="menu_rescan_title">Rescan</string>
     <string name="rescan_screen_verbage">Now scanning your SD card or internal memory for new animations or deletions, just a moment&#8230;</string>
+    
+    <string name="menu_galleryPickTitle">Select from Gallery</string>
+    <string name="select_picture">Select Picture</string>
     
     <string name="startup_verbage_1">Initial Setup</string>
     <string name="startup_verbage_2">Copying animations to your local storage&#8230;</string>
