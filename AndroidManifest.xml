@@ -39,7 +39,7 @@
                       <intent-filter>
                 		<action android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED" />
             		</intent-filter>
-            		 <!--
+            		 
                        <intent-filter>
 					        <action android:name="android.intent.action.SEND" />
 					        <category android:name="android.intent.category.DEFAULT" />
@@ -56,7 +56,7 @@
 					        <action android:name="android.intent.action.SEND_MULTIPLE" />
 					        <category android:name="android.intent.category.DEFAULT" />
 					        <data android:mimeType="image/*" />
-    				</intent-filter> -->
+    				</intent-filter> 
             
             		<meta-data android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED"
                                   android:resource="@xml/accessory_filter" />

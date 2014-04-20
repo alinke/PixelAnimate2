@@ -55,15 +55,15 @@ import android.widget.ImageView;
     	   if (convertView == null) { // if it's not recycled, initialize some
     	          // attributes
     	    imageView = new ImageView(mContext);
-    	    imageView.setLayoutParams(new GridView.LayoutParams(220, 220));
+    	    imageView.setLayoutParams(new GridView.LayoutParams(128,128));
     	    imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-    	    imageView.setPadding(8, 8, 8, 8);
+    	    imageView.setPadding(4, 4, 4, 4);
     	   } else {
     	    imageView = (ImageView) convertView;
     	   }
 
-    	   Bitmap bm = decodeSampledBitmapFromUri(itemList.get(position), 220,
-    	     220);
+    	   Bitmap bm = decodeSampledBitmapFromUri(itemList.get(position), 128,
+    	     128);
 
     	   imageView.setImageBitmap(bm);
     	   return imageView;
