@@ -34,6 +34,12 @@
     android:defaultValue="@string/pref_kioskModeDefault"
     android:summary="@string/kioskModeSummary"/>
     
+    <CheckBoxPreference
+    android:title="@string/gifonly"
+    android:key="pref_gifonly"
+    android:defaultValue="@string/pref_gifonlyDefault"
+    android:summary="@string/gifonlySummary"/>
+    
       <!-- <CheckBoxPreference
     android:title="Call Taxi"
     android:key="pref_taxi"

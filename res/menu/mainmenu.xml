@@ -17,10 +17,11 @@ android:title="@string/menu_instructions_title"
 android:icon="@drawable/ic_menu_database"
 />
 
+ <!--
 <item android:id="@+id/menu_galleryPick"
 android:title="@string/menu_galleryPickTitle"
 android:icon="@drawable/ic_menu_database"
-/>
+/>-->
 
   <!--
 <item android:id="@+id/menu_rescan"

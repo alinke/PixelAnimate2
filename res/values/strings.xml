@@ -62,7 +62,10 @@
     <string name="pref_kioskModeDefault">false</string>    
     <string name="kioskModeSummary">Writing to PIXEL is disabled</string>
     
-    
+    <string name="gifonly">Gifs Only</string>    
+    <string name="pref_gifonly">pref_gifonly</string>
+    <string name="pref_gifonlyDefault">false</string>    
+    <string name="gifonlySummary">Only show animated gifs</string>
     
     <string name="menu_rescan_title">Rescan</string>
     <string name="rescan_screen_verbage">Now scanning your SD card or internal memory for new animations or deletions, just a moment&#8230;</string>

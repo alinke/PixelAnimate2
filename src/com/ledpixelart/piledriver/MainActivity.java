@@ -221,6 +221,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	private ImageAdapter2 myImageAdapter;
 	private GridView gridview;
 	private boolean kioskMode_ = false;
+	private String originalImagePath;
+	private boolean gifonly_ = false;
 	
 
 	@Override
@@ -396,8 +398,16 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	    	
 			try {
 			  incomingStream = cr.openInputStream(imageUri);
-			  out = new FileOutputStream(basepath + "/pixel/animatedgifs/" + newfilename_no_extension + "." + uriExtension);
-			  String newFile = basepath + "/pixel/animatedgifs/" + newfilename_no_extension + "." + uriExtension;
+			  //out = new FileOutputStream(basepath + "/pixel/animatedgifs/" + newfilename_no_extension + "." + uriExtension);
+			  
+			  File outPath = new File(basepath + "/pixel/pngs");
+			  if (!outPath.exists()) {  //create the dir if it does not exist
+				  outPath.mkdirs();
+			  }
+			  
+			  out = new FileOutputStream(basepath + "/pixel/pngs/" + newfilename_no_extension + "." + uriExtension);
+			  //String newFile = basepath + "/pixel/animatedgifs/" + newfilename_no_extension + "." + uriExtension;
+			  String newFile = basepath + "/pixel/pngs/" + newfilename_no_extension + "." + uriExtension;
 			  //to do think about adding a check if the file name is already there
 			  
 			  copyFile(incomingStream, out);
@@ -820,6 +830,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
     public class AsyncTaskLoadFiles extends AsyncTask<Void, String, Void> {
     	  
     	  File targetDirector;
+    	  File PNGtargetDirector;
     	  ImageAdapter2 myTaskAdapter;
 
     	  public AsyncTaskLoadFiles(ImageAdapter2 adapter) {
@@ -833,6 +844,10 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 
     	   String targetPath = ExternalStorageDirectoryPath + "/pixel/animatedgifs";
     	   targetDirector = new File(targetPath);
+    	   
+    	   String PNGtargetPath = ExternalStorageDirectoryPath + "/pixel/pngs";
+    	   PNGtargetDirector = new File(PNGtargetPath);
+    	   
     	   myTaskAdapter.clear();
     	   
     	   super.onPreExecute();
@@ -845,7 +860,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
     	   
     	   File[] files = targetDirector.listFiles(new FilenameFilter() {
     		    public boolean accept(File dir, String name) {
-    		        return name.toLowerCase().endsWith(".gif") || name.toLowerCase().endsWith(".png") ;
+    		        return name.toLowerCase().endsWith(".gif") || name.toLowerCase().endsWith(".png") || name.toLowerCase().endsWith(".jpg") || name.toLowerCase().endsWith(".jpeg");
     		    }
     		});
     	   
@@ -853,8 +868,25 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
     	    publishProgress(file.getAbsolutePath());
     	    if (isCancelled()) break;
     	   }
-    	   return null;
+    	   //return null;
+    	   
+    	   if (gifonly_ == false && PNGtargetDirector.exists()) {
+	    	   File[] files2 = PNGtargetDirector.listFiles(new FilenameFilter() {
+	   		    public boolean accept(File dir, String name) {
+	   		        return name.toLowerCase().endsWith(".gif") || name.toLowerCase().endsWith(".png") || name.toLowerCase().endsWith(".jpg") || name.toLowerCase().endsWith(".jpeg");
+	   		    }
+	   			});
+	   	   
+		   	   for (File file : files2) {
+		   	    publishProgress(file.getAbsolutePath());
+		   	    if (isCancelled()) break;
+		   	   }
+    	   }
+	   	   
+	   	   return null;
+    	   
     	  }
+    	  
 
     	  @Override
     	  protected void onProgressUpdate(String... values) {
@@ -993,7 +1025,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 			 	     ///****************************
 				
 			
-			 	   String imagePath = (String) parent.getItemAtPosition(position);
+			 	   imagePath = (String) parent.getItemAtPosition(position);
 			       //Toast.makeText(getApplicationContext(), imagePath, Toast.LENGTH_LONG).show();  
 			    	   
 			       selectedFileName = imagePath;
@@ -1041,9 +1073,15 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 					     	   animateAfterDecode(1); //the 1 tells pixel to write
 					    } 
 			       }
-			      else {
+			       
+			       else if (extension.equals("gif")) {
 			    	   gifView.setGif(imagePath); //just sets the image, that's all, doesn't do any decoding
 			    	   animateAfterDecode(1);
+			       }
+			       
+			      else if (extension.equals("jpg")) {
+			    	   //gifView.setGif(imagePath); //just sets the image, that's all, doesn't do any decoding
+			    	   //animateAfterDecode(1);
 			       } 
 			       
 			      //gifView.setGif(imagePath);  //this crashes the code, look at this later
@@ -1076,8 +1114,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 			  	     }
 			  	     ///****************************
 		    		  
-			    	String imagePath = (String) parent.getItemAtPosition(position);
-			    	// Toast.makeText(getApplicationContext(), imagePath, Toast.LENGTH_LONG).show();
+			    	imagePath = (String) parent.getItemAtPosition(position);
+			    	originalImagePath = (String) parent.getItemAtPosition(position);
 			        
 			        selectedFileName = imagePath;
 			        //here we need to get the file name to see if the file has already been decoded
@@ -1089,7 +1127,6 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 			        String delims2 = "[.]";
 			        String[] aFileName2 = selectedFileName.split(delims2);
 			        int aFileNameLength2 = aFileName2.length;
-			       // showToast(aFileName2[0]);
 			        selectedFileName = aFileName2[0];	//now we have just the short name with no extension
 			        
 			        //**** now let's handle the thumbnails
@@ -1100,7 +1137,6 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 			        	String wholestring_no_extension = filenameArray[filenameArray.length-2]; // /storage/emulated/0/pixel/pixelanimate/tree
 			        	String filenameArray2[] = wholestring_no_extension.split("\\/");
 			        	String filename_no_extension = filenameArray2[filenameArray2.length-1]; //tree
-				       // showToast(filename_no_extension);
 			        	String newimagePath = wholestring_no_extension.replace(filename_no_extension, filename_no_extension + ".gif");
 			        	//showToast(newimagePath);
 			        	//showToast(String.valueOf(filenameArray2.length));
@@ -1108,10 +1144,10 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 			        	
 			        	//now we need to check that filename/decoded/filename.rgb565 exists
 			        	
-			        	File pngRGB565path = new File(imagePath + "/decoded/" + filename_no_extension + ".rgb565"); //sdcard/pixel/animatedgifs/tree/decoded/tree.rgb565
-			            
+			        	File pngRGB565path = new File(basepath + "/pixel/animatedgifs/decoded/" + filename_no_extension + ".rgb565"); //sdcard/pixel/animatedgifs/decoded/tree.rgb565
 			        	if (!pngRGB565path.exists()) { //if it doesn't exist
 			            	//there's no rgb565 and we only have a single frame png so let's just send this single frame png to pixel
+				        	imagePath = originalImagePath;
 			        		try {
 								WriteImagetoMatrix();
 							} catch (ConnectionLostException e) {
@@ -1120,12 +1156,21 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 							}
 			            }
 			        	else {
-					     	   gifView.setGif(imagePath);  //we have a matching rgb565 so let's animate the gif
-					     	   animateAfterDecode(0);
+					     	   animateAfterDecode(0); //the rgb565 is there so let's run the already decoded animation
 					    } 
-			        	
 			        }
-			       else {  // if it's not a png, then it's a gif so let's animate
+			        
+			        else if (extension.equals("jpg") || extension.equals("jpeg")) {  
+			        	imagePath = originalImagePath;
+		        		try {
+							WriteImagetoMatrix();
+						} catch (ConnectionLostException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+			        }
+			        
+			       else if (extension.equals("gif")) {  // if it's not a png, then it's a gif so let's animate
 			     	   gifView.setGif(imagePath);  //just sets the image , no decoding, decoding happens in the animateafterdecode method
 			     	   animateAfterDecode(0);
 			       } 
@@ -1139,9 +1184,15 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
   
   private void WriteImagetoMatrix() throws ConnectionLostException {  //here we'll take a PNG, BMP, or whatever and convert it to RGB565 via a canvas, also we'll re-size the image if necessary
   	
-	     originalImage = BitmapFactory.decodeFile(imagePath);   		 
-		 width_original = originalImage.getWidth();
-		 height_original = originalImage.getHeight();
+	    // originalImage = BitmapFactory.decodeFile(imagePath);   
+	     
+		// width_original = originalImage.getWidth();
+		// height_original = originalImage.getHeight();
+		 
+		 originalImage = decodeSampledBitmapFromFile(imagePath, KIND.width,KIND.height);
+		 
+		width_original = originalImage.getWidth();
+	    height_original = originalImage.getHeight();
 		 
 		 if (width_original != KIND.width || height_original != KIND.height) {
 			 resizedFlag = 1;
@@ -1153,7 +1204,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	   		 matrix2 = new Matrix();
 	   		 // resize the bit map
 	   		 matrix2.postScale(scaleWidth, scaleHeight);
-	   		 resizedBitmap = Bitmap.createBitmap(originalImage, 0, 0, width_original, height_original, matrix2, true);
+	   		 resizedBitmap = Bitmap.createBitmap(originalImage, 0, 0, width_original, height_original, matrix2, false); //false means don't anti-alias which is what we want when re-sizing for super pixel 64x64
 	   		 canvasBitmap = Bitmap.createBitmap(KIND.width, KIND.height, Config.RGB_565); 
 	   		 Canvas canvas = new Canvas(canvasBitmap);
 	   		 canvas.drawRGB(0,0,0); //a black background
@@ -1194,6 +1245,47 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	    	resizedBitmap.recycle(); //only there if we had to resize an image
 	    }
 	}
+  
+  public static Bitmap decodeSampledBitmapFromFile(String filePath, 
+	        int reqWidth, int reqHeight) {
+
+	    // First decode with inJustDecodeBounds=true to check dimensions
+	    final BitmapFactory.Options options = new BitmapFactory.Options();
+	    options.inJustDecodeBounds = true;
+	    BitmapFactory.decodeFile(filePath, options);
+
+	    // Calculate inSampleSize
+	    options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+	    // Decode bitmap with inSampleSize set
+	    options.inJustDecodeBounds = false;
+	    return BitmapFactory.decodeFile(filePath, options);
+	}
+  
+  public static int calculateInSampleSize(
+          BitmapFactory.Options options, int reqWidth, int reqHeight) {
+  // Raw height and width of image
+  final int height = options.outHeight;
+  final int width = options.outWidth;
+  int inSampleSize = 1;
+
+  if (height > reqHeight || width > reqWidth) {
+
+      final int halfHeight = height / 2;
+      final int halfWidth = width / 2;
+
+      // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+      // height and width larger than the requested height and width.
+      while ((halfHeight / inSampleSize) > reqHeight
+              && (halfWidth / inSampleSize) > reqWidth) {
+          inSampleSize *= 2;
+      }
+  }
+
+  return inSampleSize;
+}
+  
+  
   
   public void animateAfterDecode(int longpress) {
 	  
@@ -1648,10 +1740,10 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	    				this.startActivityForResult(intent, WENT_TO_PREFERENCES);
 	       }
 	    	
-	    	if (item.getItemId() == R.id.menu_galleryPick)
+	    	/*if (item.getItemId() == R.id.menu_galleryPick)
 		       {
 	    		
-	    		 	/*Intent intent = new Intent(); 
+	    		 	Intent intent = new Intent(); 
 	    		    intent.setType("image/jpeg");
 	    		    intent.setAction(Intent.ACTION_GET_CONTENT);
 	    		    startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.select_picture)),GALLERY_INTENT_CALLED);
@@ -1661,7 +1753,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	    		
 	    		Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
 	    	    photoPickerIntent.setType("image/*");
-	    	    startActivityForResult(photoPickerIntent, REQUEST_CODE_CHOOSE_PICTURE_FROM_GALLERY);*/
+	    	    startActivityForResult(photoPickerIntent, REQUEST_CODE_CHOOSE_PICTURE_FROM_GALLERY);
 	    		
 	    		//Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
 	    		//photoPickerIntent.setType("image/*");
@@ -1679,7 +1771,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	    		  //  startActivityForResult(intent, GALLERY_KITKAT_INTENT_CALLED);
 	    		//}
 	    		
-		       }
+		       }*/
 	    	
 	       return true;
 	    }
@@ -1792,6 +1884,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	     noSleep = prefs.getBoolean("pref_noSleep", false);
 	     debug_ = prefs.getBoolean("pref_debugMode", false);
 	     kioskMode_ = prefs.getBoolean("pref_kioskMode", false);
+	     gifonly_ = prefs.getBoolean("pref_gifonly", false); //only load gifs, don't load static pngs if true
 	   
 	     matrix_model = Integer.valueOf(prefs.getString(   //the selected RGB LED Matrix Type
 	    	        resources.getString(R.string.selected_matrix),
