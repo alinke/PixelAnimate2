@@ -127,6 +127,8 @@ import android.graphics.drawable.BitmapDrawable;
 //import android.content.BroadcastReceiver;
 
 import android.app.ProgressDialog;
+//import android.support.v7.app.ActionBar;
+//import android.support.v7.app.ActionBarActivity;
 
 
 //to do , think about deleting the decoded directory if led panel size changed
@@ -243,28 +245,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	      gifView.setGif(R.drawable.zzzblank);  //code will crash if a dummy gif is not loaded initially
 	     // proxTextView_ = (TextView)findViewById(R.id.proxTextView);
 	      
-	   // Get intent, action and MIME type
-	      Intent intent = getIntent();
-	      String action = intent.getAction();
-	      String type = intent.getType();
-
-	      if (Intent.ACTION_SEND.equals(action) && type != null) {
-	        //  if ("text/plain".equals(type)) {
-	        //      handleSendText(intent); // Handle text being sent
-	        //  } 
-	          
-	       if (type.startsWith("image/")) {
-	              handleSendImage(intent); // Handle single image being sent
-	          }
-	      } else if (Intent.ACTION_SEND_MULTIPLE.equals(action) && type != null) {
-	          if (type.startsWith("image/")) {
-	              handleSendMultipleImages(intent); // Handle multiple images being sent
-	          }
-	      } 
-	      
-	      else {
-	          // Handle other intents, such as being started from the home screen
-	      }
+	 
 
 	      
 	     //let's get the app version so we'll know if we need to add new animations to the user's app   
@@ -346,6 +327,32 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
  	      	alert.setTitle("No SD Card").setIcon(R.drawable.icon).setMessage("Sorry, your device does not have an accessible SD card, this app needs to copy some images to your SD card and will not work without it.\n\nPlease exit this app and go to Android settings and check that your SD card is mounted and available and then restart this app.\n\nNote for devices that don't have external SD cards, this app will utilize the internal SD card memory but you are most likely seeing this message because your device does have an external SD card slot.").setNeutralButton("OK", null).show();
             //showToast("Sorry, your device does not have an accessible SD card, this app will not work");//Or use your own method ie: Toast
         }
+        
+        
+        // Get intent, action and MIME type
+	      Intent intent = getIntent();
+	      String action = intent.getAction();
+	      String type = intent.getType();
+
+	      if (Intent.ACTION_SEND.equals(action) && type != null) {
+	        //  if ("text/plain".equals(type)) {
+	        //      handleSendText(intent); // Handle text being sent
+	        //  } 
+	          
+	       if (type.startsWith("image/")) {
+	              handleSendImage(intent); // Handle single image being sent
+	          }
+	      } else if (Intent.ACTION_SEND_MULTIPLE.equals(action) && type != null) {
+	          if (type.startsWith("image/")) {
+	              handleSendMultipleImages(intent); // Handle multiple images being sent
+	          }
+	      } 
+	      
+	      else {
+	          // Handle other intents, such as being started from the home screen
+	      }  
+        
+        
 	}
 	
 	/*private void handleSendText(Intent intent) {  //not used
@@ -358,7 +365,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	private void handleSendImage(Intent intent) { //another app has passed us on image so let's copy it to our sd card directory
 	    Uri imageUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
 	   
-	    
+	   
 	    if (imageUri != null) {
 	        // Update UI to reflect image being shared
 	    	String uriPath = imageUri.toString();
@@ -418,6 +425,10 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 			  out = null;
 			  //we've copied in the new file so now we need to add it to the gridview
 			  myImageAdapter.add(newFile);
+			 // showToast ("New file added");
+			  
+			  //TO DO now let's send it to PIXEL
+			  
 			} catch(Exception e) {
 			    Log.e("tag", e.getMessage());
 			}
@@ -563,10 +574,11 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	}
 
 	private void handleSendMultipleImages(Intent intent) {
-	    ArrayList<Uri> imageUris = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
+	    /*ArrayList<Uri> imageUris = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
 	    if (imageUris != null) {
 	        // Update UI to reflect multiple images being shared
-	    }
+	    }*/
+		showToast("Sorry, only single file sharing is supported. Please share just one image.");
 	}
 	
 	 private class copyFilesAsync extends AsyncTask<Void, Integer, Void>{
