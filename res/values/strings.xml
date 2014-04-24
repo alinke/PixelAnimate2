@@ -67,6 +67,11 @@
     <string name="pref_gifonlyDefault">false</string>    
     <string name="gifonlySummary">Only show animated gifs</string>
     
+    <string name="only64">64x64 Content Only</string>    
+    <string name="pref_only64">pref_only64</string>
+    <string name="pref_only64Default">false</string>    
+    <string name="pref_only64Summary">Only show 64x64 and user added content</string>
+    
     <string name="menu_rescan_title">Rescan</string>
     <string name="rescan_screen_verbage">Now scanning your SD card or internal memory for new animations or deletions, just a moment&#8230;</string>
     

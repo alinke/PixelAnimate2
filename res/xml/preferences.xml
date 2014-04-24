@@ -40,6 +40,12 @@
     android:defaultValue="@string/pref_gifonlyDefault"
     android:summary="@string/gifonlySummary"/>
     
+    <CheckBoxPreference
+    android:title="@string/only64"
+    android:key="pref_only64"
+    android:defaultValue="@string/pref_only64Default"
+    android:summary="@string/pref_only64Summary"/>
+    
       <!-- <CheckBoxPreference
     android:title="Call Taxi"
     android:key="pref_taxi"

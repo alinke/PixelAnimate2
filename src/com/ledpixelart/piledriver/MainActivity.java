@@ -172,8 +172,24 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	
 	private static String extStorageDirectory = Environment.getExternalStorageDirectory().toString();
     private static String basepath = extStorageDirectory;
-    private static String decodedDirPath =  Environment.getExternalStorageDirectory() + "/pixel/animatedgifs/decoded"; 
-    private String artpath = "/media";
+   
+    private static String decodedDirPath =  Environment.getExternalStorageDirectory() + "/pixel/gif/decoded"; 
+    
+    private static String GIFPath =  Environment.getExternalStorageDirectory() + "/pixel/gif/"; //put the pngs (for display purposes) and the gifs together in this same dir, code should take the png if it exists, otherwise take the gif
+    private static String PNGPath =  Environment.getExternalStorageDirectory() + "/pixel/png/"; //static pngs
+    private static String PNG64Path =  Environment.getExternalStorageDirectory() + "/pixel/png64/"; //static pngs 64x64
+    private static String GIF64Path =  Environment.getExternalStorageDirectory() + "/pixel/gif64/";  //gifs 64x64, there will be a decoded directory here
+    private static String userPNGPath =  Environment.getExternalStorageDirectory() + "/pixel/userpng/"; //user supplied pngs
+    private static String userGIFPath =  Environment.getExternalStorageDirectory() + "/pixel/usergif/";  //user supplied gifs, there will be a decoded directory here
+    
+    /*private static String GIFname =  Environment.getExternalStorageDirectory() + "gif";
+    private static String PNGname =  Environment.getExternalStorageDirectory() + "png";
+    private static String PNG64name =  Environment.getExternalStorageDirectory() + "png64";
+    private static String GIF64name =  Environment.getExternalStorageDirectory() + "gif64";
+    private static String userPNGname =  Environment.getExternalStorageDirectory() + "userpng";
+    private static String userGIFname =  Environment.getExternalStorageDirectory() + "usergif";*/
+    
+    //private String artpath = "/media";
     private static Context context;
     private Context frameContext;
     private GridView sdcardImages;
@@ -202,10 +218,10 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	private static int StreamModePlaying = 0;
 	private static int selectedFileResolution;
 	private static int currentResolution;
-	private static String pixelFirmware = "Not Found";
-	private static String pixelBootloader = "Not Found";
-	private static String pixelHardwareID = "Not Found";
-	private static String IOIOLibVersion = "Not Found";
+	private static String pixelFirmware = "Not Connected";
+	private static String pixelBootloader = "Not Connected";
+	private static String pixelHardwareID = "Not Connected";
+	private static String IOIOLibVersion = "Not Connected";
 	private static VersionType v;
 	private static  ByteBuffer buffer; //Create a new buffer
 	private int appCode;
@@ -225,6 +241,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	private boolean kioskMode_ = false;
 	private String originalImagePath;
 	private boolean gifonly_ = false;
+	private boolean only64_ = false;
 	
 
 	@Override
@@ -244,9 +261,6 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	      gifView = (GifView) findViewById(R.id.gifView); //gifview takes care of the gif decoding
 	      gifView.setGif(R.drawable.zzzblank);  //code will crash if a dummy gif is not loaded initially
 	     // proxTextView_ = (TextView)findViewById(R.id.proxTextView);
-	      
-	 
-
 	      
 	     //let's get the app version so we'll know if we need to add new animations to the user's app   
 	        PackageInfo pinfo;
@@ -297,7 +311,9 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
             extStorageDirectory = Environment.getExternalStorageDirectory().toString();
 	           
             	// File artdir = new File(basepath + "/Android/data/com.ioiomint./files");
-            	File artdir = new File(basepath + "/pixel/animatedgifs");
+            	//File artdir = new File(basepath + "/pixel/animatedgifs");
+            	File artdir = new File(GIFPath);
+            	
 	            if (!artdir.exists()) { //no directory so let's now start the one time setup
 	            	//sdcardImages.setVisibility(View.INVISIBLE); //hide the images as they're not loaded so we can show a splash screen instead
 	            	//showToast(getResources().getString(R.string.oneTimeSetupString)); //replaced by direct text on view screen
@@ -342,18 +358,47 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	       if (type.startsWith("image/")) {
 	              handleSendImage(intent); // Handle single image being sent
 	          }
-	      } else if (Intent.ACTION_SEND_MULTIPLE.equals(action) && type != null) {
+	      } 
+	      
+	     else if (Intent.ACTION_SEND_MULTIPLE.equals(action) && type != null) {
 	          if (type.startsWith("image/")) {
 	              handleSendMultipleImages(intent); // Handle multiple images being sent
 	          }
-	      } 
+	      }
 	      
-	      else {
+	      /*else {
 	          // Handle other intents, such as being started from the home screen
-	      }  
+	      }  */
         
         
 	}
+	
+	/* protected void onResume() {
+         super.onResume();
+         
+         Intent intent = getIntent();
+	      String action = intent.getAction();
+	      String type = intent.getType();
+
+	      if (Intent.ACTION_SEND.equals(action) && type != null) {
+	        //  if ("text/plain".equals(type)) {
+	        //      handleSendText(intent); // Handle text being sent
+	        //  } 
+	          
+	       if (type.startsWith("image/")) {
+	              handleSendImage(intent); // Handle single image being sent
+	          }
+	      } 
+	      
+	     else if (Intent.ACTION_SEND_MULTIPLE.equals(action) && type != null) {
+	          if (type.startsWith("image/")) {
+	              handleSendMultipleImages(intent); // Handle multiple images being sent
+	          }
+	      }
+     }*/
+	 
+	
+ 
 	
 	/*private void handleSendText(Intent intent) {  //not used
 	    String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
@@ -381,7 +426,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	        //showToast("mimeType= " + mimeType);  // image/gif
 	        //let's get the extension
 	    	String uriNameExtensionArray[] = mimeType.split("\\/");
-        	String uriExtension = uriNameExtensionArray[uriNameExtensionArray.length-1]; //tree
+        	String uriExtension = uriNameExtensionArray[uriNameExtensionArray.length-1]; //image
 	       // showToast(uriExtension);
 	    	
 	    	ContentResolver cr = getContentResolver();
@@ -401,176 +446,87 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 		        	//showToast(String.valueOf(filenameArray2.length));
 		        	//imagePath = newimagePath;
 		     //   }
-	    	
-	    	
-			try {
-			  incomingStream = cr.openInputStream(imageUri);
-			  //out = new FileOutputStream(basepath + "/pixel/animatedgifs/" + newfilename_no_extension + "." + uriExtension);
-			  
-			  File outPath = new File(basepath + "/pixel/pngs");
-			  if (!outPath.exists()) {  //create the dir if it does not exist
-				  outPath.mkdirs();
-			  }
-			  
-			  out = new FileOutputStream(basepath + "/pixel/pngs/" + newfilename_no_extension + "." + uriExtension);
-			  //String newFile = basepath + "/pixel/animatedgifs/" + newfilename_no_extension + "." + uriExtension;
-			  String newFile = basepath + "/pixel/pngs/" + newfilename_no_extension + "." + uriExtension;
-			  //to do think about adding a check if the file name is already there
-			  
-			  copyFile(incomingStream, out);
-			  incomingStream.close();
-			  incomingStream = null;
-			  out.flush();
-			  out.close();
-			  out = null;
-			  //we've copied in the new file so now we need to add it to the gridview
-			  myImageAdapter.add(newFile);
-			 // showToast ("New file added");
-			  
-			  //TO DO now let's send it to PIXEL
-			  
-			} catch(Exception e) {
-			    Log.e("tag", e.getMessage());
-			}
-
+	    	if (uriExtension.equals("gif")) {
+	    		File outPath = new File(userGIFPath);
+	    		 if (!outPath.exists()) {  //create the dir if it does not exist
+					  outPath.mkdirs();
+				  }
+	    		 
+	    		 try {
+	   			  incomingStream = cr.openInputStream(imageUri);
+	   			  //out = new FileOutputStream(basepath + "/pixel/animatedgifs/" + newfilename_no_extension + "." + uriExtension);
+	   			  
+	   		
+	   			  //File outPath = new File(basepath + "/pixel/pngs");
+	   			// if (!outPath.exists()) {  //create the dir if it does not exist
+	   		//		  outPath.mkdirs();
+	   			//  }
+	   			  
+	   			  //out = new FileOutputStream(basepath + "/pixel/pngs/" + newfilename_no_extension + "." + uriExtension);
+	   			  out = new FileOutputStream(userGIFPath + newfilename_no_extension + "." + uriExtension);
+	   			  //String newFile = basepath + "/pixel/pngs/" + newfilename_no_extension + "." + uriExtension;
+	   			  String newFile = userGIFPath + newfilename_no_extension + "." + uriExtension;
+	   			  //to do think about adding a check if the file name is already there
+	   			  
+	   			  copyFile(incomingStream, out);
+	   			  incomingStream.close();
+	   			  incomingStream = null;
+	   			  out.flush();
+	   			  out.close();
+	   			  out = null;
+	   			  //we've copied in the new file so now we need to add it to the gridview
+	   			  myImageAdapter.add(newFile);
+	   			  showToast ("New file added");
+	   			  
+	   			  //TO DO now let's send it to PIXEL
+	   			  
+	   			} catch(Exception e) {
+	   			    Log.e("tag", e.getMessage());
+	   			}
+	    		 
+	    		 
 	    	}
+	    	else {
+	    		File outPath = new File(userPNGPath);
+	    		 if (!outPath.exists()) {  //create the dir if it does not exist
+					  outPath.mkdirs();
+				  }
+	    		 
+	    		 try {
+		   			  incomingStream = cr.openInputStream(imageUri);
+		   			  //out = new FileOutputStream(basepath + "/pixel/animatedgifs/" + newfilename_no_extension + "." + uriExtension);
+		   			  
+		   		
+		   			  //File outPath = new File(basepath + "/pixel/pngs");
+		   			// if (!outPath.exists()) {  //create the dir if it does not exist
+		   		//		  outPath.mkdirs();
+		   			//  }
+		   			  
+		   			  //out = new FileOutputStream(basepath + "/pixel/pngs/" + newfilename_no_extension + "." + uriExtension);
+		   			  out = new FileOutputStream(userPNGPath + newfilename_no_extension + "." + uriExtension);
+		   			  //String newFile = basepath + "/pixel/pngs/" + newfilename_no_extension + "." + uriExtension;
+		   			  String newFile = userPNGPath + newfilename_no_extension + "." + uriExtension;
+		   			  //to do think about adding a check if the file name is already there
+		   			  
+		   			  copyFile(incomingStream, out);
+		   			  incomingStream.close();
+		   			  incomingStream = null;
+		   			  out.flush();
+		   			  out.close();
+		   			  out = null;
+		   			  //we've copied in the new file so now we need to add it to the gridview
+		   			  myImageAdapter.add(newFile);
+		   			  showToast ("New file added");
+		   			  
+		   			  //TO DO now let's send it to PIXEL
+		   			  
+		   			} catch(Exception e) {
+		   			    Log.e("tag", e.getMessage());
+		   			}
+	    	}
+	    }
 	    
-	    //to do now that we have the new file in gridview, let's send it to PIXEL in steaming mode
-	    
-	    
-	    
-	    //Now that we have copied the gif in, we need to re-load everyting
-	    
-	   // myAsyncTaskLoadFiles.cancel(true);
-        
-        //new another ImageAdapter, to prevent the adapter have
-        //mixed files
-       // myImageAdapter = new ImageAdapter2(MainActivity.this);
-       // gridview.setAdapter(myImageAdapter);
-        //myAsyncTaskLoadFiles = new AsyncTaskLoadFiles(myImageAdapter);
-        //myAsyncTaskLoadFiles.execute();
-        
-        
-       // myAsyncTaskLoadFiles.cancel(true);
-      //  ssss
-        
-	  //  myImageAdapter.myTaskAdapter.add(newFile);
-        
-       // myImageAdapter.add(newFile);
-        
-      //  myTaskAdapter.add(newFile);
-        
-      //  void add(String path) {
-     //	   itemList.add(path);
-     //	  }
-     	  
-     //	  void clear() {
-     //	   itemList.clear();
-     //	  }
-        
-        //new another ImageAdapter, to prevent the adapter have
-        //mixed files
-        //myImageAdapter = new ImageAdapter2(MainActivity.this);
-        //gridview.setAdapter(myImageAdapter);
-        //myAsyncTaskLoadFiles = new AsyncTaskLoadFiles(myImageAdapter);
-        //myAsyncTaskLoadFiles.execute();
-        
-        
-        
-	    
-	    //myAsyncTaskLoadFiles = new AsyncTaskLoadFiles(myImageAdapter);
-        //myAsyncTaskLoadFiles.execute();
-
-       // gridview.setOnItemClickListener(myOnItemClickListener);
-        
-        //gridview.setOnItemClickListener(MainActivity.this);
-        //gridview.setOnItemLongClickListener(MainActivity.this);
-        
-       /* Button buttonReload = (Button)findViewById(R.id.reload);
-        buttonReload.setOnClickListener(new OnClickListener(){
-
-         @Override
-         public void onClick(View arg0) { //the button
-          
-          //Cancel the previous running task, if exist.
-          myAsyncTaskLoadFiles.cancel(true);
-          
-          //new another ImageAdapter, to prevent the adapter have
-          //mixed files
-          myImageAdapter = new ImageAdapter2(MainActivity.this);
-          gridview.setAdapter(myImageAdapter);
-          myAsyncTaskLoadFiles = new AsyncTaskLoadFiles(myImageAdapter);
-          myAsyncTaskLoadFiles.execute();
-	    
-	    //now we need to add the newly copied file to the itemlist
-      //  myTaskAdapter.add(out);
-      //  myTaskAdapter.notifyDataSetChanged();
-	    	
-	    
-	        //now we need to add the newly copied file to the itemlist
-	        //myTaskAdapter.add(out);
-	        //myTaskAdapter.notifyDataSetChanged();
-	        
-	        
-	        
-	    	//showToast(hello);
-	    	//Parcel fileParcel = null;
-	    	
-	    //	InputStream in = null;
-	    	//FileOutputStream out = null;
-	    	
-	    	//Parcelable sharedParse = imageUri;
-	    //	;jkl;j;l
-	    	
-	    //	in.read(imageUri.);
-	    	
-	    	
-	    	//imageUri.writeToParcel(fileParcel,1);
-	    	
-	    //	imageUri.writeToParcel(out, uri);
-	    	//writeToParcel(fileParcel, imageUri);
-	    	
-	    	
-	    /*
-	    	//byte[] sharedByte = fileParcel.createByteArray();
-	    	byte[] sharedByte = null;
-	    	fileParcel.writeByteArray(sharedByte);
-	    	InputStream in = null;
-	    	FileOutputStream out = null;
-	    	try {
-				in.read(sharedByte);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	    	
-	    //	  in = assetManager.open("animatedgifs/" + files[i]);
-           try {
-			out = new FileOutputStream(basepath + "/pixel/animatedgifs/al.png");
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-          
-           
-           try {
-			copyFile(in, out);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-           try {
-			in.close();
-			 in = null;
-	         out.flush();
-	         out.close();
-	         out = null;    
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
-           
-	   // }
+	    //TO DO now that we have the new file in gridview, let's send it to PIXEL in steaming mode
 	}
 
 	private void handleSendMultipleImages(Intent intent) {
@@ -592,8 +548,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 		   
 		   progress = new ProgressDialog(MainActivity.this);
 	       //progress.setMax(selectedFileTotalFrames);
-	       progress.setTitle("Initial Setup");
-	       progress.setMessage("Copying animations to your local memory....");
+	       progress.setTitle("One Time Setup");
+	       progress.setMessage("Copying pixel art to your local memory....");
 	       progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 	       progress.show();
 	 
@@ -604,50 +560,35 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	  @Override
 	  protected Void doInBackground(Void... params) {
 		  	
-			File artdir = new File(basepath + "/pixel/animatedgifs");
+			//File artdir = new File(basepath + "/pixel/animatedgifs");
+			File artdir = new File(GIFPath);
 			artdir.mkdirs();			
-			//SystemClock.sleep(100);
-            File decodeddir = new File(basepath + "/pixel/animatedgifs/decoded");
+			
+           // File decodeddir = new File(basepath + "/pixel/animatedgifs/decoded");
+            File decodeddir = new File(GIFPath + "decoded");
 		  	decodeddir.mkdirs();
-			//SystemClock.sleep(100);
+		  	
+		  	File PNGdir = new File(PNGPath);
+		  	if (!PNGdir.exists()) {
+		  		PNGdir.mkdirs();
+		  	}
+		  	
+		  	File PNG64dir = new File(PNG64Path);
+		  	if (!PNG64dir.exists()) {
+		  		PNG64dir.mkdirs();
+		  	}
+		  	
+		  	File GIF64dir = new File(GIF64Path);
+		  	if (!GIF64dir.exists()) {
+		  		GIF64dir.mkdirs();
+		  	}
 			
 		  	copyArt(); //copy the .png and .gif files (mainly png) because we want to decode first
-		  	
-		  	AssetManager assetManager = getResources().getAssets();
-	        String[] files = null;
-	        try {
-	            files = assetManager.list("animatedgifs");
-	        } catch (Exception e) {
-	            Log.e("read clipart ERROR", e.toString());
-	            e.printStackTrace();
-	        }
-	        
-	        //let's get the total numbers of files here and set the progress bar
-	        progress.setMax(files.length*3);  //it's 3x because each animation has 3 files with it: .png file, the raw rgb565, and a text file containing the speed/frame rate of the animation
-	        
-	        for(int i=0; i<files.length; i++) {
-	            InputStream in = null;
-	            OutputStream out = null;
-	            try {
-	              in = assetManager.open("animatedgifs/" + files[i]);
-	              out = new FileOutputStream(basepath + "/pixel/animatedgifs/" + files[i]);
-	              copyFile(in, out);
-	              in.close();
-	              in = null;
-	              out.flush();
-	              out.close();
-	              out = null;    
-	            
-	           progress_status ++;
-	  		   publishProgress(progress_status);  
-	           
-	            } catch(Exception e) {
-	                Log.e("copy clipart ERROR", e.toString());
-	                e.printStackTrace();
-	            }       
-	        }
-	        
-			copyArt2();  //copy the decoded files
+		  	copyGIFDecoded();  //copy the decoded files
+			copyPNG();  //copy the png files
+			copyGIF64();
+			copyPNG64();
+			
 	   return null;
 	  }
 	  
@@ -666,13 +607,15 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	   // btn_start.setEnabled(true);
 	  }
 	  
-		@SuppressLint("NewApi")
+		//********** the copy functions
+	  
 		private void copyArt() {
 	    	
 	    	AssetManager assetManager = getResources().getAssets();
 	        String[] files = null;
 	        try {
-	            files = assetManager.list("animatedgifs");
+	           files = assetManager.list("gif");
+	           //files = assetManager.list(GIFname); //not sure why but putting a variable here doesn't work, only works if you put the string, weird...
 	        } catch (Exception e) {
 	            Log.e("read clipart ERROR", e.toString());
 	            e.printStackTrace();
@@ -685,8 +628,14 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	            InputStream in = null;
 	            OutputStream out = null;
 	            try {
-	              in = assetManager.open("animatedgifs/" + files[i]);
-	              out = new FileOutputStream(basepath + "/pixel/animatedgifs/" + files[i]);
+	             // in = assetManager.open("animatedgifs/" + files[i]);
+	            //  out = new FileOutputStream(basepath + "/pixel/animatedgifs/" + files[i]);
+	              
+	             in = assetManager.open("gif/" + files[i]); //same thing, can't put a variable for gif
+	            // out = new FileOutputStream(basepath + "/pixel/gif/" + files[i]);
+	             // in = assetManager.open(GIFname +"/" + files[i]);
+	             out = new FileOutputStream(GIFPath + files[i]);
+	              
 	              copyFile(in, out);
 	              in.close();
 	              in = null;
@@ -705,24 +654,27 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	    }
 		
 		
-		private void copyArt2() {
+		private void copyGIFDecoded() {
 	    	
 	    	AssetManager assetManager = getResources().getAssets();
-	        String[] files2 = null;
+	        String[] files = null;
 	        try {
-	            files2 = assetManager.list("animatedgifs/decoded");
+	            files = assetManager.list("gif/decoded");
+	            //files2 = assetManager.list(GIFname + "/decoded");
 	        } catch (Exception e) {
 	            Log.e("read clipart ERROR", e.toString());
 	            e.printStackTrace();
 	        }
-	        for(int i=0; i<files2.length; i++) {
+	        for(int i=0; i<files.length; i++) {
 	        	progress_status ++;
 		  		publishProgress(progress_status);  
 	            InputStream in = null;
 	            OutputStream out = null;
 	            try {
-	              in = assetManager.open("animatedgifs/decoded/" + files2[i]);
-	              out = new FileOutputStream(basepath + "/pixel/animatedgifs/decoded/" + files2[i]);
+	             in = assetManager.open("gif/decoded/" + files[i]);
+	             //out = new FileOutputStream(basepath + "/pixel/gif/decoded/" + files2[i]);
+	             // in = assetManager.open(GIFname + "/decoded/" + files2[i]);
+	             out = new FileOutputStream(GIFPath + "decoded/" + files[i]);
 	              copyFile(in, out);
 	              in.close();
 	              in = null;
@@ -737,13 +689,118 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	                e.printStackTrace();
 	            }       
 	        }
-	    } //end method
+	    } //end copy gif decoded
+		
+   private void copyPNG() {
+	    	
+	    	AssetManager assetManager = getResources().getAssets();
+	        String[] files = null;
+	        try {
+	            files = assetManager.list("png");
+	        } catch (Exception e) {
+	            Log.e("read clipart ERROR", e.toString());
+	            e.printStackTrace();
+	        }
+	        for(int i=0; i<files.length; i++) {
+	        	progress_status ++;
+		  		publishProgress(progress_status);  
+	            InputStream in = null;
+	            OutputStream out = null;
+	            try {
+	             in = assetManager.open("png/" + files[i]);
+	             out = new FileOutputStream(PNGPath + files[i]); //PNGPath has the blackslash at the end
+	              copyFile(in, out);
+	              in.close();
+	              in = null;
+	              out.flush();
+	              out.close();
+	              out = null;  
+	              
+	              //no need to register these with mediascanner as these are internal gifs , the workaround for the gifs with a black frame as the first frame
+	           
+	            } catch(Exception e) {
+	                Log.e("copy clipart ERROR", e.toString());
+	                e.printStackTrace();
+	            }       
+	        }
+	    } //end copyPNG
+   
+   private void copyPNG64() {
+   	
+   	AssetManager assetManager = getResources().getAssets();
+       String[] files = null;
+       try {
+           files = assetManager.list("png64");
+       } catch (Exception e) {
+           Log.e("read clipart ERROR", e.toString());
+           e.printStackTrace();
+       }
+       for(int i=0; i<files.length; i++) {
+       	progress_status ++;
+	  		publishProgress(progress_status);  
+           InputStream in = null;
+           OutputStream out = null;
+           try {
+            in = assetManager.open("png64/" + files[i]);
+            out = new FileOutputStream(PNG64Path + files[i]); 
+             copyFile(in, out);
+             in.close();
+             in = null;
+             out.flush();
+             out.close();
+             out = null;  
+             
+             //no need to register these with mediascanner as these are internal gifs , the workaround for the gifs with a black frame as the first frame
+          
+           } catch(Exception e) {
+               Log.e("copy clipart ERROR", e.toString());
+               e.printStackTrace();
+           }       
+       }
+   } //end copyPNG64
+   
+   private void copyGIF64() {
+	   	
+	   	AssetManager assetManager = getResources().getAssets();
+	       String[] files = null;
+	       try {
+	           files = assetManager.list("gif64");
+	       } catch (Exception e) {
+	           Log.e("read clipart ERROR", e.toString());
+	           e.printStackTrace();
+	       }
+	       for(int i=0; i<files.length; i++) {
+	       	progress_status ++;
+		  		publishProgress(progress_status);  
+	           InputStream in = null;
+	           OutputStream out = null;
+	           try {
+	            in = assetManager.open("gif64/" + files[i]);
+	            out = new FileOutputStream(GIF64Path + files[i]); 
+	             copyFile(in, out);
+	             in.close();
+	             in = null;
+	             out.flush();
+	             out.close();
+	             out = null;  
+	             
+	             //no need to register these with mediascanner as these are internal gifs , the workaround for the gifs with a black frame as the first frame
+	          
+	           } catch(Exception e) {
+	               Log.e("copy clipart ERROR", e.toString());
+	               e.printStackTrace();
+	           }       
+	       }
+	   } //end copyGIF64
 		
 } //end async task
 	    
     private void continueOnCreate() {
          
-         myAsyncTaskLoadFiles = new AsyncTaskLoadFiles(myImageAdapter);
+         
+    	 //now let's load the files asynch
+    	
+    	 myAsyncTaskLoadFiles = new AsyncTaskLoadFiles(myImageAdapter);
          myAsyncTaskLoadFiles.execute();
 
         // gridview.setOnItemClickListener(myOnItemClickListener);
@@ -843,6 +900,10 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
     	  
     	  File targetDirector;
     	  File PNGtargetDirector;
+    	  File UserPNGtargetDirector;
+    	  File UserGIFtargetDirector;
+    	  File PNG64targetDirector;
+    	  File GIF64targetDirector;
     	  ImageAdapter2 myTaskAdapter;
 
     	  public AsyncTaskLoadFiles(ImageAdapter2 adapter) {
@@ -851,16 +912,33 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 
     	  @Override
     	  protected void onPreExecute() {
-    	   String ExternalStorageDirectoryPath = Environment
-    	     .getExternalStorageDirectory().getAbsolutePath();
+    		  
+    	  //ideally it would be nice to access the pre-packaged pixel art from assets directly and not have to copy to the sd card but wtih Android you can't access assets via file path, only inputstreeam. So this is why we're using the sd card, you can turn a file from an inputstream but this will take longer, save this for another day, we'll use the sd card for now
+    		  
+    		String ExternalStorageDirectoryPath = Environment
+    	   .getExternalStorageDirectory().getAbsolutePath();
 
-    	   String targetPath = ExternalStorageDirectoryPath + "/pixel/animatedgifs";
+    	   //String targetPath = ExternalStorageDirectoryPath + "/pixel/animatedgifs";
+    	   String targetPath = GIFPath;
     	   targetDirector = new File(targetPath);
     	   
-    	   String PNGtargetPath = ExternalStorageDirectoryPath + "/pixel/pngs";
+    	   //String PNGtargetPath = ExternalStorageDirectoryPath + "/pixel/pngs";
+    	   String PNGtargetPath = PNGPath;
     	   PNGtargetDirector = new File(PNGtargetPath);
     	   
-    	   myTaskAdapter.clear();
+    	   String UserPNGtargetPath = userPNGPath;
+    	   UserPNGtargetDirector = new File(UserPNGtargetPath);
+    	   
+    	   String UserGIFtargetPath = userGIFPath;
+    	   UserGIFtargetDirector = new File(UserGIFtargetPath);
+    	   
+    	   String PNG64targetPath = PNG64Path;
+    	   PNG64targetDirector = new File(PNG64targetPath);
+    	   
+    	   String GIF64targetPath = GIF64Path;
+    	   GIF64targetDirector = new File(GIF64targetPath);
+    	   
+    	   myTaskAdapter.clear(); //TO DO add this to the sharing piece?
     	   
     	   super.onPreExecute();
     	  }
@@ -869,10 +947,37 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
     	  protected Void doInBackground(Void... params) {
     	   
     	 //  File[] files = targetDirector.listFiles();
-    	   
-    	   File[] files = targetDirector.listFiles(new FilenameFilter() {
+    	  //let's add the user added images at the top of the list/first
+		  if (gifonly_ == false && UserPNGtargetDirector.exists()) {  //user png content, could be any size
+	    	   File[] files = UserPNGtargetDirector.listFiles(new FilenameFilter() {
+	   		    public boolean accept(File dir, String name) {
+	   		        return name.toLowerCase().endsWith(".png") || name.toLowerCase().endsWith(".jpg") || name.toLowerCase().endsWith(".jpeg");
+	   		    }
+	   			});
+	   	   
+		   	   for (File file : files) {
+		   	    publishProgress(file.getAbsolutePath());
+		   	    if (isCancelled()) break;
+		   	   }
+	   	   }
+			  
+		  if (UserGIFtargetDirector.exists()) { //user gif content, could be any size
+	    	   File[] files = UserGIFtargetDirector.listFiles(new FilenameFilter() {
+	   		    public boolean accept(File dir, String name) {
+	   		        return name.toLowerCase().endsWith(".gif") ;
+	   		    }
+		   		});
+		   	   
+		   	   for (File file : files) {
+		   	    publishProgress(file.getAbsolutePath());
+		   	    if (isCancelled()) break;
+		   	   }
+    	   }
+    		  
+		  if (only64_ == false && targetDirector.exists()) {  //gif or png, this is the gif directory 32x32 content
+    		  File[] files = targetDirector.listFiles(new FilenameFilter() {
     		    public boolean accept(File dir, String name) {
-    		        return name.toLowerCase().endsWith(".gif") || name.toLowerCase().endsWith(".png") || name.toLowerCase().endsWith(".jpg") || name.toLowerCase().endsWith(".jpeg");
+    		        return name.toLowerCase().endsWith(".gif") || name.toLowerCase().endsWith(".png");
     		    }
     		});
     	   
@@ -880,24 +985,50 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
     	    publishProgress(file.getAbsolutePath());
     	    if (isCancelled()) break;
     	   }
-    	   //return null;
+	    }
     	   
-    	   if (gifonly_ == false && PNGtargetDirector.exists()) {
-	    	   File[] files2 = PNGtargetDirector.listFiles(new FilenameFilter() {
-	   		    public boolean accept(File dir, String name) {
-	   		        return name.toLowerCase().endsWith(".gif") || name.toLowerCase().endsWith(".png") || name.toLowerCase().endsWith(".jpg") || name.toLowerCase().endsWith(".jpeg");
-	   		    }
-	   			});
+	   if (only64_ == false && gifonly_ == false && PNGtargetDirector.exists()) { //png 32x32 content
+    	   File[] files = PNGtargetDirector.listFiles(new FilenameFilter() {
+   		    public boolean accept(File dir, String name) {
+   		        return name.toLowerCase().endsWith(".png") || name.toLowerCase().endsWith(".jpg") || name.toLowerCase().endsWith(".jpeg");
+   		    }
+   			});
+   	   
+	   	   for (File file : files) {
+	   	    publishProgress(file.getAbsolutePath());
+	   	    if (isCancelled()) break;
+	   	   }
+	   }
+	   
+	   if (gifonly_ == false && PNG64targetDirector.exists()) { //png 64x64 content
+    	   File[] files = PNG64targetDirector.listFiles(new FilenameFilter() {
+   		    public boolean accept(File dir, String name) {
+   		        return name.toLowerCase().endsWith(".png") || name.toLowerCase().endsWith(".jpg") || name.toLowerCase().endsWith(".jpeg");
+   		    }
+   			});
+   	   
+	   	   for (File file : files) {
+	   	    publishProgress(file.getAbsolutePath());
+	   	    if (isCancelled()) break;
+	   	   }
+	   }
+	   
+	   if (GIF64targetDirector.exists()) { //gif 64x64 content
+    	   File[] files = GIF64targetDirector.listFiles(new FilenameFilter() {
+   		    public boolean accept(File dir, String name) {
+   		        return name.toLowerCase().endsWith(".gif");
+   		    }
+   			});
+   	   
+	   	   for (File file : files) {
+	   	    publishProgress(file.getAbsolutePath());
+	   	    if (isCancelled()) break;
+	   	   }
+	   }
 	   	   
-		   	   for (File file : files2) {
-		   	    publishProgress(file.getAbsolutePath());
-		   	    if (isCancelled()) break;
-		   	   }
-    	   }
-	   	   
-	   	   return null;
-    	   
-    	  }
+   return null;
+   
+  }
     	  
 
     	  @Override
@@ -1016,98 +1147,112 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 
 	@Override
  public  boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id) {  
-		   if (deviceFound == 1) {   
-			   if (pixelFirmware.substring(0,5).equals("PIXLD") || kioskMode_ == true) { //then it's a demo unit and we shouldn't support writing 
-				   
-				   showToast("This demo unit does not support writing or Kiosk Mode is on");
-				   return true;
-			   }
-			   
-			   else {
-		
-					//********we need to reset everything because the user could have been already running an animation
-			 	     x = 0;
-			 	     
-			 	     if (StreamModePlaying == 1) {
-			 	    	 //decodedtimer.cancel();
-			 	    	// if(!pixelHardwareID.equals("PIXL")) {  //not PIXEL V2
-			 	    		decodedtimer.cancel();  //it's a lon
-			 	    	// }
-			 	     }
-			 	     ///****************************
-				
-			
-			 	   imagePath = (String) parent.getItemAtPosition(position);
-			       //Toast.makeText(getApplicationContext(), imagePath, Toast.LENGTH_LONG).show();  
-			    	   
-			       selectedFileName = imagePath;
-			       //here we need to get the file name to see if the file has already been decoded
-			       //file name will be in a format like this sdcard/pixel/pixerinteractive/rain.gif , we want to extra just rain
-			       String delims = "[/]";
-			       String[] aFileName = selectedFileName.split(delims);
-			       int aFileNameLength = aFileName.length;
-			       selectedFileName = aFileName[aFileNameLength-1];
-			       String delims2 = "[.]";
-			       String[] aFileName2 = selectedFileName.split(delims2);
-			       int aFileNameLength2 = aFileName2.length;
-			       //showToast(aFileName2[0]);
-			       selectedFileName = aFileName2[0];	//now we have just the short name   
-			       
-			       //**** now let's handle the thumbnails
-			       String filenameArray[] = imagePath.split("\\.");
-			       String extension = filenameArray[filenameArray.length-1]; //.png
-			       
-			       if (extension.equals("png")) {  //then we use the thumbnail, we just need to rename the image path to a gif
-				       	String wholestring_no_extension = filenameArray[filenameArray.length-2]; // /storage/emulated/0/pixel/pixelanimate/tree
-				       	String filenameArray2[] = wholestring_no_extension.split("\\/");
-				       	String filename_no_extension = filenameArray2[filenameArray2.length-1]; //tree
-					       // showToast(filename_no_extension);
-				       	String newimagePath = wholestring_no_extension.replace(filename_no_extension, filename_no_extension + ".gif");
-				       	//showToast(newimagePath);
-				       	//showToast(String.valueOf(filenameArray2.length));
-				       	imagePath = newimagePath;
-				       	File pngRGB565path = new File(imagePath + "/decoded/" + filename_no_extension + ".rgb565"); //sdcard/pixel/animatedgifs/tree/decoded/tree.rgb565
-			            
-			        	if (!pngRGB565path.exists()) { //if it doesn't exist
-			            	//there's no rgb565 and we only have a single frame png so let's just send this single frame png to pixel
-			        		try {
-								matrix_.interactive();
-								matrix_.writeFile(fps);
-		    		        	WriteImagetoMatrix();
-		    		        	matrix_.playFile();
-							} catch (ConnectionLostException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-			            }
-			        	else {
-					     	   gifView.setGif(imagePath);  //we have a matching rgb565 so let's animate the gif
-					     	   animateAfterDecode(1); //the 1 tells pixel to write
-					    } 
-			       }
-			       
-			       else if (extension.equals("gif")) {
-			    	   gifView.setGif(imagePath); //just sets the image, that's all, doesn't do any decoding
-			    	   animateAfterDecode(1);
-			       }
-			       
-			      else if (extension.equals("jpg")) {
-			    	   //gifView.setGif(imagePath); //just sets the image, that's all, doesn't do any decoding
-			    	   //animateAfterDecode(1);
-			       } 
-			       
-			      //gifView.setGif(imagePath);  //this crashes the code, look at this later
-			       
-			      // animateAfterDecode(1);
-				   return true;  //VERY IMPORTANT this is true, otherwise we'll get a single click event too at the same time which will screw things up royally
-			   }  
-		 } 
-		     
-	   else {
-		   showToast("PIXEL was not found, did you Bluetooth pair to PIXEL?");
-		   return true;
-	   }
-	}
+		if (deviceFound == 1) { 
+	  		//********we need to reset everything because the user could have been already running an animation
+	  	     x = 0;
+	  	     
+	  	     
+	  	     if (StreamModePlaying == 1) {
+	  	    	 //decodedtimer.cancel();
+	  	    	// if(!pixelHardwareID.equals("PIXL")) {
+	  	    		decodedtimer.cancel();
+	  	    	// }
+	  	    	// is.close();
+	  	     }
+	  	     ///****************************
+    		  
+	    	imagePath = (String) parent.getItemAtPosition(position);
+	    	originalImagePath = (String) parent.getItemAtPosition(position);
+	        selectedFileName = imagePath;
+	        //here we need to get the file name to see if the file has already been decoded
+	        //file name will be in a format like this sdcard/pixel/pixerinteractive/rain.gif , we want to extra just rain
+	        String delims = "[/]";
+	        String[] aFileName = selectedFileName.split(delims);
+	        int aFileNameLength = aFileName.length;
+	        selectedFileName = aFileName[aFileNameLength-1];
+	        String fileType = aFileName[aFileNameLength-2];  //can be gif, png, userpng, usergif, png64, or gif64
+	        String delims2 = "[.]";
+	        String[] aFileName2 = selectedFileName.split(delims2);
+	        int aFileNameLength2 = aFileName2.length;
+	        selectedFileName = aFileName2[0];	//now we have just the short name with no extension
+	        
+	        //**** now let's handle the thumbnails
+	        String filenameArray[] = imagePath.split("\\.");
+	        String extension = filenameArray[filenameArray.length-1]; //.png
+	        
+	        //we need to find out which directory was selected so we can set the decodeddir
+	        
+	        if (fileType.equals("gif")) {
+	        	decodedDirPath = GIFPath + "decoded";
+	        }
+	        else if (fileType.equals("usergif")) {
+	        	decodedDirPath = userGIFPath + "decoded";
+	        }
+	        else if (fileType.equals("gif64")) {
+	        	decodedDirPath = GIF64Path + "decoded";
+	        }
+	        //if the file type was not one of these like a png for example, then we don't care about the decodeddirpath and we don't change it
+	        
+	        if (extension.equals("png")) {  //then we use the thumbnail, we just need to rename the image path to a gif
+	        	String wholestring_no_extension = filenameArray[filenameArray.length-2]; // /storage/emulated/0/pixel/pixelanimate/tree
+	        	String filenameArray2[] = wholestring_no_extension.split("\\/");
+	        	String filename_no_extension = filenameArray2[filenameArray2.length-1]; //tree
+	        	String newimagePath = wholestring_no_extension.replace(filename_no_extension, filename_no_extension + ".gif");
+	        	//showToast(newimagePath);
+	        	//showToast(String.valueOf(filenameArray2.length));
+	        	imagePath = newimagePath;
+	        	
+	        	//now we need to check that filename/decoded/filename.rgb565 exists
+	        	
+	        	//File pngRGB565path = new File(basepath + "/pixel/animatedgifs/decoded/" + filename_no_extension + ".rgb565"); //sdcard/pixel/animatedgifs/decoded/tree.rgb565
+	        	File pngRGB565path = new File(GIFPath + "decoded/" + filename_no_extension + ".rgb565"); //sdcard/pixel/gifs/decoded/tree.rgb565
+	        	if (!pngRGB565path.exists()) { //if it doesn't exist
+	            	//there's no rgb565 and we only have a single frame png so let's just send this single frame png to pixel
+		        	
+	        		//it's  not there so let's check the original gifs folder, if it's in there, then treat it like a gif and decode
+	        		
+	        		imagePath = originalImagePath;
+	        		try {
+						matrix_.interactive();
+						//matrix_.writeFile(fps);
+						matrix_.writeFile(100); //since it's only one frame , doesn't matter what fps is
+    		        	WriteImagetoMatrix();
+    		        	matrix_.playFile();
+					} catch (ConnectionLostException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	            }
+	        	else {
+			     	   animateAfterDecode(1); //the rgb565 is there so let's run the already decoded animation
+			    } 
+	        }
+	        
+	        else if (extension.equals("jpg") || extension.equals("jpeg")) {  
+	        	imagePath = originalImagePath;
+	        	try {
+        			matrix_.interactive();
+					matrix_.writeFile(fps);
+        			WriteImagetoMatrix();
+        			matrix_.playFile();
+				} catch (ConnectionLostException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	        }
+	        
+	       else if (extension.equals("gif")) {  // if it's not a png, then it's a gif so let's animate
+	     	   gifView.setGif(imagePath);  //just sets the image , no decoding, decoding happens in the animateafterdecode method
+	     	   animateAfterDecode(1);
+	       } 
+	       return true;
+	       // animateAfterDecode(0);  //0 means streaming mode, 1 means download mode 
+    }
+    else {
+    	showToast("PIXEL was not found, did you Bluetooth pair to PIXEL?");
+    	return true;
+    }
+}
     
   public void onItemClick(AdapterView<?> parent, View v, int position, long id) {    //we go here when the user tapped an image from the initial grid    
         
@@ -1128,7 +1273,6 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 		    		  
 			    	imagePath = (String) parent.getItemAtPosition(position);
 			    	originalImagePath = (String) parent.getItemAtPosition(position);
-			        
 			        selectedFileName = imagePath;
 			        //here we need to get the file name to see if the file has already been decoded
 			        //file name will be in a format like this sdcard/pixel/pixerinteractive/rain.gif , we want to extra just rain
@@ -1136,6 +1280,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 			        String[] aFileName = selectedFileName.split(delims);
 			        int aFileNameLength = aFileName.length;
 			        selectedFileName = aFileName[aFileNameLength-1];
+			        String fileType = aFileName[aFileNameLength-2];  //can be gif, png, userpng, usergif, png64, or gif64
 			        String delims2 = "[.]";
 			        String[] aFileName2 = selectedFileName.split(delims2);
 			        int aFileNameLength2 = aFileName2.length;
@@ -1144,6 +1289,19 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 			        //**** now let's handle the thumbnails
 			        String filenameArray[] = imagePath.split("\\.");
 			        String extension = filenameArray[filenameArray.length-1]; //.png
+			        
+			        //we need to find out which directory was selected so we can set the decodeddir
+			        
+			        if (fileType.equals("gif")) {
+			        	decodedDirPath = GIFPath + "decoded";
+			        }
+			        else if (fileType.equals("usergif")) {
+			        	decodedDirPath = userGIFPath + "decoded";
+			        }
+			        else if (fileType.equals("gif64")) {
+			        	decodedDirPath = GIF64Path + "decoded";
+			        }
+			        //if the file type was not one of these like a png for example, then we don't care about the decodeddirpath and we don't change it
 			        
 			        if (extension.equals("png")) {  //then we use the thumbnail, we just need to rename the image path to a gif
 			        	String wholestring_no_extension = filenameArray[filenameArray.length-2]; // /storage/emulated/0/pixel/pixelanimate/tree
@@ -1156,10 +1314,14 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 			        	
 			        	//now we need to check that filename/decoded/filename.rgb565 exists
 			        	
-			        	File pngRGB565path = new File(basepath + "/pixel/animatedgifs/decoded/" + filename_no_extension + ".rgb565"); //sdcard/pixel/animatedgifs/decoded/tree.rgb565
+			        	//File pngRGB565path = new File(basepath + "/pixel/animatedgifs/decoded/" + filename_no_extension + ".rgb565"); //sdcard/pixel/animatedgifs/decoded/tree.rgb565
+			        	File pngRGB565path = new File(GIFPath + "decoded/" + filename_no_extension + ".rgb565"); //sdcard/pixel/gifs/decoded/tree.rgb565
 			        	if (!pngRGB565path.exists()) { //if it doesn't exist
 			            	//there's no rgb565 and we only have a single frame png so let's just send this single frame png to pixel
-				        	imagePath = originalImagePath;
+				        	
+			        		//it's  not there so let's check the original gifs folder, if it's in there, then treat it like a gif and decode
+			        		
+			        		imagePath = originalImagePath;
 			        		try {
 								WriteImagetoMatrix();
 							} catch (ConnectionLostException e) {
@@ -1297,8 +1459,6 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
   return inSampleSize;
 }
   
-  
-  
   public void animateAfterDecode(int longpress) {
 	  
 	  //********we need to reset everything because the user could have been already running an animation
@@ -1400,7 +1560,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 		        toast6.show();
 		        
 		        //because the LED panel was changed, we need to delete the decoding dir and create it all again
-		        File decodeddir = new File(basepath + "/pixel/animatedgifs/decoded");
+		       // File decodeddir = new File(basepath + "/pixel/animatedgifs/decoded");
+		        File decodeddir = new File(GIFPath + "decoded");
 		        
 		        //before we delete the decoded dir, we have to renmae it, this is due to some strange Android bug http://stackoverflow.com/questions/11539657/open-failed-ebusy-device-or-resource-busy
 		        final File to = new File(decodeddir.getAbsolutePath() + System.currentTimeMillis());
@@ -1442,9 +1603,10 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	    
 	     progress = new ProgressDialog(MainActivity.this);
 		        progress.setMax(selectedFileTotalFrames);
-		        progress.setTitle("Writing Animation to PIXEL");
+		        progress.setTitle("Writing to PIXEL, please do not interrupt");
 		        //progress.setMessage("Sending Animation to PIXEL....");
 		        progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+		        progress.setCancelable(false); //must have this as we don't want users cancel while it's writing
 		        progress.show();
 	  }
 	      
@@ -1897,6 +2059,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	     debug_ = prefs.getBoolean("pref_debugMode", false);
 	     kioskMode_ = prefs.getBoolean("pref_kioskMode", false);
 	     gifonly_ = prefs.getBoolean("pref_gifonly", false); //only load gifs, don't load static pngs if true
+	     only64_ = prefs.getBoolean("pref_only64", false); //only show 64x64 content
 	   
 	     matrix_model = Integer.valueOf(prefs.getString(   //the selected RGB LED Matrix Type
 	    	        resources.getString(R.string.selected_matrix),
@@ -2534,13 +2697,20 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 						   		 } 
 				   		
 					   	//**** had to add this as the decoded dir could have been deleted if the user changed the led panel type
-					    File decodeddir = new File(basepath + "/pixel/animatedgifs/decoded");
+					    //File decodeddir = new File(basepath + "/pixel/animatedgifs/decoded");
+					    /*File decodeddir = new File(GIFPath + "decoded");
+					    if(decodeddir.exists() == false)
+			             {
+					    	decodeddir.mkdirs();
+			             }*/
+					    
+					    File decodeddir = new File(decodedDirPath);
 					    if(decodeddir.exists() == false)
 			             {
 					    	decodeddir.mkdirs();
 			             }
 						//*********************   		 
-						   		 
+					   
 				   		if (index <= decoder.getFrameCount()) { 	
 					   			try {
 									//writeFile(BitmapBytes, decodedDirPath + "/" + selectedFileName + "/" + selectedFileName + index + ".rgb565");  //this one the original one
