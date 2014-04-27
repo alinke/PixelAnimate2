@@ -242,6 +242,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	private String originalImagePath;
 	private boolean gifonly_ = false;
 	private boolean only64_ = false;
+	private boolean showStartupMsg_ = true;
+	private String gifPath_;
 	
 
 	@Override
@@ -582,12 +584,18 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 		  	if (!GIF64dir.exists()) {
 		  		GIF64dir.mkdirs();
 		  	}
+		  	
+		  	File gifSourcedir = new File(GIFPath + "gifsource");
+			if (!gifSourcedir.exists()) {
+				gifSourcedir.mkdirs();
+		  	}
 			
 		  	copyArt(); //copy the .png and .gif files (mainly png) because we want to decode first
 		  	copyGIFDecoded();  //copy the decoded files
 			copyPNG();  //copy the png files
 			copyGIF64();
 			copyPNG64();
+			copyGIFSource();
 			
 	   return null;
 	  }
@@ -690,6 +698,38 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	            }       
 	        }
 	    } //end copy gif decoded
+		
+		private void copyGIFSource() {
+	    	
+	    	AssetManager assetManager = getResources().getAssets();
+	        String[] files = null;
+	        try {
+	            files = assetManager.list("gif/gifsource");
+	        } catch (Exception e) {
+	            Log.e("read clipart ERROR", e.toString());
+	            e.printStackTrace();
+	        }
+	        for(int i=0; i<files.length; i++) {
+	        	progress_status ++;
+		  		publishProgress(progress_status);  
+	            InputStream in = null;
+	            OutputStream out = null;
+	            try {
+	             in = assetManager.open("gif/gifsource/" + files[i]);
+	             out = new FileOutputStream(GIFPath + "gifsource/" + files[i]);
+	              copyFile(in, out);
+	              in.close();
+	              in = null;
+	              out.flush();
+	              out.close();
+	              out = null;
+	           
+	            } catch(Exception e) {
+	                Log.e("copy clipart ERROR", e.toString());
+	                e.printStackTrace();
+	            }       
+	        }
+	    } //end copy gifsource
 		
    private void copyPNG() {
 	    	
@@ -807,6 +847,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
          
          gridview.setOnItemClickListener(MainActivity.this);
          gridview.setOnItemLongClickListener(MainActivity.this);
+         
+        
          
         /* Button buttonReload = (Button)findViewById(R.id.reload);
          buttonReload.setOnClickListener(new OnClickListener(){
@@ -986,6 +1028,19 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
     	    if (isCancelled()) break;
     	   }
 	    }
+		  
+		  if (GIF64targetDirector.exists()) { //gif 64x64 content
+	    	   File[] files = GIF64targetDirector.listFiles(new FilenameFilter() {
+	   		    public boolean accept(File dir, String name) {
+	   		        return name.toLowerCase().endsWith(".gif") || name.toLowerCase().endsWith(".png");
+	   		    }
+	   			});
+	   	   
+		   	   for (File file : files) {
+		   	    publishProgress(file.getAbsolutePath());
+		   	    if (isCancelled()) break;
+		   	   }
+		   }
     	   
 	   if (only64_ == false && gifonly_ == false && PNGtargetDirector.exists()) { //png 32x32 content
     	   File[] files = PNGtargetDirector.listFiles(new FilenameFilter() {
@@ -1013,23 +1068,11 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	   	   }
 	   }
 	   
-	   if (GIF64targetDirector.exists()) { //gif 64x64 content
-    	   File[] files = GIF64targetDirector.listFiles(new FilenameFilter() {
-   		    public boolean accept(File dir, String name) {
-   		        return name.toLowerCase().endsWith(".gif");
-   		    }
-   			});
-   	   
-	   	   for (File file : files) {
-	   	    publishProgress(file.getAbsolutePath());
-	   	    if (isCancelled()) break;
-	   	   }
-	   }
+	  
 	   	   
    return null;
    
-  }
-    	  
+  }	  
 
     	  @Override
     	  protected void onProgressUpdate(String... values) {
@@ -1294,12 +1337,15 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 			        
 			        if (fileType.equals("gif")) {
 			        	decodedDirPath = GIFPath + "decoded";
+			        	gifPath_ = GIFPath;
 			        }
 			        else if (fileType.equals("usergif")) {
 			        	decodedDirPath = userGIFPath + "decoded";
+			        	gifPath_ = userGIFPath;
 			        }
 			        else if (fileType.equals("gif64")) {
 			        	decodedDirPath = GIF64Path + "decoded";
+			        	gifPath_ = GIF64Path;
 			        }
 			        //if the file type was not one of these like a png for example, then we don't care about the decodeddirpath and we don't change it
 			        
@@ -1315,29 +1361,44 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 			        	//now we need to check that filename/decoded/filename.rgb565 exists
 			        	
 			        	//File pngRGB565path = new File(basepath + "/pixel/animatedgifs/decoded/" + filename_no_extension + ".rgb565"); //sdcard/pixel/animatedgifs/decoded/tree.rgb565
-			        	File pngRGB565path = new File(GIFPath + "decoded/" + filename_no_extension + ".rgb565"); //sdcard/pixel/gifs/decoded/tree.rgb565
+			        	//File pngRGB565path = new File(GIFPath + "decoded/" + filename_no_extension + ".rgb565"); //sdcard/pixel/gifs/decoded/tree.rgb565
+			        	File pngRGB565path = new File(gifPath_ + "decoded/" + filename_no_extension + ".rgb565"); //sdcard/pixel/gifs/decoded/tree.rgb565
 			        	if (!pngRGB565path.exists()) { //if it doesn't exist
-			            	//there's no rgb565 and we only have a single frame png so let's just send this single frame png to pixel
-				        	
-			        		//it's  not there so let's check the original gifs folder, if it's in there, then treat it like a gif and decode
 			        		
-			        		imagePath = originalImagePath;
-			        		try {
-								WriteImagetoMatrix();
-							} catch (ConnectionLostException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-			            }
-			        	else {
-					     	   animateAfterDecode(0); //the rgb565 is there so let's run the already decoded animation
+			        		//ok not there so let's see if the original gif is there as decoded may have been deleted because the led panel changed
+			        		File originalGIF = new File(gifPath_ + "gifsource/" + filename_no_extension + ".gif"); //sdcard/pixel/gifs/gifsource/tree.rgb565
+			        		if (originalGIF.exists()) { 
+			        			//we've got the original gif so now let's decode it
+			        			 imagePath = gifPath_ + "gifsource/" + filename_no_extension + ".gif";
+			        			 gifView.setGif(imagePath);  //just sets the image , no decoding, decoding happens in the animateafterdecode method
+						     	 animateAfterDecode(0);
+			        		}
+			        		else { //well we tried, no original gif so we'll treat it as a png
+					            	//there's no rgb565 and we only have a single frame png so let's just send this single frame png to pixel
+						        	
+					        		//it's  not there so let's check the original gifs folder, if it's in there, then treat it like a gif and decode
+					        		
+					        		imagePath = originalImagePath;
+					        		try {
+					        			matrix_.interactive();  //this has to be here in case we were in interactive mode from a previous long tap
+					        			WriteImagetoMatrix();
+									} catch (ConnectionLostException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+					            }
+			        		}
+			        	else {  //the rgb565 is there
+			        		//gifView.setGif(imagePath);  //this is causing a crash, TO DO figure out why later 
+			        		animateAfterDecode(0); //the rgb565 is there so let's run the already decoded animation
 					    } 
 			        }
 			        
 			        else if (extension.equals("jpg") || extension.equals("jpeg")) {  
 			        	imagePath = originalImagePath;
 		        		try {
-							WriteImagetoMatrix();
+		        			matrix_.interactive(); //this has to be here in case we were in interactive mode from a previous long tap
+		        			WriteImagetoMatrix();
 						} catch (ConnectionLostException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -1358,11 +1419,12 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
   
   private void WriteImagetoMatrix() throws ConnectionLostException {  //here we'll take a PNG, BMP, or whatever and convert it to RGB565 via a canvas, also we'll re-size the image if necessary
   	
+	    // ***** old code, had to switch to newer code below as was getting out of memory errors for when opening larger JPEGs (from Android gallery for example)
 	    // originalImage = BitmapFactory.decodeFile(imagePath);   
-	     
 		// width_original = originalImage.getWidth();
 		// height_original = originalImage.getHeight();
-		 
+	    //***********************************************************************************
+	  
 		 originalImage = decodeSampledBitmapFromFile(imagePath, KIND.width,KIND.height);
 		 
 		width_original = originalImage.getWidth();
@@ -1460,6 +1522,11 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 }
   
   public void animateAfterDecode(int longpress) {
+	  
+	  //first check if rgb565 file is there, proceed if so
+	  // if not then decode
+	  // also check if the led matrix selected now doesn't match the led matrix from the decoded file, re-decode if so
+	  
 	  
 	  //********we need to reset everything because the user could have been already running an animation
 	     x = 0;
@@ -1561,7 +1628,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 		        
 		        //because the LED panel was changed, we need to delete the decoding dir and create it all again
 		       // File decodeddir = new File(basepath + "/pixel/animatedgifs/decoded");
-		        File decodeddir = new File(GIFPath + "decoded");
+		       // File decodeddir = new File(GIFPath + "decoded");
+		        File decodeddir = new File(decodedDirPath); //could be gif, gif64, or usergif, this was set above
 		        
 		        //before we delete the decoded dir, we have to renmae it, this is due to some strange Android bug http://stackoverflow.com/questions/11539657/open-failed-ebusy-device-or-resource-busy
 		        final File to = new File(decodeddir.getAbsolutePath() + System.currentTimeMillis());
@@ -1603,7 +1671,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	    
 	     progress = new ProgressDialog(MainActivity.this);
 		        progress.setMax(selectedFileTotalFrames);
-		        progress.setTitle("Writing to PIXEL, please do not interrupt");
+		        progress.setTitle("Writing to PIXEL, please do not leave this screen or interrupt");
 		        //progress.setMessage("Sending Animation to PIXEL....");
 		        progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		        progress.setCancelable(false); //must have this as we don't want users cancel while it's writing
@@ -2060,6 +2128,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	     kioskMode_ = prefs.getBoolean("pref_kioskMode", false);
 	     gifonly_ = prefs.getBoolean("pref_gifonly", false); //only load gifs, don't load static pngs if true
 	     only64_ = prefs.getBoolean("pref_only64", false); //only show 64x64 content
+	     showStartupMsg_ = prefs.getBoolean("pref_showStartupMsg", true); //show the "long tap to write to pixel message
 	   
 	     matrix_model = Integer.valueOf(prefs.getString(   //the selected RGB LED Matrix Type
 	    	        resources.getString(R.string.selected_matrix),
@@ -2183,6 +2252,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 		 BitmapBytes = new byte[KIND.width * KIND.height *2]; //512 * 2 = 1024 or 1024 * 2 = 2048
 		 
 		 loadRGB565(); //load the select pic raw565 file
+		 
+		 
 	 }
 	
 	
@@ -2222,6 +2293,10 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
   			//}
   			
   			appAlreadyStarted = 1;
+  			
+  			if (showStartupMsg_ == true && kioskMode_ == false && pixelHardwareID.substring(0,4).equals("PIXL")) { //if writing is supported
+  	        	 showToast(getString(R.string.StartupMessage));
+  	        }
   			
   			//decodedtimer.start();
   			
@@ -2704,7 +2779,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 					    	decodeddir.mkdirs();
 			             }*/
 					    
-					    File decodeddir = new File(decodedDirPath);
+					    File decodeddir = new File(decodedDirPath); //this could be gif, gif64, or usergif
 					    if(decodeddir.exists() == false)
 			             {
 					    	decodeddir.mkdirs();

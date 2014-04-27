@@ -46,6 +46,12 @@
     android:defaultValue="@string/pref_only64Default"
     android:summary="@string/pref_only64Summary"/>
     
+    <CheckBoxPreference
+    android:title="@string/showStartupMsg"
+    android:key="pref_showStartupMsg"
+    android:defaultValue="@string/showStartupMsgDefault"
+    android:summary="@string/showStartupMsgSummary"/>
+    
       <!-- <CheckBoxPreference
     android:title="Call Taxi"
     android:key="pref_taxi"

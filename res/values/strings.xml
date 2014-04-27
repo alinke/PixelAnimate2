@@ -16,7 +16,7 @@
     
    
    <string name="menu_instructions_title">Instructions</string>
-   <string name="setupInstructionsString">Bluetooth pair to PIXEL using code 0000 or 4545 for PIXEL V1.\n\nTap animations to display them.\n\nPIXEL V2 users may long tap to write animations to PIXEL for stand alone operation.\n\nCopy your animated gifs to the pixel/animatedgifs folder on your Android device.</string>
+   <string name="setupInstructionsString">Bluetooth pair to PIXEL using code 0000 or 4545 for PIXEL V1.\n\nPIXEL V2 users may long tap to write to PIXEL for stand alone operation.\n\nAdd your own art by sharing to this app from email, gallery, and other apps.</string>
    <string name="setupInstructionsStringTitle">Instructions</string>   
      
      
@@ -26,7 +26,7 @@
     
     <string name="scanAll">Show All Album Pics</string>
     <string name="pref_scanAll_default">false</string>
-    <string name="scanAllSummary">Only animations in the pixel/animatedgifs directory of your SD card will be displayed. Checking this box displays all SD card pictures.</string>
+    <string name="scanAllSummary">Only animations in the pixel/gifs directory of your SD card will be displayed. Checking this box displays all SD card pictures.</string>
   
     <string name="OKText">OK</string>   
     <string name="notFoundString">PIXEL Not Found</string>   
@@ -71,6 +71,13 @@
     <string name="pref_only64">pref_only64</string>
     <string name="pref_only64Default">false</string>    
     <string name="pref_only64Summary">Only show 64x64 and user added content</string>
+    
+    <string name="showStartupMsg">Show Startup Message</string>    
+    <string name="pref_showStartupMsg">pref_showStartupMsg</string>
+    <string name="showStartupMsgDefault">true</string>    
+    <string name="showStartupMsgSummary"></string>
+    
+    <string name="StartupMessage">Long tap to write to PIXEL</string>
     
     <string name="menu_rescan_title">Rescan</string>
     <string name="rescan_screen_verbage">Now scanning your SD card or internal memory for new animations or deletions, just a moment&#8230;</string>
