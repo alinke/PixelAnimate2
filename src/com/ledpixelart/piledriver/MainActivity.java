@@ -127,6 +127,7 @@ import android.graphics.drawable.BitmapDrawable;
 //import android.content.BroadcastReceiver;
 
 import android.app.ProgressDialog;
+import java.util.UUID;
 //import android.support.v7.app.ActionBar;
 //import android.support.v7.app.ActionBarActivity;
 
@@ -459,16 +460,24 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	   			  //out = new FileOutputStream(basepath + "/pixel/animatedgifs/" + newfilename_no_extension + "." + uriExtension);
 	   			  
 	   		
-	   			  //File outPath = new File(basepath + "/pixel/pngs");
-	   			// if (!outPath.exists()) {  //create the dir if it does not exist
-	   		//		  outPath.mkdirs();
-	   			//  }
+	   			  
 	   			  
 	   			  //out = new FileOutputStream(basepath + "/pixel/pngs/" + newfilename_no_extension + "." + uriExtension);
-	   			  out = new FileOutputStream(userGIFPath + newfilename_no_extension + "." + uriExtension);
+	   			 
 	   			  //String newFile = basepath + "/pixel/pngs/" + newfilename_no_extension + "." + uriExtension;
 	   			  String newFile = userGIFPath + newfilename_no_extension + "." + uriExtension;
 	   			  //to do think about adding a check if the file name is already there
+	   			  
+	   			  File newGIFfile = new File(userGIFPath + newfilename_no_extension + "." + uriExtension);
+	   			  if (newGIFfile.exists()) {  //if the file is already there, then let's come up with a random filename, had to add this here because attachments in gmail always have the filename of false
+	   				  //newFile = userGIFPath + newfilename_no_extension + "1" + "." + uriExtension;
+	   				  String uuid = UUID.randomUUID().toString();
+	   				  out = new FileOutputStream(userGIFPath  + uuid + "." + uriExtension);
+	   				  newFile = userGIFPath  + uuid + "." + uriExtension;
+	   			  }
+	   			  else {
+	   				 out = new FileOutputStream(userGIFPath + newfilename_no_extension + "." + uriExtension);
+	   			  }
 	   			  
 	   			  copyFile(incomingStream, out);
 	   			  incomingStream.close();
@@ -505,10 +514,21 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 		   			//  }
 		   			  
 		   			  //out = new FileOutputStream(basepath + "/pixel/pngs/" + newfilename_no_extension + "." + uriExtension);
-		   			  out = new FileOutputStream(userPNGPath + newfilename_no_extension + "." + uriExtension);
+		   			  
 		   			  //String newFile = basepath + "/pixel/pngs/" + newfilename_no_extension + "." + uriExtension;
 		   			  String newFile = userPNGPath + newfilename_no_extension + "." + uriExtension;
 		   			  //to do think about adding a check if the file name is already there
+		   			  
+		   			  File newPNGfile = new File(userPNGPath + newfilename_no_extension + "." + uriExtension);
+		   			  if (newPNGfile.exists()) {  //append to the file if it's already there
+		   				  String uuid = UUID.randomUUID().toString();
+		   				  out = new FileOutputStream(userPNGPath  + uuid + "." + uriExtension);
+		   				  newFile = userPNGPath  + uuid + "." + uriExtension;
+		   			  }
+		   			  else {
+		   				out = new FileOutputStream(userPNGPath + newfilename_no_extension + "." + uriExtension);
+		   			  }
+		   				  
 		   			  
 		   			  copyFile(incomingStream, out);
 		   			  incomingStream.close();
@@ -1248,7 +1268,56 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	        	//now we need to check that filename/decoded/filename.rgb565 exists
 	        	
 	        	//File pngRGB565path = new File(basepath + "/pixel/animatedgifs/decoded/" + filename_no_extension + ".rgb565"); //sdcard/pixel/animatedgifs/decoded/tree.rgb565
+	        	//File pngRGB565path = new File(GIFPath + "decoded/" + filename_no_extension + ".rgb565"); //sdcard/pixel/gifs/decoded/tree.rgb565
+	        	File pngRGB565path = new File(gifPath_ + "decoded/" + filename_no_extension + ".rgb565"); //sdcard/pixel/gifs/decoded/tree.rgb565
+	        	if (!pngRGB565path.exists()) { //if it doesn't exist
+	        		
+	        		//ok not there so let's see if the original gif is there as decoded may have been deleted because the led panel changed
+	        		File originalGIF = new File(gifPath_ + "gifsource/" + filename_no_extension + ".gif"); //sdcard/pixel/gifs/gifsource/tree.rgb565
+	        		if (originalGIF.exists()) { 
+	        			//we've got the original gif so now let's decode it
+	        			 imagePath = gifPath_ + "gifsource/" + filename_no_extension + ".gif";
+	        			 gifView.setGif(imagePath);  //just sets the image , no decoding, decoding happens in the animateafterdecode method
+				     	 animateAfterDecode(0);
+	        		}
+	        		else { //well we tried, no original gif so we'll treat it as a png
+			            	//there's no rgb565 and we only have a single frame png so let's just send this single frame png to pixel
+				        	
+			        		//it's  not there so let's check the original gifs folder, if it's in there, then treat it like a gif and decode
+			        		
+			        		imagePath = originalImagePath;
+			        		try {
+			        			matrix_.interactive();
+								matrix_.writeFile(100); //since it's only one frame , doesn't matter what fps is
+		    		        	WriteImagetoMatrix();
+		    		        	matrix_.playFile();
+							} catch (ConnectionLostException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+			            }
+	        		}
+	        	else {  //the rgb565 is there
+	        		//gifView.setGif(imagePath);  //this is causing a crash, TO DO figure out why later 
+	        		animateAfterDecode(1); //the rgb565 is there so let's run the already decoded animation
+			    } 
+	        }
+	        
+	        
+	        /*if (extension.equals("png")) {  //then we use the thumbnail, we just need to rename the image path to a gif
+	        	String wholestring_no_extension = filenameArray[filenameArray.length-2]; // /storage/emulated/0/pixel/pixelanimate/tree
+	        	String filenameArray2[] = wholestring_no_extension.split("\\/");
+	        	String filename_no_extension = filenameArray2[filenameArray2.length-1]; //tree
+	        	String newimagePath = wholestring_no_extension.replace(filename_no_extension, filename_no_extension + ".gif");
+	        	//showToast(newimagePath);
+	        	//showToast(String.valueOf(filenameArray2.length));
+	        	imagePath = newimagePath;
+	        	
+	        	//now we need to check that filename/decoded/filename.rgb565 exists
+	        	
+	        	//File pngRGB565path = new File(basepath + "/pixel/animatedgifs/decoded/" + filename_no_extension + ".rgb565"); //sdcard/pixel/animatedgifs/decoded/tree.rgb565
 	        	File pngRGB565path = new File(GIFPath + "decoded/" + filename_no_extension + ".rgb565"); //sdcard/pixel/gifs/decoded/tree.rgb565
+	        	
 	        	if (!pngRGB565path.exists()) { //if it doesn't exist
 	            	//there's no rgb565 and we only have a single frame png so let's just send this single frame png to pixel
 		        	
@@ -1269,7 +1338,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	        	else {
 			     	   animateAfterDecode(1); //the rgb565 is there so let's run the already decoded animation
 			    } 
-	        }
+	        }*/
 	        
 	        else if (extension.equals("jpg") || extension.equals("jpeg")) {  
 	        	imagePath = originalImagePath;
@@ -1671,7 +1740,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	    
 	     progress = new ProgressDialog(MainActivity.this);
 		        progress.setMax(selectedFileTotalFrames);
-		        progress.setTitle("Writing to PIXEL, please do not leave this screen or interrupt");
+		        progress.setTitle("Writing to PIXEL, please do not interrupt or leave this screen");
 		        //progress.setMessage("Sending Animation to PIXEL....");
 		        progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		        progress.setCancelable(false); //must have this as we don't want users cancel while it's writing
