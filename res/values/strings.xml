@@ -16,13 +16,13 @@
     
    
    <string name="menu_instructions_title">Instructions</string>
-   <string name="setupInstructionsString">Bluetooth pair to PIXEL using code 0000 or 4545 for PIXEL V1.\n\nPIXEL V2 users may long tap to write to PIXEL for stand alone operation.\n\nAdd your own art by sharing to this app from email, gallery, and other apps.</string>
+   <string name="setupInstructionsString">Bluetooth pair to PIXEL using code 0000 or 4545 for PIXEL V1.\n\nPIXEL V2 users may long tap to write to PIXEL for stand alone operation.\n\nAdd your own art by sharing to this app from email, gallery, and other apps.\n\n64x64 animated gifs will only show if SUPER PIXEL 64x64 is selected from settings.</string>
    <string name="setupInstructionsStringTitle">Instructions</string>   
      
      
-    <string name="prefTitle">PIXEL Animations Settings</string>
+    <string name="prefTitle">PIXEL:LED ART Settings</string>
     <string name="menu_prefs_title">Settings</string>
-    <string name="prefSummary">PIXEL Animations Settings</string>
+    <string name="prefSummary">PIXEL:LED ART Settings</string>
     
     <string name="scanAll">Show All Album Pics</string>
     <string name="pref_scanAll_default">false</string>

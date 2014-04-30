@@ -6,14 +6,14 @@
     <item>Seeed 32x16</item>
     <item>Adafruit 32x16</item>
     <item>Seeed 32x32</item>
-    <item>32x32 (DEFAULT)</item>
+    <item>PIXEL 32x32 (DEFAULT)</item>
     <item>64x32 (2x1 horz)</item>
     <item>32x64 (1x2 vert)</item>
     <item>Mirrored (2 displays)</item>
     <item>Mirrored (4 displays)</item>
     <item>128x32 (4x1 horz)</item>
     <item>32x128 (1x4 vert)</item>
-    <item>64x64 (2x2 square)</item>
+    <item>SUPER PIXEL 64x64 (2x2 square)</item>
 </string-array>
 	
 <string-array name="matrix_values">

@@ -610,12 +610,24 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 				gifSourcedir.mkdirs();
 		  	}
 			
+			File gif64Sourcedir = new File(GIF64Path + "gifsource");
+			if (!gif64Sourcedir.exists()) {
+				gif64Sourcedir.mkdirs();
+		  	}
+			
+			File GIF64decodeddir = new File(GIF64Path + "decoded");
+		  	if (!GIF64decodeddir.exists()) {
+		  		GIF64decodeddir.mkdirs();
+		  	}
+			
 		  	copyArt(); //copy the .png and .gif files (mainly png) because we want to decode first
 		  	copyGIFDecoded();  //copy the decoded files
 			copyPNG();  //copy the png files
 			copyGIF64();
 			copyPNG64();
 			copyGIFSource();
+			copyGIF64Source();
+			copyGIF64Decoded();
 			
 	   return null;
 	  }
@@ -750,6 +762,75 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	            }       
 	        }
 	    } //end copy gifsource
+		
+private void copyGIF64Source() {
+	    	
+	    	AssetManager assetManager = getResources().getAssets();
+	        String[] files = null;
+	        try {
+	            files = assetManager.list("gif64/gifsource");
+	        } catch (Exception e) {
+	            Log.e("read clipart ERROR", e.toString());
+	            e.printStackTrace();
+	        }
+	        for(int i=0; i<files.length; i++) {
+	        	progress_status ++;
+		  		publishProgress(progress_status);  
+	            InputStream in = null;
+	            OutputStream out = null;
+	            try {
+	             in = assetManager.open("gif64/gifsource/" + files[i]);
+	             out = new FileOutputStream(GIF64Path + "gifsource/" + files[i]);
+	              copyFile(in, out);
+	              in.close();
+	              in = null;
+	              out.flush();
+	              out.close();
+	              out = null;
+	           
+	            } catch(Exception e) {
+	                Log.e("copy clipart ERROR", e.toString());
+	                e.printStackTrace();
+	            }       
+	        }
+	    } //end copy gifsource
+		
+  private void copyGIF64Decoded() {
+	    	
+	    	AssetManager assetManager = getResources().getAssets();
+	        String[] files = null;
+	        try {
+	            files = assetManager.list("gif64/decoded");
+	            //files2 = assetManager.list(GIFname + "/decoded");
+	        } catch (Exception e) {
+	            Log.e("read clipart ERROR", e.toString());
+	            e.printStackTrace();
+	        }
+	        for(int i=0; i<files.length; i++) {
+	        	progress_status ++;
+		  		publishProgress(progress_status);  
+	            InputStream in = null;
+	            OutputStream out = null;
+	            try {
+	             in = assetManager.open("gif64/decoded/" + files[i]);
+	             //out = new FileOutputStream(basepath + "/pixel/gif/decoded/" + files2[i]);
+	             // in = assetManager.open(GIFname + "/decoded/" + files2[i]);
+	             out = new FileOutputStream(GIF64Path + "decoded/" + files[i]);
+	              copyFile(in, out);
+	              in.close();
+	              in = null;
+	              out.flush();
+	              out.close();
+	              out = null;  
+	              
+	              //no need to register these with mediascanner as these are internal gifs , the workaround for the gifs with a black frame as the first frame
+	           
+	            } catch(Exception e) {
+	                Log.e("copy clipart ERROR", e.toString());
+	                e.printStackTrace();
+	            }       
+	        }
+	    } //end copy gif decoded
 		
    private void copyPNG() {
 	    	
@@ -1049,7 +1130,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
     	   }
 	    }
 		  
-		  if (GIF64targetDirector.exists()) { //gif 64x64 content
+		  if (matrix_model == 10 && GIF64targetDirector.exists()) { //gif 64x64 content, only show if 64x64 led matrix is picked
 	    	   File[] files = GIF64targetDirector.listFiles(new FilenameFilter() {
 	   		    public boolean accept(File dir, String name) {
 	   		        return name.toLowerCase().endsWith(".gif") || name.toLowerCase().endsWith(".png");
@@ -1247,12 +1328,15 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	        
 	        if (fileType.equals("gif")) {
 	        	decodedDirPath = GIFPath + "decoded";
+	        	gifPath_ = GIFPath;
 	        }
 	        else if (fileType.equals("usergif")) {
 	        	decodedDirPath = userGIFPath + "decoded";
+	        	gifPath_ = userGIFPath;
 	        }
 	        else if (fileType.equals("gif64")) {
 	        	decodedDirPath = GIF64Path + "decoded";
+	        	gifPath_ = GIF64Path;
 	        }
 	        //if the file type was not one of these like a png for example, then we don't care about the decodeddirpath and we don't change it
 	        
