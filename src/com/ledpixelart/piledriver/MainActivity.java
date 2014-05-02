@@ -260,6 +260,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	     myImageAdapter = new ImageAdapter2(this);
 	     gridview.setAdapter(myImageAdapter);
 	      ///*******************
+	     
+	      gridview.setKeepScreenOn(false);
 		 
 	      gifView = (GifView) findViewById(R.id.gifView); //gifview takes care of the gif decoding
 	      gifView.setGif(R.drawable.zzzblank);  //code will crash if a dummy gif is not loaded initially
@@ -1740,6 +1742,7 @@ private void copyGIF64Source() {
 		    		try {
 		    			if (longpress == 1 && kioskMode_ == false && pixelHardwareID.substring(0,4).equals("PIXL")) {  //download mode
 		    				StreamModePlaying = 0;
+		    				gridview.setKeepScreenOn(true); //we don't want the screen going into sleep mode
 		    				matrix_.interactive();
 			    			matrix_.writeFile(fps);
 			    			writePixelAsync loadApplication = new writePixelAsync();
@@ -2006,6 +2009,7 @@ private void copyGIF64Source() {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
+	  gridview.setKeepScreenOn(false); //we're done so we can allow the screen to turn off again
 	  super.onPostExecute(result);
 }
 	
