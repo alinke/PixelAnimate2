@@ -412,6 +412,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	    }
 	}*/
 
+	@SuppressLint("NewApi")
 	private void handleSendImage(Intent intent) { //another app has passed us on image so let's copy it to our sd card directory
 	    Uri imageUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
 	   
@@ -420,18 +421,48 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	        // Update UI to reflect image being shared
 	    	String uriPath = imageUri.toString();
 	    	//showToast(uriPath);
+	    	//Log.d(LOG_TAG,"URI path is: " + uriPath);
 	    	
 	    	/*
 	         * Get the file's content URI from the incoming Intent, then
 	         * get the file's MIME type
 	         */
 	        //Uri returnUri = returnIntent.getData();
-	        String mimeType = getContentResolver().getType(imageUri);
 	        
+	       // String uriNameExtensionArray[] = mimeType.split("\\/");
+        //	String uriExtension = uriNameExtensionArray[uriNameExtensionArray.length-1]; //image
+	        
+	        String uriExtension = null;
+	        String mimeType = getContentResolver().getType(imageUri); //this doesn't work for web calls, only works locally
+	        String uriNameExtensionArray[] = null;
+	        String uriNameArray[] = null;
+	        String newfilename_no_extension = null;
+	        
+	        //here we're just getting the extension of the image file, png, gif, jpg, etc.
+	        if (mimeType != null && !mimeType.isEmpty()) {
+	        	uriNameExtensionArray = mimeType.split("\\/"); //image/gif
+	        	uriExtension = uriNameExtensionArray[uriNameExtensionArray.length-1]; //gif
+	        	uriNameArray = uriPath.split("\\/");
+	        	newfilename_no_extension = uriNameArray[uriNameArray.length-1]; //tree, we want the filename
+	        }
+	        else {
+	        	//showToast("it's null");
+	        	uriNameExtensionArray = uriPath.split("\\.");
+	        	uriExtension = uriNameExtensionArray[uriNameExtensionArray.length-1]; //gif
+	        	uriNameArray = uriPath.split("\\.");
+	        	newfilename_no_extension = uriNameArray[uriNameArray.length-2]; //tree, we want the filename   path/morestuff/tree
+	        	//showToast(newfilename_no_extension); 
+	        	//Log.d(LOG_TAG,newfilename_no_extension);
+	        	uriNameExtensionArray = newfilename_no_extension.split("\\/");
+	        	newfilename_no_extension = uriNameExtensionArray[uriNameExtensionArray.length-1]; 
+	        	//showToast(newfilename_no_extension);
+	        }
+	        
+	       // mimeType = "image/gif";
 	        //showToast("mimeType= " + mimeType);  // image/gif
 	        //let's get the extension
-	    	String uriNameExtensionArray[] = mimeType.split("\\/");
-        	String uriExtension = uriNameExtensionArray[uriNameExtensionArray.length-1]; //image
+	    	//String uriNameExtensionArray[] = mimeType.split("\\/");
+        	//String uriExtension = uriNameExtensionArray[uriNameExtensionArray.length-1]; //image
 	       // showToast(uriExtension);
 	    	
 	    	ContentResolver cr = getContentResolver();
@@ -443,8 +474,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	    	
 	    	// if (extension.equals("png")) {  //then we use the thumbnail, we just need to rename the image path to a gif
 		        	//String wholestring_no_extension = filenameArray[filenameArray.length-2]; // /storage/emulated/0/pixel/pixelanimate/tree
-        	String uriNameArray[] = uriPath.split("\\/");
-        	String newfilename_no_extension = uriNameArray[uriNameArray.length-1]; //tree
+        	
 	        //showToast(newfilename_no_extension);
 		        	//String newimagePath = wholestring_no_extension.replace(filename_no_extension, filename_no_extension + ".gif");
 		        	//showToast(newimagePath);
