@@ -32,6 +32,7 @@ import android.widget.LinearLayout.LayoutParams;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -91,6 +92,7 @@ import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
 import android.provider.OpenableColumns;
+import android.provider.Settings;
 //import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.Display;
@@ -127,6 +129,8 @@ import android.graphics.drawable.BitmapDrawable;
 //import android.content.BroadcastReceiver;
 
 import android.app.ProgressDialog;
+import android.bluetooth.BluetoothAdapter;
+
 import java.util.UUID;
 //import android.support.v7.app.ActionBar;
 //import android.support.v7.app.ActionBarActivity;
@@ -202,6 +206,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	private static final int countdownDuration = 30;
 	private static final int REQUEST_CODE_CHOOSE_PICTURE_FROM_GALLERY = 22;
 	private static final int WENT_TO_PREFERENCES = 1;
+	private static final int REQUEST_PAIR_DEVICE = 10;
+	private static final int REQUEST_IMAGE_CAPTURE = 40;
 	private Display display;
 	private Cursor cursor;
 	private int size;  //the number of pictures
@@ -245,6 +251,11 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	private boolean only64_ = false;
 	private boolean showStartupMsg_ = true;
 	private String gifPath_;
+	private String downloadURL_32;
+	private String downloadURL_64;
+	private boolean saveMultipleCameraPics_;
+	private boolean writeCameraFlag_ = false;
+	private Bitmap cameraBMP;
 	
 
 	@Override
@@ -518,8 +529,10 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	   			  out.close();
 	   			  out = null;
 	   			  //we've copied in the new file so now we need to add it to the gridview
-	   			  myImageAdapter.add(newFile);
-	   			  showToast ("New file added");
+	   			 // myImageAdapter.add(newFile);
+	   			  //myImageAdapter.clear();
+	   			  //showToast ("New file added");
+	   			 
 	   			  
 	   			  //TO DO now let's send it to PIXEL
 	   			  
@@ -577,6 +590,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 		   			} catch(Exception e) {
 		   			    Log.e("tag", e.getMessage());
 		   			}
+	    		 
+	    		 continueOnCreate();
 	    	}
 	    }
 	    
@@ -1610,7 +1625,7 @@ private void copyGIF64Source() {
 		// height_original = originalImage.getHeight();
 	    //***********************************************************************************
 	  
-		 originalImage = decodeSampledBitmapFromFile(imagePath, KIND.width,KIND.height);
+		originalImage = decodeSampledBitmapFromFile(imagePath, KIND.width,KIND.height);
 		 
 		width_original = originalImage.getWidth();
 	    height_original = originalImage.getHeight();
@@ -1649,6 +1664,47 @@ private void copyGIF64Source() {
 		matrix_.frame(frame_);  //write to the matrix   
 }
   
+  private void WriteCameratoMatrix(Bitmap cameraBitmap) throws ConnectionLostException {  //here we'll take a PNG, BMP, or whatever and convert it to RGB565 via a canvas, also we'll re-size the image if necessary
+	  	
+		//originalImage = decodeSampledBitmapFromFile(imagePath, KIND.width,KIND.height);
+		 
+		width_original = cameraBitmap.getWidth();
+	    height_original = cameraBitmap.getHeight();
+		 
+		 if (width_original != KIND.width || height_original != KIND.height) {
+			 resizedFlag = 1;
+			 //the iamge is not the right dimensions, so we need to re-size
+			 scaleWidth = ((float) KIND.width) / width_original;
+		 	 scaleHeight = ((float) KIND.height) / height_original;
+		 	 
+	   		 // create matrix for the manipulation
+	   		 matrix2 = new Matrix();
+	   		 // resize the bit map
+	   		 matrix2.postScale(scaleWidth, scaleHeight);
+	   		 resizedBitmap = Bitmap.createBitmap(cameraBitmap, 0, 0, width_original, height_original, matrix2, false); //false means don't anti-alias which is what we want when re-sizing for super pixel 64x64
+	   		 canvasBitmap = Bitmap.createBitmap(KIND.width, KIND.height, Config.RGB_565); 
+	   		 Canvas canvas = new Canvas(canvasBitmap);
+	   		 canvas.drawRGB(0,0,0); //a black background
+	   	   	 canvas.drawBitmap(resizedBitmap, 0, 0, null);
+	   		 ByteBuffer buffer = ByteBuffer.allocate(KIND.width * KIND.height *2); //Create a new buffer
+	   		 canvasBitmap.copyPixelsToBuffer(buffer); //copy the bitmap 565 to the buffer		
+	   		 BitmapBytes = buffer.array(); //copy the buffer into the type array
+		 }
+		 else {
+			// then the image is already the right dimensions, no need to waste resources resizing
+			 resizedFlag = 0;
+			 canvasBitmap = Bitmap.createBitmap(KIND.width, KIND.height, Config.RGB_565); 
+	   		 Canvas canvas = new Canvas(canvasBitmap);
+	   	   	 canvas.drawBitmap(cameraBitmap, 0, 0, null);
+	   		 ByteBuffer buffer = ByteBuffer.allocate(KIND.width * KIND.height *2); //Create a new buffer
+	   		 canvasBitmap.copyPixelsToBuffer(buffer); //copy the bitmap 565 to the buffer		
+	   		 BitmapBytes = buffer.array(); //copy the buffer into the type array
+		 }	   		
+		 
+		loadImage();  
+		matrix_.frame(frame_);  //write to the matrix   
+}
+  
   public void loadImage() {
 	  	
 
@@ -1660,7 +1716,7 @@ private void copyGIF64Source() {
 		
 		//we're done with the images so let's recycle them to save memory
 	    canvasBitmap.recycle();
-	    originalImage.recycle(); 
+	    //originalImage.recycle(); //was crashing on the camera2matrix 
 	    
 	    if ( resizedFlag == 1) {
 	    	resizedBitmap.recycle(); //only there if we had to resize an image
@@ -2169,6 +2225,58 @@ private void copyGIF64Source() {
 	    				this.startActivityForResult(intent, WENT_TO_PREFERENCES);
 	       }
 	    	
+	    	if (item.getItemId() == R.id.menu_btPair)
+		       {
+	    			
+	    		if (pixelHardwareID.substring(0,4).equals("MINT")) { //then it's a PIXEL V1 unit
+	    			showToast("Bluetooth Pair to PIXEL using code: 4545");
+	    		}
+	    		else { //we have a PIXEL V2 unit
+	    			showToast("Bluetooth Pair to PIXEL using code: 0000");
+	    		}
+	    		
+	    		Intent intent = new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
+		        startActivityForResult(intent, REQUEST_PAIR_DEVICE);
+		        
+		       }
+	    	
+
+	    	if (item.getItemId() == R.id.menu_pixelJoint)
+		       {
+	    			String downloadURL = "www.pixeljoint.com/pixels/new_icons.asp?search=&dimo=%3D&dim=32&colorso=%3E%3D&colors=2&tran=&anim=&iso=&av=&owner=&d=&dosearch=1&ob=search&action=search";
+	    			
+	    			if (matrix_model == 10) { //if 64x64
+	    				downloadURL = downloadURL_64;
+	    			}
+	    			else {
+	    				downloadURL = downloadURL_32;
+	    			}
+	    			
+			    	Intent i = new Intent(Intent.ACTION_VIEW);
+			    	i.setData(Uri.parse("http://" + downloadURL));
+			    	startActivity(i);
+		       }
+	    	
+	    	if (item.getItemId() == R.id.menu_camera)
+		       {
+	    		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+	    	    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+	    	     startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+	    	    }
+	    			
+			    	//Intent i = new Intent(Intent.ACTION_VIEW);
+			    	//i.setData(Uri.parse("http://" + downloadURL));
+			    	//startActivity(i);
+	    		//jhllhj
+	    		
+	    		//dsfasfsdaf
+		       }
+	    	
+	    	
+	    	
+	    	//Intent intent = new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
+	        //startActivityForResult(intent, REQUEST_PAIR_DEVICE);
+	    	
 	    	/*if (item.getItemId() == R.id.menu_galleryPick)
 		       {
 	    		
@@ -2216,7 +2324,7 @@ private void copyGIF64Source() {
 	    	
 	    	if (resCode == WENT_TO_PREFERENCES)  {
 	    		setPreferences(); //very important to have this here, after the menu comes back this is called, we'll want to apply the new prefs without having to re-start the app
-	    		showToast("returned from preferences");
+	    		//showToast("returned from preferences");
 	    	}	
 	    	
 	    	//if (reqCode == 0 || reqCode == 1) //then we came back from the preferences menu so re-load all images from the sd card, 1 is a re-scan
@@ -2228,7 +2336,7 @@ private void copyGIF64Source() {
 	    	    //loadImages();      
 	        //}
 	    	
-	    	if (reqCode == REQUEST_CODE_CHOOSE_PICTURE_FROM_GALLERY) {
+	    	/*if (reqCode == REQUEST_CODE_CHOOSE_PICTURE_FROM_GALLERY) { //not using this one right now
 	    		
 	    		 if (null == data) {
 	    			 showToast("Sorry, an error occurred");
@@ -2239,7 +2347,99 @@ private void copyGIF64Source() {
 	    		 String uriPath = originalUri.toString();
 	    		 showToast(uriPath);
 	    		 }
-	    	}	
+	    	}	*/
+	    	
+	    	if (reqCode == REQUEST_IMAGE_CAPTURE && resCode == RESULT_OK) {  //we'll get the picture and write is to the userpng sd card directory and then load into the gridview like any other png or gif
+	            Bundle extras = data.getExtras();
+	            cameraBMP = (Bitmap) extras.get("data");
+	            
+	            //let's make sure our directory is there fist and create it if not
+	           File outPath = new File(userPNGPath);
+    		   if (!outPath.exists()) {  //create the dir if it does not exist
+				  outPath.mkdirs();
+			   }
+	            
+	            //let's save this bitmap to the sd card and then load it also
+	        
+	           OutputStream stream = null;
+	           File newCamerafile = new File(userPNGPath + "camerapic.png");
+	           String newCamerafileString = null;
+	   		   
+				if (newCamerafile.exists() && saveMultipleCameraPics_ == true) {  //if the file is already there AND we should save multiple camera images, then we need to create a unique name
+	   				  String uuid = UUID.randomUUID().toString();
+	   				  try {
+						stream = new FileOutputStream(userPNGPath  + uuid + ".png");
+						newCamerafileString = userPNGPath  + uuid + ".png";
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	   			  }
+	   			  else {
+	   				try {
+						stream = new FileOutputStream(userPNGPath + "camerapic.png");
+						newCamerafileString = userPNGPath + "camerapic.png";
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	   			  }
+				
+	            /* Write bitmap to file using JPEG or PNG and 100% quality hint for JPEG. */
+	            cameraBMP.compress(CompressFormat.PNG, 100, stream);
+	            try {
+					stream.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+ 			 
+ 			  //we've copied in the new file so now we need to add it to the gridview
+ 			  myImageAdapter.add(newCamerafileString);
+ 			  //now let's re-load
+ 			  continueOnCreate();
+ 			  
+ 			  //now let's stream it
+ 			 //this part won't work actually because after this happens, we go back to IOIO setup which resets everything 
+ 			/*  imagePath = newCamerafileString;
+     		try {
+     			matrix_.interactive();  //this has to be here in case we were in interactive mode from a previous long tap
+     			WriteImagetoMatrix();
+				} catch (ConnectionLostException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}*/
+ 			 
+	            //well this isn't working out so instead let's write to the sd card and treat it like any other image in this program but always overwrite so there is only one camera image
+	            
+	           /* if (saveMultipleCameraPics_ == true) { //we'll write to the SD card
+	            	try {
+						matrix_.interactive();
+						matrix_.writeFile(100);
+						WriteCameratoMatrix(cameraBMP);
+	        			matrix_.playFile();
+	        			showToast("went here");
+	        			
+					} catch (ConnectionLostException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+	            }
+	            else { //just stream
+	            	  try {
+	            		  matrix_.interactive();
+	            		  WriteCameratoMatrix(cameraBMP);
+	  				} catch (ConnectionLostException e) {
+	  					// TODO Auto-generated catch block
+	  					e.printStackTrace();
+	  				}
+	            }*/
+	            //add preference to write camera or stream
+	        }
+	    	
+	    	
+	    	
 	    		//	Uri selectedImageURI = data.getData();
 	    		
 	    		//if (selectedImageURI != null) {
@@ -2316,10 +2516,31 @@ private void copyGIF64Source() {
 	     gifonly_ = prefs.getBoolean("pref_gifonly", false); //only load gifs, don't load static pngs if true
 	     only64_ = prefs.getBoolean("pref_only64", false); //only show 64x64 content
 	     showStartupMsg_ = prefs.getBoolean("pref_showStartupMsg", true); //show the "long tap to write to pixel message
+	     saveMultipleCameraPics_ = prefs.getBoolean("pref_writeCamera", false);
 	   
 	     matrix_model = Integer.valueOf(prefs.getString(   //the selected RGB LED Matrix Type
 	    	        resources.getString(R.string.selected_matrix),
 	    	        resources.getString(R.string.matrix_default_value))); 
+	     
+	     downloadURL_32 = prefs.getString(   //the selected RGB LED Matrix Type
+	    	        resources.getString(R.string.downloadURL_32),
+	    	        resources.getString(R.string.downloadURL_32Default)); 
+	     
+	     downloadURL_64 = prefs.getString(   //the selected RGB LED Matrix Type
+	    	        resources.getString(R.string.downloadURL_64),
+	    	        resources.getString(R.string.downloadURL_64Default)); 
+	     
+	    /* <EditTextPreference
+		    android:title="@string/downloadURL_32"
+		    android:key="@string/pref_downloadURL_32"
+		    android:defaultValue="@string/downloadURL_32Default"
+		    android:summary="@string/downloadURL_32Summary"/>
+	    
+	    <EditTextPreference
+		    android:title="@string/downloadURL_64"
+		    android:key="@string/pref_downloadURL_64"
+		    android:defaultValue="@string/downloadURL_64Default"
+		    android:summary="@string/downloadURL_64Summary"/>*/
 	     
 	   /*  if (matrix_model == 0 || matrix_model == 1) {
 	    	 currentResolution = 16;
@@ -2450,7 +2671,7 @@ private void copyGIF64Source() {
     	//public AnalogInput prox_;  //just for testing , REMOVE later
 
   		@Override
-  		protected void setup() throws ConnectionLostException {
+  		protected void setup() throws ConnectionLostException { //we'll always come back here after an intent or loss of connection
   			matrix_ = ioio_.openRgbLedMatrix(KIND);
   			deviceFound = 1; //if we went here, then we are connected over bluetooth or USB
   			connectTimer.cancel(); //we can stop this since it was found
@@ -2476,8 +2697,21 @@ private void copyGIF64Source() {
   			//	matrixdrawtimer.start(); 
   			//}
   			//else {
-  			matrix_.frame(frame_); //write select pic to the frame since we didn't start the timer
+  			
+  			//if (writeCameraFlag_ == true) {
+  			//  matrix_.interactive();
+      		//  WriteCameratoMatrix(cameraBMP);
   			//}
+  			//else {
+  				matrix_.frame(frame_); 
+  				//writeCameraFlag_ = false;
+  			//}
+  			
+  			/*if (writeCameraFlag_ == false) { //had to put this here cuz we could have come here on a reset from the camera intent in which case we don't want to over-write the camera stream that we already did
+  				matrix_.frame(frame_); //write select pic to the frame since we didn't start the timer
+  			}
+  			//}
+  			writeCameraFlag_ = false;*/
   			
   			appAlreadyStarted = 1;
   			

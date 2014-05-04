@@ -2,11 +2,31 @@
 <!-- This file is /res/menu/mainmenu.xml -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     
+
+<item android:id="@+id/menu_btPair"
+android:title="@string/menu_btPair_title"
+android:icon="@drawable/ic_action_bluetooth_searching"
+android:showAsAction="always"
+/>
+
+<item android:id="@+id/menu_camera"
+android:title="@string/menu_camera_title"
+android:icon="@drawable/ic_action_camera"
+android:showAsAction="always"
+/>
+
+<item android:id="@+id/menu_pixelJoint"
+android:title="@string/menu_pixelJoint_title"
+android:icon="@drawable/ic_action_download"
+  android:showAsAction="always"
+/>
+
 <item android:id="@+id/menu_prefs"
 android:title="@string/menu_prefs_title"
-    android:icon="@drawable/ic_menu_preferences"
+    android:icon="@drawable/ic_action_settings"
     android:showAsAction="always"
 />
+
 
 <item android:id="@+id/menu_about"
 android:title="@string/menu_about_title"
@@ -17,6 +37,8 @@ android:icon="@drawable/ic_menu_info_details"
 android:title="@string/menu_instructions_title"
 android:icon="@drawable/ic_menu_database"
 />
+
+
 
  <!--
 <item android:id="@+id/menu_galleryPick"

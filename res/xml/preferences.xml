@@ -83,9 +83,25 @@
     android:key="pref_debugMode"
     android:defaultValue="@string/pref_debugModeDefault"
     android:summary="@string/debugModeSummary"/>  
-  
-  
     
+    <CheckBoxPreference
+    android:title="@string/writeCamera"
+    android:key="pref_writeCamera"
+    android:defaultValue="@string/writeCameraDefault"
+    android:summary="@string/writeCameraSummary"/>  
+    
+    <EditTextPreference
+	    android:title="@string/downloadURL_32"
+	    android:key="@string/pref_downloadURL_32"
+	    android:defaultValue="@string/downloadURL_32Default"
+	    android:summary="@string/downloadURL_32Summary"/>
+    
+    <EditTextPreference
+	    android:title="@string/downloadURL_64"
+	    android:key="@string/pref_downloadURL_64"
+	    android:defaultValue="@string/downloadURL_64Default"
+	    android:summary="@string/downloadURL_64Summary"/>
+  
     
      
    </PreferenceScreen>
