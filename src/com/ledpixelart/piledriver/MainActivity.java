@@ -529,8 +529,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	   			  out.close();
 	   			  out = null;
 	   			  //we've copied in the new file so now we need to add it to the gridview
-	   			 // myImageAdapter.add(newFile);
-	   			  //myImageAdapter.clear();
+	   			  myImageAdapter.add(newFile);
 	   			  //showToast ("New file added");
 	   			 
 	   			  
@@ -2263,13 +2262,6 @@ private void copyGIF64Source() {
 	    	    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
 	    	     startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
 	    	    }
-	    			
-			    	//Intent i = new Intent(Intent.ACTION_VIEW);
-			    	//i.setData(Uri.parse("http://" + downloadURL));
-			    	//startActivity(i);
-	    		//jhllhj
-	    		
-	    		//dsfasfsdaf
 		       }
 	    	
 	    	
