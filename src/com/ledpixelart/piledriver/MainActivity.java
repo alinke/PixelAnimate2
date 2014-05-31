@@ -1162,6 +1162,19 @@ private void copyGIF64Source() {
 		   	    if (isCancelled()) break;
 		   	   }
     	   }
+		  
+		  if (matrix_model == 10 && GIF64targetDirector.exists()) { //gif 64x64 content, only show if 64x64 led matrix is picked
+	    	   File[] files = GIF64targetDirector.listFiles(new FilenameFilter() {
+	   		    public boolean accept(File dir, String name) {
+	   		        return name.toLowerCase().endsWith(".gif") || name.toLowerCase().endsWith(".png");
+	   		    }
+	   			});
+	   	   
+		   	   for (File file : files) {
+		   	    publishProgress(file.getAbsolutePath());
+		   	    if (isCancelled()) break;
+		   	   }
+		   }
     		  
 		  if (only64_ == false && targetDirector.exists()) {  //gif or png, this is the gif directory 32x32 content
     		  File[] files = targetDirector.listFiles(new FilenameFilter() {
@@ -1176,18 +1189,7 @@ private void copyGIF64Source() {
     	   }
 	    }
 		  
-		  if (matrix_model == 10 && GIF64targetDirector.exists()) { //gif 64x64 content, only show if 64x64 led matrix is picked
-	    	   File[] files = GIF64targetDirector.listFiles(new FilenameFilter() {
-	   		    public boolean accept(File dir, String name) {
-	   		        return name.toLowerCase().endsWith(".gif") || name.toLowerCase().endsWith(".png");
-	   		    }
-	   			});
-	   	   
-		   	   for (File file : files) {
-		   	    publishProgress(file.getAbsolutePath());
-		   	    if (isCancelled()) break;
-		   	   }
-		   }
+		
     	   
 	   if (only64_ == false && gifonly_ == false && PNGtargetDirector.exists()) { //png 32x32 content
     	   File[] files = PNGtargetDirector.listFiles(new FilenameFilter() {
@@ -1416,15 +1418,28 @@ private void copyGIF64Source() {
 			        		//it's  not there so let's check the original gifs folder, if it's in there, then treat it like a gif and decode
 			        		
 			        		imagePath = originalImagePath;
-			        		try {
-			        			matrix_.interactive();
-								matrix_.writeFile(100); //since it's only one frame , doesn't matter what fps is
-		    		        	WriteImagetoMatrix();
-		    		        	matrix_.playFile();
-							} catch (ConnectionLostException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
+			        		
+			        		if (kioskMode_ == false) {
+				        		try {
+				        			matrix_.interactive();
+									matrix_.writeFile(100); //since it's only one frame , doesn't matter what fps is
+			    		        	WriteImagetoMatrix();
+			    		        	matrix_.playFile();
+								} catch (ConnectionLostException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+			        		}
+			        		else {
+			        			try {
+				        			showToast("Writing to PIXEL not supported in Kiosk mode");
+			        				matrix_.interactive();
+			    		        	WriteImagetoMatrix();
+								} catch (ConnectionLostException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+			        		}
 			            }
 	        		}
 	        	else {  //the rgb565 is there
