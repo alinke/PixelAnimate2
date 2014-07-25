@@ -1981,7 +1981,7 @@ private void copyGIF64Source() {
 		   			}
 					
 					 switch (selectedFileResolution) { //16x32 matrix = 1024k frame size, 32x32 matrix = 2048k frame size
-			            case 16: frame_length = 1048;
+			            case 16: frame_length = 1024;
 			                     break;
 			            case 32: frame_length = 2048;
 			                     break;
@@ -2592,13 +2592,13 @@ private void copyGIF64Source() {
 	     case 0:
 	    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x16;
 	    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage16);
-	    	 frame_length = 1048;
+	    	 frame_length = 1024;
 	    	 currentResolution = 16;
 	    	 break;
 	     case 1:
 	    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x16;
 	    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage16);
-	    	 frame_length = 1048;
+	    	 frame_length = 1024;
 	    	 currentResolution = 16;
 	    	 break;
 	     case 2:
@@ -2873,7 +2873,7 @@ private void copyGIF64Source() {
 	   			}
 				
 				 switch (selectedFileResolution) {
-		            case 16: frame_length = 1048;
+		            case 16: frame_length = 1024;
 		                     break;
 		            case 32: frame_length = 2048;
 		                     break;
