@@ -24,6 +24,7 @@ import android.graphics.Canvas;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout.LayoutParams;
@@ -98,12 +99,14 @@ import android.util.Log;
 import android.view.Display;
 //import android.view.GestureDetector;
 //import android.view.GestureDetector.SimpleOnGestureListener;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnDragListener;
 import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
@@ -115,6 +118,7 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
@@ -122,33 +126,33 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.graphics.Matrix;
 import android.graphics.Bitmap.Config;
 import android.graphics.drawable.BitmapDrawable;
-//import android.hardware.SensorManager;
-
-//import android.app.IntentService;
-//import android.content.Intent;
-//import android.content.BroadcastReceiver;
 
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 
 import java.util.UUID;
-//import android.support.v7.app.ActionBar;
-//import android.support.v7.app.ActionBarActivity;
+import com.ledpixelart.pixel.hardware.Pixel;
+import android.view.ContextMenu;
+import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
+
+import android.widget.PopupMenu.OnMenuItemClickListener;
 
 
 //to do , think about deleting the decoded directory if led panel size changed
 
-@SuppressLint({ "ParserError", "ParserError" })
+
+@SuppressLint("NewApi")
 public class MainActivity extends IOIOActivity implements OnItemClickListener, OnItemLongClickListener  {
 
 	private static GifView gifView;
-	private static ioio.lib.api.RgbLedMatrix matrix_;
+	static ioio.lib.api.RgbLedMatrix matrix_;
 	private static ioio.lib.api.RgbLedMatrix.Matrix KIND;  //have to do it this way because there is a matrix library conflict
 	private static android.graphics.Matrix matrix2;
     private static final String TAG = "PixelAnimations";	
 	private static short[] frame_;
   	public static final Bitmap.Config FAST_BITMAP_CONFIG = Bitmap.Config.RGB_565;
-  	private static byte[] BitmapBytes;
+  	public static byte[] BitmapBytes;
   	private static InputStream BitmapInputStream;
   	private static Bitmap canvasBitmap;
   	private static Bitmap IOIOBitmap;
@@ -167,7 +171,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	private  int matrix_model;
 	private final String tag = "";	
 	private final String LOG_TAG = "PixelAnimations";
-	private String imagePath;
+	public static String imagePath;
 	private static int resizedFlag = 0;
 	
 	private ConnectTimer connectTimer; 	
@@ -178,7 +182,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	private static String extStorageDirectory = Environment.getExternalStorageDirectory().toString();
     private static String basepath = extStorageDirectory;
    
-    private static String decodedDirPath =  Environment.getExternalStorageDirectory() + "/pixel/gif/decoded"; 
+    public static String decodedDirPath =  Environment.getExternalStorageDirectory() + "/pixel/gif/decoded"; 
     
     private static String GIFPath =  Environment.getExternalStorageDirectory() + "/pixel/gif/"; //put the pngs (for display purposes) and the gifs together in this same dir, code should take the png if it exists, otherwise take the gif
     private static String PNGPath =  Environment.getExternalStorageDirectory() + "/pixel/png/"; //static pngs
@@ -186,6 +190,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
     private static String GIF64Path =  Environment.getExternalStorageDirectory() + "/pixel/gif64/";  //gifs 64x64, there will be a decoded directory here
     private static String userPNGPath =  Environment.getExternalStorageDirectory() + "/pixel/userpng/"; //user supplied pngs
     private static String userGIFPath =  Environment.getExternalStorageDirectory() + "/pixel/usergif/";  //user supplied gifs, there will be a decoded directory here
+    private static String FavPNGPath =  Environment.getExternalStorageDirectory() + "/pixel/favpng/"; //user supplied pngs
+    private static String FavGIFPath =  Environment.getExternalStorageDirectory() + "/pixel/favgif/";  //user supplied gifs, there will be a decoded directory here
     
     /*private static String GIFname =  Environment.getExternalStorageDirectory() + "gif";
     private static String PNGname =  Environment.getExternalStorageDirectory() + "png";
@@ -216,7 +222,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	private boolean debug_;
 	private static int appAlreadyStarted = 0;
 	private int FPSOverride_ = 0;
-	private static float fps = 0;
+	public static float fps = 0;
 	private static int x = 0;
 	private static int downloadCounter = 0;
 	private static String selectedFileName;
@@ -224,7 +230,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	private static int selectedFileDelay;
 	private static int StreamModePlaying = 0;
 	private static int selectedFileResolution;
-	private static int currentResolution;
+	public static int currentResolution;
 	private static String pixelFirmware = "Not Connected";
 	private static String pixelBootloader = "Not Connected";
 	private static String pixelHardwareID = "Not Connected";
@@ -256,6 +262,36 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	private boolean saveMultipleCameraPics_;
 	private boolean writeCameraFlag_ = false;
 	private Bitmap cameraBMP;
+	
+	private static File[] PNGFiles;
+	private boolean scanAllPics;
+	private String setupInstructionsString; 
+	private String setupInstructionsStringTitle;
+	private static final int SWIPE_MIN_DISTANCE = 120;
+	private static final int SWIPE_MAX_OFF_PATH = 250;
+	private static final int SWIPE_THRESHOLD_VELOCITY = 200;
+	private GestureDetector gestureDetector;
+	private  OnTouchListener gestureListener;
+	
+	public static int slideshowPosition = 0;
+	private int slideShowRunning = 0;
+	public static ImageDisplayDurationTimer imagedisplaydurationTimer;
+	public static PauseBetweenImagesDurationTimer pausebetweenimagesdurationTimer;
+	
+    private boolean slideShowMode;
+	  //   dimDuringSlideShow = prefs.getBoolean("pref_dimDuringSlideShow", true);
+	     
+	public static int imageDisplayDuration;
+	
+	public float slideShowFPS = 5;
+	
+	public int pauseBetweenImagesDuration;
+	
+	private int z = 0;
+	
+	public static String SlideShowArray[] = new String[5000];
+	
+	//String[] errorSoon = new String[100]; // <--initialized statement
 	
 
 	@Override
@@ -316,6 +352,14 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
  		
  		context = getApplicationContext();
  		baseContext = getBaseContext();
+ 		
+ 		//TO DO add a preerence to disable this
+ 		  gestureDetector = new GestureDetector(new MyGestureDetector());
+ 	       gestureListener = new View.OnTouchListener() {
+ 	    	   public boolean onTouch(View v, MotionEvent event) { 
+ 	    		   return gestureDetector.onTouchEvent(event);
+ 	    		   }
+ 	    	   };
  		
  		/*  IntentFilter filter = new IntentFilter(ResponseReceiver.ACTION_RESP);
  	        filter.addCategory(Intent.CATEGORY_DEFAULT);
@@ -994,6 +1038,8 @@ private void copyGIF64Source() {
          
          gridview.setOnItemClickListener(MainActivity.this);
          gridview.setOnItemLongClickListener(MainActivity.this);
+        // registerForContextMenu(gridview);    
+       //  gridview.setOnDragListener((OnDragListener) (MainActivity.this));
          
         
          
@@ -1065,9 +1111,15 @@ private void copyGIF64Source() {
         }
         
         if (deviceFound == 0) {  
-    	     connectTimer.cancel();  //if user closes the program, need to kill this timer or we'll get a crash
+    	     if (connectTimer != null) connectTimer.cancel();  //if user closes the program, need to kill this timer or we'll get a crash
         }
-    
+        
+       //kill the slideshow timers if they are open
+        if (imagedisplaydurationTimer != null) imagedisplaydurationTimer.cancel();
+ 		if (pausebetweenimagesdurationTimer != null) pausebetweenimagesdurationTimer.cancel();
+        
+        
+        
         
        /* if (deviceFound == 1) {  //was causing crashes
         	connectTimer.cancel();  //if user closes the program, need to kill this timer or we'll get a crash
@@ -1087,6 +1139,8 @@ private void copyGIF64Source() {
     
     public class AsyncTaskLoadFiles extends AsyncTask<Void, String, Void> {
     	  
+    	  File favPNGDirector;
+    	  File favGIFDirector;
     	  File targetDirector;
     	  File PNGtargetDirector;
     	  File UserPNGtargetDirector;
@@ -1094,6 +1148,7 @@ private void copyGIF64Source() {
     	  File PNG64targetDirector;
     	  File GIF64targetDirector;
     	  ImageAdapter2 myTaskAdapter;
+    	  int z = 0;
 
     	  public AsyncTaskLoadFiles(ImageAdapter2 adapter) {
     	   myTaskAdapter = adapter;
@@ -1106,6 +1161,18 @@ private void copyGIF64Source() {
     		  
     		String ExternalStorageDirectoryPath = Environment
     	   .getExternalStorageDirectory().getAbsolutePath();
+    		
+    		
+    		
+    	   //favPNGDirector;
+       	   //favGIFDirector;
+    		
+    	   String favPNGtargetPath = FavPNGPath;
+    	   favPNGDirector = new File(favPNGtargetPath);
+    	   
+    	   String favGIFtargetPath = FavGIFPath;
+    	   favGIFDirector = new File(favGIFtargetPath);
+    		
 
     	   //String targetPath = ExternalStorageDirectoryPath + "/pixel/animatedgifs";
     	   String targetPath = GIFPath;
@@ -1137,6 +1204,43 @@ private void copyGIF64Source() {
     	   
     	 //  File[] files = targetDirector.listFiles();
     	  //let's add the user added images at the top of the list/first
+    		  
+    		  
+    	//TO DO need to add a check if fav directory is empty and skip if not	
+    		  
+    	//we're going to load the user favorited items first !
+    		  
+        if (gifonly_ == false && favPNGDirector.exists()) {  //user png content, could be any size
+   	    	   File[] files = favPNGDirector.listFiles(new FilenameFilter() {
+   	   		    public boolean accept(File dir, String name) {
+   	   		        return name.toLowerCase().endsWith(".png") || name.toLowerCase().endsWith(".jpg") || name.toLowerCase().endsWith(".jpeg");
+   	   		    }
+   	   			});
+   	   	   
+   		   	   for (File file : files) {
+   		   	    publishProgress(file.getAbsolutePath());
+   		   	    SlideShowArray[z] = file.getAbsolutePath(); //array starts at 0
+   		   	    z++;
+   		   	    if (isCancelled()) break;
+   		   	   }
+   	   	   }
+        
+        if (favGIFDirector.exists()) { //fav gif content, could be any size
+	    	   File[] files = favGIFDirector.listFiles(new FilenameFilter() {
+	   		    public boolean accept(File dir, String name) {
+	   		    	return name.toLowerCase().endsWith(".gif") || name.toLowerCase().endsWith(".png"); //can be either png thumbnails or gif (gifs could have came from user gifs)
+	   		    }
+		   		});
+		   	    
+		   	   for (File file : files) {
+		   	    publishProgress(file.getAbsolutePath());
+		   	    SlideShowArray[z] = file.getAbsolutePath(); 
+		   	    z++;
+		   	    if (isCancelled()) break;
+		   	   }
+ 	   }
+    		  
+    		  
 		  if (gifonly_ == false && UserPNGtargetDirector.exists()) {  //user png content, could be any size
 	    	   File[] files = UserPNGtargetDirector.listFiles(new FilenameFilter() {
 	   		    public boolean accept(File dir, String name) {
@@ -1146,6 +1250,8 @@ private void copyGIF64Source() {
 	   	   
 		   	   for (File file : files) {
 		   	    publishProgress(file.getAbsolutePath());
+		   	    SlideShowArray[z] = file.getAbsolutePath(); //array starts at 0
+		   	    z++;
 		   	    if (isCancelled()) break;
 		   	   }
 	   	   }
@@ -1159,6 +1265,8 @@ private void copyGIF64Source() {
 		   	   
 		   	   for (File file : files) {
 		   	    publishProgress(file.getAbsolutePath());
+		   	    SlideShowArray[z] = file.getAbsolutePath(); 
+		   	    z++;
 		   	    if (isCancelled()) break;
 		   	   }
     	   }
@@ -1172,6 +1280,8 @@ private void copyGIF64Source() {
 	   	   
 		   	   for (File file : files) {
 		   	    publishProgress(file.getAbsolutePath());
+		   	    SlideShowArray[z] = file.getAbsolutePath(); 
+		   	    z++;
 		   	    if (isCancelled()) break;
 		   	   }
 		   }
@@ -1182,24 +1292,31 @@ private void copyGIF64Source() {
     		        return name.toLowerCase().endsWith(".gif") || name.toLowerCase().endsWith(".png");
     		    }
     		});
+    		
+    		if (files != null) {  //TO DO deletet his later
     	   
-    	   for (File file : files) {
-    	    publishProgress(file.getAbsolutePath());
-    	    if (isCancelled()) break;
-    	   }
+	    	   for (File file : files) {     //the Android emulator was crashing here, weird
+	    	    publishProgress(file.getAbsolutePath());
+	    	    SlideShowArray[z] = file.getAbsolutePath(); 
+		   	    z++;
+	    	    if (isCancelled()) break;
+	    	   }
+    		}
 	    }
-		  
-		
+    		
     	   
-	   if (only64_ == false && gifonly_ == false && PNGtargetDirector.exists()) { //png 32x32 content
-    	   File[] files = PNGtargetDirector.listFiles(new FilenameFilter() {
+	   if (only64_ == false && gifonly_ == false && PNGtargetDirector.exists()) { //png 32x32 content 
+		   PNGFiles = PNGtargetDirector.listFiles(new FilenameFilter() {  //PNGFiles is a file array / list?, if we only want a slideshow with the PNGs
+    		   
    		    public boolean accept(File dir, String name) {
    		        return name.toLowerCase().endsWith(".png") || name.toLowerCase().endsWith(".jpg") || name.toLowerCase().endsWith(".jpeg");
    		    }
    			});
    	   
-	   	   for (File file : files) {
+	   	   for (File file : PNGFiles) {
 	   	    publishProgress(file.getAbsolutePath());
+	   	    SlideShowArray[z] = file.getAbsolutePath(); 
+	   	    z++;
 	   	    if (isCancelled()) break;
 	   	   }
 	   }
@@ -1213,19 +1330,23 @@ private void copyGIF64Source() {
    	   
 	   	   for (File file : files) {
 	   	    publishProgress(file.getAbsolutePath());
+	   	    SlideShowArray[z] = file.getAbsolutePath(); 
+	   	    z++;
 	   	    if (isCancelled()) break;
 	   	   }
 	   }
 	   
-	  
-	   	   
+	int SlideShowArraySize = SlideShowArray.length;
+	System.out.println("Size of the Slide Show Array is: " + SlideShowArraySize);
+	System.out.println("The third path is : " + SlideShowArray[2]);
+	   	  
    return null;
    
   }	  
 
     	  @Override
     	  protected void onProgressUpdate(String... values) {
-    	   myTaskAdapter.add(values[0]);
+    	   myTaskAdapter.add(values[0]);  //this is where we add the image to the gridview
     	   super.onProgressUpdate(values);
     	  }
 
@@ -1337,8 +1458,10 @@ private void copyGIF64Source() {
 
     	 }*/
 
-	@Override
+	/*@Override
  public  boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id) {  
+		//deviceFound = 1;
+		
 		if (deviceFound == 1) { 
 	  		//********we need to reset everything because the user could have been already running an animation
 	  	     x = 0;
@@ -1449,7 +1572,7 @@ private void copyGIF64Source() {
 	        }
 	        
 	        
-	        /*if (extension.equals("png")) {  //then we use the thumbnail, we just need to rename the image path to a gif
+	        if (extension.equals("png")) {  //then we use the thumbnail, we just need to rename the image path to a gif
 	        	String wholestring_no_extension = filenameArray[filenameArray.length-2]; // /storage/emulated/0/pixel/pixelanimate/tree
 	        	String filenameArray2[] = wholestring_no_extension.split("\\/");
 	        	String filename_no_extension = filenameArray2[filenameArray2.length-1]; //tree
@@ -1483,7 +1606,7 @@ private void copyGIF64Source() {
 	        	else {
 			     	   animateAfterDecode(1); //the rgb565 is there so let's run the already decoded animation
 			    } 
-	        }*/
+	        }
 	        
 	        else if (extension.equals("jpg") || extension.equals("jpeg")) {  
 	        	imagePath = originalImagePath;
@@ -1503,15 +1626,424 @@ private void copyGIF64Source() {
 	     	   animateAfterDecode(1);
 	       } 
 	       return true;
-	       // animateAfterDecode(0);  //0 means streaming mode, 1 means download mode 
     }
     else {
     	showToast("PIXEL was not found, did you Bluetooth pair to PIXEL?");
     	return true;
     }
+}*/
+    
+//	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+//			long arg3) {
+    
+    public boolean onItemLongClick(final AdapterView<?> parent, View v, final int position, long id) {  
+    	PopupMenu popupMenu = new PopupMenu(getApplicationContext(),
+				parent);
+		popupMenu.getMenuInflater().inflate(R.menu.gridview_menu,
+				popupMenu.getMenu());
+		popupMenu
+				.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+				@Override
+				public boolean onMenuItemClick(MenuItem arg0) {
+					/*Toast.makeText(getApplicationContext(),
+							"Do something!" + arg0.toString(), Toast.LENGTH_SHORT)
+							.show();*/
+					
+					originalImagePath = (String) parent.getItemAtPosition(position);
+						
+					if (arg0.toString().equals("Write")) {
+						
+						deviceFound = 1;//TO DO remove later
+						
+						if (deviceFound == 1) { 
+					  		//********we need to reset everything because the user could have been already running an animation
+					  	     x = 0;
+					  	     
+					  	     
+					  	     if (StreamModePlaying == 1) {
+					  	    	 //decodedtimer.cancel();
+					  	    	// if(!pixelHardwareID.equals("PIXL")) {
+					  	    	decodedtimer.cancel(); //TO DO add null check here later
+					  	    	// }
+					  	    	// is.close();
+					  	     }
+					  	     ///****************************
+				    		  
+					    	imagePath = (String) parent.getItemAtPosition(position);
+					    	originalImagePath = (String) parent.getItemAtPosition(position);
+					        selectedFileName = imagePath;
+					        //here we need to get the file name to see if the file has already been decoded
+					        //file name will be in a format like this sdcard/pixel/pixerinteractive/rain.gif , we want to extra just rain
+					        String delims = "[/]";
+					        String[] aFileName = selectedFileName.split(delims);
+					        int aFileNameLength = aFileName.length;
+					        selectedFileName = aFileName[aFileNameLength-1];
+					        String fileType = aFileName[aFileNameLength-2];  //can be gif, png, userpng, usergif, png64, or gif64
+					        String delims2 = "[.]";
+					        String[] aFileName2 = selectedFileName.split(delims2);
+					        int aFileNameLength2 = aFileName2.length;
+					        selectedFileName = aFileName2[0];	//now we have just the short name with no extension
+					        
+					        //**** now let's get the extension
+					        String filenameArray[] = imagePath.split("\\.");
+					        String extension = filenameArray[filenameArray.length-1]; //.png
+					        
+					        //we need to find out which directory was selected so we can set the decodeddir
+					        
+					        if (fileType.equals("gif")) {
+					        	decodedDirPath = GIFPath + "decoded";
+					        	gifPath_ = GIFPath;
+					        }
+					        else if (fileType.equals("usergif")) {
+					        	decodedDirPath = userGIFPath + "decoded";
+					        	gifPath_ = userGIFPath;
+					        }
+					        else if (fileType.equals("gif64")) {
+					        	decodedDirPath = GIF64Path + "decoded";
+					        	gifPath_ = GIF64Path;
+					        }
+					        else if (fileType.equals("favgif")) {
+					        	decodedDirPath = FavGIFPath + "decoded";
+					        	gifPath_ = FavGIFPath;
+					        }
+					        
+					        
+					        // TO DO check this part of code, looks like I was duplicating this same block below so just delete the duplicate but make sure everything is still working
+					        
+					        if (extension.equals("png")) {  //then we use the thumbnail, we just need to rename the image path to a gif
+					        	String wholestring_no_extension = filenameArray[filenameArray.length-2]; // /storage/emulated/0/pixel/pixelanimate/tree
+					        	String filenameArray2[] = wholestring_no_extension.split("\\/");
+					        	String filename_no_extension = filenameArray2[filenameArray2.length-1]; //tree
+					        	String newimagePath = wholestring_no_extension.replace(filename_no_extension, filename_no_extension + ".gif");
+					        	//showToast(newimagePath);
+					        	//showToast(String.valueOf(filenameArray2.length));
+					        	imagePath = newimagePath;
+					        	
+					        	//now we need to check that filename/decoded/filename.rgb565 exists
+					        	
+					        	//File pngRGB565path = new File(basepath + "/pixel/animatedgifs/decoded/" + filename_no_extension + ".rgb565"); //sdcard/pixel/animatedgifs/decoded/tree.rgb565
+					        	//File pngRGB565path = new File(GIFPath + "decoded/" + filename_no_extension + ".rgb565"); //sdcard/pixel/gifs/decoded/tree.rgb565
+					        	File pngRGB565path = new File(gifPath_ + "decoded/" + filename_no_extension + ".rgb565"); //sdcard/pixel/gifs/decoded/tree.rgb565
+					        	if (!pngRGB565path.exists()) { //if it doesn't exist
+					        		
+					        		//ok not there so let's see if the original gif is there as decoded may have been deleted because the led panel changed
+					        		File originalGIF = new File(gifPath_ + "gifsource/" + filename_no_extension + ".gif"); //sdcard/pixel/gifs/gifsource/tree.rgb565
+					        		if (originalGIF.exists()) { 
+					        			//we've got the original gif so now let's decode it
+					        			 imagePath = gifPath_ + "gifsource/" + filename_no_extension + ".gif";
+					        			 gifView.setGif(imagePath);  //just sets the image , no decoding, decoding happens in the animateafterdecode method
+								     	 animateAfterDecode(0);
+					        		}
+					        		else { //well we tried, no original gif so we'll treat it as a png
+							            	//there's no rgb565 and we only have a single frame png so let's just send this single frame png to pixel
+								        	
+							        		//it's  not there so let's check the original gifs folder, if it's in there, then treat it like a gif and decode
+							        		
+							        		imagePath = originalImagePath;
+							        		
+							        		if (kioskMode_ == false) {
+								        		try {
+								        			matrix_.interactive();
+													matrix_.writeFile(100); //since it's only one frame , doesn't matter what fps is
+							    		        	WriteImagetoMatrix();
+							    		        	matrix_.playFile();
+												} catch (ConnectionLostException e) {
+													// TODO Auto-generated catch block
+													e.printStackTrace();
+												}
+							        		}
+							        		else {
+							        			try {
+								        			showToast("Writing to PIXEL not supported in Kiosk mode");
+							        				matrix_.interactive();
+							    		        	WriteImagetoMatrix();
+												} catch (ConnectionLostException e) {
+													// TODO Auto-generated catch block
+													e.printStackTrace();
+												}
+							        		}
+							            }
+					        		}
+					        	else {  //the rgb565 is there
+					        		//gifView.setGif(imagePath);  //this is causing a crash, TO DO figure out why later 
+					        		animateAfterDecode(1); //the rgb565 is there so let's run the already decoded animation
+							    } 
+					      
+					    }
+					    else {
+					    	showToast("PIXEL was not found, did you Bluetooth pair to PIXEL?");
+					    }
+					        
+					}
+						
+					else if (arg0.toString().equals("Favorite")) {
+						
+						showToast("Moving favorite to the top...");
+						//we need to first see what directory this came from 
+						
+						String PixelDirName_ = Pixel.getPixelDir(originalImagePath);
+						
+						if (PixelDirName_.equals("gif")) {
+					        	//decodedDirPath = GIFPath + "decoded";
+					        	gifPath_ = GIFPath;
+					        }
+					        else if (PixelDirName_.equals("usergif")) {
+					        	//decodedDirPath = userGIFPath + "decoded";
+					        	gifPath_ = userGIFPath;
+					        }
+					        else if (PixelDirName_.equals("gif64")) {
+					        	//decodedDirPath = GIF64Path + "decoded";
+					        	gifPath_ = GIF64Path;
+					        }
+					        else if (PixelDirName_.equals("favgif")) {
+					        	//decodedDirPath = FavGIFPath + "decoded";
+					        	gifPath_ = FavGIFPath;
+					        	//this shouldn't happen
+					        }
+					        
+					        
+					        //if the file type was not one of these like a png for example, then we don't care about the decodeddirpath and we don't change it
+					     
+						String extension_ = Pixel.getExtension(originalImagePath);
+						
+						File FavPNGPath_ = new File(FavPNGPath); //let's create the favoriate dir if it's not there already
+			    		 if (!FavPNGPath_.exists()) {  //create the dir if it does not exist
+			    			 FavPNGPath_.mkdirs();
+						  }
+			    		 
+			    		File FavGIFPath_ = new File(FavGIFPath); //let's create the favoriate dir if it's not there already
+			    		if (!FavGIFPath_.exists()) {  //create the dir if it does not exist
+			    			FavGIFPath_.mkdirs();
+						}
+			    		
+			    		String filename_no_extension = Pixel.getNameOnly(originalImagePath); //get the name of the select file but without the extension
+			    		showToast(filename_no_extension); //get just the name of the file with no extension
+			    			
+		    			//may need to put this in the background
+			    		//let's check now if the PNG that was favorited is a thumbnail for a gif or if it's realy just a PNG
+			    		
+			    		File pngRGB565path = new File(gifPath_ + "decoded/" + filename_no_extension + ".rgb565"); //sdcard/pixel/gifs/decoded/tree.rgb565
+			        	if (!pngRGB565path.exists()) { //if it doesn't exist
+			        		
+			        		//ok not there so let's see if the original gif is there as decoded may have been deleted because the led panel changed
+			        		File originalGIF = new File(gifPath_ + "gifsource/" + filename_no_extension + ".gif"); //sdcard/pixel/gifs/gifsource/tree.rgb565
+			        		if (originalGIF.exists()) { 
+			        			//just copy the original gif to the new place, we'll decode it later there
+			        			
+			        			 //imagePath = gifPath_ + "gifsource/" + filename_no_extension + ".gif";
+			        			 //gifView.setGif(imagePath);  //just sets the image , no decoding, decoding happens in the animateafterdecode method
+						     	 //animateAfterDecode(0);
+			        		}
+			        		else { //well we tried, no original gif so we'll treat it as a png
+					            	//there's no rgb565 and we only have a single frame png so let's just send this single frame png to pixel
+						        	
+			        			 InputStream in = null;
+			     	             OutputStream out = null;
+			     	             
+			     	             try {
+			     	            	 
+				     	             in = new FileInputStream(originalImagePath);
+				     	             out = new FileOutputStream(FavPNGPath + filename_no_extension + ".png");
+				     	             copyFile(in, out);
+				     	             in.close();
+				     	             in = null;
+				     	             out.flush();
+				     	             out.close();
+				     	             out = null;  
+				     	              
+				     	              //no need to register these with mediascanner as these are internal gifs , the workaround for the gifs with a black frame as the first frame
+			     	           
+				     	            } catch(Exception e) {
+				     	                Log.e("copy ERROR", e.toString());
+				     	                e.printStackTrace();
+				     	            }     
+					        		
+					        		
+					        		
+					            }
+			        		}
+			        	else {  //the rgb565 is there
+			        		//so let's copy the rgb565 and the .txt file to the fav dir and then delete from here so we don't have dups
+			        		
+			       		 
+			        	//let's first copy the original png
+			        	InputStream in = null;
+	     	            OutputStream out = null;
+	     	             
+	     	             
+	     	            
+	     	            File PNGPath = new File(originalImagePath); //sdcard/pixel/gifs/decoded/tree.rgb565
+			        	if (PNGPath.exists()) { //if it doesn't exist
+		     	            try {
+		     	            	 
+			     	             in = new FileInputStream(originalImagePath);
+			     	             out = new FileOutputStream(FavPNGPath + filename_no_extension + ".png");
+			     	             copyFile(in, out);
+			     	             in.close();
+			     	             in = null;
+			     	             out.flush();
+			     	             out.close();
+			     	             out = null;  
+			     	              
+			     	              //no need to register these with mediascanner as these are internal gifs , the workaround for the gifs with a black frame as the first frame
+		     	           
+			     	            } catch(Exception e) {
+			     	                Log.e("copy ERROR", e.toString());
+			     	                e.printStackTrace();
+			     	            }  
+		     	           PNGPath.delete();
+			        	} 
+     	             
+	     	             
+	     	            File RGB565path = new File(gifPath_ + "decoded/" + filename_no_extension + ".rgb565"); //sdcard/pixel/gifs/decoded/tree.rgb565
+			        	if (RGB565path.exists()) { //if it doesn't exist
+	     	             //now let's get the rgb565
+		     	             try {
+			     	             in = new FileInputStream(gifPath_ + "decoded/" + filename_no_extension + ".rgb565");
+			     	             out = new FileOutputStream(FavPNGPath + "decoded/" + filename_no_extension + ".rgb565");
+			     	             copyFile(in, out);
+			     	             in.close();
+			     	             in = null;
+			     	             out.flush();
+			     	             out.close();
+			     	             out = null;  
+			     	              
+			     	              //no need to register these with mediascanner as these are internal gifs , the workaround for the gifs with a black frame as the first frame
+		     	           
+			     	            } catch(Exception e) {
+			     	                Log.e("copy ERROR", e.toString());
+			     	                e.printStackTrace();
+			     	            }  
+		     	            RGB565path.delete();
+						}
+	     	             
+	     	            //now let's get the txt
+	     	            File TXTpath = new File(gifPath_ + "decoded/" + filename_no_extension + ".txt"); //sdcard/pixel/gifs/decoded/tree.rgb565
+			        	if (TXTpath.exists()) { //if it doesn't exist
+		     	             try {
+			     	             in = new FileInputStream(gifPath_ + "decoded/" + filename_no_extension + ".txt");
+			     	             out = new FileOutputStream(FavPNGPath + "decoded/" + filename_no_extension + ".txt");
+			     	             copyFile(in, out);
+			     	             in.close();
+			     	             in = null;
+			     	             out.flush();
+			     	             out.close();
+			     	             out = null;  
+			     	              
+			     	              //no need to register these with mediascanner as these are internal gifs , the workaround for the gifs with a black frame as the first frame
+		     	           
+			     	            } catch(Exception e) {
+			     	                Log.e("copy ERROR", e.toString());
+			     	                e.printStackTrace();
+			     	            } 
+		     	            TXTpath.delete();
+			        	}
+			        	
+			        	//lastly we need to copy over the originanl GIF
+			        	//File originalGIF = new File(gifPath_ + "gifsource/" + filename_no_extension + ".gif"); //sdcard/pixel/gifs/gifsource/tree.rgb565
+		        		//if (originalGIF.exists()) { 
+			        	
+			        	 File originalGIF = new File(gifPath_ + "gifsource/" + filename_no_extension + ".gif"); //sdcard/pixel/gifs/decoded/tree.rgb565
+				        	if (originalGIF.exists()) { //if it doesn't exist
+			     	             try {
+				     	             in = new FileInputStream(gifPath_ + "decoded/" + filename_no_extension + ".txt");
+				     	             out = new FileOutputStream(FavPNGPath + "decoded/" + filename_no_extension + ".txt");
+				     	             copyFile(in, out);
+				     	             in.close();
+				     	             in = null;
+				     	             out.flush();
+				     	             out.close();
+				     	             out = null;  
+				     	              
+				     	              //no need to register these with mediascanner as these are internal gifs , the workaround for the gifs with a black frame as the first frame
+			     	           
+				     	            } catch(Exception e) {
+				     	                Log.e("copy ERROR", e.toString());
+				     	                e.printStackTrace();
+				     	            } 
+			     	             
+			     	            originalGIF.delete();
+			     	             
+				        	}
+			        	
+			        		
+			        	//now we need to delete the old ones from the griview
+				        //and add the new one to the top
+			        		
+			        		
+					    }   
+			        	
+			    		      
+					}
+					
+					else if (arg0.toString().equals("Delete")) {
+						showToast("let't delete the path: " + originalImagePath);
+						
+						//delete the file and refresh, we should ask the user to confirm
+						
+						File deleteGIF = new File(originalImagePath);
+						if (deleteGIF.exists()) {
+							deleteGIF.delete();
+					  	}
+						
+						//myTaskAdapter.remove(2);
+						
+						/* void remove(int index){
+					    	   itemList.remove(index);
+					    	  }*/
+						
+						// myTaskAdapter.notifyDataSetChanged();
+					 }
+						
+					//return false;		
+						
+						
+					} //end on menu
+					return debug_;
+				}});
+		
+		popupMenu.show();
+		
+		return true;
 }
     
-  public void onItemClick(AdapterView<?> parent, View v, int position, long id) {    //we go here when the user tapped an image from the initial grid    
+    
+   
+    
+	
+		
+				
+				
+				
+
+    
+    // not using this
+	 @Override
+	    public void onCreateContextMenu(ContextMenu menu, View v,ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+			menu.setHeaderTitle("Context Menu");
+			menu.add(0, v.getId(), 0, "Action 1");
+			menu.add(0, v.getId(), 0, "Action 2");
+		}
+
+	    @Override
+		public boolean onContextItemSelected(MenuItem item) {
+	       	if(item.getTitle()=="Action 1"){function1(item.getItemId());}
+	    	else if(item.getTitle()=="Action 2"){function2(item.getItemId());}
+	    	else {return false;}
+		return true;
+		}
+	    
+	    public void function1(int id){
+	    	Toast.makeText(this, "function 1 called", Toast.LENGTH_SHORT).show();
+	    }
+	    public void function2(int id){
+	    	Toast.makeText(this, "function 2 called", Toast.LENGTH_SHORT).show();
+	    }
+	
+	
+	public void onItemClick(AdapterView<?> parent, View v, int position, long id) {    //we go here when the user tapped an image from the initial grid    
         
 	     
 	        if (deviceFound == 1) { 
@@ -1631,7 +2163,7 @@ private void copyGIF64Source() {
 	        }
   		}
   
-  private void WriteImagetoMatrix() throws ConnectionLostException {  //here we'll take a PNG, BMP, or whatever and convert it to RGB565 via a canvas, also we'll re-size the image if necessary
+  public static void WriteImagetoMatrix() throws ConnectionLostException {  //here we'll take a PNG, BMP, or whatever and convert it to RGB565 via a canvas, also we'll re-size the image if necessary
   	
 	    // ***** old code, had to switch to newer code below as was getting out of memory errors for when opening larger JPEGs (from Android gallery for example)
 	    // originalImage = BitmapFactory.decodeFile(imagePath);   
@@ -1719,7 +2251,7 @@ private void copyGIF64Source() {
 		matrix_.frame(frame_);  //write to the matrix   
 }
   
-  public void loadImage() {
+  public static void loadImage() {
 	  	
 
 		int y = 0;
@@ -2218,6 +2750,21 @@ private void copyGIF64Source() {
 	 	    	AlertDialog.Builder alert=new AlertDialog.Builder(this);
 	 	      	alert.setTitle(getResources().getString(R.string.setupInstructionsStringTitle)).setIcon(R.drawable.icon).setMessage(getResources().getString(R.string.setupInstructionsString)).setNeutralButton(getResources().getString(R.string.OKText), null).show();
 	 	   }
+	      
+	      if (item.getItemId() == R.id.start_SlideShow) {
+	 	    	try {
+	 	    	   Toast toast = Toast.makeText(context, "Starting Slide Show...", Toast.LENGTH_LONG);
+	 	           toast.show();
+	 	    		SlideShow(false);
+				} catch (ConnectionLostException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	 	   }
+	      
+	      if (item.getItemId() == R.id.stop_SlideShow) {
+	 	    	stopSlideShow();
+	 	   }
 	    	
 		  if (item.getItemId() == R.id.menu_about) {
 			  
@@ -2231,6 +2778,9 @@ private void copyGIF64Source() {
 	    	
 	    	if (item.getItemId() == R.id.menu_prefs)
 	       {
+	    		
+	    		if (imagedisplaydurationTimer != null) imagedisplaydurationTimer.cancel(); 
+	     		if (pausebetweenimagesdurationTimer != null) pausebetweenimagesdurationTimer.cancel();
 	    		
 	    		appAlreadyStarted = 0;    		
 	    		Intent intent = new Intent()
@@ -2330,6 +2880,9 @@ private void copyGIF64Source() {
 	    	
 	    	
 	    	if (resCode == WENT_TO_PREFERENCES)  {
+	    		
+	    		//TO DO do we need to cancel the slideshow timers here? test this
+	    		
 	    		setPreferences(); //very important to have this here, after the menu comes back this is called, we'll want to apply the new prefs without having to re-start the app
 	    		//showToast("returned from preferences");
 	    	}	
@@ -2537,25 +3090,21 @@ private void copyGIF64Source() {
 	    	        resources.getString(R.string.downloadURL_64),
 	    	        resources.getString(R.string.downloadURL_64Default)); 
 	     
-	    /* <EditTextPreference
-		    android:title="@string/downloadURL_32"
-		    android:key="@string/pref_downloadURL_32"
-		    android:defaultValue="@string/downloadURL_32Default"
-		    android:summary="@string/downloadURL_32Summary"/>
-	    
-	    <EditTextPreference
-		    android:title="@string/downloadURL_64"
-		    android:key="@string/pref_downloadURL_64"
-		    android:defaultValue="@string/downloadURL_64Default"
-		    android:summary="@string/downloadURL_64Summary"/>*/
+	     slideShowMode = prefs.getBoolean("pref_slideshowMode", false);
+	  //   dimDuringSlideShow = prefs.getBoolean("pref_dimDuringSlideShow", true);
 	     
-	   /*  if (matrix_model == 0 || matrix_model == 1) {
-	    	 currentResolution = 16;
-	     }
-	     else
-	     {
-	    	 currentResolution = 32;
-	     }*/
+	     imageDisplayDuration = Integer.valueOf(prefs.getString(   
+	  	        resources.getString(R.string.pref_imageDisplayDuration),
+	  	        resources.getString(R.string.imageDisplayDurationDefault)));   
+	     
+	     slideShowFPS = 1000.f / imageDisplayDuration*1000;
+	    // fps = 1000/5000;
+	    
+	     
+	     pauseBetweenImagesDuration = Integer.valueOf(prefs.getString(   
+	  	        resources.getString(R.string.pref_pauseBetweenImagesDuration),
+	  	        resources.getString(R.string.pauseBetweenImagesDurationDefault)));  
+	     
 	     
 	   /*  FPSOverride_ = Integer.valueOf(prefs.getString(   //the selected RGB LED Matrix Type
 	    	        resources.getString(R.string.fps_override),
@@ -2668,6 +3217,11 @@ private void copyGIF64Source() {
 		 
 		 loadRGB565(); //load the select pic raw565 file
 		 
+		 imagedisplaydurationTimer = new ImageDisplayDurationTimer(imageDisplayDuration*1000,1000); //how long the image should display
+	 	 pausebetweenimagesdurationTimer = new PauseBetweenImagesDurationTimer(pauseBetweenImagesDuration*1000,1000); //how long to show a blank screen before showing the next image
+	 	 slideShowRunning = 0;
+		 
+		 
 		 
 	 }
 	
@@ -2751,7 +3305,9 @@ private void copyGIF64Source() {
   			Log.i(LOG_TAG, "IOIO disconnected");
 			if (debug_ == true) {  			
 	  			showToast("Bluetooth Disconnected");
-  			}			
+  			}	
+			
+			deviceFound = 0;
 		}
 
 		@Override
@@ -2759,8 +3315,8 @@ private void copyGIF64Source() {
 			//AlertDialog.Builder alert=new AlertDialog.Builder(context); //causing a crash
 			//alert.setTitle(getResources().getString(R.string.notFoundString)).setIcon(R.drawable.icon).setMessage(getResources().getString(R.string.bluetoothPairingString)).setNeutralButton(getResources().getString(R.string.OKText), null).show();	
 			showToast("Incompatbile firmware!");
-			showToast("This app won't work until you flash the IOIO with the correct firmware!");
-			showToast("You can use the IOIO Dude application on your PC/Mac to upgrade to the correct firmware");
+			showToast("This app won't work until you flash PIXEL with the correct firmware!");
+			showToast("You can use the PIXEL firmware application on your PC/Mac to upgrade to the correct firmware using the included USB A-A cable");
 			Log.e(LOG_TAG, "Incompatbile firmware!");
 		}
   		
@@ -2771,7 +3327,7 @@ private void copyGIF64Source() {
   		return new IOIOThread();
   	}
     
-    private  void showToast(final String msg) {
+    public void showToast(final String msg) {
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
@@ -3374,4 +3930,145 @@ private void copyGIF64Source() {
 			}
 		}*/
 	}
-}
+	
+	
+	 public static void clearMatrixImage() throws ConnectionLostException {
+	    	//let's claear the image
+		 //TO DO add back later
+	    	/* BitmapInputStream = getResources().openRawResource(R.raw.blank); //load a blank image to clear it
+	    	 loadRGB565();    	
+	    	 matrix_.frame(frame_); */
+	    	//then let's start another timer to load the next image
+	    	pausebetweenimagesdurationTimer.start();  //how long the rgb matrix should be of before showing the next image
+	    }
+	
+	  
+	   public static void SlideShow(boolean writeMode) throws ConnectionLostException {
+		      	        
+	    //	if (deviceFound == 1) { //TO DO add this back  
+	    	
+		    	if (pixelHardwareID.substring(0,4).equals("PIXL") && writeMode == true) {  //download mode cuz it's a PIXEL V2 unit
+		    	   			
+		    			new createSlideShowAsync().execute();  //start the async task to create the slideshow
+		    	}
+		    	
+		    	else { //it's a PIXEL V1 unit
+		    		if (slideshowPosition >= SlideShowArray.length) { //let's make sure we haven't reached the end
+			        	slideshowPosition = 0;
+			        }
+			        
+		    		System.out.println (SlideShowArray[slideshowPosition]); 			       
+			        slideshowPosition++; //increment it so we can play the next one
+			  		Toast toast = Toast.makeText(context, "SlideShow Path..." + SlideShowArray[slideshowPosition], Toast.LENGTH_LONG);
+			        toast.show();
+			        // Get image filename
+			       // imagePath = cursor.getString(columnIndex);
+			        
+			    	//imagePath = (String) parent.getItemAtPosition(slideshowPosition);
+		    		
+			        System.gc();
+			       // showToastShort("path: " + imagePath);
+			     //   WriteImagetoMatrix();	    
+			      //  Pixel.writeImagetoMatrix(SlideShowArray[slideshowPosition],KIND.width,KIND.height);
+			        
+			        imagedisplaydurationTimer.start(); //the image will stay on for as long as this timer;
+		    	}    
+	    //	}
+	    //	else {
+	    		//showToast("PIXEL was not found, did you Bluetooth pair to PIXEL?");
+	    //	}
+	    }
+	    
+	    private void stopSlideShow() { //stop the slideshow
+	    	
+	    	if (pixelHardwareID.substring(0,4).equals("PIXL")) {  
+	    		try {
+					matrix_.interactive(); //go out of local playback mode
+				} catch (ConnectionLostException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	    	}
+	    	
+	    	
+    	if (imagedisplaydurationTimer != null) imagedisplaydurationTimer.cancel();
+ 		if (pausebetweenimagesdurationTimer != null) pausebetweenimagesdurationTimer.cancel();
+ 		Toast toast = Toast.makeText(context, "Slide Show Stopped", Toast.LENGTH_LONG);
+        toast.show();
+	    	
+	    	
+	    }
+	
+	
+    class MyGestureDetector extends SimpleOnGestureListener {    //TO DO add the gesture listeners   
+    	@Override        
+    	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) { 
+    		
+    		try {                
+    			if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH)
+    				return false;                // right to left swipe
+    			if(e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+    				//Toast.makeText(MainActivity.this, "Stopping Slide Show", Toast.LENGTH_SHORT).show();
+    				showToastShort(getResources().getString(R.string.slideShowStopVerbage)); //stop slideshow verbage
+    				stopSlideShow();
+    				slideShowRunning = 0;
+    				//if (dimDuringSlideShow == true) {
+    				//	screenOn();
+    				//}
+    				//sdcardImages.setOnItemClickListener(MainActivity.this); //add the onclick listener back
+    				//add onclick listener back?
+    				
+    				
+    				}  else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) { 
+    					
+    					if (slideShowRunning == 0) {    						
+    						slideShowRunning = 1;
+	    					//Toast.makeText(MainActivity.this, "Starting Slide Show...", Toast.LENGTH_SHORT).show();
+	    					showToastShort(getResources().getString(R.string.slideShowStartVerbage));
+	    					showToast(getResources().getString(R.string.slideShowStopInstructions));
+	    					//sdcardImages.setOnClickListener(null); //remove the on click listener
+	    					//if (dimDuringSlideShow == true) {
+	    					//	dimScreen();
+	    					//}
+	    					
+	    					String[] projection = {MediaStore.Images.Media.DATA}; //maybe move this outside of slideshow since it runs everytime
+	    				        
+	    				        if (scanAllPics == true) {
+	    				            
+	    				            cursor = managedQuery( MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+	    				                projection, // Which columns to return
+	    				                null,       // Return all rows
+	    				                null,
+	    				                null);
+	    				        }
+	    				        else {
+	    				        	cursor = managedQuery(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+	    				                projection, 
+	    				                MediaStore.Images.Media.DATA + " like ? ",
+	    				                new String[] {"%pngs%"},  
+	    				                null);
+	    				        } 
+	    					
+	    					
+	    					
+	    					SlideShow(true); //start or resume the slideshow
+	    					
+    					}
+    					
+    					
+    					}            } catch (Exception e) {                // nothing
+    						
+    					}            return false;
+    				}
+    
+    	} //end gesture recognizer
+
+		
+	
+	
+}  //end package
+
+
+
+
+

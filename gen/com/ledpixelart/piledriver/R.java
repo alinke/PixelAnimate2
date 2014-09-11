@@ -27,32 +27,39 @@ public final class R {
         public static final int ic_action_download=0x7f020003;
         public static final int ic_action_search=0x7f020004;
         public static final int ic_action_settings=0x7f020005;
-        public static final int ic_launcher=0x7f020006;
-        public static final int ic_menu_database=0x7f020007;
-        public static final int ic_menu_info_details=0x7f020008;
-        public static final int ic_menu_preferences=0x7f020009;
-        public static final int icon=0x7f02000a;
-        public static final int iconcat=0x7f02000b;
-        public static final int splash=0x7f02000c;
-        public static final int video256=0x7f02000d;
-        public static final int video64=0x7f02000e;
-        public static final int zzzblank=0x7f02000f;
+        public static final int ic_action_slideshow=0x7f020006;
+        public static final int ic_action_stop=0x7f020007;
+        public static final int ic_launcher=0x7f020008;
+        public static final int ic_menu_database=0x7f020009;
+        public static final int ic_menu_info_details=0x7f02000a;
+        public static final int ic_menu_preferences=0x7f02000b;
+        public static final int icon=0x7f02000c;
+        public static final int iconcat=0x7f02000d;
+        public static final int splash=0x7f02000e;
+        public static final int video256=0x7f02000f;
+        public static final int video64=0x7f020010;
+        public static final int zzzblank=0x7f020011;
     }
     public static final class id {
+        public static final int delete=0x7f09000a;
+        public static final int favorite=0x7f090009;
         public static final int firstTimeInstructions=0x7f090004;
         public static final int firstTimeSetup1=0x7f090002;
         public static final int firstTimeSetup2=0x7f090003;
         public static final int firstTimeSetupCounter=0x7f090005;
         public static final int gifView=0x7f090000;
         public static final int gridview=0x7f090001;
-        public static final int menu_about=0x7f09000c;
-        public static final int menu_btPair=0x7f090008;
-        public static final int menu_camera=0x7f090009;
-        public static final int menu_instructions=0x7f09000d;
-        public static final int menu_pixelJoint=0x7f09000a;
-        public static final int menu_prefs=0x7f09000b;
+        public static final int menu_about=0x7f090011;
+        public static final int menu_btPair=0x7f09000d;
+        public static final int menu_camera=0x7f09000e;
+        public static final int menu_instructions=0x7f090012;
+        public static final int menu_pixelJoint=0x7f09000f;
+        public static final int menu_prefs=0x7f090010;
         public static final int reload=0x7f090007;
         public static final int sdcard=0x7f090006;
+        public static final int start_SlideShow=0x7f09000b;
+        public static final int stop_SlideShow=0x7f09000c;
+        public static final int write=0x7f090008;
     }
     public static final class layout {
         public static final int main=0x7f030000;
@@ -60,7 +67,8 @@ public final class R {
         public static final int splash=0x7f030002;
     }
     public static final class menu {
-        public static final int mainmenu=0x7f080000;
+        public static final int gridview_menu=0x7f080000;
+        public static final int mainmenu=0x7f080001;
     }
     public static final class raw {
         public static final int blank=0x7f050000;
@@ -94,7 +102,7 @@ public final class R {
         public static final int HardwareVersionString=0x7f070007;
         public static final int LibraryVersionString=0x7f070006;
         public static final int OKText=0x7f070013;
-        public static final int StartInstructions=0x7f07005b;
+        public static final int StartInstructions=0x7f070069;
         public static final int StartupMessage=0x7f07004c;
         public static final int app_name=0x7f070000;
         public static final int artURL1=0x7f070018;
@@ -103,8 +111,8 @@ public final class R {
         public static final int bluetoothPairingString=0x7f070009;
         public static final int bluetooth_pair=0x7f070026;
         public static final int bluetooth_pairSummary=0x7f070027;
-        public static final int debugMode=0x7f070057;
-        public static final int debugModeSummary=0x7f07005a;
+        public static final int debugMode=0x7f070065;
+        public static final int debugModeSummary=0x7f070068;
         public static final int dialogTitleFPSOverride=0x7f070024;
         public static final int dialogTitleMatrix=0x7f07001f;
         public static final int downloadURL_32=0x7f070044;
@@ -117,6 +125,9 @@ public final class R {
         public static final int fps_override=0x7f070021;
         public static final int gifonly=0x7f070034;
         public static final int gifonlySummary=0x7f070037;
+        public static final int imageDisplayDuration=0x7f070057;
+        public static final int imageDisplayDurationDefault=0x7f070059;
+        public static final int imageDisplayDurationSummary=0x7f07005a;
         public static final int kioskMode=0x7f070030;
         public static final int kioskModeSummary=0x7f070033;
         public static final int loadingImagesPlsWait=0x7f070055;
@@ -134,25 +145,32 @@ public final class R {
         public static final int menu_pixelJoint_title=0x7f070017;
         public static final int menu_prefs_title=0x7f07000e;
         public static final int menu_rescan_title=0x7f07004d;
+        public static final int menu_startSlideShow_title=0x7f070063;
+        public static final int menu_stopSlideShow_title=0x7f070064;
         public static final int noSleep=0x7f07002d;
         public static final int noSleepSummary=0x7f07002f;
         public static final int notFoundString=0x7f070014;
         public static final int oneTimeSetupString=0x7f070008;
         public static final int only64=0x7f07003c;
+        public static final int pauseBetweenImagesDuration=0x7f07005b;
+        public static final int pauseBetweenImagesDurationDefault=0x7f07005d;
+        public static final int pauseBetweenImagesDurationSummary=0x7f07005e;
         public static final int prefSummary=0x7f07000f;
         public static final int prefTitle=0x7f07000d;
-        public static final int pref_debugMode=0x7f070058;
-        public static final int pref_debugModeDefault=0x7f070059;
+        public static final int pref_debugMode=0x7f070066;
+        public static final int pref_debugModeDefault=0x7f070067;
         public static final int pref_downloadURL_32=0x7f070045;
         public static final int pref_downloadURL_64=0x7f070049;
         public static final int pref_gifonly=0x7f070035;
         public static final int pref_gifonlyDefault=0x7f070036;
+        public static final int pref_imageDisplayDuration=0x7f070058;
         public static final int pref_kioskMode=0x7f070031;
         public static final int pref_kioskModeDefault=0x7f070032;
         public static final int pref_noSleepDefault=0x7f07002e;
         public static final int pref_only64=0x7f07003d;
         public static final int pref_only64Default=0x7f07003e;
         public static final int pref_only64Summary=0x7f07003f;
+        public static final int pref_pauseBetweenImagesDuration=0x7f07005c;
         public static final int pref_scanAll_default=0x7f070011;
         public static final int pref_showStartupMsg=0x7f070041;
         public static final int pref_writeCamera=0x7f070039;
@@ -169,6 +187,10 @@ public final class R {
         public static final int slideShowMode=0x7f07002a;
         public static final int slideShowModeDefault=0x7f07002b;
         public static final int slideShowModeSummary=0x7f07002c;
+        public static final int slideShowStartInstructions=0x7f070062;
+        public static final int slideShowStartVerbage=0x7f070060;
+        public static final int slideShowStopInstructions=0x7f07005f;
+        public static final int slideShowStopVerbage=0x7f070061;
         public static final int slideShowtitle=0x7f070028;
         public static final int slideShowtitleSummary=0x7f070029;
         public static final int startup_verbage_1=0x7f070051;

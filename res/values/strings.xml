@@ -119,6 +119,33 @@
     <string name="loadingImagesPlsWaitTitle">Please Wait</string>
     <string name="loadingImagesPlsWait">Loading animations, just a moment&#8230;</string>
     
+     <string name="imageDisplayDuration">Image Display Duration</string>    
+    <string name="pref_imageDisplayDuration">pref_imageDisplayDuration</string>
+    <string name="imageDisplayDurationDefault">5</string>
+    <string name="imageDisplayDurationSummary">Number of seconds each image is displayed</string>
+    
+    <string name="pauseBetweenImagesDuration">Pause Between Images</string>    
+    <string name="pref_pauseBetweenImagesDuration">pref_pauseBetweenImagesDuration</string>
+    <string name="pauseBetweenImagesDurationDefault">3</string>
+    <string name="pauseBetweenImagesDurationSummary">Number of seconds to pause in between images</string>
+    
+    <string name="stopSlideShowMessage">You\'re still in slide show mode, swipe from right to left to end the slide show and then you can select a single image</string>
+    <string name="loadingImagesPlsWaitTitle">Please Wait</string>
+    <string name="loadingImagesPlsWait">Loading images, just a moment&#8230;</string>
+    
+    <string name="slideShowStopInstructions">Swipe from right to left to stop the Slide Show</string>
+    <string name="slideShowStartVerbage">Starting Slide Show&#8230;</string>
+    <string name="slideShowStopVerbage">Slide Show Stopped</string>    
+    <string name="slideShowStartInstructions">Tap to display a single image or Swipe from left to right to start a Slide Show</string>
+    
+    
+    <string name="menu_startSlideShow_title">Start Slide Show</string>
+    <string name="menu_stopSlideShow_title">Stop Slide Show</string>
+    
+  
+    
+  
+    
     <string name="debugMode">Debug Mode</string>    
     <string name="pref_debugMode">pref_debugMode</string>
     <string name="pref_debugModeDefault">false</string>    

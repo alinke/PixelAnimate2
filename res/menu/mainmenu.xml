@@ -3,6 +3,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     
 
+<item android:id="@+id/start_SlideShow"
+android:title="@string/menu_startSlideShow_title"
+android:icon="@drawable/ic_action_slideshow"
+android:showAsAction="always"
+/>    
+
+
+<item android:id="@+id/stop_SlideShow"
+android:title="@string/menu_stopSlideShow_title"
+android:icon="@drawable/ic_action_stop"
+android:showAsAction="always"
+/>
+
+    
 <item android:id="@+id/menu_btPair"
 android:title="@string/menu_btPair_title"
 android:icon="@drawable/ic_action_bluetooth"
@@ -37,6 +51,9 @@ android:icon="@drawable/ic_menu_info_details"
 android:title="@string/menu_instructions_title"
 android:icon="@drawable/ic_menu_database"
 />
+
+
+
 
 
 
