@@ -2846,6 +2846,11 @@ private void copyGIF64Source() {
 	 	   }
 	      
 	      if (item.getItemId() == R.id.start_SlideShow) {
+	    	  
+	    	  Toast toast = Toast.makeText(context, "Streaming Slide Show...", Toast.LENGTH_LONG);
+	 	      toast.show();
+	    	  
+	    	  
 	 	    	try {
 	 	    		SlideShow(false);
 				} catch (ConnectionLostException e) {
@@ -4078,9 +4083,6 @@ private void copyGIF64Source() {
 	   public static void SlideShow(boolean writeMode) throws ConnectionLostException {
 		      	        
 	    	if (deviceFound == 1) { //TO DO add this back  
-	    	
-	    		Toast toast = Toast.makeText(context, "Streaming Slide Show...", Toast.LENGTH_LONG);
-	 	        toast.show();
 	    		
 	    		//we need to kill the timers if they are already running
 	    		stopTimers();
@@ -4169,6 +4171,7 @@ private void copyGIF64Source() {
 		   super.onPostExecute(result);
 		   //now let's put PIXEL in local playback mode and set fps
 		   try {
+			gridview.setKeepScreenOn(true);  //need to prevent screen from turning off / power savings during the write
 			matrix_.interactive();
 			matrix_.writeFile(1); //duhhh!!!! I had this at a 1000, no wonder it was going so fast, writeFile is frames per second as opposed to the ms frame delay which is used in the .txt file, 1 fps is the slowest we can go
 			} catch (ConnectionLostException e) {
@@ -4405,6 +4408,7 @@ private void copyGIF64Source() {
 		 
 		   try {
 			matrix_.playFile();
+			gridview.setKeepScreenOn(false); //enable power savings again
 		} catch (ConnectionLostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
