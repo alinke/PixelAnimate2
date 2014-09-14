@@ -9,11 +9,15 @@ android:icon="@drawable/ic_action_slideshow"
 android:showAsAction="always"
 />    
 
+<item android:id="@+id/menu_createSlideShow"
+android:title="@string/menu_createSlideShow_title"
+android:icon="@drawable/ic_action_add_to_queue"
+android:showAsAction="always"
+/>
 
 <item android:id="@+id/stop_SlideShow"
 android:title="@string/menu_stopSlideShow_title"
 android:icon="@drawable/ic_action_stop"
-android:showAsAction="always"
 />
 
     
@@ -28,6 +32,8 @@ android:title="@string/menu_camera_title"
 android:icon="@drawable/ic_action_camera"
 android:showAsAction="always"
 />
+
+
 
 <item android:id="@+id/menu_pixelJoint"
 android:title="@string/menu_pixelJoint_title"

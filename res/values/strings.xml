@@ -25,14 +25,17 @@
     <string name="scanAll">Show All Album Pics</string>
     <string name="pref_scanAll_default">false</string>
     <string name="scanAllSummary">Only animations in the pixel/gifs directory of your SD card will be displayed. Checking this box displays all SD card pictures.</string>
-  
+        
+    <string name="whatsNewTitle">Welcome PIXEL User</string>   
+    <string name="whatsNewText">First Bluetooth pair to PIXEL using code 0000 or 4545 for PIXEL V1 frames\n\nTap any image or GIF to display in streaming mode\n\nLong tap to write to PIXEL\n\nThe last item you write will continue to play after your device has been disconnected from PIXEL</string>   
+    
     <string name="OKText">OK</string>   
     <string name="notFoundString">PIXEL Not Found</string>   
     
     <string name="menu_camera_title">Camera Pic to PIXEL</string>   
     
     <string name="menu_getART_title">Pixel Art on the Web</string>   
-    <string name="menu_pixelJoint_title">Pixel Joint</string>   
+    <string name="menu_pixelJoint_title">Pixel Art on the Web</string>   
     <string name="artURL1">pixeljoint.com</string>   
     <string name="artURL2">pixeljoint.com</string> 
     <string name="artURL3">pixeljoint.com</string> 
@@ -56,6 +59,8 @@
     
     <string name="slideShowtitle">Slide Show Settings</string>
     <string name="slideShowtitleSummary">Slide Show Settings</string>
+    
+     <string name="menu_createSlideShow_title">Write Slide Show</string>
    
     <string name="slideShowMode">Slide Show Mode</string>    
     <string name="slideShowModeDefault">false</string>
