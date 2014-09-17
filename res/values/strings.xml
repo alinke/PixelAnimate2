@@ -105,7 +105,7 @@
     <string name="downloadURL_64Default">www.pixeljoint.com/pixels/new_icons.asp?search=&amp;dimo=%3D&amp;dim=64&amp;colorso=%3E%3D&amp;colors=2&amp;tran=&amp;anim=&amp;iso=&amp;av=&amp;owner=&amp;d=&amp;dosearch=1&amp;ob=search&amp;action=search</string>    
     <string name="downloadURL_64Summary">URL for 64x64 pixel art, don\'t include http://</string>
     
-    <string name="StartupMessage">Long tap to write to PIXEL</string>
+    <string name="StartupMessage">Short tap to stream or long tap to write</string>
     
     <string name="menu_rescan_title">Rescan</string>
     <string name="rescan_screen_verbage">Now scanning your SD card or internal memory for new animations or deletions, just a moment&#8230;</string>

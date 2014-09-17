@@ -2132,7 +2132,7 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 		    		  public void onClick(DialogInterface dialog, int which) {
 		    			  
 		    			  
-		    				showToast("Moving towards top");
+		    				showToast("Moving up");
 						        
 						        //if the file type was not one of these like a png for example, then we don't care about the decodeddirpath and we don't change it
 						     
