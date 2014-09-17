@@ -1146,7 +1146,7 @@ private void copyGIF64Source() {
             ((BitmapDrawable) v.getDrawable()).setCallback(null);
         }
         
-        if (deviceFound == 0) {  
+        if (matrix_ == null) {  
     	     if (connectTimer != null) connectTimer.cancel();  //if user closes the program, need to kill this timer or we'll get a crash
         }
         
@@ -1200,12 +1200,12 @@ private void copyGIF64Source() {
     		
     		if (deletePNG_) {
     			PNGPathFile.delete();  
-    			System.out.println("Moved PNG to favpng and delete the old one...");
-    			showToast("Moving towards top");
+    			System.out.println("Moved PNG to favpng and deleting the old one...");
+    			//showToast("Moving towards top");
     		}
     	   
     		
-    		String favPNGtargetPath = FavPNGPath;
+    	   String favPNGtargetPath = FavPNGPath;
     	   favPNGDirector = new File(favPNGtargetPath);
     	   
     	   String favGIFtargetPath = FavGIFPath;
@@ -1573,7 +1573,7 @@ private void copyGIF64Source() {
     
 
     
- public boolean onItemLongClick(final AdapterView<?> parent, View v, final int position, long id) {  
+ /*public boolean onItemLongClick(final AdapterView<?> parent, View v, final int position, long id) {  
     	
     	gridViewPosition = position;
     	originalImagePath = (String) parent.getItemAtPosition(position);
@@ -1983,6 +1983,308 @@ private void copyGIF64Source() {
 		
 		
 		return true;
+}*/
+    
+public boolean onItemLongClick(final AdapterView<?> parent, View v, final int position, long id) {  
+    	
+    	gridViewPosition = position;
+    	originalImagePath = (String) parent.getItemAtPosition(position);
+    	Boolean showFavoriteButton = false;
+        Boolean removeFavorite = false;
+    	String FavoriteButonText = "Favorite";
+    	
+    	 String PixelDirName_ = Pixel.getPixelDir(originalImagePath);
+    	
+    	 if (PixelDirName_.equals("gif")) {
+	        	decodedDirPath = GIFPath + "decoded";
+	        	gifPath_ = GIFPath;
+	      }
+	      else if (PixelDirName_.equals("usergif")) {
+	        	decodedDirPath = userGIFPath + "decoded";
+	        	gifPath_ = userGIFPath;
+	       }
+	      else if (PixelDirName_.equals("gif64")) {
+	        	decodedDirPath = GIF64Path + "decoded";
+	        	gifPath_ = GIF64Path;
+	      }
+	        
+	      else if (PixelDirName_.equals("favgif")) {
+	        	decodedDirPath = FavGIFPath + "decoded";
+	        	gifPath_ = FavGIFPath;
+	        	FavoriteButonText = "Unfavorite";
+	      }
+    	  
+	      else if (PixelDirName_.equals("favpng")) {
+	        	showFavoriteButton = false;
+	        	removeFavorite = true;
+	        	FavoriteButonText = "Unfavorite";
+	      }
+    	 
+	      else if (PixelDirName_.equals("png")) {
+	    	  	showFavoriteButton = true;
+	        	FavoriteButonText = "Favorite";
+	      }
+    	 
+	      else if (PixelDirName_.equals("png64")) {
+	    	  	showFavoriteButton = true;
+	        	FavoriteButonText = "Favorite";
+	      }
+    	 
+	      else if (PixelDirName_.equals("userpng")) {
+	    	  	showFavoriteButton = true;
+	        	FavoriteButonText = "Favorite";
+	      }
+    	 
+    	 //we can give the user the option to favorite if coming from userpng, png or png64, unfavorite if coming from favpng
+    	
+
+    		 AlertDialog.Builder LongTapPrompt = new AlertDialog.Builder(this);
+    		 LongTapPrompt.setTitle("Select Action");
+    		 LongTapPrompt.setMessage("");
+    		 LongTapPrompt.setPositiveButton("Write",
+    		   new DialogInterface.OnClickListener() {
+
+    		    public void onClick(DialogInterface dialog, int which) {  //WRITE
+    		     
+    		    	if (matrix_ != null) { 
+				  		//********we need to reset everything because the user could have been already running an animation
+				  	     x = 0;
+  	     
+				  	    stopTimers(); //need the kill all timers that were running
+			    		  
+				    	imagePath = (String) parent.getItemAtPosition(position);
+				    	
+				    	originalImagePath = (String) parent.getItemAtPosition(position);
+				    	
+				        filename_no_extension = Pixel.getNameOnly(originalImagePath);
+				        
+				        selectedFileName = filename_no_extension; //not really good coding but selected file name is used elsewhere so we need this here
+				        
+				        String extension_ = Pixel.getExtension(originalImagePath);
+				        
+				        // TO DO check this part of code, looks like I was duplicating this same block below so just delete the duplicate but make sure everything is still working
+				        
+				        if (extension_.equals("png")) {  //then we use the thumbnail, we just need to rename the image path to a gif
+				       	
+				        	//now we need to check that filename/decoded/filename.rgb565 exists
+				        	
+				        	File pngRGB565path = new File(gifPath_ + "decoded/" + filename_no_extension + ".rgb565"); //sdcard/pixel/gifs/decoded/tree.rgb565
+				        	if (!pngRGB565path.exists()) { //if it doesn't exist
+				        		
+				        		//ok not there so let's see if the original gif is there as decoded may have been deleted because the led panel changed
+				        		File originalGIF = new File(gifPath_ + "gifsource/" + filename_no_extension + ".gif"); //sdcard/pixel/gifs/gifsource/tree.rgb565
+				        		if (originalGIF.exists()) { 
+				        			//we've got the original gif so now let's decode it
+				        			 imagePath = gifPath_ + "gifsource/" + filename_no_extension + ".gif";
+				        			 gifView.setGif(imagePath);  //just sets the image , no decoding, decoding happens in the animateafterdecode method
+							     	 animateAfterDecode(0);
+				        		}
+				        		else { //well we tried, no original gif so we'll treat it as a png
+						            	//there's no rgb565 and we only have a single frame png so let's just send this single frame png to pixel
+							        	
+						        		//it's  not there so let's check the original gifs folder, if it's in there, then treat it like a gif and decode
+						        		
+						        		imagePath = originalImagePath;
+						        		
+						        		if (kioskMode_ == false) {
+							        		try {
+							        			matrix_.interactive();
+												matrix_.writeFile(1); //since it's only one frame , doesn't matter what fps is
+						    		        	WriteImagetoMatrix();
+						    		        	matrix_.playFile();
+											} catch (ConnectionLostException e) {
+												// TODO Auto-generated catch block
+												e.printStackTrace();
+											}
+						        		}
+						        		else {
+						        			try {
+							        			showToast("Writing to PIXEL not supported in Kiosk mode");
+						        				matrix_.interactive();
+						    		        	WriteImagetoMatrix();
+											} catch (ConnectionLostException e) {
+												// TODO Auto-generated catch block
+												e.printStackTrace();
+											}
+						        		}
+						            }
+				        		}
+				        	else {  //the rgb565 is there
+				        		//gifView.setGif(imagePath);  //this is causing a crash, TO DO figure out why later 
+				        		animateAfterDecode(1); //the rgb565 is there so let's run the already decoded animation
+						    } 
+				      
+				    }
+				    else {
+				    	showToast("PIXEL was not found, did you Bluetooth pair?");
+				    }
+				        
+				}
+    		    }
+    		   });
+
+    		 //only show the favorite option if coming from the right area 
+    		 if (showFavoriteButton) { 
+		    		 
+		    		 LongTapPrompt.setNeutralButton(FavoriteButonText, new DialogInterface.OnClickListener() { //FAVORITE
+		
+		    		  @Override
+		    		  public void onClick(DialogInterface dialog, int which) {
+		    			  
+		    			  
+		    				showToast("Moving towards top");
+						        
+						        //if the file type was not one of these like a png for example, then we don't care about the decodeddirpath and we don't change it
+						     
+							String extension_ = Pixel.getExtension(originalImagePath);
+							
+							//***** let's check & create the needed directories on the sd card first
+							
+							File FavPNGPath_ = new File(FavPNGPath); //let's create the favoriate dir if it's not there already
+				    		 if (!FavPNGPath_.exists()) {  //create the dir if it does not exist
+				    			 FavPNGPath_.mkdirs();
+							  }
+				    		 
+				    		File FavGIFPath_ = new File(FavGIFPath); //let's create the favoriate dir if it's not there already
+				    		if (!FavGIFPath_.exists()) {  //create the dir if it does not exist
+				    			FavGIFPath_.mkdirs();
+							}
+				    		 
+				    		File FavGIFPathDecoded_ = new File(FavGIFPath + "/decoded"); //let's create the favoriate dir if it's not there already
+				    		if (!FavGIFPathDecoded_.exists()) {  //create the dir if it does not exist
+				    			FavGIFPathDecoded_.mkdirs();
+							}
+				    		
+				    		File FavGIFPathGIFSource_ = new File(FavGIFPath + "/gifsource"); //let's create the favoriate dir if it's not there already
+				    		if (!FavGIFPathGIFSource_.exists()) {  //create the dir if it does not exist
+				    			FavGIFPathGIFSource_.mkdirs();
+							}
+				    		
+				    		//***************************************************************************
+				    		
+				    		filename_no_extension = Pixel.getNameOnly(originalImagePath); //get the name of the select file but without the extension
+				    		
+			    			//may need to put this in the background
+				    		//let's check now if the PNG that was favorited is a thumbnail for a gif or if it's realy just a PNG
+				    		
+				    				InputStream in = null;
+				     	            OutputStream out = null;
+				     	             
+				     	            PNGPathFile = new File(originalImagePath); 
+						        	if (PNGPathFile.exists()) { 
+					     	             try {
+					     	            	 
+						     	             in = new FileInputStream(originalImagePath);
+						     	             out = new FileOutputStream(FavPNGPath + filename_no_extension + ".png");
+						     	             copyFile(in, out);
+						     	             in.close();
+						     	             in = null;
+						     	             out.flush();
+						     	             out.close();
+						     	             out = null; 
+					     	           
+						     	            } catch(Exception e) {
+						     	                Log.e("copy ERROR", e.toString());
+						     	                e.printStackTrace();
+						     	            } 
+					     	            
+					     	           //we have to reload the whole gridview because if you add, the favorite gets stuck at the bottom and rather we want the favorite towards the top 
+					     	            myAsyncTaskLoadFiles = new AsyncTaskLoadFiles(myImageAdapter, true);  //true is the flag to delete the old PNG
+							    	    myAsyncTaskLoadFiles.execute();
+				        		}
+		    		  }
+		    		  
+		    		 });
+    		 }	
+    		 
+    		 else if (removeFavorite) {  //meaning the user clicked something that was already in the favpng directory
+    			 
+    			 LongTapPrompt.setNeutralButton(FavoriteButonText, new DialogInterface.OnClickListener() { //REMOVE FAVORITE
+    					
+		    		  @Override
+		    		  public void onClick(DialogInterface dialog, int which) {
+				    		
+				    		filename_no_extension = Pixel.getNameOnly(originalImagePath); //get the name of the select file but without the extension
+				    		
+			    			//may need to put this in the background
+				    		showToast("Moving down");
+				    		
+				    				InputStream in = null;
+				     	            OutputStream out = null;
+				     	             
+				     	            PNGPathFile = new File(originalImagePath); //sdcard/pixel/favpng
+						        	if (PNGPathFile.exists()) { 
+					     	             try {
+					     	            	 //TO DO check the res of the file being moved, either goes to PNGPath or PNG64Path
+					     	             
+						     	             in = new FileInputStream(originalImagePath);
+						     	             out = new FileOutputStream(PNGPath + filename_no_extension + ".png"); //sdcard/pixel/png/fire.png
+						     	             copyFile(in, out);
+						     	             in.close();
+						     	             in = null;
+						     	             out.flush();
+						     	             out.close();
+						     	             out = null;  
+					     	           
+						     	            } catch(Exception e) {
+						     	                Log.e("copy ERROR", e.toString());
+						     	                e.printStackTrace();
+						     	            } 
+					     	            
+					     	           //we have to reload the whole gridview because if you add, the favorite gets stuck at the bottom and rather we want the favorite towards the top 
+					     	            myAsyncTaskLoadFiles = new AsyncTaskLoadFiles(myImageAdapter, true);  //true is the flag to delete the old PNG
+							    	    myAsyncTaskLoadFiles.execute();
+				        		}
+		    		  }
+		    		  
+		    		 });
+    		 }
+    		 
+    		 
+    		 LongTapPrompt.setNegativeButton("Delete", new DialogInterface.OnClickListener() {  //DELETE
+
+    		  @Override
+    		  public void onClick(DialogInterface dialog, int which) {
+    				
+    			  
+    			  AlertDialog.Builder confirmDelete = new AlertDialog.Builder(MainActivity.this);
+    			  confirmDelete.setMessage("Are You Sure?");
+    			  confirmDelete.setCancelable(true);
+    			  confirmDelete.setPositiveButton("Yes",
+    	                    new DialogInterface.OnClickListener() {
+    	                public void onClick(DialogInterface dialog, int id) {
+    	                	
+    	                	File deleteGIF = new File(originalImagePath);
+    						if (deleteGIF.exists()) {
+    							//myImageAdapter.remove(position); //remove the old one
+    							 deleteGIF.delete();
+    							 //myImageAdapter.notifyDataSetChanged();
+    							 myAsyncTaskLoadFiles = new AsyncTaskLoadFiles(myImageAdapter, false);  //true is the flag to delete the old PNG
+						    	 myAsyncTaskLoadFiles.execute();
+    					  	}
+    		     	        
+    	                    dialog.cancel();
+    	                }
+    	            });
+    			  confirmDelete.setNegativeButton("Cancel",
+    	                    new DialogInterface.OnClickListener() {
+    	                public void onClick(DialogInterface dialog, int id) {
+    	                    dialog.cancel();
+    	                }
+    	            });
+
+    	            AlertDialog alert11 = confirmDelete.create();
+    	            alert11.show();
+					
+    		  }
+    		 });
+
+    		 // Remember, create doesn't show the dialog
+    		 AlertDialog LongTapPromptDialog = LongTapPrompt.create();
+    		 LongTapPromptDialog.show();
+		
+		
+		return true;
 }
     
     
@@ -2142,7 +2444,7 @@ private void copyGIF64Source() {
 	public void onItemClick(AdapterView<?> parent, View v, int position, long id) {    //we go here when the user tapped an image from the initial grid    
         
 	     
-	        if (deviceFound == 1) { 
+			if (matrix_ != null) { 
 			  		//********we need to reset everything because the user could have been already running an animation
 			  	     x = 0;
 			  	     
@@ -2246,7 +2548,7 @@ private void copyGIF64Source() {
 			       // animateAfterDecode(0);  //DELETE this line ? 0 means streaming mode, 1 means download mode 
 	        }
 	        else {
-	        	showToast("PIXEL was not found, did you Bluetooth pair to PIXEL?");
+	        	showToast("PIXEL was not found, did you Bluetooth pair?");
 	        }
   		}
   
@@ -2847,21 +3149,39 @@ private void copyGIF64Source() {
 	      
 	      if (item.getItemId() == R.id.start_SlideShow) {
 	    	  
-	    	  Toast toast = Toast.makeText(context, "Streaming Slide Show...", Toast.LENGTH_LONG);
-	 	      toast.show();
-	    	  
-	    	  
-	 	    	try {
-	 	    		SlideShow(false);
-				} catch (ConnectionLostException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+	    	  if (matrix_ != null) {
+		    	  
+		    	  Toast toast = Toast.makeText(context, "Streaming Slide Show...", Toast.LENGTH_LONG);
+		 	      toast.show();
+		    	  
+		    	  
+		 	    	try {
+		 	    		SlideShow(false);
+					} catch (ConnectionLostException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	    	  }
+	    	  else {
+	    		   showToast("PIXEL was not found, did you Bluetooth pair?");
+	    	  }
 	 	   }
 	      
 	      if (item.getItemId() == R.id.menu_createSlideShow) {
 	    	  
-	    	    writeSlideShow();
+	    	 
+	    	  if (matrix_ != null) {
+	    		  
+	    		  if (pixelHardwareID.substring(0,4).equals("PIXL")) {
+	    	  			writeSlideShow();
+	    		  }
+	    		  else {
+	    			  showToast("Sorry, writing is only supported on PIXEL V2 and higher frames.");
+	    		  }
+	    	  }
+	    	  else {
+	    		  showToast("PIXEL was not found, did you Bluetooth pair?");
+	    	  }
 	 	   }
 	      
 	      if (item.getItemId() == R.id.stop_SlideShow) {
@@ -3332,8 +3652,7 @@ private void copyGIF64Source() {
 	
     
     class IOIOThread extends BaseIOIOLooper {
-  		//private ioio.lib.api.RgbLedMatrix matrix_;
-    	//public AnalogInput prox_;  //just for testing , REMOVE later
+  	
 
   		@Override
   		protected void setup() throws ConnectionLostException { //we'll always come back here after an intent or loss of connection
@@ -3462,7 +3781,7 @@ private void copyGIF64Source() {
    		@Override
    		public void onFinish()
    			{
-   				if (deviceFound == 0) {
+   				if (matrix_ == null) {
    					showNotFound(); 					
    				}
    				
@@ -4048,7 +4367,7 @@ private void copyGIF64Source() {
 	 
 	 @SuppressLint("ParserError")
 	 private void writeSlideShow() {
-		 if (deviceFound == 1) { //TO DO add this back  
+		if (matrix_ != null) { 
 		    	
 			 if (kioskMode_ == false) {
 			 
@@ -4082,7 +4401,7 @@ private void copyGIF64Source() {
 	  
 	   public static void SlideShow(boolean writeMode) throws ConnectionLostException {
 		      	        
-	    	if (deviceFound == 1) { //TO DO add this back  
+	    	if (matrix_ != null) { 
 	    		
 	    		//we need to kill the timers if they are already running
 	    		stopTimers();
@@ -4108,7 +4427,7 @@ private void copyGIF64Source() {
 	    	}
 	    	else {
 	    		//showToast("PIXEL was not found, did you Bluetooth pair to PIXEL?");
-	    		Toast toast = Toast.makeText(context, "PIXEL was not found, did you Bluetooth pair to PIXEL?", Toast.LENGTH_LONG);
+	    		Toast toast = Toast.makeText(context, "PIXEL was not found, did you Bluetooth pair?", Toast.LENGTH_LONG);
 		        toast.show();
 	    	}
 	    }
