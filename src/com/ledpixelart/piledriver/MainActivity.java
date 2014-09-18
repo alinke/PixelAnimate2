@@ -287,7 +287,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
    // private boolean slideShowMode;
 	//dimDuringSlideShow = prefs.getBoolean("pref_dimDuringSlideShow", true);
 	     
-	public static int imageDisplayDuration;
+	public int imageDisplayDuration;
 	
 	public int pauseBetweenImagesDuration;
 	
@@ -1241,14 +1241,19 @@ private void copyGIF64Source() {
     	   String GIF64targetPath = GIF64Path;
     	   GIF64targetDirector = new File(GIF64targetPath);
     	   
-    	   File FavPNGDirectory = new File(FavPNGPath);
-    	   if (FavPNGDirectory.list().length>0) {  //does the favorites PNG folder have any favorites in it that the user has picked?
-   				System.out.println("FavPNG has files");
-   		    	FavPNGHasFiles = true; 
-	   		} 
+    	   if (favPNGDirector.exists()) {
+	    	   File FavPNGDirectory = new File(FavPNGPath);
+	    	   if (FavPNGDirectory.list().length>0) {  //does the favorites PNG folder have any favorites in it that the user has picked?
+	   				System.out.println("FavPNG has files");
+	   		    	FavPNGHasFiles = true; 
+		   		} 
+	    	   else {
+		   			System.out.println("FavPNG is empty");
+		   		}
+    	   }
     	   else {
-	   			System.out.println("FavPNG is empty");
-	   		}
+    		   FavPNGHasFiles = false; 
+    	   }
     	   
     	   myTaskAdapter.clear(); //TO DO add this to the sharing piece?
     	   
@@ -2783,9 +2788,11 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 	     x = 0;
 	     downloadCounter = 0;
 	     
-	     if (StreamModePlaying == 1) {
+	     stopTimers();
+	     
+	     /*if (StreamModePlaying == 1) {
 	    	 decodedtimer.cancel();
-	     }
+	     }*/
 	     ///****************************
      
      //now let's check if this file was already decoded by looking for the text meta data file
@@ -4780,8 +4787,8 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 		        	
 		        	//and now let's write the black frame for the pause in between, it's possible pauseBetweenImagesDuration can be 0 and hence not execute here
 		        	WritePNG2Matrix(blackFrame_);
-		        	int z = 0;
-		        	for (z = 0; z < pauseBetweenImagesDuration; z++) { //since the longest frame delay we can go is 1 second, we'll need to repeat frames here!
+		        	int p = 0;
+		        	for (p = 0; p < pauseBetweenImagesDuration; p++) { //since the longest frame delay we can go is 1 second, we'll need to repeat frames here!
 		        		
 		        		 try {
 		 					appendWrite(BitmapBytes, decodedDirPath + "/" + "slideshow" + ".rgb565");
@@ -4820,6 +4827,16 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 		      progress.setCancelable(false);
 		      progress.setIcon(R.drawable.ic_action_warning);
 		      progress.show();
+		      
+		      Log.i("PixelAnimations ", "Slide Show Length is: " + SlideShowLength);
+		      Log.i("PixelAnimations ", "Image Display Duration is: " + imageDisplayDuration);
+		      Log.i("PixelAnimations ", "Pause Between Images is: " + pauseBetweenImagesDuration);
+		      Log.i("PixelAnimations ", "Selected File Resoution is: " + selectedFileResolution);
+		      
+		      if (selectedFileResolution == 0) { //then let's set it from the led panel that has been selected
+		    	  selectedFileResolution = currentResolution;
+		      }
+		      
 		     
 			  }
 		      
@@ -4852,8 +4869,11 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 							} 
 			   			}*/
 						
+						
+						//TO DO this will not work for super pixel because selected file resolutio hasn't been set
+						
 						 switch (selectedFileResolution) { //16x32 matrix = 1024k frame size, 32x32 matrix = 2048k frame size
-				            case 16: frame_length = 1048;
+				            case 16: frame_length = 1024;
 				                     break;
 				            case 32: frame_length = 2048;
 				                     break;
@@ -4911,7 +4931,7 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 				   			try {
 				   				raf.close();
 							} catch (IOException e1) {
-								// TODO Auto-generated catch block
+								Log.i("PixelAnimations ","Could not close the raf");
 								e1.printStackTrace();
 							}	
 								
