@@ -15,7 +15,7 @@
    <string name="bluetoothPairingString">Did you Bluetooth pair to PIXEL? The pairing code is: 0000 or 4545 for PIXEL V1."</string> 
    
    <string name="menu_instructions_title">Instructions</string>
-   <string name="setupInstructionsString">Bluetooth pair to PIXEL using code 0000 or 4545 for PIXEL V1.\n\nPIXEL V2 users may long tap to write to PIXEL for stand alone operation.\n\nAdd your own art by sharing to this app from email, gallery, and other apps.\n\n64x64 animated gifs will only show if SUPER PIXEL 64x64 is selected from settings.</string>
+   <string name="setupInstructionsString">Bluetooth pair to PIXEL using code 0000 or 4545 for PIXEL V1.\n\nPIXEL V2 users may long tap to write to PIXEL for stand alone operation.\n\nAdd your own art by sharing to this app from email, gallery, and other apps.\n\nStill images (PNGs )can be favorited which will cause the slide show to display only favorites\n\nIf you have picked favorites but still want to include all images in the slide show, check Include all PNGs in Slide Show from settings\n\n64x64 animated GIFs will only show if SUPER PIXEL 64x64 is selected from settings.</string>
    <string name="setupInstructionsStringTitle">Instructions</string>   
      
     <string name="prefTitle">PIXEL:LED ART Settings</string>
@@ -24,7 +24,7 @@
     
     <string name="scanAll">Show All Album Pics</string>
     <string name="pref_scanAll_default">false</string>
-    <string name="scanAllSummary">Only animations in the pixel/gifs directory of your SD card will be displayed. Checking this box displays all SD card pictures.</string>
+    <string name="scanAllSummary">Only animations in the pixel/GIFs directory of your SD card will be displayed. Checking this box displays all SD card pictures.</string>
         
     <string name="whatsNewTitle">Welcome PIXEL User</string>   
     <string name="whatsNewText">First Bluetooth pair to PIXEL using code 0000 or 4545 for PIXEL V1 frames\n\nTap any image or GIF to display in streaming mode\n\nLong tap to write to PIXEL\n\nThe last item you write will continue to play after your device has been disconnected from PIXEL</string>   
@@ -75,10 +75,10 @@
     <string name="pref_kioskModeDefault">false</string>    
     <string name="kioskModeSummary">Writing to PIXEL is disabled</string>
     
-    <string name="gifonly">Gifs Only</string>    
+    <string name="gifonly">GIFs Only</string>    
     <string name="pref_gifonly">pref_gifonly</string>
     <string name="pref_gifonlyDefault">false</string>    
-    <string name="gifonlySummary">Only show animated gifs</string>
+    <string name="gifonlySummary">Only show GIFs</string>
     
     <string name="writeCamera">Save Mutliple Camera Pictures</string>    
     <string name="pref_writeCamera">pref_writeCamera</string>
@@ -142,6 +142,12 @@
     <string name="slideShowStartVerbage">Starting Slide Show&#8230;</string>
     <string name="slideShowStopVerbage">Slide Show Stopped</string>    
     <string name="slideShowStartInstructions">Tap to display a single image or Swipe from left to right to start a Slide Show</string>
+    
+    <string name="slideShowAllPNGs">Include All PNGs in Slide Show</string>    
+    <string name="pref_slideShowAllPNGs">pref_slideShowAllPNGs</string>
+    <string name="pref_slideShowAllPNGsDefault">false</string>
+    <string name="slideShowAllPNGsSummary">The slide show will include only favorites (if you have marked favorites). Check here to include all PNGs in the slide show regardless of favorites.</string>
+    
     
     
     <string name="menu_startSlideShow_title">Start Slide Show</string>

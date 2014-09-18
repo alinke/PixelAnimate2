@@ -305,6 +305,10 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	
 	final String welcomeScreenShownPref = "welcomeScreenShown";
 	
+	private boolean slideShowAllPNGs_ = false;
+	
+	private boolean FavPNGHasFiles = false;
+	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -342,6 +346,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	     
 	    
         this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        //prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext()); //causing crash
         
         try
         {
@@ -467,10 +472,14 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
         
 	}
 	
-	/* protected void onResume() {
+	 protected void onResume() {
          super.onResume();
          
-         Intent intent = getIntent();
+         this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
+         updatePrefs();
+         //setPreferences();
+       // showToast("Set Preferences") ;
+         /* Intent intent = getIntent();
 	      String action = intent.getAction();
 	      String type = intent.getType();
 
@@ -488,8 +497,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	          if (type.startsWith("image/")) {
 	              handleSendMultipleImages(intent); // Handle multiple images being sent
 	          }
-	      }
-     }*/
+	      }*/
+     }
 	 
 	
  
@@ -1182,7 +1191,9 @@ private void copyGIF64Source() {
     	  File UserGIFtargetDirector;
     	  File PNG64targetDirector;
     	  File GIF64targetDirector;
-    	  int z = 0;
+    	  
+    	  int s = 0;
+    	  
     	  boolean deletePNG_;
 
     	  public AsyncTaskLoadFiles(ImageAdapter2 adapter, boolean deletePNG) {
@@ -1200,8 +1211,7 @@ private void copyGIF64Source() {
     		
     		if (deletePNG_) {
     			PNGPathFile.delete();  
-    			System.out.println("Moved PNG to favpng and deleting the old one...");
-    			//showToast("Moving towards top");
+    			System.out.println("Moved PNG to favpng and deleted the old one...");
     		}
     	   
     		
@@ -1210,7 +1220,6 @@ private void copyGIF64Source() {
     	   
     	   String favGIFtargetPath = FavGIFPath;
     	   favGIFDirector = new File(favGIFtargetPath);
-    		
 
     	   //String targetPath = ExternalStorageDirectoryPath + "/pixel/animatedgifs";
     	   String targetPath = GIFPath;
@@ -1232,36 +1241,44 @@ private void copyGIF64Source() {
     	   String GIF64targetPath = GIF64Path;
     	   GIF64targetDirector = new File(GIF64targetPath);
     	   
+    	   File FavPNGDirectory = new File(FavPNGPath);
+    	   if (FavPNGDirectory.list().length>0) {  //does the favorites PNG folder have any favorites in it that the user has picked?
+   				System.out.println("FavPNG has files");
+   		    	FavPNGHasFiles = true; 
+	   		} 
+    	   else {
+	   			System.out.println("FavPNG is empty");
+	   		}
+    	   
     	   myTaskAdapter.clear(); //TO DO add this to the sharing piece?
+    	   
+    	   Arrays.fill(SlideShowArray, null); //empty the array
     	   
     	   super.onPreExecute();
     	  }
 
     	  @Override
     	  protected Void doInBackground(Void... params) {
-    	   
-    	 //  File[] files = targetDirector.listFiles();
-    	  //let's add the user added images at the top of the list/first
-    		  
-    		  
-    	//TO DO need to add a check if fav directory is empty and skip if not	
     		  
     	//we're going to load the user favorited items first !
     		  
-        if (gifonly_ == false && favPNGDirector.exists()) {  //user png content, could be any size
+    		  
+    		  
+        if (gifonly_ == false && favPNGDirector.exists()) {  //note we didn't check if favPNG is empty, probably should add that
    	    	   File[] files = favPNGDirector.listFiles(new FilenameFilter() {
    	   		    public boolean accept(File dir, String name) {
    	   		        return name.toLowerCase().endsWith(".png") || name.toLowerCase().endsWith(".jpg") || name.toLowerCase().endsWith(".jpeg");
    	   		    }
    	   			});
-   	   	   
+   	    	if (files != null) {  
    		   	   for (File file : files) {
    		   	    publishProgress(file.getAbsolutePath());
-   		   	    SlideShowArray[z] = file.getAbsolutePath(); //array starts at 0
-   		   	    z++;
+   		   	    SlideShowArray[s] = file.getAbsolutePath(); //array starts at 0
+   		   	    s++;
    		   	    if (isCancelled()) break;
    		   	   }
-   	   	   }
+   	    	}
+   	   	}
         
         if (favGIFDirector.exists()) { //fav gif content, could be any size
 	    	   File[] files = favGIFDirector.listFiles(new FilenameFilter() {
@@ -1269,13 +1286,12 @@ private void copyGIF64Source() {
 	   		    	return name.toLowerCase().endsWith(".gif") || name.toLowerCase().endsWith(".png"); //can be either png thumbnails or gif (gifs could have came from user gifs)
 	   		    }
 		   		});
-		   	    
-		   	   for (File file : files) {
-		   	    publishProgress(file.getAbsolutePath());
-		   	    //SlideShowArray[z] = file.getAbsolutePath(); 
-		   	    //z++;
-		   	    if (isCancelled()) break;
-		   	   }
+	    	if (files != null) {     
+			   	   for (File file : files) {
+			   	    publishProgress(file.getAbsolutePath());
+			   	    if (isCancelled()) break;
+			   	   }
+	    	}
  	   }
     		  
     		  
@@ -1288,10 +1304,14 @@ private void copyGIF64Source() {
 	   	   
 		   	   for (File file : files) {
 		   	    publishProgress(file.getAbsolutePath());
-		   	    SlideShowArray[z] = file.getAbsolutePath(); //array starts at 0
-		   	    z++;
-		   	    if (isCancelled()) break;
-		   	   }
+		   		if (files != null) {      
+			   	    if (FavPNGHasFiles == false || slideShowAllPNGs_ == true) { //then we should include all PNGs in the slideshow array
+			   	    	SlideShowArray[s] = file.getAbsolutePath(); 
+			   	    	s++;
+			   	    }
+			   	    if (isCancelled()) break;
+			   	 }
+		   	  }
 	   	   }
 			  
 		  if (UserGIFtargetDirector.exists()) { //user gif content, could be any size
@@ -1300,13 +1320,12 @@ private void copyGIF64Source() {
 	   		        return name.toLowerCase().endsWith(".gif") ;
 	   		    }
 		   		});
-		   	   
+	    	if (files != null) {     
 		   	   for (File file : files) {
 		   	    publishProgress(file.getAbsolutePath());
-		   	    //SlideShowArray[z] = file.getAbsolutePath(); 
-		   	    //z++;
 		   	    if (isCancelled()) break;
 		   	   }
+	    	}   
     	   }
 		  
 		  if (matrix_model == 10 && GIF64targetDirector.exists()) { //gif 64x64 content, only show if 64x64 led matrix is picked
@@ -1315,13 +1334,13 @@ private void copyGIF64Source() {
 	   		        return name.toLowerCase().endsWith(".gif") || name.toLowerCase().endsWith(".png");
 	   		    }
 	   			});
-	   	   
-		   	   for (File file : files) {
-		   	    publishProgress(file.getAbsolutePath());
-		   	    //SlideShowArray[z] = file.getAbsolutePath(); 
-		   	    //z++;
-		   	    if (isCancelled()) break;
-		   	   }
+	    	   
+	    		if (files != null) {  
+			   	   for (File file : files) {
+			   	    publishProgress(file.getAbsolutePath());
+			   	    if (isCancelled()) break;
+			   	   }
+	    		}
 		   }
     		  
 		  if (only64_ == false && targetDirector.exists()) {  //gif or png, this is the gif directory 32x32 content
@@ -1331,32 +1350,35 @@ private void copyGIF64Source() {
     		    }
     		});
     		
-    	//	if (files != null) {  //TO DO deletet his later
+    		if (files != null) {  
     	   
 	    	   for (File file : files) {     //the Android emulator was crashing here, weird
 	    	    publishProgress(file.getAbsolutePath());
-	    	    //SlideShowArray[z] = file.getAbsolutePath(); 
-		   	    //z++;
 	    	    if (isCancelled()) break;
 	    	   }
-    	//	}
+    		}
 	    }
     		
     	   
 	   if (only64_ == false && gifonly_ == false && PNGtargetDirector.exists()) { //png 32x32 content 
-		   PNGFiles = PNGtargetDirector.listFiles(new FilenameFilter() {  //PNGFiles is a file array / list?, if we only want a slideshow with the PNGs
+		   File[] files = PNGtargetDirector.listFiles(new FilenameFilter() {  //PNGFiles is a file array / list?, if we only want a slideshow with the PNGs
     		   
    		    public boolean accept(File dir, String name) {
    		        return name.toLowerCase().endsWith(".png") || name.toLowerCase().endsWith(".jpg") || name.toLowerCase().endsWith(".jpeg");
    		    }
    			});
-   	   
-	   	   for (File file : PNGFiles) {
-	   	    publishProgress(file.getAbsolutePath());
-	   	    SlideShowArray[z] = file.getAbsolutePath(); 
-	   	    z++;
-	   	    if (isCancelled()) break;
-	   	   }
+		   
+			if (files != null) {  
+		   
+		   	   for (File file : files) {
+		   	    publishProgress(file.getAbsolutePath());
+			   	if (FavPNGHasFiles == false || slideShowAllPNGs_ == true) {
+			   	    SlideShowArray[s] = file.getAbsolutePath(); 
+			   	    s++;
+			   	}
+		   	    if (isCancelled()) break;
+		   	   }
+		   }
 	   }
 	   
 	   if (gifonly_ == false && PNG64targetDirector.exists()) { //png 64x64 content
@@ -1365,17 +1387,22 @@ private void copyGIF64Source() {
    		        return name.toLowerCase().endsWith(".png") || name.toLowerCase().endsWith(".jpg") || name.toLowerCase().endsWith(".jpeg");
    		    }
    			});
+    	   
+    	   if (files != null) {  
    	   
-	   	   for (File file : files) {
-	   	    publishProgress(file.getAbsolutePath());
-	   	    SlideShowArray[z] = file.getAbsolutePath(); 
-	   	    z++;
-	   	    if (isCancelled()) break;
-	   	   }
+		   	   for (File file : files) {
+		   	    publishProgress(file.getAbsolutePath());
+		   	    if (FavPNGHasFiles == false || slideShowAllPNGs_ == true) {
+			   	    SlideShowArray[s] = file.getAbsolutePath(); 
+			   	    s++;
+			   	}
+		   	    if (isCancelled()) break;
+		   	   }
+	   	   
+    	   }
 	   }
 	   
-	//int SlideShowArraySize = SlideShowArray.length; //no good because the array size is 5000, do something better here later, TO DO resize the array?
-	   SlideShowLength = z;   //actual it's z-1
+	   SlideShowLength = s;   //actual it's z-1 but we compensate for this later
 	
 	   	  
    return null;
@@ -2041,6 +2068,7 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
     		 AlertDialog.Builder LongTapPrompt = new AlertDialog.Builder(this);
     		 LongTapPrompt.setTitle("Select Action");
     		 LongTapPrompt.setMessage("");
+    		 LongTapPrompt.setIcon(R.drawable.ic_action_new_event);
     		 LongTapPrompt.setPositiveButton("Write",
     		   new DialogInterface.OnClickListener() {
 
@@ -3156,6 +3184,7 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 		    	  
 		    	  
 		 	    	try {
+						matrix_.interactive(); //need to put into interactive mode as it may have been in local playback before
 		 	    		SlideShow(false);
 					} catch (ConnectionLostException e) {
 						// TODO Auto-generated catch block
@@ -3173,7 +3202,13 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 	    	  if (matrix_ != null) {
 	    		  
 	    		  if (pixelHardwareID.substring(0,4).equals("PIXL")) {
-	    	  			writeSlideShow();
+	    	  		  try {
+						matrix_.interactive();
+					} catch (ConnectionLostException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	    			  writeSlideShow();
 	    		  }
 	    		  else {
 	    			  showToast("Sorry, writing is only supported on PIXEL V2 and higher frames.");
@@ -3186,13 +3221,7 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 	      
 	      if (item.getItemId() == R.id.stop_SlideShow) {
 	 	    	stopSlideShow();
-	 	    	
-	 	    	
 	 	   }
-	      
-	      
-	      
-	      
 	    	
 		  if (item.getItemId() == R.id.menu_about) {
 			  
@@ -3307,13 +3336,13 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 	    	super.onActivityResult(reqCode, resCode, data);    	
 	    	
 	    	
-	    	if (resCode == WENT_TO_PREFERENCES)  {
+	    	//if (resCode == WENT_TO_PREFERENCES)  { //had resCode here, this dosn't seem to work, fires when we go to preferences, not when we return from preferences so instead let's add setPreferences to to ioio setup routine
 	    		
 	    		//TO DO do we need to cancel the slideshow timers here? test this
 	    		
-	    		setPreferences(); //very important to have this here, after the menu comes back this is called, we'll want to apply the new prefs without having to re-start the app
+	    		//setPreferences(); //very important to have this here, after the menu comes back this is called, we'll want to apply the new prefs without having to re-start the app
 	    		//showToast("returned from preferences");
-	    	}	
+	    	//}	
 	    	
 	    	//if (reqCode == 0 || reqCode == 1) //then we came back from the preferences menu so re-load all images from the sd card, 1 is a re-scan
 	    	//if (reqCode == 1)
@@ -3494,7 +3523,7 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 	    
 	    private void setPreferences() //here is where we read the shared preferences into variables
 	    {
-	     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);     
+	   //  SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);     
 	    
 	     //scanAllPics = prefs.getBoolean("pref_scanAll", false);
 	     //slideShowMode = prefs.getBoolean("pref_slideshowMode", false);
@@ -3505,6 +3534,7 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 	     only64_ = prefs.getBoolean("pref_only64", false); //only show 64x64 content
 	     showStartupMsg_ = prefs.getBoolean("pref_showStartupMsg", true); //show the "long tap to write to pixel message
 	     saveMultipleCameraPics_ = prefs.getBoolean("pref_writeCamera", false);
+	     slideShowAllPNGs_ = prefs.getBoolean("pref_slideShowAllPNGs", false);
 	   
 	     matrix_model = Integer.valueOf(prefs.getString(   //the selected RGB LED Matrix Type
 	    	        resources.getString(R.string.selected_matrix),
@@ -3644,11 +3674,186 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 		 
 		 loadRGB565(); //load the select pic raw565 file
 		 
+		// if (imagedisplaydurationTimer != null) imagedisplaydurationTimer.cancel();
+	    // if (pausebetweenimagesdurationTimer != null) pausebetweenimagesdurationTimer.cancel();
+	     
+	     stopTimers();
+		 
 		 imagedisplaydurationTimer = new ImageDisplayDurationTimer(imageDisplayDuration*1000,1000); //how long the image should display
 	 	 pausebetweenimagesdurationTimer = new PauseBetweenImagesDurationTimer(pauseBetweenImagesDuration*1000,1000); //how long to show a blank screen before showing the next image
 	 	 slideShowRunning = 0;
+	 	 
+	 	 //need to do this to refresh the slide array
+	    // myAsyncTaskLoadFiles = new AsyncTaskLoadFiles(myImageAdapter, false);
+        // myAsyncTaskLoadFiles.execute();
 	 }
 	
+	    
+	    private void updatePrefs() //here is where we read the shared preferences into variables
+	    {
+	    	 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);     
+	 	    
+		     //scanAllPics = prefs.getBoolean("pref_scanAll", false);
+		     //slideShowMode = prefs.getBoolean("pref_slideshowMode", false);
+		     noSleep = prefs.getBoolean("pref_noSleep", false);
+		     debug_ = prefs.getBoolean("pref_debugMode", false);
+		     kioskMode_ = prefs.getBoolean("pref_kioskMode", false);
+		     gifonly_ = prefs.getBoolean("pref_gifonly", false); //only load gifs, don't load static pngs if true
+		     only64_ = prefs.getBoolean("pref_only64", false); //only show 64x64 content
+		     showStartupMsg_ = prefs.getBoolean("pref_showStartupMsg", true); //show the "long tap to write to pixel message
+		     saveMultipleCameraPics_ = prefs.getBoolean("pref_writeCamera", false);
+		     slideShowAllPNGs_ = prefs.getBoolean("pref_slideShowAllPNGs", false);
+		   
+		     matrix_model = Integer.valueOf(prefs.getString(   //the selected RGB LED Matrix Type
+		    	        resources.getString(R.string.selected_matrix),
+		    	        resources.getString(R.string.matrix_default_value))); 
+		     
+		     downloadURL_32 = prefs.getString(   //the selected RGB LED Matrix Type
+		    	        resources.getString(R.string.downloadURL_32),
+		    	        resources.getString(R.string.downloadURL_32Default)); 
+		     
+		     downloadURL_64 = prefs.getString(   //the selected RGB LED Matrix Type
+		    	        resources.getString(R.string.downloadURL_64),
+		    	        resources.getString(R.string.downloadURL_64Default)); 
+		     
+		    // slideShowMode = prefs.getBoolean("pref_slideshowMode", false);
+		  //   dimDuringSlideShow = prefs.getBoolean("pref_dimDuringSlideShow", true);
+		     
+		     imageDisplayDuration = Integer.valueOf(prefs.getString(   
+		  	        resources.getString(R.string.pref_imageDisplayDuration),
+		  	        resources.getString(R.string.imageDisplayDurationDefault)));   
+		     
+		    if (imageDisplayDuration < 1 || imageDisplayDuration > 1000) imageDisplayDuration = 5; //in case someone entered 0
+	   
+		     
+		     pauseBetweenImagesDuration = Integer.valueOf(prefs.getString(   
+		  	        resources.getString(R.string.pref_pauseBetweenImagesDuration),
+		  	        resources.getString(R.string.pauseBetweenImagesDurationDefault)));  
+		     //it's ok for pauseBetweenImages to be 0
+		     
+		   /*  FPSOverride_ = Integer.valueOf(prefs.getString(   //the selected RGB LED Matrix Type
+		    	        resources.getString(R.string.fps_override),
+		    	        resources.getString(R.string.FPSOverrideDefault))); */
+		    //this wasn't adding any value so removed it
+		     
+		     FPSOverride_ = 0; //not using, maybe we add this back later
+		     
+		     switch (FPSOverride_) {  //get this from the preferences
+		     case 0:
+		    	 fps = 0;
+		    	 break;
+		     case 1:
+		    	 fps = 5;
+		    	 break;
+		     case 2:
+		    	 fps = 10;
+		    	 break;
+		     case 3:
+		    	 fps = 15;
+		    	 break;
+		     case 4:
+		    	 fps = 24;
+		    	 break;
+		     case 5:
+		    	 fps = 30;
+		    	 break;
+		     default:	    		 
+		    	 fps = 0;
+		     }
+		   
+		     
+		     switch (matrix_model) {  //get this from the preferences
+		     case 0:
+		    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x16;
+		    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage16);
+		    	 frame_length = 1024;
+		    	 currentResolution = 16;
+		    	 break;
+		     case 1:
+		    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x16;
+		    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage16);
+		    	 frame_length = 1024;
+		    	 currentResolution = 16;
+		    	 break;
+		     case 2:
+		    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32_NEW; //v1
+		    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
+		    	 frame_length = 2048;
+		    	 currentResolution = 32;
+		    	 break;
+		     case 3:
+		    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32; //v2
+		    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
+		    	 frame_length = 2048;
+		    	 currentResolution = 32;
+		    	 break;
+		     case 4:
+		    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_64x32; 
+		    	 BitmapInputStream = getResources().openRawResource(R.raw.select64by32);
+		    	 frame_length = 8192;
+		    	 currentResolution = 64; 
+		    	 break;
+		     case 5:
+		    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x64; 
+		    	 BitmapInputStream = getResources().openRawResource(R.raw.select32by64);
+		    	 frame_length = 8192;
+		    	 currentResolution = 64; 
+		    	 break;	 
+		     case 6:
+		    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_2_MIRRORED; 
+		    	 BitmapInputStream = getResources().openRawResource(R.raw.select32by64);
+		    	 frame_length = 8192;
+		    	 currentResolution = 64; 
+		    	 break;	 	 
+		     case 7:
+		    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_4_MIRRORED;
+		    	 BitmapInputStream = getResources().openRawResource(R.raw.select32by128);
+		    	 frame_length = 8192;
+		    	 currentResolution = 128; 
+		     case 8:
+		    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_128x32; //horizontal
+		    	 BitmapInputStream = getResources().openRawResource(R.raw.select128by32);
+		    	 frame_length = 8192;
+		    	 currentResolution = 128;  
+		    	 break;	 
+		     case 9:
+		    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x128; //vertical mount
+		    	 BitmapInputStream = getResources().openRawResource(R.raw.select32by128);
+		    	 frame_length = 8192;
+		    	 currentResolution = 128; 
+		    	 break;	 
+		     case 10:
+		    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_64x64;
+		    	 BitmapInputStream = getResources().openRawResource(R.raw.select64by64);
+		    	 frame_length = 8192;
+		    	 currentResolution = 128; 
+		    	 break;	 	 		 
+		     default:	    		 
+		    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32; //v2 as the default
+		    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
+		    	 frame_length = 2048;
+		    	 currentResolution = 32;
+		     }
+		     
+		     matrix_number = matrix_model;
+		         
+		     frame_ = new short [KIND.width * KIND.height];
+			 BitmapBytes = new byte[KIND.width * KIND.height *2]; //512 * 2 = 1024 or 1024 * 2 = 2048
+			 
+			 loadRGB565(); //load the select pic raw565 file
+			 
+			 //if (imagedisplaydurationTimer != null) imagedisplaydurationTimer.cancel();
+		     //if (pausebetweenimagesdurationTimer != null) pausebetweenimagesdurationTimer.cancel();
+			 stopTimers();
+			 
+			 imagedisplaydurationTimer = new ImageDisplayDurationTimer(imageDisplayDuration*1000,1000); //how long the image should display
+		 	 pausebetweenimagesdurationTimer = new PauseBetweenImagesDurationTimer(pauseBetweenImagesDuration*1000,1000); //how long to show a blank screen before showing the next image
+		 	 slideShowRunning = 0;
+		 	 
+		 	 //need to do this to refresh the slide array
+		     myAsyncTaskLoadFiles = new AsyncTaskLoadFiles(myImageAdapter, false);
+	         myAsyncTaskLoadFiles.execute();
+	 }
 	
     
     class IOIOThread extends BaseIOIOLooper {
@@ -3656,6 +3861,10 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 
   		@Override
   		protected void setup() throws ConnectionLostException { //we'll always come back here after an intent or loss of connection
+  			
+  			
+  			//setPreferences(); //added this hear because we need a way to reset all the variables after preferences has changed, this method gets called when we return from preferences
+  			
   			matrix_ = ioio_.openRgbLedMatrix(KIND);
   			deviceFound = 1; //if we went here, then we are connected over bluetooth or USB
   			connectTimer.cancel(); //we can stop this since it was found
@@ -3664,7 +3873,6 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
   			pixelFirmware = ioio_.getImplVersion(v.APP_FIRMWARE_VER);
   			pixelBootloader = ioio_.getImplVersion(v.BOOTLOADER_VER);
   			pixelHardwareID = ioio_.getImplVersion(v.HARDWARE_VER); 
-  			//pixelHardwareID = ioio_.getImplVersion(v.APP_FIRMWARE_VER).substring(0,4); //quick hack, fix later
   			IOIOLibVersion = ioio_.getImplVersion(v.IOIOLIB_VER);
   			//**********************************************************
   		
@@ -3697,11 +3905,13 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
   			//}
   			writeCameraFlag_ = false;*/
   			
-  			appAlreadyStarted = 1;
+  			appAlreadyStarted = 1; 
   			
   			if (showStartupMsg_ == true && kioskMode_ == false && pixelHardwareID.substring(0,4).equals("PIXL")) { //if writing is supported
   	        	 showToast(getString(R.string.StartupMessage));
   	        }
+  			
+
   			
   			//decodedtimer.start();
   			
@@ -4371,8 +4581,7 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 		    	
 			 if (kioskMode_ == false) {
 			 
-				Toast toast = Toast.makeText(context, "Preparing to Write Slide Show...", Toast.LENGTH_LONG);
-		    	toast.show();
+				
 		    	//we need to kill the timers if they are already running
 	    		stopTimers();
 	    		
@@ -4463,6 +4672,9 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 		     @Override
 		  protected void onPreExecute() {
 			   super.onPreExecute();
+			   
+			  // Toast toast = Toast.makeText(context, "Preparing to Write Slide Show...", Toast.LENGTH_LONG);
+		      // toast.show();
 		  }
 		      
 		  @Override
@@ -4551,6 +4763,9 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 	        	
 	        	WriteImagetoMatrix();	//we are streaming here, not writing
 	        	
+	        	
+	        	//TO DO add a delay here?
+	        	
 			        //********* now let's add our tween frames including pause black frames in between, tween frames because 1 fps is the slowest we can go, we want slower than that so let's add some tween frames
 		        	int y = 0;
 		        	for (y = 0; y < imageDisplayDuration; y++) { //since the longest frame delay we can go is 1 second, we'll need to repeat frames here!
@@ -4577,6 +4792,16 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 			        //***********
 		        	}
 	        }
+	       
+	        //add this delay here before we start writing to the sd card
+	        try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+	        
+	        
 	    }
 	    
 	    private class writePixelAsyncSlideShow extends AsyncTask<Void, Integer, Void>{
