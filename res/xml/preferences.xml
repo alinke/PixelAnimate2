@@ -51,11 +51,11 @@
 	    android:defaultValue="@string/pauseBetweenImagesDurationDefault"
 	    android:summary="@string/pauseBetweenImagesDurationSummary"/>
 	      
-	    <CheckBoxPreference
+	 <!--     <CheckBoxPreference
 	    android:title="@string/slideShowAllPNGs"
 	    android:key="pref_slideShowAllPNGs"
 	    android:defaultValue="@string/pref_slideShowAllPNGsDefault"
-	    android:summary="@string/slideShowAllPNGsSummary"/>
+	    android:summary="@string/slideShowAllPNGsSummary"/> -->
 	   
    <!--  <CheckBoxPreference
     android:title="@string/dimDuringSlideShow"

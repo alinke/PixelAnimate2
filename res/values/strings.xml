@@ -60,7 +60,8 @@
     <string name="slideShowtitle">Slide Show Settings</string>
     <string name="slideShowtitleSummary">Slide Show Settings</string>
     
-     <string name="menu_createSlideShow_title">Write Slide Show</string>
+    <string name="menu_createSlideShow_title">Write Slide Show All</string>
+    <string name="menu_createSlideShowFavs_title">Write Slide Show Favs</string>
    
     <string name="slideShowMode">Slide Show Mode</string>    
     <string name="slideShowModeDefault">false</string>
@@ -150,7 +151,7 @@
     
     
     
-    <string name="menu_startSlideShow_title">Start Slide Show</string>
+    <string name="menu_startSlideShow_title">Slide Show</string>
     <string name="menu_stopSlideShow_title">Stop Slide Show</string>
     
   

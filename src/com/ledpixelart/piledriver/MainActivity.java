@@ -295,6 +295,10 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	
 	public static String SlideShowArray[] = new String[5000];
 	
+	public static String SlideShowArrayFavs[] = new String[5000];
+	
+	public static String SlideShowArrayAll[] = new String[5000];
+	
 	public static ImageAdapter2 myTaskAdapter;
 	
 	public static int gridViewPosition = 0;
@@ -302,6 +306,10 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	public static File PNGPathFile = null;
 	
 	public static int SlideShowLength;
+	
+	public static int SlideShowLengthAll;
+	
+	public static int SlideShowLengthFavs;
 	
 	final String welcomeScreenShownPref = "welcomeScreenShown";
 	
@@ -1192,7 +1200,8 @@ private void copyGIF64Source() {
     	  File PNG64targetDirector;
     	  File GIF64targetDirector;
     	  
-    	  int s = 0;
+    	  int a = 0;
+    	  int f = 0;
     	  
     	  boolean deletePNG_;
 
@@ -1258,6 +1267,8 @@ private void copyGIF64Source() {
     	   myTaskAdapter.clear(); //TO DO add this to the sharing piece?
     	   
     	   Arrays.fill(SlideShowArray, null); //empty the array
+    	   Arrays.fill(SlideShowArrayFavs, null); //empty the array
+    	   Arrays.fill(SlideShowArrayAll, null); //empty the array
     	   
     	   super.onPreExecute();
     	  }
@@ -1275,11 +1286,13 @@ private void copyGIF64Source() {
    	   		        return name.toLowerCase().endsWith(".png") || name.toLowerCase().endsWith(".jpg") || name.toLowerCase().endsWith(".jpeg");
    	   		    }
    	   			});
-   	    	if (files != null) {  
+   	    	if (files != null) {  //don't go here if there are no files in there
    		   	   for (File file : files) {
    		   	    publishProgress(file.getAbsolutePath());
-   		   	    SlideShowArray[s] = file.getAbsolutePath(); //array starts at 0
-   		   	    s++;
+   		   	    SlideShowArrayFavs[f] = file.getAbsolutePath(); //array starts at 0
+   		   	    f++;
+   		   	    SlideShowArrayAll[a] = file.getAbsolutePath(); //array starts at 0
+		   	    a++;
    		   	    if (isCancelled()) break;
    		   	   }
    	    	}
@@ -1310,10 +1323,10 @@ private void copyGIF64Source() {
 		   	   for (File file : files) {
 		   	    publishProgress(file.getAbsolutePath());
 		   		if (files != null) {      
-			   	    if (FavPNGHasFiles == false || slideShowAllPNGs_ == true) { //then we should include all PNGs in the slideshow array
-			   	    	SlideShowArray[s] = file.getAbsolutePath(); 
-			   	    	s++;
-			   	    }
+			   	   // if (FavPNGHasFiles == false || slideShowAllPNGs_ == true) { //then we should include all PNGs in the slideshow array
+			   			SlideShowArrayAll[a] = file.getAbsolutePath(); //array starts at 0
+				   	    a++;
+			   	  //  }
 			   	    if (isCancelled()) break;
 			   	 }
 		   	  }
@@ -1377,10 +1390,10 @@ private void copyGIF64Source() {
 		   
 		   	   for (File file : files) {
 		   	    publishProgress(file.getAbsolutePath());
-			   	if (FavPNGHasFiles == false || slideShowAllPNGs_ == true) {
-			   	    SlideShowArray[s] = file.getAbsolutePath(); 
-			   	    s++;
-			   	}
+			   //	if (FavPNGHasFiles == false || slideShowAllPNGs_ == true) {
+			   		SlideShowArrayAll[a] = file.getAbsolutePath(); //array starts at 0
+			   	    a++;
+			  // 	}
 		   	    if (isCancelled()) break;
 		   	   }
 		   }
@@ -1397,17 +1410,18 @@ private void copyGIF64Source() {
    	   
 		   	   for (File file : files) {
 		   	    publishProgress(file.getAbsolutePath());
-		   	    if (FavPNGHasFiles == false || slideShowAllPNGs_ == true) {
-			   	    SlideShowArray[s] = file.getAbsolutePath(); 
-			   	    s++;
-			   	}
+		   	   // if (FavPNGHasFiles == false || slideShowAllPNGs_ == true) {
+		   	    	SlideShowArrayAll[a] = file.getAbsolutePath(); //array starts at 0
+			   	    a++;
+			  // }
 		   	    if (isCancelled()) break;
 		   	   }
 	   	   
     	   }
 	   }
 	   
-	   SlideShowLength = s;   //actual it's z-1 but we compensate for this later
+	   SlideShowLengthAll = a;   //actual it's z-1 but we compensate for this later
+	   SlideShowLengthFavs = f;   //actual it's z-1 but we compensate for this later
 	
 	   	  
    return null;
@@ -2548,6 +2562,7 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 					        		
 					        		imagePath = originalImagePath;
 					        		try {
+					        			//TO DO will this crash pixel v1?
 					        			matrix_.interactive();  //this has to be here in case we were in interactive mode from a previous long tap
 					        			WriteImagetoMatrix();
 									} catch (ConnectionLostException e) {
@@ -3189,6 +3204,15 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 		    	  Toast toast = Toast.makeText(context, "Streaming Slide Show...", Toast.LENGTH_LONG);
 		 	      toast.show();
 		    	  
+		 	     SlideShowLength = SlideShowLengthAll;
+		 	   /* //initial array
+		         int[] oldArray = {1,2,3,4,5};
+		         //define a new array + allocate space
+		         int[] newArray = new int[oldArray.length];*/
+		  
+		         //copy values
+		         System.arraycopy(SlideShowArrayAll, 0, SlideShowArray, 0, SlideShowArrayAll.length);
+		 	      
 		    	  
 		 	    	try {
 						matrix_.interactive(); //need to put into interactive mode as it may have been in local playback before
@@ -3203,7 +3227,44 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 	    	  }
 	 	   }
 	      
-	      if (item.getItemId() == R.id.menu_createSlideShow) {
+	      if (item.getItemId() == R.id.menu_createSlideShowFavs) {
+	    	  
+		    	 
+	    	  if (matrix_ != null) {
+	    		  
+	    		  if (pixelHardwareID.substring(0,4).equals("PIXL")) {
+		    	  		
+	    			  if (FavPNGHasFiles == true) {
+		    			  
+		    			  try {
+								matrix_.interactive();
+							} catch (ConnectionLostException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+		    			  
+					  	     x = 0; //without this, the slideshow will not complete on the second run and will only work the first time
+						  
+					  	     SlideShowLength = SlideShowLengthFavs;
+					  	     
+						     System.arraycopy(SlideShowArrayFavs, 0, SlideShowArray, 0, SlideShowArrayFavs.length);
+					  	     
+					  	     writeSlideShow();
+	    			  }   
+	    			  else {
+	    				  showToast("You have marked any favorites, long tap to mark a favorite");
+	    			  }
+	    		  }
+	    		  else {
+	    			  showToast("Sorry, writing is only supported on PIXEL V2 and higher frames.");
+	    		  }
+	    	  }
+	    	  else {
+	    		  showToast("PIXEL was not found, did you Bluetooth pair?");
+	    	  }
+	 	   }
+	      
+	      if (item.getItemId() == R.id.menu_createSlideShow) { //all images including favorites (if there are favorites)
 	    	  
 	    	 
 	    	  if (matrix_ != null) {
@@ -3215,7 +3276,13 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-	    			  writeSlideShow();
+				  	     x = 0; //without this, the slideshow will not complete on the second run and will only work the first time
+				  	  
+				  	     SlideShowLength = SlideShowLengthAll;
+				  	     
+					     System.arraycopy(SlideShowArrayAll, 0, SlideShowArray, 0, SlideShowArrayAll.length);
+				  	     
+				  	     writeSlideShow();
 	    		  }
 	    		  else {
 	    			  showToast("Sorry, writing is only supported on PIXEL V2 and higher frames.");
@@ -3226,9 +3293,9 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 	    	  }
 	 	   }
 	      
-	      if (item.getItemId() == R.id.stop_SlideShow) {
+	     /* if (item.getItemId() == R.id.stop_SlideShow) {
 	 	    	stopSlideShow();
-	 	   }
+	 	   }*/
 	    	
 		  if (item.getItemId() == R.id.menu_about) {
 			  
@@ -4593,11 +4660,10 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 	    		stopTimers();
 	    		
 	    		
-	    		if (pixelHardwareID.substring(0,4).equals("PIXL")) {  //download mode cuz it's a PIXEL V2 unit
-	    			    
-	    				
-	    				
-	    				new createSlideShowAsync().execute();  
+	    		if (pixelHardwareID.substring(0,4).equals("PIXL")) {  //let's make sure we have a pixelv2 board
+	    			   
+	    			gridview.setKeepScreenOn(true); //enable power savings again	
+	    			new createSlideShowAsync().execute();  
 		    			
 		    	}
 			 }
@@ -4831,11 +4897,13 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 		      Log.i("PixelAnimations ", "Slide Show Length is: " + SlideShowLength);
 		      Log.i("PixelAnimations ", "Image Display Duration is: " + imageDisplayDuration);
 		      Log.i("PixelAnimations ", "Pause Between Images is: " + pauseBetweenImagesDuration);
-		      Log.i("PixelAnimations ", "Selected File Resoution is: " + selectedFileResolution);
+		     
 		      
 		      if (selectedFileResolution == 0) { //then let's set it from the led panel that has been selected
 		    	  selectedFileResolution = currentResolution;
 		      }
+		      
+		      Log.i("PixelAnimations ", "Selected File Resoution is: " + selectedFileResolution);
 		      
 		     
 			  }
@@ -4870,8 +4938,6 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 			   			}*/
 						
 						
-						//TO DO this will not work for super pixel because selected file resolutio hasn't been set
-						
 						 switch (selectedFileResolution) { //16x32 matrix = 1024k frame size, 32x32 matrix = 2048k frame size
 				            case 16: frame_length = 1024;
 				                     break;
@@ -4879,6 +4945,8 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 				                     break;
 				            case 64: frame_length = 4096;
 				                     break;
+				            case 128: frame_length = 8192;
+				            		 break;
 				            default: frame_length = 2048;
 				                     break;
 				          }
