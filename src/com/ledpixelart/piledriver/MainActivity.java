@@ -1740,14 +1740,30 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 				      
 				    }
 				        
+				        else if (extension_.equals("jpg") || extension_.equals("jpeg")) {  
+				        	imagePath = originalImagePath;
+				        	try {
+			        			matrix_.interactive();
+								matrix_.writeFile(1000);
+			        			WriteImagetoMatrix();
+			        			matrix_.playFile();
+							} catch (ConnectionLostException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+				        }
+				        
+				       else if (extension_.equals("gif")) {  // if it's not a png, then it's a gif so let's animate
+				     	   gifView.setGif(imagePath);  //just sets the image , no decoding, decoding happens in the animateafterdecode method
+				     	   animateAfterDecode(1);
+				       }  
 				}
     		    	
 	    	 else {
 		    	showToast("PIXEL was not found, did you Bluetooth pair?");
 	    	 }
-    		    	
-    		    }
-    		   });
+	    }
+	   });
 
     		 //only show the favorite option if coming from the right area 
     		 if (showFavoriteButton) { 
