@@ -3423,7 +3423,7 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 		     gifonly_ = prefs.getBoolean("pref_gifonly", false); //only load gifs, don't load static pngs if true
 		     only64_ = prefs.getBoolean("pref_only64", false); //only show 64x64 content
 		     showStartupMsg_ = prefs.getBoolean("pref_showStartupMsg", true); //show the "long tap to write to pixel message
-		     saveMultipleCameraPics_ = prefs.getBoolean("pref_writeCamera", false);
+		     saveMultipleCameraPics_ = prefs.getBoolean("pref_writeCamera", true);
 		     slideShowAllPNGs_ = prefs.getBoolean("pref_slideShowAllPNGs", false);
 		   
 		     matrix_model = Integer.valueOf(prefs.getString(   //the selected RGB LED Matrix Type

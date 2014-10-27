@@ -83,7 +83,7 @@
     
     <string name="writeCamera">Save Mutliple Camera Pictures</string>    
     <string name="pref_writeCamera">pref_writeCamera</string>
-    <string name="writeCameraDefault">false</string>    
+    <string name="writeCameraDefault">true</string>    
     <string name="writeCameraSummary">Saves multiple camera pictures to this app vs. overwriting just one</string>
     
     <string name="only64">64x64 Content Only</string>    
@@ -118,13 +118,6 @@
     <string name="startup_verbage_2">Copying animations to your local storage&#8230;</string>
     <string name="firstTime_instructions"></string>
   
-    <string name="loadingImagesPlsWaitTitle">Please Wait</string>
-    <string name="loadingImagesPlsWait">Loading animations, just a moment&#8230;</string>
-    
-    <string name="stopSlideShowMessage">You\'re still in slide show mode, swipe from right to left to end the slide show and then you can select a single image</string>
-    <string name="loadingImagesPlsWaitTitle">Please Wait</string>
-    <string name="loadingImagesPlsWait">Loading animations, just a moment&#8230;</string>
-    
      <string name="imageDisplayDuration">Image Display Duration</string>    
     <string name="pref_imageDisplayDuration">pref_imageDisplayDuration</string>
     <string name="imageDisplayDurationDefault">5</string>
