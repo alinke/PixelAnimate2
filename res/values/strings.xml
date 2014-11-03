@@ -43,8 +43,8 @@
     <string name="menu_btPair_title">Bluetooth Pair PIXEL | Code 0000 or 4545</string>   
    
     <string name="selected_matrix">selected_matrix</string>
-    <string name="matrix">LED Panel Selection</string>
-    <string name="matrixSummary">Select your LED Panel model</string>    
+    <string name="matrix">PIXEL (LED Panel) Size</string>
+    <string name="matrixSummary">Change the LED Panel Size (PIXEL 32x32 or SUPER PIXEL 64x64). *** IMPORTANT*** You must restart this app manually after changing.</string>    
     <string name="dialogTitleMatrix">LED Panel Selection</string>
     <string name="matrix_default_value">3</string>   
     

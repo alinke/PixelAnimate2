@@ -1351,7 +1351,7 @@ private void copyGIF64Source() {
 	    		}
 		   }
 		  
-		  if (gifonly_ == false && PNG64targetDirector.exists()) { //png 64x64 content
+		  if (matrix_model == 10 && gifonly_ == false && PNG64targetDirector.exists()) { //png 64x64 content but don't show for 32x32
 	    	   File[] files = PNG64targetDirector.listFiles(new FilenameFilter() {
 	   		    public boolean accept(File dir, String name) {
 	   		        return name.toLowerCase().endsWith(".png") || name.toLowerCase().endsWith(".jpg") || name.toLowerCase().endsWith(".jpeg");
