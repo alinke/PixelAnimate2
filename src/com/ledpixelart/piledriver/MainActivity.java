@@ -254,6 +254,11 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	private static int matrix_number;
 	public static AsyncTaskLoadFiles myAsyncTaskLoadFiles;
 	public static createSlideShowAsync myCreateSlideShowAsync;
+	
+	private writePixelAsync writePixel;
+	private writePixelAsyncSlideShow writePixelSlideShow;
+	
+	
 	public static ImageAdapter2 myImageAdapter;
 	private GridView gridview;
 	private boolean kioskMode_ = false;
@@ -323,6 +328,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	private AssetFileDescriptor sinistarWAV;	
 	
 	private AssetFileDescriptor qbertWAV;	
+	
+	
 	
 
 	@Override
@@ -1343,6 +1350,27 @@ private void copyGIF64Source() {
 			   	   }
 	    		}
 		   }
+		  
+		  if (gifonly_ == false && PNG64targetDirector.exists()) { //png 64x64 content
+	    	   File[] files = PNG64targetDirector.listFiles(new FilenameFilter() {
+	   		    public boolean accept(File dir, String name) {
+	   		        return name.toLowerCase().endsWith(".png") || name.toLowerCase().endsWith(".jpg") || name.toLowerCase().endsWith(".jpeg");
+	   		    }
+	   			});
+	    	   
+	    	   if (files != null) {  
+	   	   
+			   	   for (File file : files) {
+			   	    publishProgress(file.getAbsolutePath());
+			   	 
+			   	    	SlideShowArrayAll[a] = file.getAbsolutePath(); //array starts at 0
+				   	    a++;
+				 
+			   	    if (isCancelled()) break;
+			   	   }
+		   	   
+	    	   }
+		   }
     		  
 		  if (only64_ == false && targetDirector.exists()) {  //gif or png, this is the gif directory 32x32 content
     		  File[] files = targetDirector.listFiles(new FilenameFilter() {
@@ -1382,26 +1410,7 @@ private void copyGIF64Source() {
 		   }
 	   }
 	   
-	   if (gifonly_ == false && PNG64targetDirector.exists()) { //png 64x64 content
-    	   File[] files = PNG64targetDirector.listFiles(new FilenameFilter() {
-   		    public boolean accept(File dir, String name) {
-   		        return name.toLowerCase().endsWith(".png") || name.toLowerCase().endsWith(".jpg") || name.toLowerCase().endsWith(".jpeg");
-   		    }
-   			});
-    	   
-    	   if (files != null) {  
-   	   
-		   	   for (File file : files) {
-		   	    publishProgress(file.getAbsolutePath());
-		   	 
-		   	    	SlideShowArrayAll[a] = file.getAbsolutePath(); //array starts at 0
-			   	    a++;
-			 
-		   	    if (isCancelled()) break;
-		   	   }
-	   	   
-    	   }
-	   }
+	  
 	   
 	   SlideShowLengthAll = a;   //actual it's z-1 but we compensate for this later
 	   SlideShowLengthFavs = f;   //actual it's z-1 but we compensate for this later
@@ -2453,7 +2462,7 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 	  
 	  //********we need to reset everything because the user could have been already running an animation
 	     x = 0;
-	     downloadCounter = 0;
+	    // downloadCounter = 0;
 	     
 	     stopTimers();
 	     
@@ -2515,29 +2524,40 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 		    				gridview.setKeepScreenOn(true); //we don't want the screen going into sleep mode
 		    				matrix_.interactive();
 			    			matrix_.writeFile(fps);
-			    			writePixelAsync loadApplication = new writePixelAsync();
-			    			loadApplication.execute();
+			    			
+			    			//writePixelAsync loadApplication = new writePixelAsync();
+			    			//loadApplication.execute();
+			    			
+			    			//This piece of code to ensure we don't do a double write which was happening for SUPER PIXEL
+			    			//*******************************************************
+			    			if (writePixel == null) {
+		    		            android.util.Log.v("TAG", "Pixel Write Async Task is Null so OK to Start Now");
+		    		            writePixel = new writePixelAsync();
+				    			writePixel.execute();
+		    		        } 
+				    			
+				    		else {
+		    		            //Depending on your situation take appropriate action
+		    		          //  android.util.Log.i("TAG", "Not Null");
+		    		            if(writePixel.getStatus() == (AsyncTask.Status.PENDING)) {
+		    		                //Indicates that the task has not been executed yet.
+		    		                android.util.Log.v("TAG", "Pixel Write Pending so not writing now");
+		    		            } else if(writePixel.getStatus() == (AsyncTask.Status.RUNNING)) {
+		    		                //Indicates that the task is running.
+		    		                android.util.Log.v("TAG", "Pixel Write Running so not writing now");
+		    		            } else if(writePixel.getStatus() == (AsyncTask.Status.FINISHED)) {
+		    		                //Indicates that AsyncTask.onPostExecute has finished.
+		    		                android.util.Log.v("TAG", "Pixel Write Finished Before so OK to Start Again");
+		    		                writePixel = new writePixelAsync();
+					    			writePixel.execute();
+		    		            } 
+				    		}
 		    			}
+			    			
+		    			
 		    			else {
 		    				matrix_.interactive(); //put PIXEL back in interactive mode, can't forget to do that! or we'll just be playing local animations
 		    				decodedtimer = myActivity.new DecodedTimer(300000,selectedFileDelay);  //stream mode
-		    				
-
-		    	   		   /* file = new File(decodedDirPath + "/" + selectedFileName + ".rgb565");
-		    	   			if (file.exists()) {
-		    					
-		    			   // RandomAccessFile raf = null;
-		    					
-		    					//let's setup the seeker object
-		    					try {
-		    						raf = new RandomAccessFile(file, "r"); //r means read only
-		    						showToast("went here");
-		    					} catch (FileNotFoundException e2) {
-		    						// TODO Auto-generated catch block
-		    						e2.printStackTrace();
-		    					}  
-		    	   			}*/
-		    				
 							decodedtimer.start();
 							StreamModePlaying = 1; //our isStreamModePlaying flag	
 		    			}
@@ -2608,9 +2628,12 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 	  @Override
 	  protected Void doInBackground(Void... params) {
 			
-	  int count = 0;
-	  for (count=0;count< (selectedFileTotalFrames)*2;count++) {  //had to add this work around to loop through twice and write on the second time. For some weird reason, the first frame is getting skipped if only gong through the loop one time
-				 
+		
+		  
+		  //int count = 1;
+	  //for (count=0;count< (selectedFileTotalFrames)*2;count++) {  //had to add this work around to loop through twice and write on the second time. For some weird reason, the first frame is getting skipped if only gong through the loop one time
+	  for (int count = 0 ; count < selectedFileTotalFrames  ; count++) {  //ex. 1402 total frames but starts at 0 so count would be 1401, 1403 < 1402
+		  //for (count = 0; count == (selectedFileTotalFrames - 1) ; count++) {  		 
 				/* if (downloadCounter < count) {  //won't need this but just in case, some weird problem caused by a bug with an extra timer going, the gc was interrupting
 					Log.i("PixelAnimations ","STARTING OVER!"+ downloadCounter + " " + String.valueOf(selectedFileTotalFrames-1));
 					matrix_.interactive();
@@ -2623,7 +2646,7 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 				  
 				  File file = new File(decodedDirPath + "/" + selectedFileName + ".rgb565"); //this is one big file now, no longer separate files
 				  
-					RandomAccessFile raf = null;
+				  RandomAccessFile raf = null;
 				  
 					//let's setup the seeker object
 					try {
@@ -2640,7 +2663,7 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 						e3.printStackTrace();
 					} //move pointer back to the beginning of the file
 					
-					if (x == selectedFileTotalFrames) { // Manju - Reached End of the file.
+					/*if (x == selectedFileTotalFrames) { // Manju - Reached End of the file.
 		   				x = 0;
 		   				readytoWrite = 1;
 		   				try {
@@ -2649,7 +2672,7 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						} 
-		   			}
+		   			}*/
 					
 					 switch (selectedFileResolution) { //16x32 matrix = 1024k frame size, 32x32 matrix = 2048k frame size
 			            case 16: frame_length = 1024;
@@ -2664,16 +2687,18 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 			                     break;
 			          }
 					 
-					 Log.d("PixelAnimations","frame length: " + frame_length);
+					// Log.d("PixelAnimations","frame length: " + frame_length);
 					
 					//now let's see forward to a part of the file
 						try {
-							raf.seek(x*frame_length);
+							//raf.seek(x*frame_length);
+							raf.seek(count*frame_length);
 						} catch (IOException e2) {
 							// TODO Auto-generated catch block
 							e2.printStackTrace();
 						} 
-						Log.d("PixelAnimations","from sd card write, x is: " + x);
+						//Log.d("PixelAnimations","from sd card write, x is: " + x); 
+						//Log.d("PixelAnimations","Writing frame : " + count);
 						
 						
 						if (frame_length > Integer.MAX_VALUE) {
@@ -2695,9 +2720,8 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 							// TODO Auto-generated catch block
 							e2.printStackTrace();
 						}
-			   			
 			   		
-			   			x++;
+			   			//x++;
 			   			 
 			   			// Close the input stream, all file contents are in the bytes variable
 			   			try {
@@ -2717,9 +2741,9 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 					
 						//need to add something in here if the transfer got interruped, then go back to interactive mode and start over
 						
-					  if (readytoWrite == 1)  {
+					  //if (readytoWrite == 1)  {
  					   		try {
-						   	 Log.v("PixelAnimations ","Starting-->"+ count + " " + String.valueOf(selectedFileTotalFrames-1));
+						   	 Log.v("PixelAnimations ","Writing frame: " + count + " of " + String.valueOf(selectedFileTotalFrames-1));
 						   		matrix_.frame(frame_);
 						   		progress_status++;
 							    publishProgress(progress_status);
@@ -2728,8 +2752,8 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-					  }		
-					   	
+					  //}
+ 					   //x++;
 			  }  
 			
 		    
@@ -2756,6 +2780,190 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 		e.printStackTrace();
 	}
 	  gridview.setKeepScreenOn(false); //we're done so we can allow the screen to turn off again
+	  super.onPostExecute(result);
+}
+	
+}
+  
+  public class streamPixelAsync extends AsyncTask<Void, Integer, Void>{
+		
+		
+	      
+		  @Override
+		  protected void onPreExecute() {
+	      super.onPreExecute();
+	    
+	    
+	  }
+	      
+	  @Override
+	  protected Void doInBackground(Void... params) {
+			
+		  File file = new File(decodedDirPath + "/" + selectedFileName + ".rgb565");
+ 			if (file.exists()) {
+ 				
+				
+				RandomAccessFile raf = null;
+				
+				//let's setup the seeker object
+				try {
+					raf = new RandomAccessFile(file, "r");
+					try {
+						raf.seek(0);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				} catch (FileNotFoundException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}  // "r" means open the file for reading
+			
+				
+				//if (x == selectedFileTotalFrames - 1) { // Manju - Reached End of the file.
+	   			//	x = 0;
+	   		//	}
+				
+				if (x == selectedFileTotalFrames) { // Manju - Reached End of the file.
+	   				x = 0;
+	   				try {
+						raf.seek(0); //go to the beginning of the rgb565 file
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} 
+	   			}
+				
+				 switch (selectedFileResolution) {
+		            case 16: frame_length = 1024;
+		                     break;
+		            case 32: frame_length = 2048;
+		                     break;
+		            case 64: frame_length = 4096;
+		                     break;
+		            case 128: frame_length = 8192;
+                  		break;
+		            default: frame_length = 2048;
+		                     break;
+		          }
+				
+				//now let's see forward to a part of the file
+				try {
+					raf.seek(x*frame_length);
+				} catch (IOException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				} 
+				//Log.d("PixelAnimations","x is: " + x);
+				//Log.d("seeker","seeker is: " + x*frame_length);
+				
+	   			 
+	   			if (frame_length > Integer.MAX_VALUE) {
+	   			    try {
+						throw new IOException("The file is too big");
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	   			}
+	   			 
+	   			// Create the byte array to hold the data
+	   			//byte[] bytes = new byte[(int)length];
+	   			BitmapBytes = new byte[(int)frame_length];
+	   			
+	   			//BitmapBytes = raf.readFully(byte[] b, int off, int len);
+	   		//	readFully(BitmapBytes, 0, 2048);
+	   		 // read the full data into the buffer
+	         //   dis.readFully(buf);
+	   			//Reads exactly len bytes from this file into the byte array, starting at the current file pointer.
+	   			 
+	   			// Read in the bytes
+	   			int offset = 0;
+	   			int numRead = 0;
+	   			try {
+					while (offset < BitmapBytes.length && (numRead=raf.read(BitmapBytes, offset, BitmapBytes.length-offset)) >= 0) {
+					    offset += numRead;
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+	   			 
+	   			// Ensure all the bytes have been read in
+	   			if (offset < BitmapBytes.length) {
+	   			    try {
+						throw new IOException("The file was not completely read: "+file.getName());
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	   			}
+	   			 
+	   			// Close the input stream, all file contents are in the bytes variable
+	   			try {
+	   				raf.close();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}	
+	   			
+	   			//BitmapBytes = bos.toByteArray();
+	   			
+	   			//now that we have the byte array loaded, load it into the frame short array
+	   			
+	   			int y = 0;
+	     		for (int i = 0; i < frame_.length; i++) {
+	     			frame_[i] = (short) (((short) BitmapBytes[y] & 0xFF) | (((short) BitmapBytes[y + 1] & 0xFF) << 8));
+	     			y = y + 2;
+	     		}
+	     		
+	     		//we're done with the images so let's recycle them to save memory
+	    	   // canvasBitmap.recycle();
+	    	 //  bitmap.recycle(); 
+	   		
+		   		//and then load to the LED matrix
+	     		
+			   	try {
+					matrix_.frame(frame_);
+					
+				} catch (ConnectionLostException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			   	x++;
+ 			}
+ 			
+ 			else {
+ 				showToast("We have a problem, couldn't find the decoded file");
+ 			}
+		  
+		 
+			
+		    
+	   return null;
+	  }
+	  
+	  @Override
+	  protected void onProgressUpdate(Integer... values) {
+	   super.onProgressUpdate(values);
+	   
+	   //progress.incrementProgressBy(1);
+	    
+	  }
+	   
+	  @Override
+	  protected void onPostExecute(Void result) {
+		 // progress.dismiss();
+	
+	 
+	 /*  try {
+		matrix_.playFile();
+	} catch (ConnectionLostException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}*/
+	 // gridview.setKeepScreenOn(false); //we're done so we can allow the screen to turn off again
 	  super.onPostExecute(result);
 }
 	
@@ -2953,6 +3161,42 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 		      			+ getString(R.string.BootloaderVersionString) + " " + pixelBootloader + "\n"
 		      			+ getString(R.string.LibraryVersionString) + " " + IOIOLibVersion).setNeutralButton(getResources().getString(R.string.OKText), null).show();	
 		   }
+		  
+		  if (item.getItemId() == R.id.menu_refreshArt) {
+			  
+			  File pngPath = new File(PNGPath);
+			  File pngPath64 = new File(PNG64Path);
+			  
+			  File gifPath = new File(GIFPath);
+			  File gifPathDecoded = new File(GIFPath + "decoded");
+			  File gifPathSource = new File(GIFPath + "gifsource");
+			  
+			  File gifPath64 = new File(GIF64Path);
+			  File gifPathDecoded64 = new File(GIF64Path + "decoded");
+			  File gifPathSource64 = new File(GIF64Path + "gifsource");
+			  
+			  //stop any timers before deleting
+			  stopTimers();
+			  
+			  DeleteRecursive(pngPath);  
+			  DeleteRecursive(pngPath64);  
+			  
+			  DeleteRecursive(gifPath);  
+			  DeleteRecursive(gifPathDecoded);  
+			  DeleteRecursive(gifPathSource);  
+			  
+			  DeleteRecursive(gifPath64);  
+			  DeleteRecursive(gifPathDecoded64);  
+			  DeleteRecursive(gifPathSource64);  
+			  
+			  myAsyncTaskLoadFiles = new AsyncTaskLoadFiles(myImageAdapter, false);
+		      myAsyncTaskLoadFiles.execute();
+			  
+			  AlertDialog.Builder alert=new AlertDialog.Builder(this);
+		      	alert.setTitle(getString(R.string.menu_refresh_title)).setIcon(R.drawable.icon).setMessage(getString(R.string.menu_refresh_summary)).setNeutralButton(getResources().getString(R.string.OKText), null).show();	
+		     
+		      	
+		  }
 	    	
 	    	if (item.getItemId() == R.id.menu_prefs)
 	       {
@@ -3049,7 +3293,13 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 	    }
 	    
 	    
+	  private void DeleteRecursive(File fileOrDirectory) {
+	        if (fileOrDirectory.isDirectory())
+	            for (File child : fileOrDirectory.listFiles())
+	                DeleteRecursive(child);
 
+	        fileOrDirectory.delete();
+	    }
 
 	@Override
 	    public void onActivityResult(int reqCode, int resCode, Intent data) //we'll go into a reset after this
@@ -3721,6 +3971,11 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
    			//to do bug: the first frame is not display on pixel the first go around but does get displayed after looping
    			//now we need to read in the raw file, it's already in RGB565 format and scaled so we don't need to do any scaling
    			//Log.d("Animations","inside the decoder timer");
+   			
+   			//streamPixelAsync streamPixel = new streamPixelAsync();
+   			//streamPixel.execute();
+   			
+   			
    			
    			File file = new File(decodedDirPath + "/" + selectedFileName + ".rgb565");
    			if (file.exists()) {
@@ -4497,6 +4752,7 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 				e.printStackTrace();
 			}
 		   
+		 
 		   writePixelAsyncSlideShow loadApplication = new writePixelAsyncSlideShow();
 		   loadApplication.execute();
 		   

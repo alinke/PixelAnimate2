@@ -19,6 +19,11 @@ android:title="@string/menu_createSlideShowFavs_title"
 android:icon="@drawable/ic_action_new_picture"
 />
 
+<item android:id="@+id/menu_refreshArt"
+android:title="@string/menu_refreshArt_title"
+android:icon="@drawable/ic_action_refresh"
+/>
+
 <!--
 <item android:id="@+id/stop_SlideShow"
 android:title="@string/menu_stopSlideShow_title"

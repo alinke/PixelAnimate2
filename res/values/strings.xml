@@ -128,6 +128,11 @@
     <string name="pauseBetweenImagesDurationDefault">3</string>
     <string name="pauseBetweenImagesDurationSummary">Number of seconds to pause in between images</string>
     
+    <string name="menu_refreshArt_title">Refresh Stock Art</string>
+    
+    <string name="menu_refresh_title">Refresh Stock Art</string>
+    <string name="menu_refresh_summary">Please exit and restart this app now to refresh the stock art.</string>
+    
     <string name="stopSlideShowMessage">You\'re still in slide show mode, swipe from right to left to end the slide show and then you can select a single image</string>
     <string name="loadingImagesPlsWaitTitle">Please Wait</string>
     <string name="loadingImagesPlsWait">Loading images, just a moment&#8230;</string>
