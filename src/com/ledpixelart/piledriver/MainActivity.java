@@ -256,7 +256,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	public static createSlideShowAsync myCreateSlideShowAsync;
 	
 	private writePixelAsync writePixel;
-	private writePixelAsyncSlideShow writePixelSlideShow;
+	//private writePixelAsyncSlideShow writePixel;
 	
 	
 	public static ImageAdapter2 myImageAdapter;
