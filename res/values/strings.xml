@@ -96,6 +96,9 @@
     <string name="showStartupMsgDefault">true</string>    
     <string name="showStartupMsgSummary"></string>
     
+    
+     <string name="menu_pixelStop_title">Stop Streaming</string>  
+    
     <string name="downloadURL_32">Download URL 32x32</string>    
     <string name="pref_downloadURL_32">pref_downloadURL_32</string>
     <string name="downloadURL_32Default">"www.pixeljoint.com/pixels/new_icons.asp?search=&amp;dimo=%3D&amp;dim=32&amp;colorso=%3E%3D&amp;colors=2&amp;tran=&amp;anim=&amp;iso=&amp;av=&amp;owner=&amp;d=&amp;dosearch=1&amp;ob=search&amp;action=search"</string>    

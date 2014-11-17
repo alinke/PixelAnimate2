@@ -23,13 +23,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.util.AttributeSet;
+import android.util.LruCache;
 import android.view.View;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout.LayoutParams;
-
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -49,6 +48,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
@@ -128,13 +128,13 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.graphics.Matrix;
 import android.graphics.Bitmap.Config;
 import android.graphics.drawable.BitmapDrawable;
-
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 
 import java.util.UUID;
 
 import com.ledpixelart.pixel.hardware.Pixel;
+
 import android.view.ContextMenu;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -329,7 +329,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	
 	private AssetFileDescriptor qbertWAV;	
 	
-	
+	//private LruCache<String, Bitmap> mMemoryCache;
 	
 
 	@Override
@@ -347,6 +347,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	      ///*******************
 	     
 	      gridview.setKeepScreenOn(false);
+	      gridview.setFastScrollEnabled(true); //this didn't make a difference
 		 
 	      gifView = (GifView) findViewById(R.id.gifView); //gifview takes care of the gif decoding
 	      gifView.setGif(R.drawable.zzzblank);  //code will crash if a dummy gif is not loaded initially
@@ -1435,182 +1436,7 @@ private void copyGIF64Source() {
 
     	 }
 
-	/*@Override
- public  boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id) {  //this was the old long click method, keep it just in case we need to go back
-		//deviceFound = 1;
-		
-		if (deviceFound == 1) { 
-	  		//********we need to reset everything because the user could have been already running an animation
-	  	     x = 0;
-	  	     
-	  	     
-	  	     if (StreamModePlaying == 1) {
-	  	    	 //decodedtimer.cancel();
-	  	    	// if(!pixelHardwareID.equals("PIXL")) {
-	  	    		decodedtimer.cancel();
-	  	    	// }
-	  	    	// is.close();
-	  	     }
-	  	     ///****************************
-    		  
-	    	imagePath = (String) parent.getItemAtPosition(position);
-	    	originalImagePath = (String) parent.getItemAtPosition(position);
-	        selectedFileName = imagePath;
-	        //here we need to get the file name to see if the file has already been decoded
-	        //file name will be in a format like this sdcard/pixel/pixerinteractive/rain.gif , we want to extra just rain
-	        String delims = "[/]";
-	        String[] aFileName = selectedFileName.split(delims);
-	        int aFileNameLength = aFileName.length;
-	        selectedFileName = aFileName[aFileNameLength-1];
-	        String fileType = aFileName[aFileNameLength-2];  //can be gif, png, userpng, usergif, png64, or gif64
-	        String delims2 = "[.]";
-	        String[] aFileName2 = selectedFileName.split(delims2);
-	        int aFileNameLength2 = aFileName2.length;
-	        selectedFileName = aFileName2[0];	//now we have just the short name with no extension
-	        
-	        //**** now let's handle the thumbnails
-	        String filenameArray[] = imagePath.split("\\.");
-	        String extension = filenameArray[filenameArray.length-1]; //.png
-	        
-	        //we need to find out which directory was selected so we can set the decodeddir
-	        
-	        if (fileType.equals("gif")) {
-	        	decodedDirPath = GIFPath + "decoded";
-	        	gifPath_ = GIFPath;
-	        }
-	        else if (fileType.equals("usergif")) {
-	        	decodedDirPath = userGIFPath + "decoded";
-	        	gifPath_ = userGIFPath;
-	        }
-	        else if (fileType.equals("gif64")) {
-	        	decodedDirPath = GIF64Path + "decoded";
-	        	gifPath_ = GIF64Path;
-	        }
-	        //if the file type was not one of these like a png for example, then we don't care about the decodeddirpath and we don't change it
-	        
-	        if (extension.equals("png")) {  //then we use the thumbnail, we just need to rename the image path to a gif
-	        	String wholestring_no_extension = filenameArray[filenameArray.length-2]; // /storage/emulated/0/pixel/pixelanimate/tree
-	        	String filenameArray2[] = wholestring_no_extension.split("\\/");
-	        	String filename_no_extension = filenameArray2[filenameArray2.length-1]; //tree
-	        	String newimagePath = wholestring_no_extension.replace(filename_no_extension, filename_no_extension + ".gif");
-	        	//showToast(newimagePath);
-	        	//showToast(String.valueOf(filenameArray2.length));
-	        	imagePath = newimagePath;
-	        	
-	        	//now we need to check that filename/decoded/filename.rgb565 exists
-	        	
-	        	//File pngRGB565path = new File(basepath + "/pixel/animatedgifs/decoded/" + filename_no_extension + ".rgb565"); //sdcard/pixel/animatedgifs/decoded/tree.rgb565
-	        	//File pngRGB565path = new File(GIFPath + "decoded/" + filename_no_extension + ".rgb565"); //sdcard/pixel/gifs/decoded/tree.rgb565
-	        	File pngRGB565path = new File(gifPath_ + "decoded/" + filename_no_extension + ".rgb565"); //sdcard/pixel/gifs/decoded/tree.rgb565
-	        	if (!pngRGB565path.exists()) { //if it doesn't exist
-	        		
-	        		//ok not there so let's see if the original gif is there as decoded may have been deleted because the led panel changed
-	        		File originalGIF = new File(gifPath_ + "gifsource/" + filename_no_extension + ".gif"); //sdcard/pixel/gifs/gifsource/tree.rgb565
-	        		if (originalGIF.exists()) { 
-	        			//we've got the original gif so now let's decode it
-	        			 imagePath = gifPath_ + "gifsource/" + filename_no_extension + ".gif";
-	        			 gifView.setGif(imagePath);  //just sets the image , no decoding, decoding happens in the animateafterdecode method
-				     	 animateAfterDecode(0);
-	        		}
-	        		else { //well we tried, no original gif so we'll treat it as a png
-			            	//there's no rgb565 and we only have a single frame png so let's just send this single frame png to pixel
-				        	
-			        		//it's  not there so let's check the original gifs folder, if it's in there, then treat it like a gif and decode
-			        		
-			        		imagePath = originalImagePath;
-			        		
-			        		if (kioskMode_ == false) {
-				        		try {
-				        			matrix_.interactive();
-									matrix_.writeFile(100); //since it's only one frame , doesn't matter what fps is
-			    		        	WriteImagetoMatrix();
-			    		        	matrix_.playFile();
-								} catch (ConnectionLostException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-			        		}
-			        		else {
-			        			try {
-				        			showToast("Writing to PIXEL not supported in Kiosk mode");
-			        				matrix_.interactive();
-			    		        	WriteImagetoMatrix();
-								} catch (ConnectionLostException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-			        		}
-			            }
-	        		}
-	        	else {  //the rgb565 is there
-	        		//gifView.setGif(imagePath);  //this is causing a crash, TO DO figure out why later 
-	        		animateAfterDecode(1); //the rgb565 is there so let's run the already decoded animation
-			    } 
-	        }
-	        
-	        
-	        if (extension.equals("png")) {  //then we use the thumbnail, we just need to rename the image path to a gif
-	        	String wholestring_no_extension = filenameArray[filenameArray.length-2]; // /storage/emulated/0/pixel/pixelanimate/tree
-	        	String filenameArray2[] = wholestring_no_extension.split("\\/");
-	        	String filename_no_extension = filenameArray2[filenameArray2.length-1]; //tree
-	        	String newimagePath = wholestring_no_extension.replace(filename_no_extension, filename_no_extension + ".gif");
-	        	//showToast(newimagePath);
-	        	//showToast(String.valueOf(filenameArray2.length));
-	        	imagePath = newimagePath;
-	        	
-	        	//now we need to check that filename/decoded/filename.rgb565 exists
-	        	
-	        	//File pngRGB565path = new File(basepath + "/pixel/animatedgifs/decoded/" + filename_no_extension + ".rgb565"); //sdcard/pixel/animatedgifs/decoded/tree.rgb565
-	        	File pngRGB565path = new File(GIFPath + "decoded/" + filename_no_extension + ".rgb565"); //sdcard/pixel/gifs/decoded/tree.rgb565
-	        	
-	        	if (!pngRGB565path.exists()) { //if it doesn't exist
-	            	//there's no rgb565 and we only have a single frame png so let's just send this single frame png to pixel
-		        	
-	        		//it's  not there so let's check the original gifs folder, if it's in there, then treat it like a gif and decode
-	        		
-	        		imagePath = originalImagePath;
-	        		try {
-						matrix_.interactive();
-						//matrix_.writeFile(fps);
-						matrix_.writeFile(100); //since it's only one frame , doesn't matter what fps is
-    		        	WriteImagetoMatrix();
-    		        	matrix_.playFile();
-					} catch (ConnectionLostException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-	            }
-	        	else {
-			     	   animateAfterDecode(1); //the rgb565 is there so let's run the already decoded animation
-			    } 
-	        }
-	        
-	        else if (extension.equals("jpg") || extension.equals("jpeg")) {  
-	        	imagePath = originalImagePath;
-	        	try {
-        			matrix_.interactive();
-					matrix_.writeFile(fps);
-        			WriteImagetoMatrix();
-        			matrix_.playFile();
-				} catch (ConnectionLostException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-	        }
-	        
-	       else if (extension.equals("gif")) {  // if it's not a png, then it's a gif so let's animate
-	     	   gifView.setGif(imagePath);  //just sets the image , no decoding, decoding happens in the animateafterdecode method
-	     	   animateAfterDecode(1);
-	       } 
-	       return true;
-    }
-    else {
-    	showToast("PIXEL was not found, did you Bluetooth pair to PIXEL?");
-    	return true;
-    }
-}*/
-    
-
+	
     
 public boolean onItemLongClick(final AdapterView<?> parent, View v, final int position, long id) {  
     	
@@ -3151,6 +2977,31 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 	     /* if (item.getItemId() == R.id.stop_SlideShow) {
 	 	    	stopSlideShow();
 	 	   }*/
+	      
+	      
+	      if (item.getItemId() == R.id.menu_pixelStop) { //to stop streaming and eliminate the UI lag when the user wants to scroll to another gif
+	    	  
+		    	 
+	    	  if (matrix_ != null) {
+	    		  
+	    		  
+		    		  if (pixelHardwareID.substring(0,4).equals("PIXL")) {  
+		  	    		try {
+		  					matrix_.interactive(); //go out of local playback mode
+		  				} catch (ConnectionLostException e) {
+		  					// TODO Auto-generated catch block
+		  					e.printStackTrace();
+		  				}
+		  	    	}
+	    		  
+	    		  stopTimers();
+	    		  
+	    	  }
+	    	  else {
+	    		  showToast("PIXEL was not found, did you Bluetooth pair?");
+	    	  }
+	 	   }
+	      
 	    	
 		  if (item.getItemId() == R.id.menu_about) {
 			  
@@ -3175,8 +3026,10 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 			  File gifPathDecoded64 = new File(GIF64Path + "decoded");
 			  File gifPathSource64 = new File(GIF64Path + "gifsource");
 			  
-			  //stop any timers before deleting
-			  stopTimers();
+			  if (matrix_ != null) {
+				  //stop any timers before deleting
+				  stopTimers();
+			  }
 			  
 			  DeleteRecursive(pngPath);  
 			  DeleteRecursive(pngPath64);  
