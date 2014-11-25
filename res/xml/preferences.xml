@@ -20,6 +20,15 @@
     android:defaultValue="@string/pref_scanAll_default"
     android:summary="@string/scanAllSummary"/>-->
     
+    <ListPreference
+    android:key="@string/selected_matrix"
+    android:title="@string/matrix"
+    android:summary="@string/matrixSummary"
+    android:entries="@array/matrix_options"
+    android:entryValues="@array/matrix_values"
+    android:dialogTitle="@string/dialogTitleMatrix"
+    android:defaultValue="@string/matrix_default_value" />
+    
     
     <CheckBoxPreference
     android:title="@string/noSleep"
@@ -50,6 +59,19 @@
 	    android:maxLength="3"
 	    android:defaultValue="@string/pauseBetweenImagesDurationDefault"
 	    android:summary="@string/pauseBetweenImagesDurationSummary"/>
+	      
+	    <ListPreference
+	    android:key="@string/slideshowGIFFPS_key"
+	    android:title="@string/slideshowGIFFPS_title"
+	    android:summary="@string/slideshowGIFFPS_Summary"
+	    android:entries="@array/FPSOverride_options"
+	    android:entryValues="@array/FPSOverride_values"
+	    android:dialogTitle="@string/slideshowGIFFPS_dialogTitle"
+	    android:defaultValue="@string/slideshowGIFFPS_default_value" />
+	      
+	      
+	      
+	      
 	      
 	 <!--     <CheckBoxPreference
 	    android:title="@string/slideShowAllPNGs"
@@ -105,14 +127,7 @@
     android:defaultValue="@string/FPSOverrideDefault" />  -->
     
         
-    <ListPreference
-    android:key="@string/selected_matrix"
-    android:title="@string/matrix"
-    android:summary="@string/matrixSummary"
-    android:entries="@array/matrix_options"
-    android:entryValues="@array/matrix_values"
-    android:dialogTitle="@string/dialogTitleMatrix"
-    android:defaultValue="@string/matrix_default_value" />
+ 
     
     
   

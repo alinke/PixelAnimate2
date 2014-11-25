@@ -17,6 +17,8 @@ import java.io.OutputStreamWriter;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 
+import com.ledpixelart.piledriver.MainActivity;
+
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
@@ -61,6 +63,8 @@ public class Pixel
 	private float fps;
 	    
 	private static String decodedDirPathExternal;
+	
+	public static int GIFSlideShowFrameCounter = 0;
     
     public Pixel(RgbLedMatrix matrix, RgbLedMatrix.Matrix KIND)
     {
@@ -597,7 +601,144 @@ public int getDecodedresolution(String decodedGIFPathTXT) {  //need to return th
     			
     	}  
               
-      public static void appendWrite(byte[] data, String filename) throws IOException {
+        public static void decodeGIFSlideShow(String gifNamePath, int currentResolution) {  //pass the matrix type
+    		
+        	
+        	
+        	//this is for the slideshow, we have already taken care of the txt file, we only worry about the rgb565 here
+            
+      	  //from the gifpath, we need to derive just the gif name with no extension and the decoded path for .txt and rgb565
+      		
+      	    String delims = "[/]";
+            String[] aFileName = gifNamePath.split(delims);
+            int aFileNameLength = aFileName.length;
+            String gifName = aFileName[aFileNameLength-1];  
+            
+            String path = "";                               //sd card / pixel / gif  / gifname.gif
+            for (int y = 0; y < aFileNameLength-1 ; y++) {
+          	  if ( y==0 ) {
+          		  path = aFileName[y];   // sd card
+          	  }
+          	  else {
+          		  path = path + "/" + aFileName[y];       // sd card/pixel/favgif
+          	  }
+            }
+            //decodedDirPathExternal = path + "/decoded" ;   //  sdcard/pixel/favgif/decoded
+            
+            String fileType = aFileName[aFileNameLength-2];  //can be gif, png, userpng, usergif, png64, or gif64
+            String delims2 = "[.]";
+            String[] aFileName2 = gifName.split(delims2);
+            int aFileNameLength2 = aFileName2.length;
+            gifName = aFileName2[0];	//now we have just the short name with no extension
+      	
+      	//we're going to decode a native GIF into our RGB565 format
+  	    //we'll need to know the resolution of the currently selected matrix type: 16x32, 32x32, 32x64, or 64x64
+  		//and then we will receive the gif accordingly as we decode
+  		//we also need to get the original width and height of the gif which is easily done from the gif decoder class
+  		//gifName = FilenameUtils.removeExtension(gifName); //with no extension
+  		//String gifNamePath = currentDir + "/" + gifName + ".gif";  //   ex. c:\animation\tree.gif
+  		
+  		File file = new File(gifNamePath);
+  		FileInputStream gifInputStream = null;
+			try {
+				gifInputStream = new FileInputStream(file);
+				//System.out.println("Total file size to read (in bytes) : "
+					//	+ fis.available());
+			} catch (FileNotFoundException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+			
+  		
+  		if (file.exists()) {
+  			
+  			  //since we are decoding, we need to first make sure the .rgb565 and .txt decoded file is not there and delete if so.
+  			  //String gifNameTXTPath = MainActivity.FavGIFPath + "decoded" + "/" + "slideshowgif" + ".txt";  //   ex. c:\animation\decoded\tree.txtString gifNameTXTPath = decodedDirPathExternal + gifName + ".txt";  //   ex. c:\animation\decoded\tree.txt
+  			  //String gifName565Path = MainActivity.FavGIFPath + "decoded" + "/" + "slideshowgif" + ".rgb565";  //   ex. c:\animation\decoded\tree.rgb565
+  			  
+  			  //File fileTXT = new File(gifNameTXTPath);
+  			  //File file565 = new File(gifName565Path);
+  			  
+  			 
+  			  //*******************************************************************************************
+  			
+  			  GifDecoder d = new GifDecoder();
+  	          d.read(gifInputStream);
+  	          int numFrames = d.getFrameCount(); 
+  	          int frameDelay = d.getDelay(1); //even though gifs have a frame delay for each frmae, pixel doesn't support this so we'll take the frame rate of the second frame and use this for the whole animation. We take the second frame because often times the frame delay of the first frame in a gif is much longer than the rest of the frames
+  	          
+  	          Bitmap gifBitmap = d.getBitmap();
+  	        //  Dimension frameSize = d.getFrameSize();
+  	          int width_original = gifBitmap.getWidth();
+  	          int height_original = gifBitmap.getHeight();
+  	         
+  	          System.out.println("frame count: " + numFrames);
+  	          System.out.println("frame delay: " + frameDelay);
+  	          System.out.println("frame height: " + height_original);
+  	          System.out.println("frame width: " + width_original);
+  	          	          
+  	          for (int i = 0; i < numFrames; i++) { //loop through all the frames
+  	             Bitmap rotatedFrame = d.getFrame(i);  //need to validate we still need this?
+  	               	             
+  	             if (width_original != MainActivity.KIND.width || height_original != MainActivity.KIND.height) {
+  	    			 resizedFlag = 1;
+  	    			 //the iamge is not the right dimensions, so we need to re-size
+  	    			 float scaleWidth = ((float) MainActivity.KIND.width) / width_original;
+  	     		 	 float scaleHeight = ((float) MainActivity.KIND.height) / height_original;
+  	     		 	 
+  	    	   		 // create matrix for the manipulation
+  	    	   		 matrix2 = new Matrix();
+  	    	   		 // resize the bit map
+  	    	   		 matrix2.postScale(scaleWidth, scaleHeight);
+  	    	   		 resizedBitmap = Bitmap.createBitmap(rotatedFrame, 0, 0, width_original, height_original, matrix2, false); //false means don't anti-alias which is what we want when re-sizing for super pixel 64x64
+  	    	   		 canvasBitmap = Bitmap.createBitmap(MainActivity.KIND.width, MainActivity.KIND.height, Config.RGB_565); 
+  	    	   		 Canvas canvas = new Canvas(canvasBitmap);
+  	    	   		 canvas.drawRGB(0,0,0); //a black background
+  	    	   	   	 canvas.drawBitmap(resizedBitmap, 0, 0, null);
+  	    	   		 ByteBuffer buffer = ByteBuffer.allocate(MainActivity.KIND.width * MainActivity.KIND.height *2); //Create a new buffer
+  	    	   		 canvasBitmap.copyPixelsToBuffer(buffer); //copy the bitmap 565 to the buffer		
+  	    	   		 BitmapBytes = buffer.array(); //copy the buffer into the type array
+  	    		 }
+  	    		 else {
+  	    			// then the image is already the right dimensions, no need to waste resources resizing
+  	    			 resizedFlag = 0;
+  	    			 canvasBitmap = Bitmap.createBitmap(MainActivity.KIND.width, MainActivity.KIND.height, Config.RGB_565); 
+  	    	   		 Canvas canvas = new Canvas(canvasBitmap);
+  	    	   	   	 canvas.drawBitmap(rotatedFrame, 0, 0, null);
+  	    	   		 ByteBuffer buffer = ByteBuffer.allocate(MainActivity.KIND.width * MainActivity.KIND.height *2); //Create a new buffer
+  	    	   		 canvasBitmap.copyPixelsToBuffer(buffer); //copy the bitmap 565 to the buffer		
+  	    	   		 BitmapBytes = buffer.array(); //copy the buffer into the type array
+  	    		 }
+  			   		    
+  			   		 File decodeddir = new File(MainActivity.FavGIFPath + "decoded"); //this could be gif, gif64, or usergif
+  					    if(decodeddir.exists() == false)
+  			             {
+  					    	decodeddir.mkdirs();
+  			             }
+  					
+  				   			try {
+  							
+  								appendWrite(BitmapBytes, MainActivity.FavGIFPath + "decoded" + "/" + "slideshowgif" + ".rgb565"); //this writes one big file instead of individual ones
+  								GIFSlideShowFrameCounter++; //we need this to count up all the frames in the combined gif slideshow
+  								
+  							} catch (IOException e1) {
+  								// TODO Auto-generated catch block
+  								//Log.e("PixelAnimate", "Had a problem writing the original unified animation rgb565 file");
+  								e1.printStackTrace();
+  							}
+  				  
+  	             
+  	          } //end for, we are done with the loop so let's now write the file
+  	          
+  	          //normally we would write the frame delay here but we're not going to because we have one master frame delay/txt file in the main program
+  		}
+  		else {
+  			System.out.println("ERROR  Could not write " + decodedDirPathExternal + "/" + "slideshowgif" + ".rgb565");
+  		}
+  			
+  	}
+        
+        public static void appendWrite(byte[] data, String filename) throws IOException {
     	 FileOutputStream fos = new FileOutputStream(filename, true);  //true means append, false is over-write
          fos.write(data);
          fos.close();

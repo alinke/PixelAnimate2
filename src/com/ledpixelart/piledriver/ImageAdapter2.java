@@ -15,9 +15,6 @@ import android.widget.ImageView;
 
     	  private Context mContext;
     	  ArrayList<String> itemList = new ArrayList<String>();
-    	  
-    	  
-    	  
 
     	  public ImageAdapter2(Context c) {
     	   mContext = c;
@@ -51,7 +48,6 @@ import android.widget.ImageView;
     	   // TODO Auto-generated method stub
     	   return 0;
     	  }
-    	  
 
     	  @Override
     	  public View getView(int position, View convertView, ViewGroup parent) {
@@ -70,12 +66,6 @@ import android.widget.ImageView;
     	     128);
 
     	   imageView.setImageBitmap(bm);
-    	   
-    	  // ImageView profileImgView = (ImageView) gridCell.findViewById(R.id.profileImg);
-          // ImageLoaderHelper.getImageLoader(context).displayImage(getItem(position).getImageUrl(), profileImgView);
-
-    	   
-    	   
     	   return imageView;
     	  }
 
@@ -95,12 +85,9 @@ import android.widget.ImageView;
     	   // Decode bitmap with inSampleSize set
     	   options.inJustDecodeBounds = false;
     	   bm = BitmapFactory.decodeFile(path, options);
-    	   
-    	 
+
     	   return bm;
     	  }
-    	  
-    	  
 
     	  public int calculateInSampleSize(
 

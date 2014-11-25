@@ -2,21 +2,20 @@
 <resources>
   <string name="app_name">PIXEL: LED ART</string>
 
-  
+    <string name="oneTimeSetupString">Initial Setup: Copying animations to your SD card.</string> 
+    <string name="bluetoothPairingString">Did you Bluetooth pair to PIXEL? The pairing code is: 0000 or 4545 for PIXEL V1."</string>   
+    <string name="menu_camera_title">Camera Pic to PIXEL</string>  
     <string name="menu_about_title">About</string> 
-    <string name="menu_about_summary">http://ledpixelart.html\n\nDesigned by Open Gadgets LLC</string>
+    <string name="menu_about_summary">http:Slash:/Slash:/ledpixelart.html\n\nDesigned by Open Gadgets LLC</string>
     <string name="versionString">App Version</string> 
     <string name="BootloaderVersionString">Bootloader Version</string> 
     <string name="FirmwareVersionString">Firmware Version</string> 
     <string name="LibraryVersionString">Library Version</string> 
     <string name="HardwareVersionString">Hardware Version</string> 
-    
-   <string name="oneTimeSetupString">One Time Setup: Copying animations to your SD card.</string> 
-   <string name="bluetoothPairingString">Did you Bluetooth pair to PIXEL? The pairing code is: 0000 or 4545 for PIXEL V1."</string> 
    
-   <string name="menu_instructions_title">Instructions</string>
-   <string name="setupInstructionsString">Bluetooth pair to PIXEL using code 0000 or 4545 for PIXEL V1.\n\nPIXEL V2 users may long tap to write to PIXEL for stand alone operation.\n\nAdd your own art by sharing to this app from email, gallery, and other apps.\n\nStill images (PNGs and JPGs) can be favorited. Note single frame GIFs cannot be favorited, convert them to PNG if you need to favorite and use in a slide show. Use the menu to create a slide show of only favorites.\n\n64x64 animated GIFs will only show if SUPER PIXEL 64x64 is selected from settings.</string>
-   <string name="setupInstructionsStringTitle">Instructions</string>   
+    <string name="menu_instructions_title">Instructions</string>
+    <string name="setupInstructionsString">Bluetooth pair to PIXEL using code 0000 or 4545 for PIXEL V1.\n\nPIXEL V2 users may long tap to write to PIXEL for stand alone operation.\n\nAdd your own art by sharing to this app from email, gallery, and other apps.\n\nUse the menu to create a slide show of favorites.\n\n64x64 animated GIFs will only show if SUPER PIXEL 64x64 is selected from settings.</string>
+    <string name="setupInstructionsStringTitle">Instructions</string>   
      
     <string name="prefTitle">PIXEL:LED ART Settings</string>
     <string name="menu_prefs_title">Settings</string>
@@ -32,8 +31,6 @@
     <string name="OKText">OK</string>   
     <string name="notFoundString">PIXEL Not Found</string>   
     
-    <string name="menu_camera_title">Camera Pic to PIXEL</string>   
-    
     <string name="menu_getART_title">Pixel Art on the Web</string>   
     <string name="menu_pixelJoint_title">Pixel Art on the Web</string>   
     <string name="artURL1">pixeljoint.com</string>   
@@ -43,14 +40,20 @@
     <string name="menu_btPair_title">Bluetooth Pair PIXEL | Code 0000 or 4545</string>   
    
     <string name="selected_matrix">selected_matrix</string>
-    <string name="matrix">PIXEL (LED Panel) Size</string>
-    <string name="matrixSummary">Change the LED Panel Size (PIXEL 32x32 or SUPER PIXEL 64x64). *** IMPORTANT*** You must restart this app manually after changing.</string>    
-    <string name="dialogTitleMatrix">LED Panel Selection</string>
+    <string name="matrix">PIXEL Model</string>
+    <string name="matrixSummary">Choose between standard PIXEL or SUPER PIXEL</string>    
+    <string name="dialogTitleMatrix">PIXEL Model</string>
     <string name="matrix_default_value">3</string>   
+    
+    <string name="slideshowGIFFPS_key">slideshowGIFFPS_key</string>
+    <string name="slideshowGIFFPS_title">GIF Slide Show FPS</string>
+    <string name="slideshowGIFFPS_Summary">Frame rate (frames per second) for the GIF slide show</string>    
+    <string name="slideshowGIFFPS_dialogTitle">GIF Slide Show FPS</string>
+    <string name="slideshowGIFFPS_default_value">4</string>  
     
     <string name="fps_override">fps_override</string>
     <string name="FPSOverrideTitle">Frames per Second</string>
-    <string name="FPSOverrideSummary">Normally you won\'t need to change this, only if you want to override the frames per second of the animations. Restart app after changing.</string>    
+    <string name="FPSOverrideSummary">Normally you would not need to change this, only if you want to override the frames per second of the animations. Restart app after changing.</string>    
     <string name="dialogTitleFPSOverride">Frames per Second</string>
     <string name="FPSOverrideDefault">0</string>  
     
@@ -59,9 +62,6 @@
     
     <string name="slideShowtitle">Slide Show Settings</string>
     <string name="slideShowtitleSummary">Slide Show Settings</string>
-    
-    <string name="menu_createSlideShow_title">Write Slide Show All</string>
-    <string name="menu_createSlideShowFavs_title">Write Slide Show Favs</string>
    
     <string name="slideShowMode">Slide Show Mode</string>    
     <string name="slideShowModeDefault">false</string>
@@ -96,18 +96,15 @@
     <string name="showStartupMsgDefault">true</string>    
     <string name="showStartupMsgSummary"></string>
     
-    
-     <string name="menu_pixelStop_title">Stop Streaming</string>  
-    
     <string name="downloadURL_32">Download URL 32x32</string>    
     <string name="pref_downloadURL_32">pref_downloadURL_32</string>
     <string name="downloadURL_32Default">"www.pixeljoint.com/pixels/new_icons.asp?search=&amp;dimo=%3D&amp;dim=32&amp;colorso=%3E%3D&amp;colors=2&amp;tran=&amp;anim=&amp;iso=&amp;av=&amp;owner=&amp;d=&amp;dosearch=1&amp;ob=search&amp;action=search"</string>    
-    <string name="downloadURL_32Summary">URL for 32x32 pixel art, don\'t include http://</string>
+    <string name="downloadURL_32Summary">URL for 32x32 pixel art, do not include http:Slash:/Slash:/</string>
     
     <string name="downloadURL_64">Download URL 64x64</string>    
     <string name="pref_downloadURL_64">pref_downloadURL_64</string>
     <string name="downloadURL_64Default">www.pixeljoint.com/pixels/new_icons.asp?search=&amp;dimo=%3D&amp;dim=64&amp;colorso=%3E%3D&amp;colors=2&amp;tran=&amp;anim=&amp;iso=&amp;av=&amp;owner=&amp;d=&amp;dosearch=1&amp;ob=search&amp;action=search</string>    
-    <string name="downloadURL_64Summary">URL for 64x64 pixel art, don\'t include http://</string>
+    <string name="downloadURL_64Summary">URL for 64x64 pixel art, do not include http:Slash:/Slash:/</string>
     
     <string name="StartupMessage">Short tap to stream or long tap to write</string>
     
@@ -121,7 +118,7 @@
     <string name="startup_verbage_2">Copying animations to your local storage&#8230;</string>
     <string name="firstTime_instructions"></string>
   
-     <string name="imageDisplayDuration">Image Display Duration</string>    
+    <string name="imageDisplayDuration">Image Display Duration</string>    
     <string name="pref_imageDisplayDuration">pref_imageDisplayDuration</string>
     <string name="imageDisplayDurationDefault">5</string>
     <string name="imageDisplayDurationSummary">Number of seconds each image is displayed</string>
@@ -136,7 +133,7 @@
     <string name="menu_refresh_title">Refresh Stock Art</string>
     <string name="menu_refresh_summary">Please exit and restart this app now to refresh the stock art.</string>
     
-    <string name="stopSlideShowMessage">You\'re still in slide show mode, swipe from right to left to end the slide show and then you can select a single image</string>
+    <string name="stopSlideShowMessage">You are still in slide show mode, swipe from right to left to end the slide show and then you can select a single image</string>
     <string name="loadingImagesPlsWaitTitle">Please Wait</string>
     <string name="loadingImagesPlsWait">Loading images, just a moment&#8230;</string>
     
@@ -150,24 +147,51 @@
     <string name="pref_slideShowAllPNGsDefault">false</string>
     <string name="slideShowAllPNGsSummary">The slide show will include only favorites (if you have marked favorites). Check here to include all PNGs in the slide show regardless of favorites.</string>
     
-    
-    
     <string name="menu_startSlideShow_title">Slide Show</string>
     <string name="menu_stopSlideShow_title">Stop Slide Show</string>
-    
-  
-    
-  
     
     <string name="debugMode">Debug Mode</string>    
     <string name="pref_debugMode">pref_debugMode</string>
     <string name="pref_debugModeDefault">false</string>    
     <string name="debugModeSummary">Displays debug messages, use to see how often the Bluetooth connections are getting disconnected and connected as well as other debug messages</string>
     
-    
     <string name="StartInstructions">Tap to Animate</string>
     
-
-   
+ 	<string name="oneTimeCopyTitle">Initial Setup</string> 
+    <string name="oneTimeCopyMessage">Do not interrupt or leave this screen. It will stay on 100% for awhile so please be patient.</string> 
     
+    <string name="LongTapActionTitle">Select Action</string> 
+    <string name="LongTapActionWrite">Write</string> 
+   
+    <string name="cannotWriteMsg">Sorry, writing is only supported on PIXEL V2 frames and above, streaming instead&#8230;</string> 
+    <string name="FavoriteText">Favorite</string> 
+    <string name="UnFavoriteText">Unfavorite</string> 
+    <string name="MovingUp">Moving Up</string> 
+    <string name="MovingDown">Moving Down</string> 
+    <string name="AreYouSure">Are You Sure?</string> 
+    <string name="Yes">Yes</string> 
+    <string name="Delete">Delete</string> 
+    <string name="Cancel">Cancel</string> 
+    <string name="DoNotInterrupt">Please do not interrupt or leave this screen.</string> 
+    <string name="oneTimeDecode">One time decode in process, just a moment&#8230;</string> 
+    <string name="writingPIXEL">Writing to PIXEL</string> 
+    <string name="PIXELNotFound">PIXEL was not found, did you Bluetooth pair?</string> 
+    <string name="NoWritinginKiosk">Writing to PIXEL not supported in Kiosk mode</string> 
+    <string name="ProcessingFavorite">Processing Favorite</string> 
+    <string name="LEDPanelChanged">LED panel model was changed, decoding again&#8230;</string> 
+    <string name="NoFavoritesMarked">You have not marked any favorites, long tap to mark a favorite</string> 
+    <string name="WritingOnlyOnV2">Sorry, writing is only supported on PIXEL V2 and higher frames</string>
+   
+    <string name="menu_createSlideShow_title">Write Slide Show of All Images</string>
+    <string name="menu_createSlideShowFavs_title">Write Slide Show of Favorite Images</string>
+   
+    <string name="BluetoothPairInstructionsV1">Bluetooth Pair to PIXEL using code: 4545</string> 
+    <string name="BluetoothPairInstructionsV2">Bluetooth Pair to PIXEL using code: 0000</string> 
+   
+    <string name="PreparingSlideshow">Preparing Slide Show</string> 
+    <string name="WritingSlideshow">Writing Slide Show to PIXEL</string> 
+    <string name="WritingSlideshowGIF">Writing Slide Show GIF to PIXEL</string> 
+
+    <string name="menu_createSlideShowGIFFavs_title">Write Slide Show of Favorite GIFs</string> 
+   
 </resources>

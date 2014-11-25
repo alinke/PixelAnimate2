@@ -7,7 +7,7 @@ import java.io.FilenameFilter;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import com.ledpixelart.piledriver.MainActivity.AsyncTaskLoadFiles;
+//import com.ledpixelart.piledriver.MainActivity.AsyncTaskLoadFiles;
 
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -145,9 +145,9 @@ import android.util.Log;
     	  @Override
     	  protected void onPostExecute(Void result) {
     		  
-    		  MainActivity.myTaskAdapter.remove(MainActivity.gridViewPosition); //remove the old one
+    		/*  MainActivity.myTaskAdapter.remove(MainActivity.gridViewPosition); //remove the old one
     		  MainActivity.myTaskAdapter.add(MainActivity.FavGIFPath + MainActivity.filename_no_extension + ".png"); 
-    		  MainActivity.myTaskAdapter.notifyDataSetChanged();
+    		  MainActivity.myTaskAdapter.notifyDataSetChanged();*/
     		  //MainActivity.myTaskAdapter.clear();
     		  
     		 // MainActivity.myTaskAdapter.//
