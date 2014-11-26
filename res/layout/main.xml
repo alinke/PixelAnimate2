@@ -19,6 +19,8 @@
         android:layout_height="wrap_content"
         android:text="Reload"/>
         
+        android:numColumns="auto_fit"
+         android:stretchMode="columnWidth"
          -->
      
     <GridView
@@ -26,10 +28,8 @@
         android:layout_width="fill_parent" 
         android:layout_height="fill_parent"
         android:background="#000000"   
-        android:numColumns="3"
         android:verticalSpacing="10dp"
         android:horizontalSpacing="10dp"
-        android:stretchMode="columnWidth"
         android:gravity="center"/>
 
 </LinearLayout>

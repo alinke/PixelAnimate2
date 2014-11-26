@@ -371,8 +371,28 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	     gridview = (GridView) findViewById(R.id.gridview);
 	     list = new ListAdapter(this, items);
 	     gridview.setAdapter(list);
-	     gridview.setNumColumns(3);
-	    // gridview.setFastScrollEnabled(true);  //with this one, we're getting a crash
+	     
+	     if (getResources().getDisplayMetrics().widthPixels < 481) {  //my droidX is 480 width as an example
+	    	 gridview.setNumColumns(2);
+	     }
+	     else {
+	    	 gridview.setNumColumns(3);
+	     }
+	     
+	     /*int iDisplayWidth = getResources().getDisplayMetrics().widthPixels ;
+	     showToast(String.valueOf(iDisplayWidth));
+	     
+	    int iDisplayWidth = getResources().getDisplayMetrics().widthPixels ;
+	     int iNumberOfColumns = 3;
+	     int iImageWidth = iDisplayWidth / iNumberOfColumns ; 
+	     gridview.setColumnWidth( iImageWidth );
+	     gridview.setStretchMode( GridView.NO_STRETCH ) ;   
+	     
+	     int iDisplayWidth = getResources().getDisplayMetrics().widthPixels ;
+	     showToast(String.valueOf(iDisplayWidth));*/
+	     
+	     //gridview.setNumColumns(3);
+	    // gridview.setFastScrollEnabled(true);  //with this one, we're getting a CRASH
 	     
 	     gridview.setKeepScreenOn(false);
 		 
@@ -1452,7 +1472,7 @@ private void copyGIF64Source() {
 	  
 	   list = new ListAdapter(this, items);
 	   gridview.setAdapter(list);
-	   gridview.setNumColumns(3);
+	   //gridview.setNumColumns(3);
 	   gridview.setKeepScreenOn(false);
   	 }
     

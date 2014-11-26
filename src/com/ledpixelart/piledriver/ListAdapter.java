@@ -11,13 +11,20 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.util.LruCache;
+
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridLayout.LayoutParams;
 import android.widget.GridView;
 import android.widget.ImageView;
+
+//import android.util.LruCache;
+//import android.widget.GridLayout.LayoutParams;
+
+import android.support.v4.util.LruCache;
+import android.support.v4.view.ViewPager.LayoutParams;
+import android.support.v7.appcompat.*;
+
 
 @SuppressLint("NewApi")
 public class ListAdapter extends BaseAdapter {
@@ -51,7 +58,8 @@ public class ListAdapter extends BaseAdapter {
 			protected int sizeOf(String key, Bitmap bitmap) {
 				// The cache size will be measured in bytes rather than number
 				// of items.
-				return bitmap.getByteCount();
+				return bitmap.getRowBytes() * bitmap.getHeight(); //changed this because getByteCount is only in API12 and above but according to http://stackoverflow.com/questions/12581322/android-bitmap-getbytecount-in-api-lesser-than-12 is the same
+				//return bitmap.getByteCount();
 			}
 
 		};

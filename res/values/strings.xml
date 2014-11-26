@@ -182,8 +182,8 @@
     <string name="NoFavoritesMarked">You have not marked any favorites, long tap to mark a favorite</string> 
     <string name="WritingOnlyOnV2">Sorry, writing is only supported on PIXEL V2 and higher frames</string>
    
-    <string name="menu_createSlideShow_title">Write Slide Show of All Images</string>
-    <string name="menu_createSlideShowFavs_title">Write Slide Show of Favorite Images</string>
+    <string name="menu_createSlideShow_title">Write All Images Slide Show</string>
+    <string name="menu_createSlideShowFavs_title">Write Favorite Images Slide Show</string>
    
     <string name="BluetoothPairInstructionsV1">Bluetooth Pair to PIXEL using code: 4545</string> 
     <string name="BluetoothPairInstructionsV2">Bluetooth Pair to PIXEL using code: 0000</string> 
@@ -192,6 +192,6 @@
     <string name="WritingSlideshow">Writing Slide Show to PIXEL</string> 
     <string name="WritingSlideshowGIF">Writing Slide Show GIF to PIXEL</string> 
 
-    <string name="menu_createSlideShowGIFFavs_title">Write Slide Show of Favorite GIFs</string> 
+    <string name="menu_createSlideShowGIFFavs_title">Write Favorite GIFs Slide Show</string> 
    
 </resources>
