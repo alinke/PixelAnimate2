@@ -28,8 +28,8 @@
         android:layout_width="fill_parent" 
         android:layout_height="fill_parent"
         android:background="#000000"   
-        android:verticalSpacing="10dp"
-        android:horizontalSpacing="10dp"
+        android:verticalSpacing="5dp"
+        android:horizontalSpacing="5dp"
         android:gravity="center"/>
 
 </LinearLayout>

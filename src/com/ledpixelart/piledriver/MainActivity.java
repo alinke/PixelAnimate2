@@ -49,9 +49,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.ByteBuffer;
 import java.nio.ShortBuffer;
 import java.nio.channels.FileChannel;
@@ -128,12 +130,14 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.graphics.Matrix;
 import android.graphics.Bitmap.Config;
 import android.graphics.drawable.BitmapDrawable;
-
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 
 import java.util.UUID;
+import java.util.concurrent.Executor;
+
 import com.ledpixelart.pixel.hardware.Pixel;
+
 import android.view.ContextMenu;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -351,6 +355,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	
 	private int slideshowGIFFrameDelay;
 	
+	public static int targetScreenResolution = 0;
+	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -359,25 +365,54 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		 setContentView(R.layout.main);
 	      display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-	     
+	      
+	      
+	     //**** was added to due intermittent crashes http://stackoverflow.com/questions/24343563/avoiding-rejectedexecutionexception-in-android-4-4-when-app-uses-list 
+	      try {
+			AsyncTask.class.getMethod("setDefaultExecutor", Executor.class).invoke(null, AsyncTask.SERIAL_EXECUTOR);
+		} catch (IllegalArgumentException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		} catch (IllegalAccessException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		} catch (InvocationTargetException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		} catch (NoSuchMethodException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
 			
 	      ///original gridview code
 	     //gridview = (GridView) findViewById(R.id.gridview);
 	     //myImageAdapter = new ImageAdapter2(this);
 	     //gridview.setAdapter(myImageAdapter);
 	      ///*******************
+	      
+	     targetScreenResolution = getResources().getDisplayMetrics().widthPixels;
+	     //showToast(String.valueOf(targetScreenResolution));
 	     
 	     //****new gridview and adapter code 
 	     gridview = (GridView) findViewById(R.id.gridview);
 	     list = new ListAdapter(this, items);
 	     gridview.setAdapter(list);
 	     
-	     if (getResources().getDisplayMetrics().widthPixels < 481) {  //my droidX is 480 width as an example
-	    	 gridview.setNumColumns(2);
+	     int numColumns = 2;
+	     if (targetScreenResolution < 481) {  //my droidX is 480 width as an example, samsung gs4 and gs4 is 1080 width, nexus 4 is 768, nexus 7 original is 800
+	    	 numColumns = targetScreenResolution / 128;
+	    	 //showToast(String.valueOf(numColumns));
+	    	 gridview.setNumColumns(numColumns);
 	     }
 	     else {
-	    	 gridview.setNumColumns(3);
+	    	 numColumns = targetScreenResolution / 256;
+	    	 //showToast(String.valueOf(numColumns));
+	    	 gridview.setNumColumns(numColumns);
 	     }
+	     
+	     //note samsung gs4 and gs4 is 1080 width
+	     //nexus4 is 800
+	     
 	     
 	     /*int iDisplayWidth = getResources().getDisplayMetrics().widthPixels ;
 	     showToast(String.valueOf(iDisplayWidth));

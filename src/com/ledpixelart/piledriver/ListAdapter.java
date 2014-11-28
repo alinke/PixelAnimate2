@@ -91,9 +91,17 @@ public class ListAdapter extends BaseAdapter {
 					LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 			
 			// imageView = new ImageView(mContext);
-	    	    img.setLayoutParams(new GridView.LayoutParams(256,256));
-	    	    img.setScaleType(ImageView.ScaleType.CENTER_CROP);
-	    	    img.setPadding(2, 2, 2, 2);
+			
+			if (MainActivity.targetScreenResolution < 481) { //the small screen can't take the larger icons
+				img.setLayoutParams(new GridView.LayoutParams(128,128)); 
+			}
+			else {
+				img.setLayoutParams(new GridView.LayoutParams(256,256)); 
+			}
+			
+	    	   // img.setLayoutParams(new GridView.LayoutParams(128,128)); //this used to be 256, 256 which explains why the grids were too small for the 128 sizes images
+	    	img.setScaleType(ImageView.ScaleType.CENTER_CROP);
+	    	img.setPadding(1, 1, 1, 1);
 			
 			
 		} else {
@@ -233,10 +241,21 @@ public class ListAdapter extends BaseAdapter {
 			return bitmap;
 		}*/
 		
+		//try adding statement here to change 128 to something smaller is the screen size is smaller
+		
 		protected Bitmap doInBackground(String... params) {
 				data = params[0];
-				final Bitmap bitmap = decodeSampledBitmapFromUri(
-						data, 128,128);
+				
+				final Bitmap bitmap;
+				
+				if (MainActivity.targetScreenResolution < 481) { //the small screen can't take the larger icons
+					bitmap = decodeSampledBitmapFromUri(
+							data, 128,128);
+				}
+				else {
+					bitmap = decodeSampledBitmapFromUri( //but use the larger icons for the bigger screen
+							data, 256,256);
+				}
 				addBitmapToMemoryCache(params[0], bitmap); //params is the key
 				return bitmap;
 			}
