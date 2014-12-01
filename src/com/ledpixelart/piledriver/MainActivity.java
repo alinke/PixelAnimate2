@@ -1594,7 +1594,7 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
     		     
     		    	if (matrix_ != null) { 
 				  		
-    		    		if (!pixelHardwareID.substring(0,4).equals("PIXL")) {
+    		    		if (!pixelHardwareID.substring(0,4).equals("PIXL")) { //add the kiosk mode firmware here
     		    			showToast(getString(R.string.cannotWriteMsg));
     		    		}
     		    		
