@@ -3332,7 +3332,7 @@ public class UnFavoriteGIFMoveAsync extends AsyncTask<Void, Integer, Void>{
 	
 	 
 	 /*  try {
-		matrix_.playFile();
+		////matrix_.playFile();
 	} catch (ConnectionLostException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
@@ -3899,7 +3899,7 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 						matrix_.interactive();
 						matrix_.writeFile(100);
 						WriteCameratoMatrix(cameraBMP);
-	        			matrix_.playFile();
+	        			////matrix_.playFile();
 	        			showToast("went here");
 	        			
 					} catch (ConnectionLostException e) {
@@ -4111,7 +4111,8 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 	    	 BitmapInputStream = getResources().openRawResource(R.raw.select32by64);
 	    	// BitmapInputStream = getResources().openRawResource(R.raw.select32by128);
 	    	 frame_length = 8192; //original 8192
-	    	 currentResolution = 64; //original 128
+	    	 currentResolution = 128; //original 128
+	    	 break;
 	     case 8:
 	    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_128x32; //horizontal
 	    	 BitmapInputStream = getResources().openRawResource(R.raw.select128by32);
@@ -4129,7 +4130,31 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 	    	 BitmapInputStream = getResources().openRawResource(R.raw.select64by64);
 	    	 frame_length = 8192;
 	    	 currentResolution = 128; 
-	    	 break;	 	 		 
+	    	 break;
+	     case 11:
+	    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x32;
+	    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
+	    	 frame_length = 2048;
+	    	 currentResolution = 32; 
+	    	 break;	 
+	     case 12:
+	    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x32_ColorSwap;
+	    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
+	    	 frame_length = 2048;
+	    	 currentResolution = 32; 
+	    	 break;	 	 
+	     case 13:
+	    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_64x32;
+	    	 BitmapInputStream = getResources().openRawResource(R.raw.select64by32);
+	    	 frame_length = 4096;
+	    	 currentResolution = 64; 
+	    	 break;	
+	     case 14:
+	    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_64x64;
+	    	 BitmapInputStream = getResources().openRawResource(R.raw.select64by64);
+	    	 frame_length = 8192;
+	    	 currentResolution = 128; 
+	    	 break;	 	 	
 	     default:	    		 
 	    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32; //v2 as the default
 	    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
