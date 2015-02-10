@@ -20,6 +20,12 @@
     android:defaultValue="@string/pref_scanAll_default"
     android:summary="@string/scanAllSummary"/>-->
     
+    <CheckBoxPreference
+    android:title="@string/AutoSelectPanel"
+    android:key="pref_AutoSelectPanel"
+    android:defaultValue="@string/pref_AutoSelectPanelDefault"
+    android:summary="@string/AutoSelectPanelSummary"/>
+    
     <ListPreference
     android:key="@string/selected_matrix"
     android:title="@string/matrix"
@@ -28,7 +34,6 @@
     android:entryValues="@array/matrix_values"
     android:dialogTitle="@string/dialogTitleMatrix"
     android:defaultValue="@string/matrix_default_value" />
-    
     
     <CheckBoxPreference
     android:title="@string/noSleep"

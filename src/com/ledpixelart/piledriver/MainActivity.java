@@ -1,8 +1,11 @@
 package com.ledpixelart.piledriver;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -42,6 +45,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Messenger;
 //import android.os.Parcel;
 //import android.os.Parcelable;
 import android.os.SystemClock;
@@ -59,6 +63,8 @@ import java.nio.ShortBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.Vector;
 
 import ioio.lib.api.AnalogInput;
 import ioio.lib.api.IOIO.VersionType;
@@ -69,6 +75,7 @@ import ioio.lib.util.android.IOIOActivity;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
@@ -122,6 +129,7 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 //import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -135,22 +143,40 @@ import android.bluetooth.BluetoothAdapter;
 
 import java.util.UUID;
 import java.util.concurrent.Executor;
+import java.util.zip.CRC32;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 
+import com.google.android.vending.expansion.downloader.IDownloaderClient;
 import com.ledpixelart.pixel.hardware.Pixel;
 
 import android.view.ContextMenu;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 
+import com.android.vending.expansion.zipfile.ZipResourceFile;
+import com.android.vending.expansion.zipfile.ZipResourceFile.ZipEntryRO;
+import com.google.android.vending.expansion.downloader.Constants;
+import com.google.android.vending.expansion.downloader.DownloadProgressInfo;
+import com.google.android.vending.expansion.downloader.DownloaderClientMarshaller;
+import com.google.android.vending.expansion.downloader.DownloaderServiceMarshaller;
+import com.google.android.vending.expansion.downloader.Helpers;
+import com.google.android.vending.expansion.downloader.IDownloaderClient;
+import com.google.android.vending.expansion.downloader.IDownloaderService;
+import com.google.android.vending.expansion.downloader.IStub;
+
 //import android.widget.PopupMenu.OnMenuItemClickListener; //decided not to use this because does not work on Android Gingerbread
 //import com.ledpixelart.piledriver.AsyncTaskFavoriteCopyGIFs;
 
 
-//to do , think about deleting the decoded directory if led panel size changed
+/*TO DO
+add a preference to choose led panel automatically, set default to on but the user can override
+add art and default view for pixel 16*/
 
 
 @SuppressLint("NewApi")
-public class MainActivity extends IOIOActivity implements OnItemClickListener, OnItemLongClickListener  {
+public class MainActivity extends IOIOActivity implements OnItemClickListener, OnItemLongClickListener, IDownloaderClient  {
 
 	private static GifView gifView;
 	static ioio.lib.api.RgbLedMatrix matrix_;
@@ -196,6 +222,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
     public static String PNGPath =  Environment.getExternalStorageDirectory() + "/pixel/png/"; //static pngs
     public static String PNG64Path =  Environment.getExternalStorageDirectory() + "/pixel/png64/"; //static pngs 64x64
     public static String GIF64Path =  Environment.getExternalStorageDirectory() + "/pixel/gif64/";  //gifs 64x64, there will be a decoded directory here
+    public static String PNG16Path =  Environment.getExternalStorageDirectory() + "/pixel/png16/"; //static pngs 32x16
+    public static String GIF16Path =  Environment.getExternalStorageDirectory() + "/pixel/gif16/";  //gifs 32x16, there will be a decoded directory here
     public static String userPNGPath =  Environment.getExternalStorageDirectory() + "/pixel/userpng/"; //user supplied pngs
     public static String userGIFPath =  Environment.getExternalStorageDirectory() + "/pixel/usergif/";  //user supplied gifs, there will be a decoded directory here
     public static String FavPNGPath =  Environment.getExternalStorageDirectory() + "/pixel/favpng/"; //user supplied pngs
@@ -357,6 +385,389 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	
 	public static int targetScreenResolution = 0;
 	
+	
+	/*this next set of code is for the APK expansion downloader service, 
+	we need this because APK's in Android can only be 50 MB and
+	with all the decoded pixel art, we're now over the 50 MB limit
+	
+	so here's how we'll handle things going forward:
+		- assets will have all baseline gif and pngs (so the user can still be up and running if downloader service is not available)
+		- the main apk expansion will have all baseline gif64, png64, gif16, and png16
+		- the patch apk expansion will have incremental gif, gif64, gif16, png, png64, and png16
+		- usergif, userpng, favgif, and favpng will continue to be generated on the fly
+		
+		- the main apk expansion zip we will unzip/inflate and overwrite whatever is their in our existing directory structure under /pixel
+		- for the patch apk expansion zip, we will add incremental files into their own directories and not over-write anything currently in the directory
+		- we'll need some preference flag that gets set letting us know that we actually completed the inflate after the download, one flag for main and one flag for patch
+		- and then if a new apk expansion files comes in the future, then we'll need to reset this flag preference
+		
+		- and also we should add an Internet check and not try to download if the user is not on the Internet
+		- we also need to add a sd card space check to ensure the user has enough sd card / intenral storage available
+		
+	 the program flow is as follows:
+	 	1. first assets will inflat as it does now and also create all the directories: gif, gif64, png, png64, gif16, png16, etc, this will repeat if the gifs directory is missing
+	 	2. then we copy from assets to gif and png as we do today and call ContinueonCreate()
+	 	3. now here we check if the user has internet and sd card space
+	 	4. if yes, then we'll do a check to see if they have the obb files and start the download if they do not
+	 	5. do a quick verification of the downloaded files
+	 	6. if download files are valid, then we unpack and unzip into our folder structure starting with the main apk
+	 	7. now move on to patch apk and unzip into our folder structure, for patch make sure to unzip into the folder structure but do a merge and not over-write anything
+	 	8. set a flag somewhere telling us that we have finished the unzip, do this because it's possible the user has the obbs but didn't have enough free space for the unzip and he/she free'd up some space later and therefore we should try again
+	 	9. then in the future once the primary apk and expansion files are updated again, start from step 3
+	 	10. we could also add a preference that the user can pick if they don't ever want to be prompted for updated art with the rational they will never have enough space?
+	 	
+	*/
+	
+	private ProgressBar mPB;
+
+    private TextView mStatusText;
+    private TextView mProgressFraction;
+    private TextView mProgressPercent;
+    private TextView mAverageSpeed;
+    private TextView mTimeRemaining;
+
+    private View mDashboard;
+    private View mCellMessage;
+
+    private Button mPauseButton;
+    private Button mWiFiSettingsButton;
+
+    private boolean mStatePaused;
+    private int mState;
+
+    private IDownloaderService mRemoteService;
+
+    private IStub mDownloaderClientStub;
+    
+    private ProgressDialog mProgressDialog;
+ 
+    private String unzipLocation = Environment.getExternalStorageDirectory() + "/pixel/";
+    private String StorezipFileLocation =Environment.getExternalStorageDirectory() + "/Android/obb/"; //change this to obb folder
+    private String DirectoryName=Environment.getExternalStorageDirectory() + "/pixel/";
+    
+    // The shared path to all app expansion files
+    private final static String EXP_PATH = "/Android/obb/";
+    
+    private void setState(int newState) {
+        if (mState != newState) {
+            mState = newState;
+            mStatusText.setText(Helpers.getDownloaderStringResourceIDFromState(newState));
+        }
+    }
+
+    private void setButtonPausedState(boolean paused) {
+        mStatePaused = paused;
+        int stringResourceID = paused ? R.string.text_button_resume :
+                R.string.text_button_pause;
+        mPauseButton.setText(stringResourceID);
+    }
+
+    /**
+     * This is a little helper class that demonstrates simple testing of an
+     * Expansion APK file delivered by Market. You may not wish to hard-code
+     * things such as file lengths into your executable... and you may wish to
+     * turn this code off during application development.
+     */
+    private static class XAPKFile {
+        public final boolean mIsMain;
+        public final int mFileVersion;
+        public final long mFileSize;
+
+        XAPKFile(boolean isMain, int fileVersion, long fileSize) {
+            mIsMain = isMain;
+            mFileVersion = fileVersion;
+            mFileSize = fileSize;
+        }
+    }
+
+    /**
+     * Here is where you place the data that the validator will use to determine
+     * if the file was delivered correctly. This is encoded in the source code
+     * so the application can easily determine whether the file has been
+     * properly delivered without having to talk to the server. If the
+     * application is using LVL for licensing, it may make sense to eliminate
+     * these checks and to just rely on the server.
+     */
+    private static final XAPKFile[] xAPKS = {
+            new XAPKFile(
+                    true, // true signifies a main file
+                    50, // the version of the APK that the file was uploaded
+                       // against
+                    32279235L
+                   // 3666679235L
+            ),
+            new XAPKFile(
+                    false, // false signifies a patch file
+                    50, // the version of the APK that the patch file was uploaded
+                       // against
+                    502035L // the length of the patch file in bytes
+            )            
+    };
+
+    /**
+     * Go through each of the APK Expansion files defined in the structure above
+     * and determine if the files are present and match the required size. Free
+     * applications should definitely consider doing this, as this allows the
+     * application to be launched for the first time without having a network
+     * connection present. Paid applications that use LVL should probably do at
+     * least one LVL check that requires the network to be present, so this is
+     * not as necessary.
+     * 
+     * @return true if they are present.
+     */
+    boolean expansionFilesDelivered() {
+        for (XAPKFile xf : xAPKS) {
+            String fileName = Helpers.getExpansionAPKFileName(this, xf.mIsMain, xf.mFileVersion);
+            if (!Helpers.doesFileExist(this, fileName, xf.mFileSize, false))
+                return false;
+        }
+        return true;
+    }
+
+    /**
+     * Calculating a moving average for the validation speed so we don't get
+     * jumpy calculations for time etc.
+     */
+    static private final float SMOOTHING_FACTOR = 0.005f;
+    
+    /**
+     * Used by the async task
+     */
+    private boolean mCancelValidation;
+
+    /**
+     * Go through each of the Expansion APK files and open each as a zip file.
+     * Calculate the CRC for each file and return false if any fail to match.
+     * 
+     * @return true if XAPKZipFile is successful
+     */
+    void validateXAPKZipFiles() {
+        AsyncTask<Object, DownloadProgressInfo, Boolean> validationTask = new AsyncTask<Object, DownloadProgressInfo, Boolean>() {
+
+            @Override
+            protected void onPreExecute() {
+                mDashboard.setVisibility(View.VISIBLE);
+                mCellMessage.setVisibility(View.GONE);
+                mStatusText.setText(R.string.text_verifying_download);
+                mPauseButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mCancelValidation = true;
+                    }
+                });
+                mPauseButton.setText(R.string.text_button_cancel_verify);
+                super.onPreExecute();
+            }
+
+            @Override
+            protected Boolean doInBackground(Object... params) {
+                for (XAPKFile xf : xAPKS) {
+                    String fileName = Helpers.getExpansionAPKFileName(
+                            MainActivity.this,
+                            xf.mIsMain, xf.mFileVersion);
+                    if (!Helpers.doesFileExist(MainActivity.this, fileName,
+                            xf.mFileSize, false))
+                        return false;
+                    fileName = Helpers
+                            .generateSaveFileName(MainActivity.this, fileName);
+                    ZipResourceFile zrf;
+                    byte[] buf = new byte[1024 * 256];
+                    try {
+                        zrf = new ZipResourceFile(fileName);
+                        ZipEntryRO[] entries = zrf.getAllEntries();
+                        /**
+                         * First calculate the total compressed length
+                         */
+                        long totalCompressedLength = 0;
+                        for (ZipEntryRO entry : entries) {
+                            totalCompressedLength += entry.mCompressedLength;
+                        }
+                        float averageVerifySpeed = 0;
+                        long totalBytesRemaining = totalCompressedLength;
+                        long timeRemaining;
+                        /**
+                         * Then calculate a CRC for every file in the Zip file,
+                         * comparing it to what is stored in the Zip directory.
+                         * Note that for compressed Zip files we must extract
+                         * the contents to do this comparison.
+                         */
+                        for (ZipEntryRO entry : entries) {
+                            if (-1 != entry.mCRC32) {
+                                long length = entry.mUncompressedLength;
+                                CRC32 crc = new CRC32();
+                                DataInputStream dis = null;
+                                try {
+                                    dis = new DataInputStream(
+                                            zrf.getInputStream(entry.mFileName));
+
+                                    long startTime = SystemClock.uptimeMillis();
+                                    while (length > 0) {
+                                        int seek = (int) (length > buf.length ? buf.length
+                                                : length);
+                                        dis.readFully(buf, 0, seek);
+                                        crc.update(buf, 0, seek);
+                                        length -= seek;
+                                        long currentTime = SystemClock.uptimeMillis();
+                                        long timePassed = currentTime - startTime;
+                                        if (timePassed > 0) {
+                                            float currentSpeedSample = (float) seek
+                                                    / (float) timePassed;
+                                            if (0 != averageVerifySpeed) {
+                                                averageVerifySpeed = SMOOTHING_FACTOR
+                                                        * currentSpeedSample
+                                                        + (1 - SMOOTHING_FACTOR)
+                                                        * averageVerifySpeed;
+                                            } else {
+                                                averageVerifySpeed = currentSpeedSample;
+                                            }
+                                            totalBytesRemaining -= seek;
+                                            timeRemaining = (long) (totalBytesRemaining / averageVerifySpeed);
+                                            this.publishProgress(
+                                                    new DownloadProgressInfo(
+                                                            totalCompressedLength,
+                                                            totalCompressedLength
+                                                                    - totalBytesRemaining,
+                                                            timeRemaining,
+                                                            averageVerifySpeed)
+                                                    );
+                                        }
+                                        startTime = currentTime;
+                                        if (mCancelValidation)
+                                            return true;
+                                    }
+                                    if (crc.getValue() != entry.mCRC32) {
+                                        Log.e(Constants.TAG,
+                                                "CRC does not match for entry: "
+                                                        + entry.mFileName);
+                                        Log.e(Constants.TAG,
+                                                "In file: " + entry.getZipFileName());
+                                        return false;
+                                    }
+                                } finally {
+                                    if (null != dis) {
+                                        dis.close();
+                                    }
+                                }
+                            }
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            @Override
+            protected void onProgressUpdate(DownloadProgressInfo... values) {
+                onDownloadProgress(values[0]);
+                super.onProgressUpdate(values);
+            }
+
+            @Override
+            protected void onPostExecute(Boolean result) {
+                if (result) {
+                    mDashboard.setVisibility(View.VISIBLE);
+                    mCellMessage.setVisibility(View.GONE);
+                    mStatusText.setText(R.string.text_validation_complete);
+                    mPauseButton.setVisibility(View.VISIBLE);
+                    
+                    mPauseButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                        	mDashboard.setVisibility(View.GONE);
+                            mCellMessage.setVisibility(View.GONE);
+                            mStatusText.setText(R.string.text_validation_complete);
+                            mPauseButton.setVisibility(View.GONE);
+                        }
+                    });
+                    mPauseButton.setText(android.R.string.ok);
+                    
+                } else {
+                    mDashboard.setVisibility(View.VISIBLE);
+                    mCellMessage.setVisibility(View.GONE);
+                    mStatusText.setText(R.string.text_validation_failed);
+                    mPauseButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            finish();
+                        }
+                    });
+                    mPauseButton.setText(android.R.string.cancel);
+                }
+                super.onPostExecute(result);
+            }
+
+        };
+        validationTask.execute(new Object());
+    }
+
+    /**
+     * If the download isn't present, we initialize the download UI. This ties
+     * all of the controls into the remote service calls.
+     */
+    private void initializeDownloadUI() {
+        mDownloaderClientStub = DownloaderClientMarshaller.CreateStub
+                (this, PIXELDownloaderService.class);
+        //setContentView(R.layout.main); //have a different layout for download but will require some work to switch screens so instead just including in main layout and hiding when we don't need
+
+        mPB = (ProgressBar) findViewById(R.id.progressBar);
+        mStatusText = (TextView) findViewById(R.id.statusText);
+        mProgressFraction = (TextView) findViewById(R.id.progressAsFraction);
+        mProgressPercent = (TextView) findViewById(R.id.progressAsPercentage);
+        mAverageSpeed = (TextView) findViewById(R.id.progressAverageSpeed);
+        mTimeRemaining = (TextView) findViewById(R.id.progressTimeRemaining);
+        
+        //mDashboard = findViewById(R.id.downloaderDashboard);
+        mDashboard = findViewById(R.id.APKExpanderDownloader); //mdashboard is all the fields and views in the downloader 
+        
+        mDashboard.setVisibility(View.VISIBLE); //it was hidden by default in the layout
+        
+        mCellMessage = findViewById(R.id.approveCellular);
+        mPauseButton = (Button) findViewById(R.id.pauseButton);
+        mWiFiSettingsButton = (Button) findViewById(R.id.wifiSettingsButton);
+
+        mPauseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mStatePaused) {
+                    mRemoteService.requestContinueDownload();
+                } else {
+                    mRemoteService.requestPauseDownload();
+                }
+                setButtonPausedState(!mStatePaused);
+            }
+        });
+
+        mWiFiSettingsButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+            }
+        });
+
+        Button resumeOnCell = (Button) findViewById(R.id.resumeOverCellular);
+        resumeOnCell.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mRemoteService.setDownloadFlags(IDownloaderService.FLAGS_DOWNLOAD_OVER_CELLULAR);
+                mRemoteService.requestContinueDownload();
+                mCellMessage.setVisibility(View.GONE);
+            }
+        });
+
+    }
+
+    /**
+     * Called when the activity is first create; we wouldn't create a layout in
+     * the case where we have the file and are moving to another activity
+     * without downloading.
+     */
+	
+	
+	//**************************************
+	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -398,7 +809,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	     list = new ListAdapter(this, items);
 	     gridview.setAdapter(list);
 	     
-	     int numColumns = 2;
+	     int numColumns = 2; //default
 	     if (targetScreenResolution < 481) {  //my droidX is 480 width as an example, samsung gs4 and gs4 is 1080 width, nexus 4 is 768, nexus 7 original is 800
 	    	 numColumns = targetScreenResolution / 128;
 	    	 //showToast(String.valueOf(numColumns));
@@ -433,7 +844,6 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 		 
 	      gifView = (GifView) findViewById(R.id.gifView); //gifview takes care of the gif decoding
 	      gifView.setGif(R.drawable.zzzblank);  //code will crash if a dummy gif is not loaded initially
-	     // proxTextView_ = (TextView)findViewById(R.id.proxTextView);
 	      
 	      blackFrame_ = BitmapFactory.decodeResource(getResources(), R.drawable.black_frame); 
 	      
@@ -523,18 +933,14 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	            	//showToast(getResources().getString(R.string.oneTimeSetupString)); //replaced by direct text on view screen
 	            	
 	            	new copyFilesAsync().execute();
+	            	//note that continueOnCreate() is called after this async task is done
 	               
 	            }
 	            else { //the directory was already there so no need to copy files or do a media re-scan so just continue on
 	            	
 	            	//now let's check the app version
-	            	if (appCode < 23) {  //if true, we need to copy some more animations
-	            		
-	            	}
-	            	else {
-	            	
 	            	continueOnCreate();
-	            	}
+	            
 	            }
 
       //  } else if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED_READ_ONLY)) {
@@ -851,6 +1257,26 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 		  		GIF64dir.mkdirs();
 		  	}
 		  	
+			File PNG16dir = new File(PNG16Path);
+		  	if (!PNG16dir.exists()) {
+		  		PNG16dir.mkdirs();
+		  	}
+		  	
+		  	File GIF16dir = new File(GIF16Path);
+		  	if (!GIF16dir.exists()) {
+		  		GIF16dir.mkdirs();
+		  	}
+		  	
+		  	File gif16Sourcedir = new File(GIF16Path + "gifsource");
+			if (!gif16Sourcedir.exists()) {
+				gif16Sourcedir.mkdirs();
+		  	}
+			
+			File GIF16decodeddir = new File(GIF16Path + "decoded");
+		  	if (!GIF16decodeddir.exists()) {
+		  		GIF16decodeddir.mkdirs();
+		  	}
+		  	
 		  	File gifSourcedir = new File(GIFPath + "gifsource");
 			if (!gifSourcedir.exists()) {
 				gifSourcedir.mkdirs();
@@ -870,20 +1296,11 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 		  	copyGIFDecoded();  //copy the decoded files
 			copyPNG();  //copy the png files
 			copyGIF64();
+			copyGIF16();
 			copyPNG64();
 			copyGIFSource();
 			copyGIF64Source();
 			copyGIF64Decoded();
-			
-			
-			/*copyArt(); //copy the .png and .gif files (mainly png) because we want to decode first
-		  	copyGIFDecoded();  //copy the decoded files
-		  	copyGIF64Source();
-			copyGIFSource();
-			copyGIF64Decoded();
-			copyPNG();  //copy the png files
-			copyGIF64();
-			copyPNG64();*/
 			
 			
 	   return null;
@@ -1190,25 +1607,636 @@ private void copyGIF64Source() {
 	           }       
 	       }
 	   } //end copyGIF64
+   
+   private void copyGIF16() {
+	   	
+	   	AssetManager assetManager = getResources().getAssets();
+	       String[] files = null;
+	       try {
+	           files = assetManager.list("gif16");
+	       } catch (Exception e) {
+	           Log.e("read clipart ERROR", e.toString());
+	           e.printStackTrace();
+	       }
+	       for(int i=0; i<files.length; i++) {
+	       	progress_status ++;
+		  		publishProgress(progress_status);  
+	           InputStream in = null;
+	           OutputStream out = null;
+	           try {
+	            in = assetManager.open("gif16/" + files[i]);
+	            out = new FileOutputStream(GIF16Path + files[i]); 
+	             copyFile(in, out);
+	             in.close();
+	             in = null;
+	             out.flush();
+	             out.close();
+	             out = null;  
+	             
+	             //no need to register these with mediascanner as these are internal gifs , the workaround for the gifs with a black frame as the first frame
+	          
+	           } catch(Exception e) {
+	               Log.e("copy clipart ERROR", e.toString());
+	               e.printStackTrace();
+	           }       
+	       }
+	   } //end copyGIF16
 		
 } //end async task
 	    
     private void continueOnCreate() {
          
          
-    	 //now let's load the files asynch
-    	LoadGridView(false);
+    	//****** now before we load up the gridview , let's check if the content from the expanded APK files is also there
+    	  /**
+         * Both downloading and validation make use of the "download" UI
+         */
+        initializeDownloadUI();
+        
+
+        /**
+         * Before we do anything, are the files we expect already here and
+         * delivered (presumably by Market) For free titles, this is probably
+         * worth doing. (so no Market request is necessary)
+         */
+        if (!expansionFilesDelivered()) {
+
+            try {
+                Intent launchIntent = MainActivity.this
+                        .getIntent();
+                Intent intentToLaunchThisActivityFromNotification = new Intent(
+                		MainActivity
+                        .this, MainActivity.this.getClass());
+                intentToLaunchThisActivityFromNotification.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                        Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intentToLaunchThisActivityFromNotification.setAction(launchIntent.getAction());
+
+                if (launchIntent.getCategories() != null) {
+                    for (String category : launchIntent.getCategories()) {
+                        intentToLaunchThisActivityFromNotification.addCategory(category);
+                    }
+                }
+
+                // Build PendingIntent used to open this activity from
+                // Notification
+                PendingIntent pendingIntent = PendingIntent.getActivity(
+                        MainActivity.this,
+                        0, intentToLaunchThisActivityFromNotification,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+                // Request to start the download
+                int startResult = DownloaderClientMarshaller.startDownloadServiceIfRequired(this,
+                        pendingIntent, PIXELDownloaderService.class);
+
+                if (startResult != DownloaderClientMarshaller.NO_DOWNLOAD_REQUIRED) {
+                    // The DownloaderService has started downloading the files,
+                    // show progress
+                    initializeDownloadUI();
+                    return;
+                } // otherwise, download not needed so we fall through to
+                  // starting the movie
+            } catch (NameNotFoundException e) {
+                Log.e(LOG_TAG, "Cannot find own package! MAYDAY!");
+                e.printStackTrace();
+            }
+
+        } else {
+            validateXAPKZipFiles();
+        }
+        
+        //******************
+    	
+        //**** Now that we have the expansion obb files loaded locally, we need to inflat them into our dir structure
+        
+        
+        
+        //****************
+     
+    	 //ok great, we're done with the expansion APK stuff so let's continue and load the gridview
+    	//LoadGridView(false);
     	
     	//setContentView(gridview); //this replaces the old asyncload files we had before
     	// myAsyncTaskLoadFiles = new AsyncTaskLoadFiles(myImageAdapter, false);
         // myAsyncTaskLoadFiles.execute();
+    	
+    	  String [] APKExpansionPath = getAPKExpansionFiles(context,50,50);
+          showToast(APKExpansionPath[0]);
+          showToast(APKExpansionPath[1]);
+          String APKExpansionPathMain = APKExpansionPath[0];
+          String APKExpansionPathPatch = APKExpansionPath[1];
+          
+          //String zipFilename = Environment.getExternalStorageDirectory() + "/files.zip"; 
+          String zipFilename = APKExpansionPathMain; 
+          
+          String unzipLocation = Environment.getExternalStorageDirectory() + "/pixel/"; 
+
+          
+          
+    	
+    	/*try {
+			unzip(APKExpansionPathMain);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    	try {
+			unzip(APKExpansionPathPatch);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
+          
+         boolean ExpandedFilesCopied = false;
          
-         gridview.setOnItemClickListener(MainActivity.this);
-         gridview.setOnItemLongClickListener(MainActivity.this);
+         if (!ExpandedFilesCopied) {
+        	 unZipAsync unZipAsync_ = new unZipAsync(zipFilename,unzipLocation);
+        	 unZipAsync_.execute();
+	        ExpandedFilesCopied = true;
+         }
+         
+        // gridview.setOnItemClickListener(MainActivity.this);
+        // gridview.setOnItemLongClickListener(MainActivity.this);
+         
+      
          
          //******** now we wait for the user to do something **************
          
     }
+    
+    private class unZipAsync extends AsyncTask<Void, Integer, Void>{
+		 
+	     int progress_status;
+	     private String _zipFile; 
+	      private String _location; 
+
+	      public unZipAsync (String zipFile, String location) { 
+	        _zipFile = zipFile; 
+	        _location = location; 
+
+	        _dirChecker(""); 
+	      } 
+
+	     
+	      
+	     @Override
+	  protected void onPreExecute() {
+		   // update the UI immediately after the task is executed
+		   super.onPreExecute();
+		   
+		   //to do don't do the pop up here and instead leverage the same layout that the download uses
+		   
+		   progress = new ProgressDialog(MainActivity.this);
+		   progress.setMax(10000);
+	       //progress.setTitle(getString(R.string.oneTimeCopyTitle));
+	       progress.setTitle("New Art");
+	      // progress.setMessage(getString(R.string.oneTimeCopyMessage));
+	       progress.setMessage("Unpacking New Art");
+	       progress.setCancelable(false);
+		   progress.setIcon(R.drawable.ic_action_warning);
+	       progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+	       progress.show();
+	 
+	    progress_status = 0;
+	    
+	  }
+	      
+	  @Override
+	  protected Void doInBackground(Void... params) {
+		  
+		  // create target location folder if not exist
+		  _dirChecker(_location);
+
+	        try {
+	            FileInputStream fin = new FileInputStream(_zipFile);
+	            ZipInputStream zin = new ZipInputStream(fin);
+	            ZipEntry ze = null;
+	            while ((ze = zin.getNextEntry()) != null) {
+
+	                // create dir if required while unzipping
+	                if (ze.isDirectory()) {
+	                	_dirChecker(ze.getName());
+	                } else {
+	                    FileOutputStream fout = new FileOutputStream(
+	                    _location + "/" + ze.getName());
+	                    BufferedOutputStream bufout = new BufferedOutputStream(fout);
+	                    byte[] buffer = new byte[1024];
+	                    int read = 0;
+	                    while ((read = zin.read(buffer)) != -1) {
+	                        bufout.write(buffer, 0, read);
+	                    }
+	                    publishProgress(1);
+	                    zin.closeEntry();
+	                    bufout.close();
+	                    fout.close();
+	                }
+	            }
+	            zin.close();
+	        } catch (Exception e) {
+	            System.out.println(e);
+	        }
+		  
+		  
+		 
+		 /* try  { 
+	          FileInputStream fin = new FileInputStream(_zipFile); 
+	          ZipInputStream zin = new ZipInputStream(fin); 
+	          ZipEntry ze = null; 
+	          while ((ze = zin.getNextEntry()) != null) { 
+	            Log.v("Decompress", "Unzipping " + ze.getName()); 
+	            publishProgress(1);
+
+	            if(ze.isDirectory()) { 
+	              _dirChecker(ze.getName()); 
+	            } else { 
+	              FileOutputStream fout = new FileOutputStream(_location + ze.getName()); 
+	              for (int c = zin.read(); c != -1; c = zin.read()) { 
+	                fout.write(c); 
+	              } 
+
+	              zin.closeEntry(); 
+	              fout.close(); 
+	            } 
+
+	          } 
+	          zin.close(); 
+	        } catch(Exception e) { 
+	          Log.e("Decompress", "unzip", e); 
+	        } */
+			
+			
+	   return null;
+	  }
+	  
+	  @Override
+	  protected void onProgressUpdate(Integer... values) {
+	   super.onProgressUpdate(values);
+	   progress.incrementProgressBy(1);
+	    
+	  }
+	   
+	  @Override
+	  protected void onPostExecute(Void result) {
+	   super.onPostExecute(result);
+	   progress.dismiss(); //we're done so now hide the progress update box
+	   //continueOnCreate();
+	   
+	   LoadGridView(false);
+	   gridview.setOnItemClickListener(MainActivity.this);
+       gridview.setOnItemLongClickListener(MainActivity.this);
+	  }
+	  
+	  private void _dirChecker(String dir) { 
+	        File f = new File(_location + dir); 
+
+	        if(!f.isDirectory()) { 
+	          f.mkdirs(); 
+	        } 
+	      } 
+	  
+    }  
+	  
+		
+
+    private static String[] getAPKExpansionFiles(Context ctx, int mainVersion,
+          int patchVersion) {
+        String packageName = ctx.getPackageName();
+        Vector<String> ret = new Vector<String>();
+        if (Environment.getExternalStorageState()
+              .equals(Environment.MEDIA_MOUNTED)) {
+            // Build the full path to the app's expansion files
+            File root = Environment.getExternalStorageDirectory();
+            File expPath = new File(root.toString() + EXP_PATH + packageName);
+
+            // Check that expansion file path exists
+            if (expPath.exists()) {
+                if ( mainVersion > 0 ) {
+                    String strMainPath = expPath + File.separator + "main." +
+                            mainVersion + "." + packageName + ".obb";
+                    File main = new File(strMainPath);
+                    if ( main.isFile() ) {
+                            ret.add(strMainPath);
+                    }
+                }
+                if ( patchVersion > 0 ) {
+                    String strPatchPath = expPath + File.separator + "patch." +
+                            mainVersion + "." + packageName + ".obb";
+                    File main = new File(strPatchPath);
+                    if ( main.isFile() ) {
+                            ret.add(strPatchPath);
+                    }
+                }
+            }
+        }
+        String[] retArray = new String[ret.size()];
+        ret.toArray(retArray);
+        return retArray;
+    }
+    
+    public void unzip(String obbPath) throws IOException 
+    {
+    mProgressDialog = new ProgressDialog(MainActivity.this);
+    mProgressDialog.setMessage("Please Wait...");
+    mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+    mProgressDialog.setCancelable(false);
+    mProgressDialog.show();
+    //new UnZipTask().execute(StorezipFileLocation, DirectoryName);
+    new UnZipTask().execute(obbPath, DirectoryName);
+      }
+    
+    public class UnzipUtil
+    {
+       private String zipFile;
+       private String location;
+
+    public UnzipUtil(String zipFile, String location)
+    {
+       this.zipFile = zipFile;
+       this.location = location;
+
+       dirChecker(""); //to do causing a crash here
+    }
+
+    public void unzip()
+   {
+     try
+   {
+        FileInputStream fin = new FileInputStream(zipFile);
+        ZipInputStream zin = new ZipInputStream(fin);
+        ZipEntry ze = null;
+        while ((ze = zin.getNextEntry()) != null)
+        {
+         Log.v("Decompress", "Unzipping " + ze.getName());
+
+  if(ze.isDirectory())
+  {
+   dirChecker(ze.getName());
+  }
+  else
+  {
+   FileOutputStream fout = new FileOutputStream(location + ze.getName());     
+
+   byte[] buffer = new byte[8192];
+   int len;
+   while ((len = zin.read(buffer)) != -1)
+   {
+    fout.write(buffer, 0, len);
+   }
+   fout.close();
+
+   zin.closeEntry();
+
+  }
+
+      }
+        zin.close();
+      }
+       catch(Exception e)
+       {
+            Log.e("Decompress", "unzip", e);
+       }
+
+    }
+
+     private void dirChecker(String dir)
+     {
+           File f = new File(location + dir);
+           if(!f.isDirectory())
+            {
+              f.mkdirs();
+            }
+           }
+      }
+    
+    private class UnZipTask extends AsyncTask<String, Void, Boolean> 
+    {
+    @SuppressWarnings("rawtypes")
+    @Override
+    protected Boolean doInBackground(String... params) 
+    {
+       String filePath = params[0];
+       String destinationPath = params[1];
+
+         File archive = new File(filePath);
+          try 
+           {
+           ZipFile zipfile = new ZipFile(archive);
+           for (Enumeration e = zipfile.entries(); e.hasMoreElements();) 
+           {
+                   ZipEntry entry = (ZipEntry) e.nextElement();
+                   unzipEntry(zipfile, entry, destinationPath);
+              }
+
+
+   UnzipUtil d = new UnzipUtil("fix this", DirectoryName); 
+   d.unzip();
+
+      } 
+catch (Exception e) 
+   {
+     return false;
+   }
+
+    return true;
+ }
+
+     @Override
+     protected void onPostExecute(Boolean result) 
+     {
+          mProgressDialog.dismiss(); 
+
+       }
+
+
+      private void unzipEntry(ZipFile zipfile, ZipEntry entry,String outputDir) throws IOException 
+   {
+
+            if (entry.isDirectory()) 
+  {
+          createDir(new File(outputDir, entry.getName()));
+          return;
+    }
+
+     File outputFile = new File(outputDir, entry.getName());
+     if (!outputFile.getParentFile().exists())
+     {
+        createDir(outputFile.getParentFile());
+     }
+
+     // Log.v("", "Extracting: " + entry);
+    BufferedInputStream inputStream = new BufferedInputStream(zipfile.getInputStream(entry));
+    BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(outputFile));
+
+ try 
+  {
+
+   }
+ finally 
+   {
+        outputStream.flush();
+        outputStream.close();
+        inputStream.close();
+    }
+     }
+
+       private void createDir(File dir) 
+       {
+          if (dir.exists()) 
+        {
+             return;
+            }
+              if (!dir.mkdirs()) 
+                {
+                  throw new RuntimeException("Can not create dir " + dir);
+         }
+         }
+  } 
+    
+//***** classes for APK expansion downloader *******
+    
+    /**
+     * Connect the stub to our service on start.
+     */
+    @Override
+    protected void onStart() {
+        if (null != mDownloaderClientStub) {
+            mDownloaderClientStub.connect(this);
+        }
+        super.onStart();
+    }
+
+    /**
+     * Disconnect the stub from our service on stop
+     */
+    @Override
+    protected void onStop() {
+        if (null != mDownloaderClientStub) {
+            mDownloaderClientStub.disconnect(this);
+        }
+        super.onStop();
+    }
+
+    /**
+     * Critical implementation detail. In onServiceConnected we create the
+     * remote service and marshaler. This is how we pass the client information
+     * back to the service so the client can be properly notified of changes. We
+     * must do this every time we reconnect to the service.
+     */
+    @Override
+    public void onServiceConnected(Messenger m) {
+        mRemoteService = DownloaderServiceMarshaller.CreateProxy(m);
+        mRemoteService.onClientUpdated(mDownloaderClientStub.getMessenger());
+    }
+
+    /**
+     * The download state should trigger changes in the UI --- it may be useful
+     * to show the state as being indeterminate at times. This sample can be
+     * considered a guideline.
+     */
+    @Override
+    public void onDownloadStateChanged(int newState) {
+        setState(newState);
+        boolean showDashboard = true;
+        boolean showCellMessage = false;
+        boolean paused;
+        boolean indeterminate;
+        switch (newState) {
+            case IDownloaderClient.STATE_IDLE:
+                // STATE_IDLE means the service is listening, so it's
+                // safe to start making calls via mRemoteService.
+                paused = false;
+                indeterminate = true;
+                break;
+            case IDownloaderClient.STATE_CONNECTING:
+            case IDownloaderClient.STATE_FETCHING_URL:
+                showDashboard = true;
+                paused = false;
+                indeterminate = true;
+                break;
+            case IDownloaderClient.STATE_DOWNLOADING:
+                paused = false;
+                showDashboard = true;
+                indeterminate = false;
+                break;
+
+            case IDownloaderClient.STATE_FAILED_CANCELED:
+            case IDownloaderClient.STATE_FAILED:
+            case IDownloaderClient.STATE_FAILED_FETCHING_URL:
+            case IDownloaderClient.STATE_FAILED_UNLICENSED:
+                paused = true;
+                showDashboard = false;
+                indeterminate = false;
+                break;
+            case IDownloaderClient.STATE_PAUSED_NEED_CELLULAR_PERMISSION:
+            case IDownloaderClient.STATE_PAUSED_WIFI_DISABLED_NEED_CELLULAR_PERMISSION:
+                showDashboard = false;
+                paused = true;
+                indeterminate = false;
+                showCellMessage = true;
+                break;
+
+            case IDownloaderClient.STATE_PAUSED_BY_REQUEST:
+                paused = true;
+                indeterminate = false;
+                break;
+            case IDownloaderClient.STATE_PAUSED_ROAMING:
+            case IDownloaderClient.STATE_PAUSED_SDCARD_UNAVAILABLE:
+                paused = true;
+                indeterminate = false;
+                break;
+            case IDownloaderClient.STATE_COMPLETED:
+                showDashboard = false;
+                paused = false;
+                indeterminate = false;
+                validateXAPKZipFiles();
+                return;
+            default:
+                paused = true;
+                indeterminate = true;
+                showDashboard = true;
+        }
+        int newDashboardVisibility = showDashboard ? View.VISIBLE : View.GONE;
+        if (mDashboard.getVisibility() != newDashboardVisibility) {
+            mDashboard.setVisibility(newDashboardVisibility);
+        }
+        int cellMessageVisibility = showCellMessage ? View.VISIBLE : View.GONE;
+        if (mCellMessage.getVisibility() != cellMessageVisibility) {
+            mCellMessage.setVisibility(cellMessageVisibility);
+        }
+
+        mPB.setIndeterminate(indeterminate);
+        setButtonPausedState(paused);
+    }
+
+    /**
+     * Sets the state of the various controls based on the progressinfo object
+     * sent from the downloader service.
+     */
+    @Override
+    public void onDownloadProgress(DownloadProgressInfo progress) {
+        mAverageSpeed.setText(getString(R.string.kilobytes_per_second,
+                Helpers.getSpeedString(progress.mCurrentSpeed)));
+        mTimeRemaining.setText(getString(R.string.time_remaining,
+                Helpers.getTimeRemaining(progress.mTimeRemaining)));
+
+        progress.mOverallTotal = progress.mOverallTotal;
+        mPB.setMax((int) (progress.mOverallTotal >> 8));
+        mPB.setProgress((int) (progress.mOverallProgress >> 8));
+        mProgressPercent.setText(Long.toString(progress.mOverallProgress
+                * 100 /
+                progress.mOverallTotal) + "%");
+        mProgressFraction.setText(Helpers.getDownloadProgressString
+                (progress.mOverallProgress,
+                        progress.mOverallTotal));
+    }
+
+   /* @Override
+    protected void onDestroy() {
+        this.mCancelValidation = true;
+        super.onDestroy();
+    }*/
+    
+    
+//*************************************************
 	    
    public static void copyFile(InputStream in, OutputStream out) throws IOException {
 	        byte[] buffer = new byte[1024];
@@ -1241,12 +2269,14 @@ private void copyGIF64Source() {
    		}
    }
 	
+	
     /////*************GridView Stuff
 	 /**
      * Free up bitmap related resources.
      */
     protected void onDestroy() {
     //	this.unregisterReceiver(receiver);
+    	this.mCancelValidation = true;  //this was added from the apk downloader service
         super.onDestroy();
        // mThread.close();
        
@@ -1292,6 +2322,8 @@ private void copyGIF64Source() {
   	  File UserGIFtargetDirector;
   	  File PNG64targetDirector;
   	  File GIF64targetDirector;
+  	  File PNG16targetDirector;
+ 	  File GIF16targetDirector;
   	  
   	  int a = 0;
   	  int f = 0;
@@ -1333,6 +2365,12 @@ private void copyGIF64Source() {
   	   String GIF64targetPath = GIF64Path;
   	   GIF64targetDirector = new File(GIF64targetPath);
   	   
+  	   String PNG16targetPath = PNG16Path;
+	   PNG16targetDirector = new File(PNG16targetPath);
+	   
+	   String GIF16targetPath = GIF16Path;
+	   GIF16targetDirector = new File(GIF16targetPath);
+  	   
   	   if (favPNGDirector.exists()) {
 	    	   File FavPNGDirectory = new File(FavPNGPath);
 	    	   if (FavPNGDirectory.list().length>0) {  //does the favorites PNG folder have any favorites in it that the user has picked?
@@ -1369,42 +2407,44 @@ private void copyGIF64Source() {
   	   Arrays.fill(SlideShowArrayAll, null); //empty the array
   	   Arrays.fill(SlideShowGIFFavs,null);
   	   
+  	   //we load in order here so favs and user supplied goes first
   	   
-      if (gifonly_ == false && favPNGDirector.exists()) {  //note we didn't check if favPNG is empty, probably should add that
- 	    	   File[] files = favPNGDirector.listFiles(new FilenameFilter() {
- 	   		    public boolean accept(File dir, String name) {
- 	   		        return name.toLowerCase().endsWith(".png") || name.toLowerCase().endsWith(".jpg") || name.toLowerCase().endsWith(".jpeg");
- 	   		    }
- 	   			});
- 	    	if (files != null) {  //don't go here if there are no files in there
- 		   	   for (File file : files) {
- 		   		items.add(file.getAbsolutePath());
- 		   	    SlideShowArrayFavs[f] = file.getAbsolutePath(); //array starts at 0
- 		   	    f++;
- 		   	    SlideShowArrayAll[a] = file.getAbsolutePath(); //array starts at 0
-		   	    a++;
- 		   	   
- 		   	   }
- 	    	}
- 	   	}
+  	   //*********** FAVORITES **************
+	      if (gifonly_ == false && favPNGDirector.exists()) {  //note we didn't check if favPNG is empty, probably should add that
+	 	    	   File[] files = favPNGDirector.listFiles(new FilenameFilter() {
+	 	   		    public boolean accept(File dir, String name) {
+	 	   		        return name.toLowerCase().endsWith(".png") || name.toLowerCase().endsWith(".jpg") || name.toLowerCase().endsWith(".jpeg");
+	 	   		    }
+	 	   			});
+	 	    	if (files != null) {  //don't go here if there are no files in there
+	 		   	   for (File file : files) {
+	 		   		items.add(file.getAbsolutePath());
+	 		   	    SlideShowArrayFavs[f] = file.getAbsolutePath(); //array starts at 0
+	 		   	    f++;
+	 		   	    SlideShowArrayAll[a] = file.getAbsolutePath(); //array starts at 0
+			   	    a++;
+	 		   	   
+	 		   	   }
+	 	    	}
+	 	   	}
       
       
-      if (favGIFDirector.exists()) { //fav gif content, could be any size
-	    	   File[] files = favGIFDirector.listFiles(new FilenameFilter() {
-	   		    public boolean accept(File dir, String name) {
-	   		    	return name.toLowerCase().endsWith(".gif") || name.toLowerCase().endsWith(".png"); //can be either png thumbnails or gif (gifs could have came from user gifs)
-	   		    }
-		   		});
-	    	if (files != null) {     
-			   	   for (File file : files) {
-			   		items.add(file.getAbsolutePath());
-			   		SlideShowGIFFavs[b] = file.getAbsolutePath(); //array starts at 0, path is /pixel/favgif/
-			   		b++;
-			   	   }
-	    	}
-	   }
-  		  
-  		  
+	      if (favGIFDirector.exists()) { //fav gif content, could be any size
+		    	   File[] files = favGIFDirector.listFiles(new FilenameFilter() {
+		   		    public boolean accept(File dir, String name) {
+		   		    	return name.toLowerCase().endsWith(".gif") || name.toLowerCase().endsWith(".png"); //can be either png thumbnails or gif (gifs could have came from user gifs)
+		   		    }
+			   		});
+		    	if (files != null) {     
+				   	   for (File file : files) {
+				   		items.add(file.getAbsolutePath());
+				   		SlideShowGIFFavs[b] = file.getAbsolutePath(); //array starts at 0, path is /pixel/favgif/
+				   		b++;
+				   	   }
+		    	}
+		   }
+	      
+	  	 //*********** USER SUPPLIED ******************	 
 		  if (gifonly_ == false && UserPNGtargetDirector.exists()) {  //user png content, could be any size
 	    	   File[] files = UserPNGtargetDirector.listFiles(new FilenameFilter() {
 	   		    public boolean accept(File dir, String name) {
@@ -1435,7 +2475,11 @@ private void copyGIF64Source() {
 	    	}   
   	   }
 		  
-		  if (matrix_model == 10 && GIF64targetDirector.exists()) { //gif 64x64 content, only show if 64x64 led matrix is picked
+		  
+		  //******** Only load if SUPER PIXEL *************
+		  
+		  if (currentResolution == 128 && GIF64targetDirector.exists()) { //gif 64x64 content which we know by current resolution because we could have a super pixel or adafruit built panels, only show if 64x64 led matrix is picked
+		  //if (matrix_model == 10 && GIF64targetDirector.exists()) { //gif 64x64 content, only show if 64x64 led matrix is picked
 	    	   File[] files = GIF64targetDirector.listFiles(new FilenameFilter() {
 	   		    public boolean accept(File dir, String name) {
 	   		        return name.toLowerCase().endsWith(".gif") || name.toLowerCase().endsWith(".png");
@@ -1449,7 +2493,8 @@ private void copyGIF64Source() {
 	    		}
 		   }
 		  
-		  if (matrix_model == 10 && gifonly_ == false && PNG64targetDirector.exists()) { //png 64x64 content but don't show for 32x32
+		  if (currentResolution == 128 && gifonly_ == false && PNG64targetDirector.exists()) { //png 64x64 content but don't show for 32x32
+		 // if (matrix_model == 10 && gifonly_ == false && PNG64targetDirector.exists()) { //png 64x64 content but don't show for 32x32
 	    	   File[] files = PNG64targetDirector.listFiles(new FilenameFilter() {
 	   		    public boolean accept(File dir, String name) {
 	   		        return name.toLowerCase().endsWith(".png") || name.toLowerCase().endsWith(".jpg") || name.toLowerCase().endsWith(".jpeg");
@@ -1467,23 +2512,25 @@ private void copyGIF64Source() {
 	    	   }
 		   }
   		  
-		  if (only64_ == false && targetDirector.exists()) {  //gif or png, this is the gif directory 32x32 content
-  		  File[] files = targetDirector.listFiles(new FilenameFilter() {
-  		    public boolean accept(File dir, String name) {
-  		        return name.toLowerCase().endsWith(".gif") || name.toLowerCase().endsWith(".png");
-  		    }
-  		});
+		  //*********** 32x32 GIFs and PNG ********** but don't load these if we have 32x16 because 32x32 will not look good on 32x16
+		  
+		  if (only64_ == false && currentResolution != 16 && targetDirector.exists()) {  //gif or png, this is the gif directory 32x32 content
+	  		  File[] files = targetDirector.listFiles(new FilenameFilter() {
+	  		    public boolean accept(File dir, String name) {
+	  		        return name.toLowerCase().endsWith(".gif") || name.toLowerCase().endsWith(".png");
+	  		    }
+	  		});
+	  		
+		  		if (files != null) {  
+		  	   
+			    	   for (File file : files) {     //the Android emulator was crashing here, weird
+			    		   items.add(file.getAbsolutePath());
+			    	   }
+		  		}
+		    }
   		
-  		if (files != null) {  
   	   
-	    	   for (File file : files) {     //the Android emulator was crashing here, weird
-	    		   items.add(file.getAbsolutePath());
-	    	   }
-  		}
-	    }
-  		
-  	   
-	   if (only64_ == false && gifonly_ == false && PNGtargetDirector.exists()) { //png 32x32 content 
+	   if (only64_ == false && currentResolution != 16 && gifonly_ == false && PNGtargetDirector.exists()) { //png 32x32 content 
 		   File[] files = PNGtargetDirector.listFiles(new FilenameFilter() {  //PNGFiles is a file array / list?, if we only want a slideshow with the PNGs
   		   
  		    public boolean accept(File dir, String name) {
@@ -1501,13 +2548,48 @@ private void copyGIF64Source() {
 		   }
 	   }
 	   
-	   SlideShowLengthAll = a;   //actual it's z-1 but we compensate for this later
-	   SlideShowLengthFavs = f;   //actual it's z-1 but we compensate for this later
+	   //****** Lastly only load  32x16 art if we have a 32x16 ************
+	   
+	   if (currentResolution == 16 && GIF16targetDirector.exists()) { //gif 64x64 content which we know by current resolution because we could have a super pixel or adafruit built panels, only show if 64x64 led matrix is picked
+			 
+		    	   File[] files = GIF16targetDirector.listFiles(new FilenameFilter() {
+		   		    public boolean accept(File dir, String name) {
+		   		        return name.toLowerCase().endsWith(".gif") || name.toLowerCase().endsWith(".png");
+		   		    }
+		   			});
+		    	   
+		    		if (files != null) {  
+				   	   for (File file : files) {
+				   		items.add(file.getAbsolutePath());
+				   	   }
+		    		}
+			   }
+			  
+		  if (currentResolution == 16 && gifonly_ == false && PNG16targetDirector.exists()) { //png 64x64 content but don't show for 32x32
+		
+	    	   File[] files = PNG16targetDirector.listFiles(new FilenameFilter() {
+	   		    public boolean accept(File dir, String name) {
+	   		        return name.toLowerCase().endsWith(".png") || name.toLowerCase().endsWith(".jpg") || name.toLowerCase().endsWith(".jpeg");
+	   		    }
+	   			});
+	    	   
+	    	   if (files != null) {  
+	   	   
+			   	   for (File file : files) {
+			   		   items.add(file.getAbsolutePath());
+			   		   SlideShowArrayAll[a] = file.getAbsolutePath(); //array starts at 0
+				   	   a++;
+			   	   }
+	    	   }
+		   }
+	   
+	   
+	   SlideShowLengthAll = a;   //actually it's z-1 but we compensate for this later
+	   SlideShowLengthFavs = f;   //actually it's z-1 but we compensate for this later
 	   SlideShowLengthGIFFavs = b;
 	  
 	   list = new ListAdapter(this, items);
 	   gridview.setAdapter(list);
-	   //gridview.setNumColumns(3);
 	   gridview.setKeepScreenOn(false);
   	 }
     
@@ -3345,7 +4427,7 @@ public class UnFavoriteGIFMoveAsync extends AsyncTask<Void, Integer, Void>{
    
 	private static void showDecoding()  {
 		
-	
+	     //TO DO change this later, it's not a good design, we should do a bitmap auto resize instead, for now we have to remember to change this if we add a matrix panel
 		
 		 switch (matrix_number) {  //get this from the preferences
 	     case 0:
@@ -3380,7 +4462,19 @@ public class UnFavoriteGIFMoveAsync extends AsyncTask<Void, Integer, Void>{
 	    	 break;	 	
 	     case 10:
 	    	 BitmapInputStream = context.getResources().openRawResource(R.raw.decoding64by64); 
-	    	 break;	 	
+	    	 break;	
+	     case 11:
+	    	 BitmapInputStream = context.getResources().openRawResource(R.raw.decoding32); 
+	    	 break;	 
+	     case 12:
+	    	 BitmapInputStream = context.getResources().openRawResource(R.raw.decoding32); 
+	    	 break;	  
+	     case 13:
+	    	 BitmapInputStream = context.getResources().openRawResource(R.raw.decoding64by32); 
+	    	 break;
+	     case 14:
+	    	 BitmapInputStream = context.getResources().openRawResource(R.raw.decoding64by64); 
+	    	 break;	 
 	     default:	    		 
 	    	 BitmapInputStream = context.getResources().openRawResource(R.raw.decoding32);
 	     }
@@ -3667,7 +4761,7 @@ public class UnFavoriteGIFMoveAsync extends AsyncTask<Void, Integer, Void>{
 		       {
 	    			String downloadURL = "www.pixeljoint.com/pixels/new_icons.asp?search=&dimo=%3D&dim=32&colorso=%3E%3D&colors=2&tran=&anim=&iso=&av=&owner=&d=&dosearch=1&ob=search&action=search";
 	    			
-	    			if (matrix_model == 10) { //if 64x64
+	    			if (currentResolution == 128) { //if 64x64
 	    				downloadURL = downloadURL_64;
 	    			}
 	    			else {
@@ -3733,6 +4827,7 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
   	  
 	  File pngPath = new File(PNGPath);
 	  File pngPath64 = new File(PNG64Path);
+	  File pngPath16 = new File(PNG16Path);
 	  
 	  File gifPath = new File(GIFPath);
 	  File gifPathDecoded = new File(GIFPath + "decoded");
@@ -3741,6 +4836,10 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 	  File gifPath64 = new File(GIF64Path);
 	  File gifPathDecoded64 = new File(GIF64Path + "decoded");
 	  File gifPathSource64 = new File(GIF64Path + "gifsource");
+	  
+	  File gifPath16 = new File(GIF16Path);
+	  File gifPathDecoded16 = new File(GIF16Path + "decoded");
+	  File gifPathSource16 = new File(GIF16Path + "gifsource");
 
   	  @Override
   	  protected void onPreExecute() {
@@ -3754,7 +4853,8 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
       	//we're going to load the user favorited items first !
   		  
   		  DeleteRecursive(pngPath);  
-		  DeleteRecursive(pngPath64);  
+		  DeleteRecursive(pngPath64); 
+		  DeleteRecursive(pngPath16);  
 		  
 		  DeleteRecursive(gifPath);  
 		  DeleteRecursive(gifPathDecoded);  
@@ -3762,7 +4862,11 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 		  
 		  DeleteRecursive(gifPath64);  
 		  DeleteRecursive(gifPathDecoded64);  
-		  DeleteRecursive(gifPathSource64);  
+		  DeleteRecursive(gifPathSource64); 
+		  
+		  DeleteRecursive(gifPath16);  
+		  DeleteRecursive(gifPathDecoded16);  
+		  DeleteRecursive(gifPathSource16);  
 	   	  
 	 return null;
 	 
@@ -4220,163 +5324,6 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 	    {
 	    	 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);     
 	    	 setPreferences();
-	 	    
-		   /*  //scanAllPics = prefs.getBoolean("pref_scanAll", false);
-		     //slideShowMode = prefs.getBoolean("pref_slideshowMode", false);
-		     noSleep = prefs.getBoolean("pref_noSleep", false);
-		     debug_ = prefs.getBoolean("pref_debugMode", false);
-		     kioskMode_ = prefs.getBoolean("pref_kioskMode", false);
-		     gifonly_ = prefs.getBoolean("pref_gifonly", false); //only load gifs, don't load static pngs if true
-		     only64_ = prefs.getBoolean("pref_only64", false); //only show 64x64 content
-		     showStartupMsg_ = prefs.getBoolean("pref_showStartupMsg", true); //show the "long tap to write to pixel message
-		     saveMultipleCameraPics_ = prefs.getBoolean("pref_writeCamera", true);
-		     slideShowAllPNGs_ = prefs.getBoolean("pref_slideShowAllPNGs", false);
-		   
-		     matrix_model = Integer.valueOf(prefs.getString(   //the selected RGB LED Matrix Type
-		    	        resources.getString(R.string.selected_matrix),
-		    	        resources.getString(R.string.matrix_default_value))); 
-		     
-		     downloadURL_32 = prefs.getString(   //the selected RGB LED Matrix Type
-		    	        resources.getString(R.string.downloadURL_32),
-		    	        resources.getString(R.string.downloadURL_32Default)); 
-		     
-		     downloadURL_64 = prefs.getString(   //the selected RGB LED Matrix Type
-		    	        resources.getString(R.string.downloadURL_64),
-		    	        resources.getString(R.string.downloadURL_64Default)); 
-		     
-		    // slideShowMode = prefs.getBoolean("pref_slideshowMode", false);
-		  //   dimDuringSlideShow = prefs.getBoolean("pref_dimDuringSlideShow", true);
-		     
-		     imageDisplayDuration = Integer.valueOf(prefs.getString(   
-		  	        resources.getString(R.string.pref_imageDisplayDuration),
-		  	        resources.getString(R.string.imageDisplayDurationDefault)));   
-		     
-		    if (imageDisplayDuration < 1 || imageDisplayDuration > 1000) imageDisplayDuration = 5; //in case someone entered 0
-	   
-		     
-		     pauseBetweenImagesDuration = Integer.valueOf(prefs.getString(   
-		  	        resources.getString(R.string.pref_pauseBetweenImagesDuration),
-		  	        resources.getString(R.string.pauseBetweenImagesDurationDefault)));  
-		     //it's ok for pauseBetweenImages to be 0
-		     
-		     FPSOverride_ = Integer.valueOf(prefs.getString(   //the selected RGB LED Matrix Type
-		    	        resources.getString(R.string.fps_override),
-		    	        resources.getString(R.string.FPSOverrideDefault))); 
-		    //this wasn't adding any value so removed it
-		     
-		     FPSOverride_ = 0; //not using, maybe we add this back later
-		     
-		     switch (FPSOverride_) {  //get this from the preferences
-		     case 0:
-		    	 fps = 0;
-		    	 break;
-		     case 1:
-		    	 fps = 5;
-		    	 break;
-		     case 2:
-		    	 fps = 10;
-		    	 break;
-		     case 3:
-		    	 fps = 15;
-		    	 break;
-		     case 4:
-		    	 fps = 24;
-		    	 break;
-		     case 5:
-		    	 fps = 30;
-		    	 break;
-		     default:	    		 
-		    	 fps = 0;
-		     }
-		   
-		     
-		     switch (matrix_model) {  //get this from the preferences
-		     case 0:
-		    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x16;
-		    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage16);
-		    	 frame_length = 1024;
-		    	 currentResolution = 16;
-		    	 break;
-		     case 1:
-		    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x16;
-		    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage16);
-		    	 frame_length = 1024;
-		    	 currentResolution = 16;
-		    	 break;
-		     case 2:
-		    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32_NEW; //v1
-		    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
-		    	 frame_length = 2048;
-		    	 currentResolution = 32;
-		    	 break;
-		     case 3:
-		    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32; //v2
-		    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
-		    	 frame_length = 2048;
-		    	 currentResolution = 32;
-		    	 break;
-		     case 4:
-		    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_64x32; 
-		    	 BitmapInputStream = getResources().openRawResource(R.raw.select64by32);
-		    	 frame_length = 8192;
-		    	 currentResolution = 64; 
-		    	 break;
-		     case 5:
-		    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x64; 
-		    	 BitmapInputStream = getResources().openRawResource(R.raw.select32by64);
-		    	 frame_length = 8192;
-		    	 currentResolution = 64; 
-		    	 break;	 
-		     case 6:
-		    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_2_MIRRORED; 
-		    	 BitmapInputStream = getResources().openRawResource(R.raw.select32by64);
-		    	 frame_length = 8192;
-		    	 currentResolution = 64; 
-		    	 break;	 	 
-		     case 7:
-		    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_4_MIRRORED;
-		    	 BitmapInputStream = getResources().openRawResource(R.raw.select32by128);
-		    	 frame_length = 8192;
-		    	 currentResolution = 128; 
-		     case 8:
-		    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_128x32; //horizontal
-		    	 BitmapInputStream = getResources().openRawResource(R.raw.select128by32);
-		    	 frame_length = 8192;
-		    	 currentResolution = 128;  
-		    	 break;	 
-		     case 9:
-		    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x128; //vertical mount
-		    	 BitmapInputStream = getResources().openRawResource(R.raw.select32by128);
-		    	 frame_length = 8192;
-		    	 currentResolution = 128; 
-		    	 break;	 
-		     case 10:
-		    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_64x64;
-		    	 BitmapInputStream = getResources().openRawResource(R.raw.select64by64);
-		    	 frame_length = 8192;
-		    	 currentResolution = 128; 
-		    	 break;	 	 		 
-		     default:	    		 
-		    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32; //v2 as the default
-		    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
-		    	 frame_length = 2048;
-		    	 currentResolution = 32;
-		     }
-		     
-		     matrix_number = matrix_model;
-		         
-		     frame_ = new short [KIND.width * KIND.height];
-			 BitmapBytes = new byte[KIND.width * KIND.height *2]; //512 * 2 = 1024 or 1024 * 2 = 2048
-			 
-			 loadRGB565(); //load the select pic raw565 file
-			 
-			 //if (imagedisplaydurationTimer != null) imagedisplaydurationTimer.cancel();
-		     //if (pausebetweenimagesdurationTimer != null) pausebetweenimagesdurationTimer.cancel();
-			 stopTimers();
-			 
-			 imagedisplaydurationTimer = new ImageDisplayDurationTimer(imageDisplayDuration*1000,1000); //how long the image should display
-		 	 pausebetweenimagesdurationTimer = new PauseBetweenImagesDurationTimer(pauseBetweenImagesDuration*1000,1000); //how long to show a blank screen before showing the next image
-		 	 slideShowRunning = 0;*/
 		 	 
 		 	 LoadGridView(false);
 		 	
