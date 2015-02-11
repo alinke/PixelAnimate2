@@ -199,6 +199,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
   	private static String extension_;
   	
   	private SharedPreferences prefs;
+  	
 	private String OKText;
 	private Resources resources;
 	private String app_ver;	
@@ -369,6 +370,10 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	
 	final String welcomeScreenShownPref = "welcomeScreenShown";
 	
+	final String mainAPKUnzippedPref = "mainAPKUnzipped";
+	
+	final String patchAPKUnzippedPref = "patchAPKUnzipped";
+	
 	private boolean slideShowAllPNGs_ = false;
 	
 	private boolean FavPNGHasFiles = false;
@@ -384,6 +389,28 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	private int slideshowGIFFrameDelay;
 	
 	public static int targetScreenResolution = 0;
+	
+	boolean ExpandedFilesCopied = false;
+	
+	private String zipFilename = ""; 
+     
+    private String unzipLocation = Environment.getExternalStorageDirectory() + "/pixel/"; 
+    
+    private String APKExpansionPathMain;
+    private String APKExpansionPathPatch;
+    private Boolean mainAPKUnzipped;
+	private Boolean patchAPKUnzipped;
+    
+    //Edit these variables when updating the APK files
+	//*********************************
+	//to do add the byte file sizes too
+	private int mainAPKExpNumFiles = 1200;
+    private int patchAPKExpNumFiles = 20;
+    private static int APKExpMainVersion = 50;
+    private static int APKExpPatchVersion = 50;
+    private static Long APKExpMainFileSize = 32279235L;
+    private static Long APKExpPatchFileSize = 502035L;
+    //***********************************
 	
 	
 	/*this next set of code is for the APK expansion downloader service, 
@@ -439,11 +466,11 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 
     private IStub mDownloaderClientStub;
     
-    private ProgressDialog mProgressDialog;
+   // private ProgressDialog mProgressDialog;
  
-    private String unzipLocation = Environment.getExternalStorageDirectory() + "/pixel/";
-    private String StorezipFileLocation =Environment.getExternalStorageDirectory() + "/Android/obb/"; //change this to obb folder
-    private String DirectoryName=Environment.getExternalStorageDirectory() + "/pixel/";
+   // private String unzipLocation = Environment.getExternalStorageDirectory() + "/pixel/";
+    //private String StorezipFileLocation =Environment.getExternalStorageDirectory() + "/Android/obb/"; //change this to obb folder
+   // private String DirectoryName=Environment.getExternalStorageDirectory() + "/pixel/";
     
     // The shared path to all app expansion files
     private final static String EXP_PATH = "/Android/obb/";
@@ -491,16 +518,13 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
     private static final XAPKFile[] xAPKS = {
             new XAPKFile(
                     true, // true signifies a main file
-                    50, // the version of the APK that the file was uploaded
-                       // against
-                    32279235L
-                   // 3666679235L
+                    APKExpMainVersion, // the version of the APK that the file was uploaded against
+                    APKExpMainFileSize
             ),
             new XAPKFile(
                     false, // false signifies a patch file
-                    50, // the version of the APK that the patch file was uploaded
-                       // against
-                    502035L // the length of the patch file in bytes
+                    APKExpPatchVersion, // the version of the APK that the patch file was uploaded against
+                    APKExpPatchFileSize // the length of the patch file in bytes
             )            
     };
 
@@ -546,7 +570,14 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 
             @Override
             protected void onPreExecute() {
-                mDashboard.setVisibility(View.VISIBLE);
+                
+            	String [] APKExpansionPath = getAPKExpansionFiles(context,APKExpMainVersion,APKExpPatchVersion); //50 and 50 are the version code versions of the APKs these were originally associated with
+                
+                APKExpansionPathMain = APKExpansionPath[0];
+                APKExpansionPathPatch = APKExpansionPath[1];
+                unzipLocation = Environment.getExternalStorageDirectory() + "/pixel/"; 
+            	
+            	mDashboard.setVisibility(View.VISIBLE);
                 mCellMessage.setVisibility(View.GONE);
                 mStatusText.setText(R.string.text_verifying_download);
                 mPauseButton.setOnClickListener(new View.OnClickListener() {
@@ -695,6 +726,21 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
                     });
                     mPauseButton.setText(android.R.string.cancel);
                 }
+                
+                //we've validated our obb's are good so now let's unzip them but let's not unzip if they have already been unzipped
+               
+                 mainAPKUnzipped = prefs.getBoolean(mainAPKUnzippedPref, false);
+                 patchAPKUnzipped = prefs.getBoolean(patchAPKUnzippedPref, false);
+                 
+                /* mainAPKUnzipped = false;
+                 patchAPKUnzipped = false;*/
+                
+             
+                if (mainAPKUnzipped != true || patchAPKUnzipped !=true) {
+	               	 unZipAsync unZipAsync_ = new unZipAsync(APKExpansionPathMain,APKExpansionPathPatch,mainAPKExpNumFiles,patchAPKExpNumFiles ,unzipLocation); //String zipFileMain, String zipFilePatch, int zipFileMainNumFiles, int zipFilePatchNumFiles, String unzipLocation) { 
+	               	 unZipAsync_.execute();
+                }
+                
                 super.onPostExecute(result);
             }
 
@@ -840,8 +886,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	     //gridview.setNumColumns(3);
 	    // gridview.setFastScrollEnabled(true);  //with this one, we're getting a CRASH
 	     
-	     gridview.setKeepScreenOn(false);
-		 
+	      gridview.setKeepScreenOn(false);
 	      gifView = (GifView) findViewById(R.id.gifView); //gifview takes care of the gif decoding
 	      gifView.setGif(R.drawable.zzzblank);  //code will crash if a dummy gif is not loaded initially
 	      
@@ -1318,7 +1363,6 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	   super.onPostExecute(result);
 	   progress.dismiss(); //we're done so now hide the progress update box
 	   continueOnCreate();
-	   // btn_start.setEnabled(true);
 	  }
 	  
 		//********** the copy functions
@@ -1645,8 +1689,7 @@ private void copyGIF64Source() {
 } //end async task
 	    
     private void continueOnCreate() {
-         
-         
+    	
     	//****** now before we load up the gridview , let's check if the content from the expanded APK files is also there
     	  /**
          * Both downloading and validation make use of the "download" UI
@@ -1692,72 +1735,22 @@ private void copyGIF64Source() {
                     // show progress
                     initializeDownloadUI();
                     return;
-                } // otherwise, download not needed so we fall through to
+                }
+                else {
+                	// otherwise, download not needed so we fall through to
+                	LoadGridView(false);
+                	//gridview.setOnItemClickListener(MainActivity.this);
+                    //gridview.setOnItemLongClickListener(MainActivity.this);
+                }
                   // starting the movie
             } catch (NameNotFoundException e) {
                 Log.e(LOG_TAG, "Cannot find own package! MAYDAY!");
                 e.printStackTrace();
             }
 
-        } else {
-            validateXAPKZipFiles();
+        } else { //the files are already there so let's just validate they are correct
+            validateXAPKZipFiles(); //on this post execute, we'll call the unzip routine
         }
-        
-        //******************
-    	
-        //**** Now that we have the expansion obb files loaded locally, we need to inflat them into our dir structure
-        
-        
-        
-        //****************
-     
-    	 //ok great, we're done with the expansion APK stuff so let's continue and load the gridview
-    	//LoadGridView(false);
-    	
-    	//setContentView(gridview); //this replaces the old asyncload files we had before
-    	// myAsyncTaskLoadFiles = new AsyncTaskLoadFiles(myImageAdapter, false);
-        // myAsyncTaskLoadFiles.execute();
-    	
-    	  String [] APKExpansionPath = getAPKExpansionFiles(context,50,50);
-          showToast(APKExpansionPath[0]);
-          showToast(APKExpansionPath[1]);
-          String APKExpansionPathMain = APKExpansionPath[0];
-          String APKExpansionPathPatch = APKExpansionPath[1];
-          
-          //String zipFilename = Environment.getExternalStorageDirectory() + "/files.zip"; 
-          String zipFilename = APKExpansionPathMain; 
-          
-          String unzipLocation = Environment.getExternalStorageDirectory() + "/pixel/"; 
-
-          
-          
-    	
-    	/*try {
-			unzip(APKExpansionPathMain);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	
-    	try {
-			unzip(APKExpansionPathPatch);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
-          
-         boolean ExpandedFilesCopied = false;
-         
-         if (!ExpandedFilesCopied) {
-        	 unZipAsync unZipAsync_ = new unZipAsync(zipFilename,unzipLocation);
-        	 unZipAsync_.execute();
-	        ExpandedFilesCopied = true;
-         }
-         
-        // gridview.setOnItemClickListener(MainActivity.this);
-        // gridview.setOnItemLongClickListener(MainActivity.this);
-         
-      
          
          //******** now we wait for the user to do something **************
          
@@ -1766,12 +1759,20 @@ private void copyGIF64Source() {
     private class unZipAsync extends AsyncTask<Void, Integer, Void>{
 		 
 	     int progress_status;
-	     private String _zipFile; 
-	      private String _location; 
+	     private String _zipFileMain; 
+	     private String _zipFilePatch;
+	     private int _zipFileMainNumFiles;
+	     private int _zipFilePatchNumFiles;
+	     private String _unzipLocation; 
+	     
+	     boolean _mainAPK;
 
-	      public unZipAsync (String zipFile, String location) { 
-	        _zipFile = zipFile; 
-	        _location = location; 
+	      public unZipAsync (String zipFileMain, String zipFilePatch, int zipFileMainNumFiles, int zipFilePatchNumFiles, String unzipLocation) { 
+	    	 _zipFileMain = zipFileMain; 
+	    	 _zipFilePatch = zipFilePatch; 
+	    	 _zipFileMainNumFiles = zipFileMainNumFiles;
+	    	 _zipFilePatchNumFiles = zipFilePatchNumFiles;
+	        _unzipLocation = unzipLocation;
 
 	        _dirChecker(""); 
 	      } 
@@ -1784,19 +1785,55 @@ private void copyGIF64Source() {
 		   super.onPreExecute();
 		   
 		   //to do don't do the pop up here and instead leverage the same layout that the download uses
+		   //mainAPKUnzipped = prefs.getBoolean(mainAPKUnzippedPref, false);
+		   //patchAPKUnzipped = prefs.getBoolean(patchAPKUnzippedPref, false);
+		   
+		  /* 
+		   * mainAPKUnzipped = false;
+		   patchAPKUnzipped = false;*/
 		   
 		   progress = new ProgressDialog(MainActivity.this);
-		   progress.setMax(10000);
+		   
+		   int MaxValueTotal = 0;
+		   int maxValue1 = 0;
+		   int maxValue2 = 0;
+		   
+		   if (!mainAPKUnzipped) {
+			    maxValue1 = _zipFileMainNumFiles;
+		   }
+		   else {
+			   maxValue1 = 0;
+		   }
+		   
+		   if (!patchAPKUnzipped) {
+			    maxValue2 = _zipFilePatchNumFiles;
+		   }
+		   else {
+			   maxValue2 = 0;
+		   }
+		   
+		   MaxValueTotal = maxValue1 + maxValue2;
+		   progress.setMax(MaxValueTotal);
+		   
 	       //progress.setTitle(getString(R.string.oneTimeCopyTitle));
-	       progress.setTitle("New Art");
+	       progress.setTitle("Unpacking");
 	      // progress.setMessage(getString(R.string.oneTimeCopyMessage));
 	       progress.setMessage("Unpacking New Art");
 	       progress.setCancelable(false);
 		   progress.setIcon(R.drawable.ic_action_warning);
 	       progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 	       progress.show();
-	 
-	    progress_status = 0;
+	       progress_status = 0;
+	    
+	       // progress.mOverallTotal = progress.mOverallTotal;
+           //mPB.setMax(_numFiles);
+           
+          /* mStatusText.setText("Unpacking...");
+           mProgressFraction.setText("");
+           mProgressPercent.setText("");
+           mAverageSpeed.setText("");
+           mTimeRemaining.setText("");*/
+	    
 	    
 	  }
 	      
@@ -1804,20 +1841,21 @@ private void copyGIF64Source() {
 	  protected Void doInBackground(Void... params) {
 		  
 		  // create target location folder if not exist
-		  _dirChecker(_location);
-
+		  _dirChecker(_unzipLocation);
+		  
+		  if (!mainAPKUnzipped) {
 	        try {
-	            FileInputStream fin = new FileInputStream(_zipFile);
+	            FileInputStream fin = new FileInputStream(_zipFileMain);
 	            ZipInputStream zin = new ZipInputStream(fin);
 	            ZipEntry ze = null;
 	            while ((ze = zin.getNextEntry()) != null) {
-
+	            	//i++;
 	                // create dir if required while unzipping
 	                if (ze.isDirectory()) {
 	                	_dirChecker(ze.getName());
 	                } else {
 	                    FileOutputStream fout = new FileOutputStream(
-	                    _location + "/" + ze.getName());
+	                    _unzipLocation + "/" + ze.getName());
 	                    BufferedOutputStream bufout = new BufferedOutputStream(fout);
 	                    byte[] buffer = new byte[1024];
 	                    int read = 0;
@@ -1825,44 +1863,59 @@ private void copyGIF64Source() {
 	                        bufout.write(buffer, 0, read);
 	                    }
 	                    publishProgress(1);
+	                   // mPB.setProgress(i++);
+	                    
+	                    
+	                    
 	                    zin.closeEntry();
 	                    bufout.close();
 	                    fout.close();
 	                }
 	            }
 	            zin.close();
+	            SharedPreferences.Editor editor = prefs.edit(); //let's write the preference that we unzipped the files successfully
+         	    editor.putBoolean(mainAPKUnzippedPref, true);
+         	    editor.commit();
 	        } catch (Exception e) {
 	            System.out.println(e);
 	        }
-		  
-		  
-		 
-		 /* try  { 
-	          FileInputStream fin = new FileInputStream(_zipFile); 
-	          ZipInputStream zin = new ZipInputStream(fin); 
-	          ZipEntry ze = null; 
-	          while ((ze = zin.getNextEntry()) != null) { 
-	            Log.v("Decompress", "Unzipping " + ze.getName()); 
-	            publishProgress(1);
-
-	            if(ze.isDirectory()) { 
-	              _dirChecker(ze.getName()); 
-	            } else { 
-	              FileOutputStream fout = new FileOutputStream(_location + ze.getName()); 
-	              for (int c = zin.read(); c != -1; c = zin.read()) { 
-	                fout.write(c); 
-	              } 
-
-	              zin.closeEntry(); 
-	              fout.close(); 
-	            } 
-
-	          } 
-	          zin.close(); 
-	        } catch(Exception e) { 
-	          Log.e("Decompress", "unzip", e); 
-	        } */
-			
+		  }    
+	        
+	    if (!patchAPKUnzipped) {
+	        try {
+	            FileInputStream fin = new FileInputStream(_zipFilePatch);
+	            ZipInputStream zin = new ZipInputStream(fin);
+	            ZipEntry ze = null;
+	            while ((ze = zin.getNextEntry()) != null) {
+	            	//i++;
+	                // create dir if required while unzipping
+	                if (ze.isDirectory()) {
+	                	_dirChecker(ze.getName());
+	                } else {
+	                    FileOutputStream fout = new FileOutputStream(
+	                    _unzipLocation + "/" + ze.getName());
+	                    BufferedOutputStream bufout = new BufferedOutputStream(fout);
+	                    byte[] buffer = new byte[1024];
+	                    int read = 0;
+	                    while ((read = zin.read(buffer)) != -1) {
+	                        bufout.write(buffer, 0, read);
+	                    }
+	                    publishProgress(1);
+	                   // mPB.setProgress(i++);
+	                    
+	                    zin.closeEntry();
+	                    bufout.close();
+	                    fout.close();
+	                }
+	            }
+	            zin.close();
+	            SharedPreferences.Editor editor = prefs.edit(); //let's write the preference that we unzipped the files successfully
+         	    editor.putBoolean(patchAPKUnzippedPref, true);
+         	    editor.commit();
+	        } catch (Exception e) {
+	            System.out.println(e);
+	        }
+	    } 
 			
 	   return null;
 	  }
@@ -1871,7 +1924,6 @@ private void copyGIF64Source() {
 	  protected void onProgressUpdate(Integer... values) {
 	   super.onProgressUpdate(values);
 	   progress.incrementProgressBy(1);
-	    
 	  }
 	   
 	  @Override
@@ -1879,14 +1931,20 @@ private void copyGIF64Source() {
 	   super.onPostExecute(result);
 	   progress.dismiss(); //we're done so now hide the progress update box
 	   //continueOnCreate();
-	   
+    	   
 	   LoadGridView(false);
 	   gridview.setOnItemClickListener(MainActivity.this);
        gridview.setOnItemLongClickListener(MainActivity.this);
+    	  
+      
+	    // now we've set that the expansion files have been unziped so we don't keep unzipping everytime
+       
+       
+	  
 	  }
 	  
 	  private void _dirChecker(String dir) { 
-	        File f = new File(_location + dir); 
+	        File f = new File(_unzipLocation + dir); 
 
 	        if(!f.isDirectory()) { 
 	          f.mkdirs(); 
@@ -1931,165 +1989,7 @@ private void copyGIF64Source() {
         ret.toArray(retArray);
         return retArray;
     }
-    
-    public void unzip(String obbPath) throws IOException 
-    {
-    mProgressDialog = new ProgressDialog(MainActivity.this);
-    mProgressDialog.setMessage("Please Wait...");
-    mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-    mProgressDialog.setCancelable(false);
-    mProgressDialog.show();
-    //new UnZipTask().execute(StorezipFileLocation, DirectoryName);
-    new UnZipTask().execute(obbPath, DirectoryName);
-      }
-    
-    public class UnzipUtil
-    {
-       private String zipFile;
-       private String location;
-
-    public UnzipUtil(String zipFile, String location)
-    {
-       this.zipFile = zipFile;
-       this.location = location;
-
-       dirChecker(""); //to do causing a crash here
-    }
-
-    public void unzip()
-   {
-     try
-   {
-        FileInputStream fin = new FileInputStream(zipFile);
-        ZipInputStream zin = new ZipInputStream(fin);
-        ZipEntry ze = null;
-        while ((ze = zin.getNextEntry()) != null)
-        {
-         Log.v("Decompress", "Unzipping " + ze.getName());
-
-  if(ze.isDirectory())
-  {
-   dirChecker(ze.getName());
-  }
-  else
-  {
-   FileOutputStream fout = new FileOutputStream(location + ze.getName());     
-
-   byte[] buffer = new byte[8192];
-   int len;
-   while ((len = zin.read(buffer)) != -1)
-   {
-    fout.write(buffer, 0, len);
-   }
-   fout.close();
-
-   zin.closeEntry();
-
-  }
-
-      }
-        zin.close();
-      }
-       catch(Exception e)
-       {
-            Log.e("Decompress", "unzip", e);
-       }
-
-    }
-
-     private void dirChecker(String dir)
-     {
-           File f = new File(location + dir);
-           if(!f.isDirectory())
-            {
-              f.mkdirs();
-            }
-           }
-      }
-    
-    private class UnZipTask extends AsyncTask<String, Void, Boolean> 
-    {
-    @SuppressWarnings("rawtypes")
-    @Override
-    protected Boolean doInBackground(String... params) 
-    {
-       String filePath = params[0];
-       String destinationPath = params[1];
-
-         File archive = new File(filePath);
-          try 
-           {
-           ZipFile zipfile = new ZipFile(archive);
-           for (Enumeration e = zipfile.entries(); e.hasMoreElements();) 
-           {
-                   ZipEntry entry = (ZipEntry) e.nextElement();
-                   unzipEntry(zipfile, entry, destinationPath);
-              }
-
-
-   UnzipUtil d = new UnzipUtil("fix this", DirectoryName); 
-   d.unzip();
-
-      } 
-catch (Exception e) 
-   {
-     return false;
-   }
-
-    return true;
- }
-
-     @Override
-     protected void onPostExecute(Boolean result) 
-     {
-          mProgressDialog.dismiss(); 
-
-       }
-
-
-      private void unzipEntry(ZipFile zipfile, ZipEntry entry,String outputDir) throws IOException 
-   {
-
-            if (entry.isDirectory()) 
-  {
-          createDir(new File(outputDir, entry.getName()));
-          return;
-    }
-
-     File outputFile = new File(outputDir, entry.getName());
-     if (!outputFile.getParentFile().exists())
-     {
-        createDir(outputFile.getParentFile());
-     }
-
-     // Log.v("", "Extracting: " + entry);
-    BufferedInputStream inputStream = new BufferedInputStream(zipfile.getInputStream(entry));
-    BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(outputFile));
-
- try 
-  {
-
-   }
- finally 
-   {
-        outputStream.flush();
-        outputStream.close();
-        inputStream.close();
-    }
-     }
-
-       private void createDir(File dir) 
-       {
-          if (dir.exists()) 
-        {
-             return;
-            }
-              if (!dir.mkdirs()) 
-                {
-                  throw new RuntimeException("Can not create dir " + dir);
-         }
-         }
-  } 
+ 
     
 //***** classes for APK expansion downloader *******
     
@@ -2165,6 +2065,7 @@ catch (Exception e)
                 paused = true;
                 showDashboard = false;
                 indeterminate = false;
+                LoadGridView(false); //the download failed so let's not forget to load the gridview or the user will not be able to click anything
                 break;
             case IDownloaderClient.STATE_PAUSED_NEED_CELLULAR_PERMISSION:
             case IDownloaderClient.STATE_PAUSED_WIFI_DISABLED_NEED_CELLULAR_PERMISSION:
@@ -2172,22 +2073,29 @@ catch (Exception e)
                 paused = true;
                 indeterminate = false;
                 showCellMessage = true;
+                LoadGridView(false);
                 break;
 
             case IDownloaderClient.STATE_PAUSED_BY_REQUEST:
                 paused = true;
                 indeterminate = false;
+                LoadGridView(false);
                 break;
             case IDownloaderClient.STATE_PAUSED_ROAMING:
             case IDownloaderClient.STATE_PAUSED_SDCARD_UNAVAILABLE:
                 paused = true;
                 indeterminate = false;
+                LoadGridView(false);
                 break;
             case IDownloaderClient.STATE_COMPLETED:
                 showDashboard = false;
                 paused = false;
                 indeterminate = false;
-                validateXAPKZipFiles();
+                //since we now have just downloaded new files, we'll need to tell the app to unzip the new obb files
+                SharedPreferences.Editor editor = prefs.edit(); //let's write the preference that we unzipped the files successfully
+         	    editor.putBoolean(patchAPKUnzippedPref, true);
+         	    editor.commit();
+                validateXAPKZipFiles(); //we'll load the gridview after validation
                 return;
             default:
                 paused = true;
@@ -2591,6 +2499,9 @@ catch (Exception e)
 	   list = new ListAdapter(this, items);
 	   gridview.setAdapter(list);
 	   gridview.setKeepScreenOn(false);
+	   //??? add these two lines, did it break something?
+	   gridview.setOnItemClickListener(MainActivity.this);
+       gridview.setOnItemLongClickListener(MainActivity.this);
   	 }
     
 public boolean onItemLongClick(final AdapterView<?> parent, View v, final int position, long id) {  
@@ -4691,40 +4602,6 @@ public class UnFavoriteGIFMoveAsync extends AsyncTask<Void, Integer, Void>{
 			  
 			  AsyncRefreshArt asyncRefreshArt_ = new AsyncRefreshArt();
 			  asyncRefreshArt_.execute();
-			  
-			  /*File pngPath = new File(PNGPath);
-			  File pngPath64 = new File(PNG64Path);
-			  
-			  File gifPath = new File(GIFPath);
-			  File gifPathDecoded = new File(GIFPath + "decoded");
-			  File gifPathSource = new File(GIFPath + "gifsource");
-			  
-			  File gifPath64 = new File(GIF64Path);
-			  File gifPathDecoded64 = new File(GIF64Path + "decoded");
-			  File gifPathSource64 = new File(GIF64Path + "gifsource");
-			  
-			  //stop any timers before deleting
-			  stopTimers();
-			  
-			  DeleteRecursive(pngPath);  
-			  DeleteRecursive(pngPath64);  
-			  
-			  DeleteRecursive(gifPath);  
-			  DeleteRecursive(gifPathDecoded);  
-			  DeleteRecursive(gifPathSource);  
-			  
-			  DeleteRecursive(gifPath64);  
-			  DeleteRecursive(gifPathDecoded64);  
-			  DeleteRecursive(gifPathSource64);  
-			  
-			  LoadGridView(false);
-			  
-			  //myAsyncTaskLoadFiles = new AsyncTaskLoadFiles(myImageAdapter, false);
-		      //myAsyncTaskLoadFiles.execute();
-			  
-			  AlertDialog.Builder alert=new AlertDialog.Builder(this);
-		      	alert.setTitle(getString(R.string.menu_refresh_title)).setIcon(R.drawable.icon).setMessage(getString(R.string.menu_refresh_summary)).setNeutralButton(getResources().getString(R.string.OKText), null).show();	
-		     */
 		      	
 		  }
 	    	
@@ -4840,6 +4717,8 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 	  File gifPath16 = new File(GIF16Path);
 	  File gifPathDecoded16 = new File(GIF16Path + "decoded");
 	  File gifPathSource16 = new File(GIF16Path + "gifsource");
+	  
+	  File ObbDir = new File(Environment.getExternalStorageDirectory() + "/Android/obb/com.ledpixelart.piledriver"); //where the two expansion APK files are stored
 
   	  @Override
   	  protected void onPreExecute() {
@@ -4867,6 +4746,8 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 		  DeleteRecursive(gifPath16);  
 		  DeleteRecursive(gifPathDecoded16);  
 		  DeleteRecursive(gifPathSource16);  
+		  
+		  DeleteRecursive(ObbDir);
 	   	  
 	 return null;
 	 

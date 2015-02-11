@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="com.ledpixelart.piledriver"
-      android:versionCode="51"
-      android:versionName="8.6">
+      android:versionCode="54"
+      android:versionName="8.8a">
       
     <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="11"/>
        
@@ -41,13 +41,13 @@
          In order to start the service, it must be uniquely registered with
          the package manager here. 
         -->
-        <service android:name=".SampleDownloaderService" />
+        <service android:name=".PIXELDownloaderService" />
 
         <!--
          In order for the alarm manager to contact the downloader script, the receiver
          must be uniquely registered with the package manager here. 
         -->
-        <receiver android:name=".SampleAlarmReceiver" />
+        <receiver android:name=".PIXELAlarmReceiver" />
            
           <uses-library android:name="com.android.future.usb.accessory" android:required="false" />	     
           
