@@ -163,7 +163,7 @@
     <string name="StartInstructions">Tap to Animate</string>
     
  	<string name="oneTimeCopyTitle">Initial Setup</string> 
-    <string name="oneTimeCopyMessage">Do not interrupt or leave this screen. It will stay on 100% for awhile so please be patient.</string> 
+    <string name="oneTimeCopyMessage">Do not interrupt or leave this screen.</string> 
     
     <string name="LongTapActionTitle">Select Action</string> 
     <string name="LongTapActionWrite">Write</string> 
@@ -205,7 +205,7 @@
     <string name="text_button_wifi_settings">Wi-Fi settings</string>
     <string name="text_verifying_download">Verifying Download</string>
     <string name="text_validation_complete">Pixel Art Download Validation Complete.  Select OK to continue.</string>
-    <string name="text_validation_failed">XAPK File Validation Failed.</string>
+    <string name="text_validation_failed">Download File Validation Failed.</string>
     <string name="text_button_pause">Pause Download</string>
     <string name="text_button_resume">Resume Download</string>
     <string name="text_button_cancel">Cancel</string>

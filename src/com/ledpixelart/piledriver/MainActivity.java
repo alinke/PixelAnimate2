@@ -395,11 +395,12 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	private String zipFilename = ""; 
      
     private String unzipLocation = Environment.getExternalStorageDirectory() + "/pixel/"; 
+    private SharedPreferences.Editor editor;
     
     private String APKExpansionPathMain;
     private String APKExpansionPathPatch;
-    private Boolean mainAPKUnzipped;
-	private Boolean patchAPKUnzipped;
+    private Boolean mainAPKUnzipped = false;
+	private Boolean patchAPKUnzipped = false;
     
     //Edit these variables when updating the APK files
 	//*********************************
@@ -565,6 +566,26 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
      * 
      * @return true if XAPKZipFile is successful
      */
+    private void CheckAndUnzipAPKExp() {
+    
+    String [] APKExpansionPath = getAPKExpansionFiles(context,APKExpMainVersion,APKExpPatchVersion); //50 and 50 are the version code versions of the APKs these were originally associated with
+    APKExpansionPathMain = APKExpansionPath[0];
+    APKExpansionPathPatch = APKExpansionPath[1];
+    unzipLocation = Environment.getExternalStorageDirectory() + "/pixel/"; 
+    
+    mainAPKUnzipped = prefs.getBoolean(mainAPKUnzippedPref, false);
+    patchAPKUnzipped = prefs.getBoolean(patchAPKUnzippedPref, false);
+   
+
+   if (!mainAPKUnzipped  || !patchAPKUnzipped) { //if either one of them have not been unzipped, then let's go here
+      	 unZipAsync unZipAsync_ = new unZipAsync(APKExpansionPathMain,APKExpansionPathPatch,mainAPKExpNumFiles,patchAPKExpNumFiles ,unzipLocation); //String zipFileMain, String zipFilePatch, int zipFileMainNumFiles, int zipFilePatchNumFiles, String unzipLocation) { 
+      	 unZipAsync_.execute();
+   }
+    
+  	
+   
+    }
+    
     void validateXAPKZipFiles() {
         AsyncTask<Object, DownloadProgressInfo, Boolean> validationTask = new AsyncTask<Object, DownloadProgressInfo, Boolean>() {
 
@@ -713,6 +734,13 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
                         }
                     });
                     mPauseButton.setText(android.R.string.ok);
+                	
+                	 mDashboard.setVisibility(View.GONE);
+                     mCellMessage.setVisibility(View.GONE);
+                   //  mStatusText.setText(R.string.text_validation_complete);
+                   //  mPauseButton.setVisibility(View.VISIBLE);
+                     
+                    
                     
                 } else {
                     mDashboard.setVisibility(View.VISIBLE);
@@ -721,7 +749,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
                     mPauseButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            finish();
+                        	//to do download the new files here
+                            //finish();
                         }
                     });
                     mPauseButton.setText(android.R.string.cancel);
@@ -732,11 +761,11 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
                  mainAPKUnzipped = prefs.getBoolean(mainAPKUnzippedPref, false);
                  patchAPKUnzipped = prefs.getBoolean(patchAPKUnzippedPref, false);
                  
-                /* mainAPKUnzipped = false;
-                 patchAPKUnzipped = false;*/
+                // for testing: mainAPKUnzipped = false;
+                // patchAPKUnzipped = false;
                 
              
-                if (mainAPKUnzipped != true || patchAPKUnzipped !=true) {
+                if (!mainAPKUnzipped  || !patchAPKUnzipped) { //if either one of them have not been unzipped, then let's go here
 	               	 unZipAsync unZipAsync_ = new unZipAsync(APKExpansionPathMain,APKExpansionPathPatch,mainAPKExpNumFiles,patchAPKExpNumFiles ,unzipLocation); //String zipFileMain, String zipFilePatch, int zipFileMainNumFiles, int zipFilePatchNumFiles, String unzipLocation) { 
 	               	 unZipAsync_.execute();
                 }
@@ -755,8 +784,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
     private void initializeDownloadUI() {
         mDownloaderClientStub = DownloaderClientMarshaller.CreateStub
                 (this, PIXELDownloaderService.class);
-        //setContentView(R.layout.main); //have a different layout for download but will require some work to switch screens so instead just including in main layout and hiding when we don't need
-
+       
         mPB = (ProgressBar) findViewById(R.id.progressBar);
         mStatusText = (TextView) findViewById(R.id.statusText);
         mProgressFraction = (TextView) findViewById(R.id.progressAsFraction);
@@ -937,7 +965,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
                             dialog.dismiss();
                         }
                     }).show();
-            SharedPreferences.Editor editor = prefs.edit();
+            editor = prefs.edit();
             editor.putBoolean(welcomeScreenShownPref, true);
             editor.commit(); // Very important to save the preference
         }
@@ -983,8 +1011,9 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	            }
 	            else { //the directory was already there so no need to copy files or do a media re-scan so just continue on
 	            	
-	            	//now let's check the app version
-	            	continueOnCreate();
+	            	//now let's check if our APK Exp files are in order
+	            	checkAPKExp();
+	            	//continueOnCreate();
 	            
 	            }
 
@@ -1362,7 +1391,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	  protected void onPostExecute(Void result) {
 	   super.onPostExecute(result);
 	   progress.dismiss(); //we're done so now hide the progress update box
-	   continueOnCreate();
+	   //continueOnCreate();
+	   CheckAndUnzipAPKExp(); //we've copied initial files, now need to check and unzip the APKExp
 	  }
 	  
 		//********** the copy functions
@@ -1687,6 +1717,78 @@ private void copyGIF64Source() {
 	   } //end copyGIF16
 		
 } //end async task
+	 
+    private void checkAPKExp() {
+    	//****** now before we load up the gridview , let's check if the content from the expanded APK files is also there
+  	  /**
+       * Both downloading and validation make use of the "download" UI
+       */
+  	//  initializeDownloadUI();
+      
+
+      /**
+       * Before we do anything, are the files we expect already here and
+       * delivered (presumably by Market) For free titles, this is probably
+       * worth doing. (so no Market request is necessary)
+       */
+      if (!expansionFilesDelivered()) { //if files are not there, we need to download them
+      	  initializeDownloadUI();
+          try {
+              Intent launchIntent = MainActivity.this
+                      .getIntent();
+              Intent intentToLaunchThisActivityFromNotification = new Intent(
+              		MainActivity
+                      .this, MainActivity.this.getClass());
+              intentToLaunchThisActivityFromNotification.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                      Intent.FLAG_ACTIVITY_CLEAR_TOP);
+              intentToLaunchThisActivityFromNotification.setAction(launchIntent.getAction());
+
+              if (launchIntent.getCategories() != null) {
+                  for (String category : launchIntent.getCategories()) {
+                      intentToLaunchThisActivityFromNotification.addCategory(category);
+                  }
+              }
+
+              // Build PendingIntent used to open this activity from
+              // Notification
+              PendingIntent pendingIntent = PendingIntent.getActivity(
+                      MainActivity.this,
+                      0, intentToLaunchThisActivityFromNotification,
+                      PendingIntent.FLAG_UPDATE_CURRENT);
+              // Request to start the download
+              int startResult = DownloaderClientMarshaller.startDownloadServiceIfRequired(this,
+                      pendingIntent, PIXELDownloaderService.class);
+
+              if (startResult != DownloaderClientMarshaller.NO_DOWNLOAD_REQUIRED) {
+                  // The DownloaderService has started downloading the files,
+                  // show progress
+                  initializeDownloadUI();
+                  return;
+              }
+              else {
+              	// otherwise, download not needed so we fall through to
+              	LoadGridView(false);
+              	//gridview.setOnItemClickListener(MainActivity.this);
+                  //gridview.setOnItemLongClickListener(MainActivity.this);
+              }
+                // starting the movie
+          } catch (NameNotFoundException e) {
+              Log.e(LOG_TAG, "Cannot find own package! MAYDAY!");
+              e.printStackTrace();
+          }
+
+      } else { //the files are already there so let's just validate they are correct and unzipped
+    	  //initializeDownloadUI();
+    	 // validateXAPKZipFiles(); //on this post execute, we'll call the unzip routine
+    	  
+    	  CheckAndUnzipAPKExp(); //let's check if they were unzipped before and if not, unzip them
+          
+          //to do this one we can skip going forward and instead just check that they were unzipped
+      }
+      
+     // continueOnCreate();
+      
+    }
 	    
     private void continueOnCreate() {
     	
@@ -1694,7 +1796,7 @@ private void copyGIF64Source() {
     	  /**
          * Both downloading and validation make use of the "download" UI
          */
-        initializeDownloadUI();
+    	//  initializeDownloadUI();
         
 
         /**
@@ -1702,8 +1804,8 @@ private void copyGIF64Source() {
          * delivered (presumably by Market) For free titles, this is probably
          * worth doing. (so no Market request is necessary)
          */
-        if (!expansionFilesDelivered()) {
-
+        /*if (!expansionFilesDelivered()) {
+        	  initializeDownloadUI();
             try {
                 Intent launchIntent = MainActivity.this
                         .getIntent();
@@ -1748,11 +1850,15 @@ private void copyGIF64Source() {
                 e.printStackTrace();
             }
 
-        } else { //the files are already there so let's just validate they are correct
-            validateXAPKZipFiles(); //on this post execute, we'll call the unzip routine
-        }
+        } else { //the files are already there so let's just validate they are correct and unzipped
+            //validateXAPKZipFiles(); //on this post execute, we'll call the unzip routine
+            CheckAndUnzipAPKExp(); //let's check if they were unzipped before and if not, unzip them
+            //to do this one we can skip going forward and instead just check that they were unzipped
+        }*/
          
          //******** now we wait for the user to do something **************
+    	
+    	LoadGridView(false);
          
     }
     
@@ -1873,9 +1979,7 @@ private void copyGIF64Source() {
 	                }
 	            }
 	            zin.close();
-	            SharedPreferences.Editor editor = prefs.edit(); //let's write the preference that we unzipped the files successfully
-         	    editor.putBoolean(mainAPKUnzippedPref, true);
-         	    editor.commit();
+	           
 	        } catch (Exception e) {
 	            System.out.println(e);
 	        }
@@ -1909,9 +2013,7 @@ private void copyGIF64Source() {
 	                }
 	            }
 	            zin.close();
-	            SharedPreferences.Editor editor = prefs.edit(); //let's write the preference that we unzipped the files successfully
-         	    editor.putBoolean(patchAPKUnzippedPref, true);
-         	    editor.commit();
+	            
 	        } catch (Exception e) {
 	            System.out.println(e);
 	        }
@@ -1931,6 +2033,11 @@ private void copyGIF64Source() {
 	   super.onPostExecute(result);
 	   progress.dismiss(); //we're done so now hide the progress update box
 	   //continueOnCreate();
+	   
+	   editor = prefs.edit(); //let's write the preference that we unzipped the files successfully
+	   editor.putBoolean(mainAPKUnzippedPref, true);
+	   editor.putBoolean(patchAPKUnzippedPref, true);
+	   editor.commit();
     	   
 	   LoadGridView(false);
 	   gridview.setOnItemClickListener(MainActivity.this);
@@ -2092,10 +2199,12 @@ private void copyGIF64Source() {
                 paused = false;
                 indeterminate = false;
                 //since we now have just downloaded new files, we'll need to tell the app to unzip the new obb files
-                SharedPreferences.Editor editor = prefs.edit(); //let's write the preference that we unzipped the files successfully
-         	    editor.putBoolean(patchAPKUnzippedPref, true);
+                editor = prefs.edit(); //let's write the preference that we need to unzip the files again because a new one was downloaded
+         	    editor.putBoolean(patchAPKUnzippedPref, false);
+         	    editor.putBoolean(mainAPKUnzippedPref, false); //to do for now, we'll unzip both but perhaps this is a more elegant way to unzip only the new one?
          	    editor.commit();
-                validateXAPKZipFiles(); //we'll load the gridview after validation
+                //validateXAPKZipFiles(); //we'll load the gridview after validation
+                CheckAndUnzipAPKExp();
                 return;
             default:
                 paused = true;
@@ -4719,6 +4828,7 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 	  File gifPathSource16 = new File(GIF16Path + "gifsource");
 	  
 	  File ObbDir = new File(Environment.getExternalStorageDirectory() + "/Android/obb/com.ledpixelart.piledriver"); //where the two expansion APK files are stored
+	  
 
   	  @Override
   	  protected void onPreExecute() {
@@ -4748,6 +4858,12 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 		  DeleteRecursive(gifPathSource16);  
 		  
 		  DeleteRecursive(ObbDir);
+		  
+		  //reset the obb unzip flags
+		  editor = prefs.edit(); //let's write the preference that we need to unzip the files again because a new one was downloaded
+   	      editor.putBoolean(patchAPKUnzippedPref, false);
+   	      editor.putBoolean(mainAPKUnzippedPref, false); //to do for now, we'll unzip both but perhaps this is a more elegant way to unzip only the new one?
+   	      editor.commit();
 	   	  
 	 return null;
 	 
