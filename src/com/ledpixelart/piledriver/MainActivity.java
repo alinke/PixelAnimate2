@@ -64,6 +64,7 @@ import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.StringTokenizer;
 import java.util.Vector;
 
 import ioio.lib.api.AnalogInput;
@@ -370,9 +371,9 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	
 	final String welcomeScreenShownPref = "welcomeScreenShown";
 	
-	final String mainAPKUnzippedPref = "mainAPKUnzipped";
+	//final String "mainAPKUnzippedPref" = "mainAPKUnzipped";
 	
-	final String patchAPKUnzippedPref = "patchAPKUnzipped";
+	//final String "patchAPKUnzippedPref" = "patchAPKUnzipped";
 	
 	private boolean slideShowAllPNGs_ = false;
 	
@@ -397,10 +398,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
     private String unzipLocation = Environment.getExternalStorageDirectory() + "/pixel/"; 
     private SharedPreferences.Editor editor;
     
-    private String APKExpansionPathMain;
-    private String APKExpansionPathPatch;
-    private Boolean mainAPKUnzipped = false;
-	private Boolean patchAPKUnzipped = false;
+   
     
     //Edit these variables when updating the APK Expansion files
 	//*********************************
@@ -408,9 +406,9 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	private int mainAPKExpNumFiles = 1200;
     private int patchAPKExpNumFiles = 20;
     private static int APKExpMainVersion = 50;
-    private static int APKExpPatchVersion = 50;
+    private static int APKExpPatchVersion = 63; //put the version of the APK exp file, not the current version of this code!
     private static Long APKExpMainFileSize = 32279235L;
-    private static Long APKExpPatchFileSize = 502035L;  //566985L new test one   502035L the original
+    private static Long APKExpPatchFileSize = 268398L;  //566985L new test one   502035L the original 63 is 268398L
     
 	private long APKExpMainFileSizeSDCard;
 	private long APKExpPatchFileSizeSDCard;
@@ -418,7 +416,12 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	private long patchAPKExpFileSieLast; 
 	private int DLCounter = 0;
 	private int NumDownloadsRequired = 0;
-	private int d = 0;
+	private String APKExpansionPathMain;
+	private String APKExpansionPathPatch;
+	private Boolean mainAPKUnzipped = false;
+	private Boolean patchAPKUnzipped = false;
+	private File APKExpansionPathMainFile;
+	private File APKExpansionPathPatchFile;
     //***********************************
 	
 	
@@ -548,29 +551,51 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
      * 
      * @return true if they are present.
      */
+    
+    public File[] GetFiles(String DirectoryPath) {
+        File f = new File(DirectoryPath);
+        f.mkdirs();
+        File[] file = f.listFiles();
+        return file;
+    }
+
+    public ArrayList<String> getFileNames(File[] file){
+        ArrayList<String> arrayFiles = new ArrayList<String>();
+         if (file.length == 0)
+                return null;
+            else {
+                for (int i=0; i<file.length; i++) 
+                    arrayFiles.add(file[i].getName());
+            }
+
+        return arrayFiles;
+    }
+    
+    /* private void expansionFileVersion() {
+    	int ExpVersionInt = 0;
+    	  //for (XAPKFile xf : xAPKS) {
+         // 	String fileName = Helpers.getExpansionAPKFileName(this, xf.mIsMain, xf.mFileVersion);
+          	StringTokenizer tokens = new StringTokenizer(fileName, ".");
+          	String ExpType = tokens.nextToken();// this will contain "main or patch"
+          	String ExpVersion = tokens.nextToken();// this will contain the version
+          	ExpVersionInt = Integer.parseInt(ExpVersion);
+          	Log.v("PixelAnimate2", ExpType + " " + ExpVersion);
+          	//return ExpVersionInt;
+          	
+          	if (!Helpers.doesFileExist(this, fileName, xf.mFileSize, false)) {
+                  return false;
+              }    
+         // }
+    	  //return ExpVersionInt;
+    }*/
+    
     boolean expansionFilesDelivered() {
         for (XAPKFile xf : xAPKS) {
-            d++;
         	String fileName = Helpers.getExpansionAPKFileName(this, xf.mIsMain, xf.mFileVersion);
             if (!Helpers.doesFileExist(this, fileName, xf.mFileSize, false)) {
-            	
-            	if (d == 1) {
-            		editor = prefs.edit(); //let's write the preference that we need to unzip the files again because a new one was downloaded
-             	    editor.putBoolean(mainAPKUnzippedPref, false); //to do for now, we'll unzip both but perhaps this is a more elegant way to unzip only the new one?
-             	    editor.commit();
-            	}
-            	
-            	if (d == 2) {
-            		editor = prefs.edit(); //let's write the preference that we need to unzip the files again because a new one was downloaded
-             	    editor.putBoolean(patchAPKUnzippedPref, false);
-             	    editor.commit();
-            	}
-            	
-            	NumDownloadsRequired++;
                 return false;
             }    
         }
-        d = 0;
         return true;
     }
 
@@ -593,59 +618,102 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
      */
     private void CheckAndUnzipAPKExp() {
     
-    String [] APKExpansionPath = getAPKExpansionFiles(context,APKExpMainVersion,APKExpPatchVersion); //50 and 50 are the version code versions of the APKs these were originally associated with
-    APKExpansionPathMain = APKExpansionPath[0];
-    APKExpansionPathPatch = APKExpansionPath[1];
-    unzipLocation = Environment.getExternalStorageDirectory() + "/pixel/"; 
-    
-    mainAPKExpFileSizeLast = prefs.getLong("APKExpMainFileSizePref", 0);
-    patchAPKExpFileSieLast = prefs.getLong("APKExpPatchFileSizePref", 0);
-    
-	/*  here let's do two checks:
-	 *  Check #1 
-	 *  the first check is that the unzip flag has been set to false which could be the case
-	 *  if there was a download initiated from this code
-	 */ 
-
-    mainAPKUnzipped = prefs.getBoolean(mainAPKUnzippedPref, false);
-    patchAPKUnzipped = prefs.getBoolean(patchAPKUnzippedPref, false);
-    
-    /*Check #2
-    for the second check, we will need to check if the download came automatically from Google Play
-    we will compare the APKExp file sizes that were there when the
-    user last exited that app which we saved in prefs. If the size now of the APKExp files is different,
-    then it means there was an update which most likely came from Google Play automatically, so if this
-    is the case, then we shall now reset the unzip flags too*/
-    
-	//let's get the file size of the APKExp Main on the sd card right now
-    File APKExpansionPathMainFile = new File(APKExpansionPathMain);
-    if(APKExpansionPathMainFile.exists()){
-		 APKExpMainFileSizeSDCard = APKExpansionPathMainFile.length();
-	}	
+    //String [] APKExpansionPath = getAPKExpansionFiles(context,APKExpMainVersion,APKExpPatchVersion); //50 and 58 are the version code versions of the APKs these were originally associated with
    
-  //let's get the file size of the APKExp Patch on the sd card right now
-    File APKExpansionPathPatchFile = new File(APKExpansionPathPatch);
-   if(APKExpansionPathPatchFile.exists()){
-		APKExpPatchFileSizeSDCard = APKExpansionPathPatchFile.length();
-	}	
+    //Log.v("PixelAnimate2", String.valueOf(APKExpansionPath.length));
+    //to do may need to add a check that the array is 2 in size
+    
+   /*  APKExpansionPathMain = APKExpansionPath[0];
+     APKExpansionPathPatch = APKExpansionPath[1];*/
+    	
+	  if (Environment.getExternalStorageState()
+	          .equals(Environment.MEDIA_MOUNTED)) {
+	        // Build the full path to the app's expansion files
+		  
+		    String packageName = this.getPackageName();
+	 	   
+	 	    APKExpansionPathMain = Helpers.getExpansionAPKFileName(this, true, APKExpMainVersion); //just the name, NOT the full path!
+	 	    APKExpansionPathPatch = Helpers.getExpansionAPKFileName(this, false, APKExpPatchVersion);
+	 	   
+	        File root = Environment.getExternalStorageDirectory();
+	        APKExpansionPathMainFile = new File(root.toString() + EXP_PATH + packageName + "/" + APKExpansionPathMain);
+	        APKExpansionPathPatchFile = new File(root.toString() + EXP_PATH + packageName + "/" + APKExpansionPathPatch);
+	        
+	        unzipLocation = Environment.getExternalStorageDirectory() + "/pixel/"; 
+	        
+	        mainAPKExpFileSizeLast = prefs.getLong("APKExpMainFileSizePref", 0);
+	        patchAPKExpFileSieLast = prefs.getLong("APKExpPatchFileSizePref", 0);
+	        
+	    	/*  here let's do two checks:
+	    	 *  Check #1 
+	    	 *  the first check is that the unzip flag has been set to false which could be the case
+	    	 *  if there was a download initiated from this code
+	    	 */ 
 
-   //and then compare it to the file size that was on the SD card that last time the app was used that we saved in prefs upon exit
-   //if it's not the same, it means an upgrade came from Google Play so let's set our unzip flag on that file
-   if (mainAPKExpFileSizeLast != APKExpMainFileSizeSDCard)  {
-	   mainAPKUnzipped = false;
-   }
-   
-   if (patchAPKExpFileSieLast != APKExpPatchFileSizeSDCard)  {
-	   patchAPKUnzipped = false;
-    }
+	        mainAPKUnzipped = prefs.getBoolean("mainAPKUnzippedPref", false);
+	        patchAPKUnzipped = prefs.getBoolean("patchAPKUnzippedPref", false);
+	        
+	       // mainAPKUnzipped = true;
+	       // patchAPKUnzipped = true;
+	        
+	        
+	        /*Check #2
+	        for the second check, we will need to check if the download came automatically from Google Play
+	        we will compare the APKExp file sizes that were there when the
+	        user last exited that app which we saved in prefs. If the size now of the APKExp files is different,
+	        then it means there was an update which most likely came from Google Play automatically, so if this
+	        is the case, then we shall now reset the unzip flags too*/
+	        
+	    	//let's get the file size of the APKExp Main on the sd card right now
+	        //File APKExpansionPathMainFile = new File(APKExpansionPathMain);
+	        if(APKExpansionPathMainFile.exists()){
+	    		 APKExpMainFileSizeSDCard = APKExpansionPathMainFile.length();
+	    	}	
+	       
+	      //let's get the file size of the APKExp Patch on the sd card right now
+	       //File APKExpansionPathPatchFile = new File(APKExpansionPathPatch);
+	       if(APKExpansionPathPatchFile.exists()){
+	    		APKExpPatchFileSizeSDCard = APKExpansionPathPatchFile.length();
+	    	}	
+	       
+	       Log.v("PixelAnimate2", "mainAPKExpFileSizeLast=" + String.valueOf(mainAPKExpFileSizeLast));
+	       Log.v("PixelAnimate2", "APKExpMainFileSizeSDCard=" + String.valueOf(APKExpMainFileSizeSDCard));
+	       Log.v("PixelAnimate2", "patchAPKExpFileSieLast=" + String.valueOf(patchAPKExpFileSieLast));
+	       Log.v("PixelAnimate2", "APKExpPatchFileSizeSDCard=" + String.valueOf(APKExpPatchFileSizeSDCard));
+	       
 
-   if (!mainAPKUnzipped  || !patchAPKUnzipped) { //if either one of them have not been unzipped, then let's go here
-      unZipAsync unZipAsync_ = new unZipAsync(APKExpansionPathMain,APKExpansionPathPatch,mainAPKExpNumFiles,patchAPKExpNumFiles ,unzipLocation); //String zipFileMain, String zipFilePatch, int zipFileMainNumFiles, int zipFilePatchNumFiles, String unzipLocation) { 
-      unZipAsync_.execute();
-   }
+	       //and then compare it to the file size that was on the SD card that last time the app was used that we saved in prefs upon exit
+	       //if it's not the same, it means an upgrade came from Google Play so let's set our unzip flag on that file
+	       if (mainAPKExpFileSizeLast != APKExpMainFileSizeSDCard)  {
+	    	   editor = prefs.edit();
+	    	   editor.putBoolean("mainAPKUnzippedPref", false); //to d
+	           editor.commit(); // Very important to save the preference
+	    	   mainAPKUnzipped = false;
+	       }
+	       
+	       if (patchAPKExpFileSieLast != APKExpPatchFileSizeSDCard)  {
+	    	   editor = prefs.edit();
+	    	   editor.putBoolean("patchAPKUnzippedPref", false);
+	           editor.commit(); // Very important to save the preference
+	    	   patchAPKUnzipped = false;
+	        }
+	       
+	       Log.v("PixelAnimate2", "MainAPKExp Unzipped = " + String.valueOf(mainAPKUnzipped));
+	       Log.v("PixelAnimate2", "PathAPKExp Unzipped = " + String.valueOf(patchAPKUnzipped));
+	       
+	      
+
+	       if (!mainAPKUnzipped  || !patchAPKUnzipped) { //if either one of them have not been unzipped, then let's go here
+	          
+	    	  unZipAsync unZipAsync_ = new unZipAsync(root.toString() + EXP_PATH + packageName + "/" + APKExpansionPathMain,root.toString() + EXP_PATH + packageName + "/" + APKExpansionPathPatch,mainAPKExpNumFiles,patchAPKExpNumFiles ,unzipLocation); //String zipFileMain, String zipFilePatch, int zipFileMainNumFiles, int zipFilePatchNumFiles, String unzipLocation) { 
+	          unZipAsync_.execute();
+	       }
+	  }
+    	
+  
 }
     
-    void validateXAPKZipFiles() {
+/*    void validateXAPKZipFiles() {
         AsyncTask<Object, DownloadProgressInfo, Boolean> validationTask = new AsyncTask<Object, DownloadProgressInfo, Boolean>() {
 
             @Override
@@ -686,9 +754,9 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
                     try {
                         zrf = new ZipResourceFile(fileName);
                         ZipEntryRO[] entries = zrf.getAllEntries();
-                        /**
+                        *//**
                          * First calculate the total compressed length
-                         */
+                         *//*
                         long totalCompressedLength = 0;
                         for (ZipEntryRO entry : entries) {
                             totalCompressedLength += entry.mCompressedLength;
@@ -696,12 +764,12 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
                         float averageVerifySpeed = 0;
                         long totalBytesRemaining = totalCompressedLength;
                         long timeRemaining;
-                        /**
+                        *//**
                          * Then calculate a CRC for every file in the Zip file,
                          * comparing it to what is stored in the Zip directory.
                          * Note that for compressed Zip files we must extract
                          * the contents to do this comparison.
-                         */
+                         *//*
                         for (ZipEntryRO entry : entries) {
                             if (-1 != entry.mCRC32) {
                                 long length = entry.mUncompressedLength;
@@ -817,8 +885,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
                 
                 //we've validated our obb's are good so now let's unzip them but let's not unzip if they have already been unzipped
                
-                 mainAPKUnzipped = prefs.getBoolean(mainAPKUnzippedPref, false);
-                 patchAPKUnzipped = prefs.getBoolean(patchAPKUnzippedPref, false);
+                 mainAPKUnzipped = prefs.getBoolean("mainAPKUnzippedPref", false);
+                 patchAPKUnzipped = prefs.getBoolean("patchAPKUnzippedPref", false);
                  
                 // for testing: mainAPKUnzipped = false;
                 // patchAPKUnzipped = false;
@@ -834,7 +902,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 
         };
         validationTask.execute(new Object());
-    }
+    }*/
 
     /**
      * If the download isn't present, we initialize the download UI. This ties
@@ -977,6 +1045,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	      gifView = (GifView) findViewById(R.id.gifView); //gifview takes care of the gif decoding
 	      gifView.setGif(R.drawable.zzzblank);  //code will crash if a dummy gif is not loaded initially
 	      
+	      gifView.setVisibility(View.GONE);
+	      
 	      blackFrame_ = BitmapFactory.decodeResource(getResources(), R.drawable.black_frame); 
 	      
 	     //let's get the app version so we'll know if we need to add new animations to the user's app   
@@ -1071,6 +1141,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	            else { //the directory was already there so no need to copy files or do a media re-scan so just continue on
 	            	
 	            	//now let's check if our APK Exp files are in order
+	            	//expansionFileVersion();
 	            	LookForAPKExpFiles();
 	            	//continueOnCreate();
 	            
@@ -1305,8 +1376,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 		   			  }
 		   			  else {
 		   				out = new FileOutputStream(userPNGPath + newfilename_no_extension + "." + uriExtension);
-		   			  }
-		   				  
+		   			  } 
 		   			  
 		   			  copyFile(incomingStream, out);
 		   			  incomingStream.close();
@@ -1448,9 +1518,11 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	   
 	  @Override
 	  protected void onPostExecute(Void result) {
+		  
+		  
+		  
 	   super.onPostExecute(result);
 	   progress.dismiss(); //we're done so now hide the progress update box
-	   //continueOnCreate();
 	   LookForAPKExpFiles(); //we've copied initial files, now need to check and unzip the APKExp
 	  }
 	  
@@ -1778,74 +1850,96 @@ private void copyGIF64Source() {
 } //end async task
 	 
     private void LookForAPKExpFiles() {
-    	//****** now before we load up the gridview , let's check if the content from the expanded APK files is also there
-  	  /**
-       * Both downloading and validation make use of the "download" UI
-       */
-  	//  initializeDownloadUI();
-      
-    	
-    	
-
+    
       /**
        * Before we do anything, are the files we expect already here and
        * delivered (presumably by Market) For free titles, this is probably
        * worth doing. (so no Market request is necessary)
        */
       if (!expansionFilesDelivered()) { //if files are not there and/or not the right size, we need to download them
-    	  LoadGridView(false);
-    	  initializeDownloadUI();
-          try {
-              Intent launchIntent = MainActivity.this
-                      .getIntent();
-              Intent intentToLaunchThisActivityFromNotification = new Intent(
-              		MainActivity
-                      .this, MainActivity.this.getClass());
-              intentToLaunchThisActivityFromNotification.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
-                      Intent.FLAG_ACTIVITY_CLEAR_TOP);
-              intentToLaunchThisActivityFromNotification.setAction(launchIntent.getAction());
-
-              if (launchIntent.getCategories() != null) {
-                  for (String category : launchIntent.getCategories()) {
-                      intentToLaunchThisActivityFromNotification.addCategory(category);
-                  }
-              }
-
-              // Build PendingIntent used to open this activity from
-              // Notification
-              PendingIntent pendingIntent = PendingIntent.getActivity(
-                      MainActivity.this,
-                      0, intentToLaunchThisActivityFromNotification,
-                      PendingIntent.FLAG_UPDATE_CURRENT);
-              // Request to start the download
-              int startResult = DownloaderClientMarshaller.startDownloadServiceIfRequired(this,
-                      pendingIntent, PIXELDownloaderService.class);
-
-              if (startResult != DownloaderClientMarshaller.NO_DOWNLOAD_REQUIRED) {
-                  // The DownloaderService has started downloading the files,
-                  // show progress
-                  initializeDownloadUI();
-                  return;
-              }
-              else {
-              	// otherwise, download not needed so we fall through to
-              	LoadGridView(false);
-              	//gridview.setOnItemClickListener(MainActivity.this);
-                  //gridview.setOnItemLongClickListener(MainActivity.this);
-              }
-                // starting the movie
-          } catch (NameNotFoundException e) {
-              Log.e(LOG_TAG, "Cannot find own package! MAYDAY!");
-              e.printStackTrace();
-          }
-
-      } else { //the files are already there so let's just validate they are correct and unzipped
-    	  //initializeDownloadUI();
-    	 // validateXAPKZipFiles(); //on this post execute, we'll call the unzip routine
     	  
-    	  CheckAndUnzipAPKExp(); //let's check if they were unzipped before and if not, unzip them
-        
-      }
+    	  //ok we know that at least one of the APKExp files doesn't exist but now we need to find out which ones are missing so we know which to unzip later
+    	  
+    	  String packageName = this.getPackageName();
+       	   
+       	  APKExpansionPathMain = Helpers.getExpansionAPKFileName(this, true, APKExpMainVersion); //just the name, NOT the full path!
+       	  APKExpansionPathPatch = Helpers.getExpansionAPKFileName(this, false, APKExpPatchVersion);
+       	   
+          File root = Environment.getExternalStorageDirectory();
+          APKExpansionPathMainFile = new File(root.toString() + EXP_PATH + packageName + "/" + APKExpansionPathMain);
+          APKExpansionPathPatchFile = new File(root.toString() + EXP_PATH + packageName + "/" + APKExpansionPathPatch);
+        	  
+    	  if (!APKExpansionPathMainFile.exists()) {
+    		  	editor = prefs.edit(); //let's write the preference that we need to unzip the files again because a new one was downloaded
+       	      	editor.putBoolean("mainAPKUnzippedPref", false); //to do for now, we'll unzip both but perhaps this is a more elegant way to unzip only the new one?
+       	      	editor.commit();
+       	      	NumDownloadsRequired++;
+       	      	Log.v("PixelAnimate2","Main download required, total downloads = " + String.valueOf(NumDownloadsRequired));
+    	  }
+    	  
+    	  if (!APKExpansionPathPatchFile.exists()) {
+    		  	editor = prefs.edit(); //let's write the preference that we need to unzip the files again because a new one was downloaded
+       	    	editor.putBoolean("patchAPKUnzippedPref", false);
+       	    	editor.commit();
+       	    	NumDownloadsRequired++;
+       	    	Log.v("PixelAnimate2","Patch downloads required, total downloads =" + String.valueOf(NumDownloadsRequired));
+    	  }
+        	  
+        	  LoadGridView(false); //let's load this so the user can interact with the assets file while the APK Expansion are downloading
+        	  initializeDownloadUI();
+              try {
+                  Intent launchIntent = MainActivity.this
+                          .getIntent();
+                  Intent intentToLaunchThisActivityFromNotification = new Intent(
+                  		MainActivity
+                          .this, MainActivity.this.getClass());
+                  intentToLaunchThisActivityFromNotification.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                          Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                  intentToLaunchThisActivityFromNotification.setAction(launchIntent.getAction());
+
+                  if (launchIntent.getCategories() != null) {
+                      for (String category : launchIntent.getCategories()) {
+                          intentToLaunchThisActivityFromNotification.addCategory(category);
+                      }
+                  }
+
+                  // Build PendingIntent used to open this activity from
+                  // Notification
+                  PendingIntent pendingIntent = PendingIntent.getActivity(
+                          MainActivity.this,
+                          0, intentToLaunchThisActivityFromNotification,
+                          PendingIntent.FLAG_UPDATE_CURRENT);
+                  // Request to start the download
+                  int startResult = DownloaderClientMarshaller.startDownloadServiceIfRequired(this,
+                          pendingIntent, PIXELDownloaderService.class);
+
+                  if (startResult != DownloaderClientMarshaller.NO_DOWNLOAD_REQUIRED) {
+                      // The DownloaderService has started downloading the files,
+                      // show progress
+                      initializeDownloadUI();
+                      return;
+                  }
+                  else {
+                  	// otherwise, download not needed so we fall through to
+                  	LoadGridView(false);
+                  	//gridview.setOnItemClickListener(MainActivity.this);
+                      //gridview.setOnItemLongClickListener(MainActivity.this);
+                  }
+                    // starting the movie
+              } catch (NameNotFoundException e) {
+                  Log.e(LOG_TAG, "Cannot find own package! MAYDAY!");
+                  e.printStackTrace();
+              }
+
+          } else { //the files are already there so let's just validate they are correct and unzipped
+        	  //initializeDownloadUI();
+        	 // validateXAPKZipFiles(); //on this post execute, we'll call the unzip routine
+        	  
+        	  CheckAndUnzipAPKExp(); //let's check if they were unzipped before and if not, unzip them
+            
+          } 
+    	  
+    	 
       
   
       
@@ -1952,8 +2046,8 @@ private void copyGIF64Source() {
 		   super.onPreExecute();
 		   
 		   //to do don't do the pop up here and instead leverage the same layout that the download uses
-		   //mainAPKUnzipped = prefs.getBoolean(mainAPKUnzippedPref, false);
-		   //patchAPKUnzipped = prefs.getBoolean(patchAPKUnzippedPref, false);
+		   //mainAPKUnzipped = prefs.getBoolean("mainAPKUnzippedPref", false);
+		   //patchAPKUnzipped = prefs.getBoolean("patchAPKUnzippedPref", false);
 		   
 		  /* 
 		   * mainAPKUnzipped = false;
@@ -1966,14 +2060,16 @@ private void copyGIF64Source() {
 		   int maxValue2 = 0;
 		   
 		   if (!mainAPKUnzipped) {
-			    maxValue1 = _zipFileMainNumFiles;
+		   //if (!prefs.getBoolean("mainAPKUnzippedPref", false)) {
+			    maxValue1 = _zipFileMainNumFiles / 4;
 		   }
 		   else {
 			   maxValue1 = 0;
 		   }
 		   
 		   if (!patchAPKUnzipped) {
-			    maxValue2 = _zipFilePatchNumFiles;
+		   //if (!prefs.getBoolean("patchAPKUnzippedPref", false))	{
+			    maxValue2 = _zipFilePatchNumFiles /4;
 		   }
 		   else {
 			   maxValue2 = 0;
@@ -2011,6 +2107,7 @@ private void copyGIF64Source() {
 		  _dirChecker(_unzipLocation);
 		  
 		  if (!mainAPKUnzipped) {
+		 // if (!prefs.getBoolean("mainAPKUnzippedPref", false)) {	  
 	        try {
 	            FileInputStream fin = new FileInputStream(_zipFileMain);
 	            ZipInputStream zin = new ZipInputStream(fin);
@@ -2029,7 +2126,7 @@ private void copyGIF64Source() {
 	                    while ((read = zin.read(buffer)) != -1) {
 	                        bufout.write(buffer, 0, read);
 	                    }
-	                    publishProgress(1);
+	                    publishProgress(4);
 	                    zin.closeEntry();
 	                    bufout.close();
 	                    fout.close();
@@ -2037,15 +2134,20 @@ private void copyGIF64Source() {
 	            }
 	            zin.close();
 	            editor = prefs.edit(); //let's write the preference that we unzipped the files successfully
-	     	    editor.putBoolean(mainAPKUnzippedPref, true);
+	     	    editor.putBoolean("mainAPKUnzippedPref", true);
 	     	    editor.commit();
+	     	    Log.v("PixelAnimate2", "Unzipped Main APK Expansion");
+	            
 	           
 	        } catch (Exception e) {
 	            System.out.println(e);
 	        }
+	        
+	        
 		  }    
 	        
-	    if (!patchAPKUnzipped) {
+	     if (!patchAPKUnzipped) {
+	     //if (!prefs.getBoolean("patchAPKUnzippedPref", false)) {	  	
 	        try {
 	            FileInputStream fin = new FileInputStream(_zipFilePatch);
 	            ZipInputStream zin = new ZipInputStream(fin);
@@ -2062,7 +2164,7 @@ private void copyGIF64Source() {
 	                    while ((read = zin.read(buffer)) != -1) {
 	                        bufout.write(buffer, 0, read);
 	                    }
-	                    publishProgress(1);
+	                    publishProgress(4);
 	                    zin.closeEntry();
 	                    bufout.close();
 	                    fout.close();
@@ -2070,12 +2172,16 @@ private void copyGIF64Source() {
 	            }
 	            zin.close();
 	            editor = prefs.edit(); //let's write the preference that we unzipped the files successfully
-	     	    editor.putBoolean(patchAPKUnzippedPref, true);
+	     	    editor.putBoolean("patchAPKUnzippedPref", true);
 	     	    editor.commit();
+	     	    Log.v("PixelAnimate2", "Unzipped Patch APK Expansion");
+	           
 	            
 	        } catch (Exception e) {
 	            System.out.println(e);
 	        }
+	        
+	       
 	    } 
 			
 	   return null;
@@ -2145,7 +2251,8 @@ private void copyGIF64Source() {
                 }
                 if ( patchVersion > 0 ) {
                     String strPatchPath = expPath + File.separator + "patch." +
-                            mainVersion + "." + packageName + ".obb";
+                            //mainVersion + "." + packageName + ".obb"; //found a Bug in Android's code, should be patchVersion
+                            patchVersion + "." + packageName + ".obb"; 
                     File main = new File(strPatchPath);
                     if ( main.isFile() ) {
                             ret.add(strPatchPath);
@@ -2234,6 +2341,9 @@ private void copyGIF64Source() {
                 paused = true;
                 showDashboard = false;
                 indeterminate = false;
+                if (mDashboard != null) {
+         		   mDashboard.setVisibility(View.GONE);  //hide this guy as it may have been turned on from the download
+         	    }
                 LoadGridView(false); //the download failed so let's not forget to load the gridview or the user will not be able to click anything
                 break;
             case IDownloaderClient.STATE_PAUSED_NEED_CELLULAR_PERMISSION:
@@ -2257,8 +2367,8 @@ private void copyGIF64Source() {
                 LoadGridView(false);
                 break;
             case IDownloaderClient.STATE_COMPLETED: //IMPORTANT: we can go here twice because there are two files to download and hence we need to handle for that
-            	Log.v("PixelAnimate2", "downloaded");
             	DLCounter++;
+            	Log.v("PixelAnimate2", "successfully downloaded an APK Expansion File, download number " + DLCounter);
             	showDashboard = false;
                 paused = false;
                 indeterminate = false;
@@ -2266,12 +2376,7 @@ private void copyGIF64Source() {
                 
                 //validateXAPKZipFiles(); //we'll load the gridview after validation
          	    //what we can do here to prevent a double call is first check and know how many files need to be re-downloaded
-         	    if (DLCounter == NumDownloadsRequired) {
-         	    	/* took out here because we instead added these in the APKCheck function
-         	    	 * *editor = prefs.edit(); //let's write the preference that we need to unzip the files again because a new one was downloaded
-             	    editor.putBoolean(patchAPKUnzippedPref, false);
-             	    editor.putBoolean(mainAPKUnzippedPref, false); //to do for now, we'll unzip both but perhaps this is a more elegant way to unzip only the new one?
-             	    editor.commit();*/
+         	    if (DLCounter == NumDownloadsRequired) { //we do this because the unzip async task can only run once and cannot run sequentially
          	    	CheckAndUnzipAPKExp();
          	    	DLCounter = 0;
          	    }
@@ -2356,11 +2461,6 @@ private void copyGIF64Source() {
    		}
    }
 	
-	
-    /////*************GridView Stuff
-	 /**
-     * Free up bitmap related resources.
-     */
     protected void onDestroy() {
     //	this.unregisterReceiver(receiver);
     	this.mCancelValidation = true;  //this was added from the apk downloader service
@@ -2382,41 +2482,44 @@ private void copyGIF64Source() {
        //kill the slideshow timers if they are open
        stopTimers();
        
-      // private static Long APKExpMainFileSize = 32279235L;
-      // private static Long APKExpPatchFileSize = 502035L;
-       //we're going to write the APK file sizes upon exit, then if they are different when we start up again, we know they were updated and we need to unzip
-       
-       File APKExpansionPathMainFile = new File(APKExpansionPathMain);
-	   if(APKExpansionPathMainFile.exists()){
-			 APKExpMainFileSizeSDCard = APKExpansionPathMainFile.length();
-			 editor = prefs.edit(); //let's write the preference that we need to unzip the files again because a new one was downloaded
-			 editor.putLong("APKExpMainFileSizePref", APKExpMainFileSizeSDCard); //add the actual size here
-			 editor.commit();
-		}	
-	   
-	   File APKExpansionPathPatchFile = new File(APKExpansionPathPatch);
-	   if(APKExpansionPathPatchFile.exists()){
-			APKExpPatchFileSizeSDCard = APKExpansionPathPatchFile.length();
-			editor = prefs.edit(); //let's write the preference that we need to unzip the files again because a new one was downloaded
-			editor.putLong("APKExpPatchFileSizePref", APKExpPatchFileSizeSDCard); //add the actual size here
-			editor.commit();
-		}	
-	   
-	   /*showToast(String.valueOf(APKExpMainFileSizeSDCard));
-	   showToast(String.valueOf(APKExpPatchFileSizeSDCard));*/
-       
-        
-        
-       /* if (deviceFound == 1) {  //was causing crashes
-        	connectTimer.cancel();  //if user closes the program, need to kill this timer or we'll get a crash
-	        decodedtimer.cancel();
-        }*/
-        
-     //   ioio_.disconnect();
-      //  imagedisplaydurationTimer.cancel();
- 		//pausebetweenimagesdurationTimer.cancel();
- 		
- 		//matrix_.frame(frame_); 
+       if (expansionFilesDelivered()) {
+    	   
+    	   String packageName = this.getPackageName();
+          
+           if (Environment.getExternalStorageState()
+                 .equals(Environment.MEDIA_MOUNTED)) {
+               // Build the full path to the app's expansion files
+        	   
+        	   APKExpansionPathMain = Helpers.getExpansionAPKFileName(this, true, APKExpMainVersion); //just the name, NOT the full path!
+        	   APKExpansionPathPatch = Helpers.getExpansionAPKFileName(this, false, APKExpPatchVersion);
+        	   
+               File root = Environment.getExternalStorageDirectory();
+               APKExpansionPathMainFile = new File(root.toString() + EXP_PATH + packageName + "/" + APKExpansionPathMain);
+               APKExpansionPathPatchFile = new File(root.toString() + EXP_PATH + packageName + "/" + APKExpansionPathPatch);
+               
+              	  
+        	  // APKExpansionPathMainFile = new File(APKExpansionPathMain); //this doesn't work because not the full path
+        	  // APKExpansionPathPatchFile = new File(APKExpansionPathPatch);
+    	      
+    	       
+    	       if (APKExpansionPathMainFile.exists()) {
+    				 APKExpMainFileSizeSDCard = APKExpansionPathMainFile.length();
+    				 editor = prefs.edit(); //let's write the preference that we need to unzip the files again because a new one was downloaded
+    				 editor.putLong("APKExpMainFileSizePref", APKExpMainFileSizeSDCard); //add the actual size here
+    				 editor.commit();
+    			}	
+    		
+    		   if (APKExpansionPathPatchFile.exists()) {
+    				APKExpPatchFileSizeSDCard = APKExpansionPathPatchFile.length();
+    				editor = prefs.edit(); //let's write the preference that we need to unzip the files again because a new one was downloaded
+    				editor.putLong("APKExpPatchFileSizePref", APKExpPatchFileSizeSDCard); //add the actual size here
+    				editor.commit();
+    			}
+           }    
+    	   
+    	   
+    	   
+       }
         
     }
     
@@ -4953,8 +5056,8 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 		  
 		  //reset the obb unzip flags
 		  editor = prefs.edit(); //let's write the preference that we need to unzip the files again because a new one was downloaded
-   	      editor.putBoolean(patchAPKUnzippedPref, false);
-   	      editor.putBoolean(mainAPKUnzippedPref, false); //to do for now, we'll unzip both but perhaps this is a more elegant way to unzip only the new one?
+   	      editor.putBoolean("patchAPKUnzippedPref", false);
+   	      editor.putBoolean("mainAPKUnzippedPref", false); //to do for now, we'll unzip both but perhaps this is a more elegant way to unzip only the new one?
    	      editor.putLong("APKExpMainFileSizePref", 0); 
    	      editor.putLong("APKExpPatchFileSizePref", 0); 
    	      editor.commit();
@@ -5763,7 +5866,7 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 	        // setGif(R.drawable.mushroom);
 	         //setGif(basepath + "/pixelpiledriver/" + "frank.gif");
 	        // Bitmap mBitmap = Bitmap.decodeFile(path.getPath()+"/"+ fileNames[i]);
-
+			
 	       //  play();
 		}
 		
@@ -5797,6 +5900,7 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 		 * @param cacheImage
 		 */
 		public void setGif(String filePath, Bitmap cacheImage) {
+			gifView.setVisibility(View.VISIBLE);
 			this.resId = 0;
 			this.filePath = filePath;
 			imageType = IMAGE_TYPE_UNKNOWN;
@@ -5805,8 +5909,8 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 			bitmap = cacheImage;
 			width = bitmap.getWidth();
 			height = bitmap.getHeight();
-			//setLayoutParams(new LayoutParams(width, height));
-			setLayoutParams(new LayoutParams(32, 32)); //changed this because otherwise the larger animations were taking up the whole screen
+			setLayoutParams(new LayoutParams(width, height));
+			//setLayoutParams(new LayoutParams(32, 32)); //changed this because otherwise the larger animations were taking up the whole screen
 		}
 
 		/**
@@ -5828,6 +5932,7 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 		
 		// to do, handle the case if it's a single frame gif
 		public void setGif(int resId, Bitmap cacheImage) {
+			gifView.setVisibility(View.VISIBLE);
 			this.filePath = null;
 			this.resId = resId;
 			imageType = IMAGE_TYPE_UNKNOWN;
@@ -6006,6 +6111,7 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 							   //Toast toast1 = Toast.makeText(context, "One Time Decode Finished", Toast.LENGTH_LONG);
 						      // toast1.show();	
 						       gifView.stop();
+						       gifView.setVisibility(View.GONE);
 						       MainActivity nonstaticCall = new MainActivity();
 						       //*****************************************************
 							   //we're done decoding and we've written our file so let's animate!
