@@ -406,7 +406,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	private int mainAPKExpNumFiles = 1200;
     private int patchAPKExpNumFiles = 20;
     private static int APKExpMainVersion = 50;
-    private static int APKExpPatchVersion = 63; //put the version of the APK exp file, not the current version of this code!
+    private static int APKExpPatchVersion = 67; //put the version of the APK exp file, not the current version of this code!
     private static Long APKExpMainFileSize = 32279235L;
     private static Long APKExpPatchFileSize = 268398L;  //566985L new test one   502035L the original 63 is 268398L
     
@@ -708,6 +708,14 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	    	  unZipAsync unZipAsync_ = new unZipAsync(root.toString() + EXP_PATH + packageName + "/" + APKExpansionPathMain,root.toString() + EXP_PATH + packageName + "/" + APKExpansionPathPatch,mainAPKExpNumFiles,patchAPKExpNumFiles ,unzipLocation); //String zipFileMain, String zipFilePatch, int zipFileMainNumFiles, int zipFilePatchNumFiles, String unzipLocation) { 
 	          unZipAsync_.execute();
 	       }
+	       
+	       else {
+	    	   writeAPKSizesToPrefs();  //now let's write the size of the APK Exp that are on the SD card right now so we can compare for next time
+	       }
+	       
+	      
+	       
+	       
 	  }
     	
   
@@ -1945,6 +1953,49 @@ private void copyGIF64Source() {
       
     }
 	    
+    private void writeAPKSizesToPrefs() {
+    	  if (expansionFilesDelivered()) {
+       	   
+       	   String packageName = this.getPackageName();
+             
+              if (Environment.getExternalStorageState()
+                    .equals(Environment.MEDIA_MOUNTED)) {
+                  // Build the full path to the app's expansion files
+           	   
+           	   Log.v("PixelAnimate2","Went to APK section in before ContinueonCreate()");
+           	   APKExpansionPathMain = Helpers.getExpansionAPKFileName(this, true, APKExpMainVersion); //just the name, NOT the full path!
+           	   APKExpansionPathPatch = Helpers.getExpansionAPKFileName(this, false, APKExpPatchVersion);
+           	   
+                  File root = Environment.getExternalStorageDirectory();
+                  APKExpansionPathMainFile = new File(root.toString() + EXP_PATH + packageName + "/" + APKExpansionPathMain);
+                  APKExpansionPathPatchFile = new File(root.toString() + EXP_PATH + packageName + "/" + APKExpansionPathPatch);
+                  
+                 	  
+           	  // APKExpansionPathMainFile = new File(APKExpansionPathMain); //this doesn't work because not the full path
+           	  // APKExpansionPathPatchFile = new File(APKExpansionPathPatch);
+       	      
+       	       
+       	       if (APKExpansionPathMainFile.exists()) {
+       				 APKExpMainFileSizeSDCard = APKExpansionPathMainFile.length();
+       				 editor = prefs.edit(); //let's write the preference that we need to unzip the files again because a new one was downloaded
+       				 editor.putLong("APKExpMainFileSizePref", APKExpMainFileSizeSDCard); //add the actual size here
+       				 editor.commit();
+       				 Log.v("PixelAnimate2","before ContinueonCreate(), wrote APK Main File size");
+       			}	
+       		
+       		   if (APKExpansionPathPatchFile.exists()) {
+       				APKExpPatchFileSizeSDCard = APKExpansionPathPatchFile.length();
+       				editor = prefs.edit(); //let's write the preference that we need to unzip the files again because a new one was downloaded
+       				editor.putLong("APKExpPatchFileSizePref", APKExpPatchFileSizeSDCard); //add the actual size here
+       				editor.commit();
+       				Log.v("PixelAnimate2","before ContinueonCreate(), wrote APK Patch File size");
+       				
+       			}
+              }  
+          }
+    	  continueOnCreate();
+    }
+    
     private void continueOnCreate() {
     	
     	//****** now before we load up the gridview , let's check if the content from the expanded APK files is also there
@@ -2204,8 +2255,9 @@ private void copyGIF64Source() {
 	   
 	   showToast("New Art Added");
 	   
-	   continueOnCreate();
-    	   
+	  // continueOnCreate();
+
+       writeAPKSizesToPrefs();   
 	   /*LoadGridView(false);
 	   gridview.setOnItemClickListener(MainActivity.this);
        gridview.setOnItemLongClickListener(MainActivity.this);*/
@@ -2482,7 +2534,7 @@ private void copyGIF64Source() {
        //kill the slideshow timers if they are open
        stopTimers();
        
-       if (expansionFilesDelivered()) {
+    /*   if (expansionFilesDelivered()) {
     	   
     	   String packageName = this.getPackageName();
           
@@ -2490,6 +2542,7 @@ private void copyGIF64Source() {
                  .equals(Environment.MEDIA_MOUNTED)) {
                // Build the full path to the app's expansion files
         	   
+        	   Log.v("PixelAnimate2","Went to APK section in OnDestroy()");
         	   APKExpansionPathMain = Helpers.getExpansionAPKFileName(this, true, APKExpMainVersion); //just the name, NOT the full path!
         	   APKExpansionPathPatch = Helpers.getExpansionAPKFileName(this, false, APKExpPatchVersion);
         	   
@@ -2507,6 +2560,7 @@ private void copyGIF64Source() {
     				 editor = prefs.edit(); //let's write the preference that we need to unzip the files again because a new one was downloaded
     				 editor.putLong("APKExpMainFileSizePref", APKExpMainFileSizeSDCard); //add the actual size here
     				 editor.commit();
+    				 Log.v("PixelAnimate2","From OnDestroy, wrote APK Main File size");
     			}	
     		
     		   if (APKExpansionPathPatchFile.exists()) {
@@ -2514,12 +2568,11 @@ private void copyGIF64Source() {
     				editor = prefs.edit(); //let's write the preference that we need to unzip the files again because a new one was downloaded
     				editor.putLong("APKExpPatchFileSizePref", APKExpPatchFileSizeSDCard); //add the actual size here
     				editor.commit();
+    				Log.v("PixelAnimate2","From OnDestroy, wrote APK Patch File size");
+    				
     			}
-           }    
-    	   
-    	   
-    	   
-       }
+           }
+       }*/
         
     }
     
