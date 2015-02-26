@@ -128,10 +128,10 @@
     <string name="pauseBetweenImagesDurationDefault">3</string>
     <string name="pauseBetweenImagesDurationSummary">Number of seconds to pause in between images</string>
     
-    <string name="menu_refreshArt_title">Refresh Stock Art</string>
+    <string name="menu_refreshArt_title">Delete Stock Art</string>
     
-    <string name="menu_refresh_title">Refresh Stock Art</string>
-    <string name="menu_refresh_summary">Please exit and restart this app now to refresh the stock art.</string>
+    <string name="menu_refresh_title">Delete Stock Art</string>
+    <string name="menu_refresh_summary">Do this before deleting this app to delete the pixel art on your local memory or SD card.</string>
     
     <string name="stopSlideShowMessage">You are still in slide show mode, swipe from right to left to end the slide show and then you can select a single image</string>
     <string name="loadingImagesPlsWaitTitle">Please Wait</string>
@@ -146,11 +146,6 @@
     <string name="pref_slideShowAllPNGs">pref_slideShowAllPNGs</string>
     <string name="pref_slideShowAllPNGsDefault">false</string>
     <string name="slideShowAllPNGsSummary">The slide show will include only favorites (if you have marked favorites). Check here to include all PNGs in the slide show regardless of favorites.</string>
-    
-    <string name="AutoSelectPanel">Auto Select PIXEL / LED Panel</string>    
-    <string name="pref_AutoSelectPanel">pref_AutoSelectPanel</string>
-    <string name="pref_AutoSelectPanelDefault">true</string>
-    <string name="AutoSelectPanelSummary">Turn this off if you want to manually select the LED panel</string>
     
     <string name="menu_startSlideShow_title">Slide Show</string>
     <string name="menu_stopSlideShow_title">Stop Slide Show</string>
@@ -210,5 +205,26 @@
     <string name="text_button_resume">Resume Download</string>
     <string name="text_button_cancel">Cancel</string>
     <string name="text_button_cancel_verify">Cancel Verification</string>
+    
+    <string name="AutoSelectPanel">Auto Select PIXEL / LED Panel</string>    
+    <string name="pref_AutoSelectPanel">pref_AutoSelectPanel</string>
+    <string name="pref_AutoSelectPanelDefault">true</string>
+    <string name="AutoSelectPanelSummary">Turn this off if you want to manually select the LED panel</string>
+    
+    <string name="DisableNewArtCheck">Disable New Art Check</string>    
+    <string name="pref_DisableNewArtCheck">pref_DisableNewArtCheck</string>
+    <string name="pref_DisableNewArtCheckDefault">false</string>
+    <string name="DisableNewArtCheckSummary">Disables checking for new art upon startup</string>
+    
+    <string name="gridSize">gridSize</string>
+    <string name="gridSizeTitle">Image Grid Size</string>
+    <string name="gridSizeSummary">Choose smaller for less vertical scrolling but with smaller image sizes</string>    
+    <string name="dialogTitlegridSize">Image Grid Size</string>
+    <string name="gridSizeDefault">1</string>  
+    
+    <string name="unsupportedPanel">Incompatible LED Panel</string>    
+    <string name="unsupportedPanelMsg">Very Sorry&#8230;\n\nThe LED Panel you have selected is not compatible with your PIXEL board.\n\nYou would need to upgrade to a PIXEL v2.5 or higher board to support this LED panel\n\nPlease now change the LED panel to a supported one.</string>
+    
+    
    
 </resources>

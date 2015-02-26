@@ -26,6 +26,13 @@
     android:defaultValue="@string/pref_AutoSelectPanelDefault"
     android:summary="@string/AutoSelectPanelSummary"/>
     
+    <CheckBoxPreference
+    android:title="@string/DisableNewArtCheck"
+    android:key="pref_DisableNewArtCheck"
+    android:defaultValue="@string/pref_DisableNewArtCheckDefault"
+    android:summary="@string/DisableNewArtCheckSummary"/>
+    
+     
     <ListPreference
     android:key="@string/selected_matrix"
     android:title="@string/matrix"
@@ -34,6 +41,16 @@
     android:entryValues="@array/matrix_values"
     android:dialogTitle="@string/dialogTitleMatrix"
     android:defaultValue="@string/matrix_default_value" />
+    
+    <ListPreference
+    android:key="@string/gridSize"
+    android:title="@string/gridSizeTitle"
+    android:summary="@string/gridSizeSummary"
+    android:entries="@array/GridSize_options"
+    android:entryValues="@array/GridSize_values"
+    android:dialogTitle="@string/dialogTitlegridSize"
+    android:defaultValue="@string/gridSizeDefault" />
+     
     
     <CheckBoxPreference
     android:title="@string/noSleep"

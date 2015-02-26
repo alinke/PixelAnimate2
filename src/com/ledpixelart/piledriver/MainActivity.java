@@ -173,7 +173,13 @@ import com.google.android.vending.expansion.downloader.IStub;
 
 /*TO DO
 add a preference to choose led panel automatically, set default to on but the user can override
-add art and default view for pixel 16*/
+add art and default view for pixel 16 - DONE
+auto set the led panel type based on firmeware / bootloader type - DONE
+add message for adafruit panels not to show up for old board or better yet hide adafruit panels if not the right one - DONE
+more columns for gif images for smaller res screens - DONE
+
+
+*/
 
 
 @SuppressLint("NewApi")
@@ -241,7 +247,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
     //private String artpath = "/media";
     private static Context context;
     private Context frameContext;
-    private GridView sdcardImages;
+    //private GridView sdcardImages;
 	
 	///********** Timers
     //private MediaScanTimer mediascanTimer; 	
@@ -291,7 +297,6 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	
 	private writePixelAsync writePixel;
 	//private writePixelAsyncSlideShow writePixel;
-	
 	
 	//public static ImageAdapter2 myImageAdapter;
 	private GridView gridview;
@@ -380,6 +385,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	private boolean FavPNGHasFiles = false;
 	
 	private boolean FavGIFHasFiles = false;
+	
+	private boolean DisableNewArtCheck_ = false;
 
 	private MediaPlayer mediaPlayer;
 	
@@ -403,12 +410,12 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
     //Edit these variables when updating the APK Expansion files
 	//*********************************
 	//to do add the byte file sizes too
-	private int mainAPKExpNumFiles = 1200;
-    private int patchAPKExpNumFiles = 20;
-    private static int APKExpMainVersion = 50;
-    private static int APKExpPatchVersion = 67; //put the version of the APK exp file, not the current version of this code!
-    private static Long APKExpMainFileSize = 32279235L;
-    private static Long APKExpPatchFileSize = 268398L;  //566985L new test one   502035L the original 63 is 268398L
+	private int mainAPKExpNumFiles = 823;
+    private int patchAPKExpNumFiles = 1;
+    private static int APKExpMainVersion = 69;
+    private static int APKExpPatchVersion = 68; //put the version of the APK exp file, not the current version of this code!
+    private static Long APKExpMainFileSize = 44177544L; //old one 32279235L;
+    private static Long APKExpPatchFileSize = 3948L;  //566985L new test one   502035L the original 63 is 268398L
     
 	private long APKExpMainFileSizeSDCard;
 	private long APKExpPatchFileSizeSDCard;
@@ -477,6 +484,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
     private IDownloaderService mRemoteService;
 
     private IStub mDownloaderClientStub;
+    
+    public static int gridScale = 1;
     
    // private ProgressDialog mProgressDialog;
  
@@ -712,10 +721,6 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	       else {
 	    	   writeAPKSizesToPrefs();  //now let's write the size of the APK Exp that are on the SD card right now so we can compare for next time
 	       }
-	       
-	      
-	       
-	       
 	  }
     	
   
@@ -1010,6 +1015,26 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	     //gridview.setAdapter(myImageAdapter);
 	      ///*******************
 	      
+	      
+	      this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
+	        //prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext()); //causing crash
+	        
+	        try
+	        {
+	            app_ver = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName;
+	        }
+	        catch (NameNotFoundException e)
+	        {
+	            Log.v(tag, e.getMessage());
+	        }
+	        
+	        //******** preferences code
+	        resources = this.getResources();
+	        setPreferences();
+	        //***************************
+	      
+	      
+	      
 	     targetScreenResolution = getResources().getDisplayMetrics().widthPixels;
 	     //showToast(String.valueOf(targetScreenResolution));
 	     
@@ -1020,12 +1045,12 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	     
 	     int numColumns = 2; //default
 	     if (targetScreenResolution < 481) {  //my droidX is 480 width as an example, samsung gs4 and gs4 is 1080 width, nexus 4 is 768, nexus 7 original is 800
-	    	 numColumns = targetScreenResolution / 128;
+	    	 numColumns = targetScreenResolution / (128 / MainActivity.gridScale); //128
 	    	 //showToast(String.valueOf(numColumns));
 	    	 gridview.setNumColumns(numColumns);
 	     }
 	     else {
-	    	 numColumns = targetScreenResolution / 256;
+	    	 numColumns = targetScreenResolution / (256 / MainActivity.gridScale); //256
 	    	 //showToast(String.valueOf(numColumns));
 	    	 gridview.setNumColumns(numColumns);
 	     }
@@ -1070,7 +1095,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 			}
 	     
 	    
-        this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
+      /*  this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
         //prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext()); //causing crash
         
         try
@@ -1086,7 +1111,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
         resources = this.getResources();
         setPreferences();
         //***************************
-        
+*/        
         Boolean welcomeScreenShown = prefs.getBoolean(welcomeScreenShownPref, false);
 
         if (!welcomeScreenShown) {
@@ -1150,16 +1175,15 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	            	
 	            	//now let's check if our APK Exp files are in order
 	            	//expansionFileVersion();
-	            	LookForAPKExpFiles();
-	            	//continueOnCreate();
-	            
+	            	
+	            	if (DisableNewArtCheck_) {  //then the user doesn't want us to check for new art so just continue the program
+	            		continueOnCreate();
+	            	}
+	            	else {
+	            		LookForAPKExpFiles();
+	            	}
 	            }
-
-      //  } else if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED_READ_ONLY)) {
-
-           // showToast("Sorry, your device does not have an accessible SD card, this app will not work");//Or use your own method ie: Toast
-      //  }
-	            
+   
         } else  {
         	AlertDialog.Builder alert=new AlertDialog.Builder(this);
  	      	alert.setTitle("No SD Card").setIcon(R.drawable.icon).setMessage("Sorry, your device does not have an accessible SD card, this app needs to copy some images to your SD card and will not work without it.\n\nPlease exit this app and go to Android settings and check that your SD card is mounted and available and then restart this app.\n\nNote for devices that don't have external SD cards, this app will utilize the internal SD card memory but you are most likely seeing this message because your device does have an external SD card slot.").setNeutralButton("OK", null).show();
@@ -1946,11 +1970,6 @@ private void copyGIF64Source() {
         	  CheckAndUnzipAPKExp(); //let's check if they were unzipped before and if not, unzip them
             
           } 
-    	  
-    	 
-      
-  
-      
     }
 	    
     private void writeAPKSizesToPrefs() {
@@ -1997,70 +2016,6 @@ private void copyGIF64Source() {
     }
     
     private void continueOnCreate() {
-    	
-    	//****** now before we load up the gridview , let's check if the content from the expanded APK files is also there
-    	  /**
-         * Both downloading and validation make use of the "download" UI
-         */
-    	//  initializeDownloadUI();
-        
-
-        /**
-         * Before we do anything, are the files we expect already here and
-         * delivered (presumably by Market) For free titles, this is probably
-         * worth doing. (so no Market request is necessary)
-         */
-        /*if (!expansionFilesDelivered()) {
-        	  initializeDownloadUI();
-            try {
-                Intent launchIntent = MainActivity.this
-                        .getIntent();
-                Intent intentToLaunchThisActivityFromNotification = new Intent(
-                		MainActivity
-                        .this, MainActivity.this.getClass());
-                intentToLaunchThisActivityFromNotification.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
-                        Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intentToLaunchThisActivityFromNotification.setAction(launchIntent.getAction());
-
-                if (launchIntent.getCategories() != null) {
-                    for (String category : launchIntent.getCategories()) {
-                        intentToLaunchThisActivityFromNotification.addCategory(category);
-                    }
-                }
-
-                // Build PendingIntent used to open this activity from
-                // Notification
-                PendingIntent pendingIntent = PendingIntent.getActivity(
-                        MainActivity.this,
-                        0, intentToLaunchThisActivityFromNotification,
-                        PendingIntent.FLAG_UPDATE_CURRENT);
-                // Request to start the download
-                int startResult = DownloaderClientMarshaller.startDownloadServiceIfRequired(this,
-                        pendingIntent, PIXELDownloaderService.class);
-
-                if (startResult != DownloaderClientMarshaller.NO_DOWNLOAD_REQUIRED) {
-                    // The DownloaderService has started downloading the files,
-                    // show progress
-                    initializeDownloadUI();
-                    return;
-                }
-                else {
-                	// otherwise, download not needed so we fall through to
-                	LoadGridView(false);
-                	//gridview.setOnItemClickListener(MainActivity.this);
-                    //gridview.setOnItemLongClickListener(MainActivity.this);
-                }
-                  // starting the movie
-            } catch (NameNotFoundException e) {
-                Log.e(LOG_TAG, "Cannot find own package! MAYDAY!");
-                e.printStackTrace();
-            }
-
-        } else { //the files are already there so let's just validate they are correct and unzipped
-            //validateXAPKZipFiles(); //on this post execute, we'll call the unzip routine
-            CheckAndUnzipAPKExp(); //let's check if they were unzipped before and if not, unzip them
-            //to do this one we can skip going forward and instead just check that they were unzipped
-        }*/
          
          //******** now we wait for the user to do something **************
     	
@@ -2112,7 +2067,7 @@ private void copyGIF64Source() {
 		   
 		   if (!mainAPKUnzipped) {
 		   //if (!prefs.getBoolean("mainAPKUnzippedPref", false)) {
-			    maxValue1 = _zipFileMainNumFiles / 4;
+			    maxValue1 = _zipFileMainNumFiles;
 		   }
 		   else {
 			   maxValue1 = 0;
@@ -2120,7 +2075,7 @@ private void copyGIF64Source() {
 		   
 		   if (!patchAPKUnzipped) {
 		   //if (!prefs.getBoolean("patchAPKUnzippedPref", false))	{
-			    maxValue2 = _zipFilePatchNumFiles /4;
+			    maxValue2 = _zipFilePatchNumFiles;
 		   }
 		   else {
 			   maxValue2 = 0;
@@ -2898,6 +2853,12 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 	      else if (PixelDirName_.equals("gif64")) {
 	        	decodedDirPath = GIF64Path + "decoded";
 	        	gifPath_ = GIF64Path;
+	        	showFavoriteGIFButton = true;
+	      }
+    	 
+	      else if (PixelDirName_.equals("gif16")) {
+	        	decodedDirPath = GIF16Path + "decoded";
+	        	gifPath_ = GIF16Path;
 	        	showFavoriteGIFButton = true;
 	      }
 	        
@@ -3817,6 +3778,11 @@ public class UnFavoriteGIFMoveAsync extends AsyncTask<Void, Integer, Void>{
 			        	decodedDirPath = GIF64Path + "decoded";
 			        	gifPath_ = GIF64Path;
 			        }
+			        
+			        else if (PixelDirName_.equals("gif16")) {
+			        	decodedDirPath = GIF16Path + "decoded";
+			        	gifPath_ = GIF16Path;
+			      }
 			        
 			        else if (PixelDirName_.equals("favgif")) {
 			        	decodedDirPath = FavGIFPath + "decoded";
@@ -5351,10 +5317,20 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 	     showStartupMsg_ = prefs.getBoolean("pref_showStartupMsg", true); //show the "long tap to write to pixel message
 	     saveMultipleCameraPics_ = prefs.getBoolean("pref_writeCamera", false);
 	     slideShowAllPNGs_ = prefs.getBoolean("pref_slideShowAllPNGs", false);
+	     DisableNewArtCheck_ = prefs.getBoolean("pref_DisableNewArtCheck", false);
+	     
 	   
 	     matrix_model = Integer.valueOf(prefs.getString(   //the selected RGB LED Matrix Type
 	    	        resources.getString(R.string.selected_matrix),
 	    	        resources.getString(R.string.matrix_default_value))); 
+	     
+	     gridScale = Integer.valueOf(prefs.getString(   //size of the image grid, higher number is more columns
+	    	        resources.getString(R.string.gridSize),
+	    	        resources.getString(R.string.gridSizeDefault))); 
+	     
+	   
+	     
+	     
 	     
 	     int slideshowGIFFrameDelay_ = Integer.valueOf(prefs.getString(   //the selected RGB LED Matrix Type
 	    	        resources.getString(R.string.slideshowGIFFPS_key),
@@ -5561,6 +5537,12 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 	 	 pausebetweenimagesdurationTimer = new PauseBetweenImagesDurationTimer(pauseBetweenImagesDuration*1000,1000); //how long to show a blank screen before showing the next image
 	 	 slideShowRunning = 0;
 	 	 
+	 	 if (matrix_model > 10 && pixelHardwareID.substring(0,4).equals("PIXL")) { //we have a PIXEL V2 board
+	 		AlertDialog.Builder alert=new AlertDialog.Builder(this);
+			alert.setTitle(getResources().getString(R.string.unsupportedPanel)).setIcon(R.drawable.icon).setMessage(getResources().getString(R.string.unsupportedPanelMsg)).setNeutralButton(getResources().getString(R.string.OKText), null).show();	
+	 		
+	 	 }
+	 	 
 	 	 //need to do this to refresh the slide array
 	    // myAsyncTaskLoadFiles = new AsyncTaskLoadFiles(myImageAdapter, false);
         // myAsyncTaskLoadFiles.execute();
@@ -5571,6 +5553,19 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 	    {
 	    	 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);     
 	    	 setPreferences();
+	    	 
+	    	 //need this part in case the user updates the grid size with preferences so we can adjust dynamically without having to re-start the app
+	    	 int numColumns = 2; //default
+	 	     if (targetScreenResolution < 481) {  //my droidX is 480 width as an example, samsung gs4 and gs4 is 1080 width, nexus 4 is 768, nexus 7 original is 800
+	 	    	 numColumns = targetScreenResolution / (128 / MainActivity.gridScale); //128
+	 	    	 //showToast(String.valueOf(numColumns));
+	 	    	 gridview.setNumColumns(numColumns);
+	 	     }
+	 	     else {
+	 	    	 numColumns = targetScreenResolution / (256 / MainActivity.gridScale); //256
+	 	    	 //showToast(String.valueOf(numColumns));
+	 	    	 gridview.setNumColumns(numColumns);
+	 	     }
 		 	 
 		 	 LoadGridView(false);
 		 	
