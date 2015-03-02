@@ -199,6 +199,11 @@ int string menu_refresh_title 0x7f06007b
 int string menu_rescan_title 0x7f06006b
 int string menu_startSlideShow_title 0x7f060088
 int string menu_stopSlideShow_title 0x7f060089
+int string newArtAdded 0x7f0600c9
+int string newFileAdded 0x7f0600c7
+int string newFilesAdded 0x7f0600c8
+int string noFreeSpace 0x7f0600ca
+int string noFreeSpaceMsg 0x7f0600cb
 int string noSleep 0x7f06004b
 int string noSleepSummary 0x7f06004d
 int string notFoundString 0x7f06002e

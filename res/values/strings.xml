@@ -41,7 +41,7 @@
    
     <string name="selected_matrix">selected_matrix</string>
     <string name="matrix">PIXEL Model</string>
-    <string name="matrixSummary">Choose between standard PIXEL or SUPER PIXEL</string>    
+    <string name="matrixSummary">Choose between standard PIXEL, SUPER PIXEL, or other LED Panel types</string>    
     <string name="dialogTitleMatrix">PIXEL Model</string>
     <string name="matrix_default_value">3</string>   
     
@@ -128,10 +128,10 @@
     <string name="pauseBetweenImagesDurationDefault">3</string>
     <string name="pauseBetweenImagesDurationSummary">Number of seconds to pause in between images</string>
     
-    <string name="menu_refreshArt_title">Delete Stock Art</string>
+    <string name="menu_refreshArt_title">Force Stock Art Refresh</string>
     
-    <string name="menu_refresh_title">Delete Stock Art</string>
-    <string name="menu_refresh_summary">Do this before deleting this app to delete the pixel art on your local memory or SD card.</string>
+    <string name="menu_refresh_title">Force Stock Art Refresh</string>
+    <string name="menu_refresh_summary">Please now restart this app</string>
     
     <string name="stopSlideShowMessage">You are still in slide show mode, swipe from right to left to end the slide show and then you can select a single image</string>
     <string name="loadingImagesPlsWaitTitle">Please Wait</string>
@@ -214,7 +214,7 @@
     <string name="DisableNewArtCheck">Disable New Art Check</string>    
     <string name="pref_DisableNewArtCheck">pref_DisableNewArtCheck</string>
     <string name="pref_DisableNewArtCheckDefault">false</string>
-    <string name="DisableNewArtCheckSummary">Disables checking for new art upon startup</string>
+    <string name="DisableNewArtCheckSummary">Disables checking for new art on startup. IMPORTANT: You must upgrade the app first to obtain any new art.</string>
     
     <string name="gridSize">gridSize</string>
     <string name="gridSizeTitle">Image Grid Size</string>
@@ -224,6 +224,14 @@
     
     <string name="unsupportedPanel">Incompatible LED Panel</string>    
     <string name="unsupportedPanelMsg">Very Sorry&#8230;\n\nThe LED Panel you have selected is not compatible with your PIXEL board.\n\nYou would need to upgrade to a PIXEL v2.5 or higher board to support this LED panel\n\nPlease now change the LED panel to a supported one.</string>
+    
+    <string name="newFileAdded">New File Added</string>    
+    <string name="newFilesAdded">New Files Added</string>   
+    <string name="newArtAdded">New Art Added</string>    
+    
+    <string name="noFreeSpace">Not Enough Free Space</string>    
+    <string name="noFreeSpaceMsg">Sorry you do not have enough free space on your SD card storage for the new pixel art</string>    
+    
     
     
    

@@ -224,6 +224,11 @@ public final class R {
         public static final int menu_rescan_title=0x7f06006b;
         public static final int menu_startSlideShow_title=0x7f060088;
         public static final int menu_stopSlideShow_title=0x7f060089;
+        public static final int newArtAdded=0x7f0600c9;
+        public static final int newFileAdded=0x7f0600c7;
+        public static final int newFilesAdded=0x7f0600c8;
+        public static final int noFreeSpace=0x7f0600ca;
+        public static final int noFreeSpaceMsg=0x7f0600cb;
         public static final int noSleep=0x7f06004b;
         public static final int noSleepSummary=0x7f06004d;
         public static final int notFoundString=0x7f06002e;
