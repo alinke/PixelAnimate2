@@ -393,11 +393,11 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	//to do add the byte file sizes too
 	private int mainAPKExpNumFiles = 874;
     private int patchAPKExpNumFiles = 1;
-    private static int APKExpMainVersion = 73;
+    private static int APKExpMainVersion = 76;
     private static int APKExpPatchVersion = 68; //put the version of the APK exp file, not the current version of this code!
-    private static Long APKExpMainFileSize = 45097793L; //old one 32279235L;
+    private static Long APKExpMainFileSize = 45334676L; //old one 32279235L; 
     private static Long APKExpPatchFileSize = 3948L;  //566985L new test one   502035L the original 63 is 268398L
-    private static Long ArtSpaceMB = 300L;
+    private static Long ArtSpaceMB = 300L; //how much free space to check for
     //***********************************
     
 	private long APKExpMainFileSizeSDCard;
@@ -2585,7 +2585,7 @@ private void copyGIF64Source() {
 		  
 		  //******** Only load if SUPER PIXEL *************
 		  
-		  if (currentResolution == 128 && GIF64targetDirector.exists()) { //gif 64x64 content which we know by current resolution because we could have a super pixel or adafruit built panels, only show if 64x64 led matrix is picked
+		  if ((currentResolution == 128 || currentResolution == 64) && GIF64targetDirector.exists()) { //gif 64x64 content which we know by current resolution because we could have a super pixel or adafruit built panels, only show if 64x64 led matrix is picked
 		 
 	    	   File[] files = GIF64targetDirector.listFiles(new FilenameFilter() {
 	   		    public boolean accept(File dir, String name) {
@@ -2600,7 +2600,7 @@ private void copyGIF64Source() {
 	    		}
 		   }
 		  
-		  if (currentResolution == 128 && gifonly_ == false && PNG64targetDirector.exists()) { //png 64x64 content but don't show for 32x32
+		  if ((currentResolution == 128 || currentResolution == 64) && gifonly_ == false && PNG64targetDirector.exists()) { //png 64x64 content but don't show for 32x32
 		
 	    	   File[] files = PNG64targetDirector.listFiles(new FilenameFilter() {
 	   		    public boolean accept(File dir, String name) {
@@ -5243,7 +5243,18 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 	 	 pausebetweenimagesdurationTimer = new PauseBetweenImagesDurationTimer(pauseBetweenImagesDuration*1000,1000); //how long to show a blank screen before showing the next image
 	 	 slideShowRunning = 0;
 	 	 
-	 	 if (matrix_model > 10 && pixelHardwareID.substring(0,4).equals("PIXL")) { //we have a PIXEL V2 board
+	 	//int BoardID = Integer.valueOf(pixelBootloader.substring(6,8)); //
+	 	 
+	 	int BoardID = 0;
+
+	 	try {
+	 		BoardID = Integer.parseInt(pixelBootloader.substring(6,8));
+	 	} catch(NumberFormatException nfe) {
+	 	  // Handle parse error.
+	 	}
+	 	 
+	 	 //if (matrix_model > 10 && pixelHardwareID.substring(0,4).equals("PIXL")) { //we have a PIXEL V2 board
+	 	 if (matrix_model > 10 && BoardID < 24 && BoardID !=0) { //we have a PIXEL V2 board pixl0025 or IOIO0401   25 or 01 pixl0025 TO DO Change this later to hardware ID
 	 		AlertDialog.Builder alert=new AlertDialog.Builder(this);
 			alert.setTitle(getResources().getString(R.string.unsupportedPanel)).setIcon(R.drawable.icon).setMessage(getResources().getString(R.string.unsupportedPanelMsg)).setNeutralButton(getResources().getString(R.string.OKText), null).show();	
 	 		

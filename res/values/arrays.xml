@@ -10,14 +10,13 @@
     <item>64x32 (2x1 horz)</item>
     <item>32x64 (1x2 vert)</item>
     <item>Mirrored (2 displays)</item>
-    <item>Mirrored (4 displays)</item>
     <item>128x32 (4x1 horz)</item>
     <item>32x128 (1x4 vert)</item>
     <item>SUPER PIXEL 64x64 (2x2 square)</item>
     <item>Adafruit 32x32</item>
     <item>Adafruit 32x32 Color Swap</item>
     <item>Adafruit 64x32</item>
-    <item>Adafruit 64x64</item>
+    <item>Adafruit 64x32 Mirrored</item>
 </string-array>
 	
 <string-array name="matrix_values">
@@ -28,7 +27,6 @@
     <item>4</item>
     <item>5</item>
     <item>6</item>
-    <item>7</item>
     <item>8</item>
     <item>9</item>
     <item>10</item>
