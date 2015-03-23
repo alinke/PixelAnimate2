@@ -180,9 +180,44 @@ add message for adafruit panels not to show up for old board or better yet hide 
 more columns for gif images for smaller res screens - DONE
 auto select logic
 
-Bootloader ID
-Hardware ID: IOIO30
+PIXEL V2
+Bootloader ID: IOIO0401
+Hardware ID: PIXL0020
 Firmware version: PIXL0008
+Library version: PIXL0020
+
+PIXEL V2.5
+Bootloader ID: PIXL0025
+Hardware ID: PIXL0025
+Firmware version: 
+Library Version: PIXL0025
+
+0020 means the board can only support seeed panels
+0025 means the board can support both seeed and adafruit panels
+hardware id and bootloader id come from the firmware so we'll leave that common for the v2.5 family
+we'll use the firmware to auto-detect the LED panel
+
+In the firmware code, the 4 first digits will be PIXL
+the fifth digital will be below which we'll use the auto-detect the panel
+and digits 6,7, and 8 will be for the firmware version
+ex. PIXLP009, PIXLQ009
+
+PIXEL V2 supported panels
+I: 32x16 adafruit
+P: 32x32 seeed
+S: 64x64 seeed
+K: 32x32 seeed kiosk no writing
+V: 64x64 seeed kiosk no writing
+
+PIXEL V2.5 additional supported panels
+Q: 32x32 adafruit d pin
+C: 32x32 adafruit color swap
+R: 64x32 adafruit d pin
+T: 64x64 adafruit
+X: 64x64 adafruit kiosk
+Y: 32x32 adafruit d pin kiosk
+
+L: 32x16 low power and 32x16
 
 Possible Hardware IDs: IOIO30 for PIXEL V2, PIXL16 for 16x32, PIXL32 for d-panel 32x32, PIXEL64 for d-panel super pixel
 So auto-detect if one of these BUT let the user turn off auto-detection in the event another panel is needed
@@ -197,7 +232,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 
 	private static GifView gifView;
 	static ioio.lib.api.RgbLedMatrix matrix_;
-	public static ioio.lib.api.RgbLedMatrix.Matrix KIND;  //have to do it this way because there is a matrix library conflict
+	public static ioio.lib.api.RgbLedMatrix.Matrix KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32; //v2;  //have to do it this way because there is a matrix library conflict
 	private static android.graphics.Matrix matrix2;
     private static final String TAG = "PixelAnimations";	
 	private static short[] frame_;
@@ -212,7 +247,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
   	private static float scaleWidth; 
   	private static float scaleHeight; 	  	
   	private static Bitmap resizedBitmap;  	
-  	private static int deviceFound = 0;
+  	private static boolean deviceFound = false;
   	private static String extension_;
   	
   	private SharedPreferences prefs;
@@ -220,7 +255,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	private String OKText;
 	private Resources resources;
 	private String app_ver;	
-	private  int matrix_model;
+	private static  int matrix_model;
 	private final String tag = "";	
 	private final String LOG_TAG = "PixelAnimations";
 	public static String imagePath;
@@ -326,6 +361,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	private int slideShowRunning = 0;
 	public static ImageDisplayDurationTimer imagedisplaydurationTimer;
 	public static PauseBetweenImagesDurationTimer pausebetweenimagesdurationTimer;
+	private static AutoDetectPanelTimer autodetectpanelTimer;
 	     
 	public int imageDisplayDuration;
 	
@@ -392,11 +428,11 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	//*********************************
 	//to do add the byte file sizes too
 	private int mainAPKExpNumFiles = 874;
-    private int patchAPKExpNumFiles = 1;
-    private static int APKExpMainVersion = 76;
-    private static int APKExpPatchVersion = 68; //put the version of the APK exp file, not the current version of this code!
-    private static Long APKExpMainFileSize = 45334676L; //old one 32279235L; 
-    private static Long APKExpPatchFileSize = 3948L;  //566985L new test one   502035L the original 63 is 268398L
+    private int patchAPKExpNumFiles = 4;
+    private static int APKExpMainVersion = 77;
+    private static int APKExpPatchVersion = 78; //put the version of the APK exp file, not the current version of this code!
+    private static Long APKExpMainFileSize = 44238062L; //old one 32279235L; 44238062
+    private static Long APKExpPatchFileSize = 6785L;  //566985L new test one   502035L the original 63 is 268398L 6785
     private static Long ArtSpaceMB = 300L; //how much free space to check for
     //***********************************
     
@@ -4323,7 +4359,8 @@ public class UnFavoriteGIFMoveAsync extends AsyncTask<Void, Integer, Void>{
 		
 	     //TO DO change this later, it's not a good design, we should do a bitmap auto resize instead, for now we have to remember to change this if we add a matrix panel
 		
-		 switch (matrix_number) {  //get this from the preferences
+		// switch (matrix_number) {  //get this from the preferences
+		 switch (matrix_model) {  //get this from the preferences
 	     case 0:
 	    	 BitmapInputStream = context.getResources().openRawResource(R.raw.decoding16);
 	    	 break;
@@ -4980,9 +5017,9 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 	    
 	    private void setPreferences() //here is where we read the shared preferences into variables
 	    {
-	   //  SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);     
-	    
-	     //scanAllPics = prefs.getBoolean("pref_scanAll", false);
+	   //  SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);  
+	    	//we are going to go here many times but let's not set the matrix KIND if the IOIO is not connected
+	    	
 	     //slideShowMode = prefs.getBoolean("pref_slideshowMode", false);
 	     noSleep = prefs.getBoolean("pref_noSleep", false);
 	     debug_ = prefs.getBoolean("pref_debugMode", false);
@@ -5014,9 +5051,8 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 	     
 	     downloadURL_64 = prefs.getString(   //the selected RGB LED Matrix Type
 	    	        resources.getString(R.string.downloadURL_64),
-	    	        resources.getString(R.string.downloadURL_64Default)); 
-	     
-	    // slideShowMode = prefs.getBoolean("pref_slideshowMode", false);
+	    	        resources.getString(R.string.downloadURL_64Default));
+	   
 	  //   dimDuringSlideShow = prefs.getBoolean("pref_dimDuringSlideShow", true);
 	     
 	     imageDisplayDuration = Integer.valueOf(prefs.getString(   
@@ -5060,140 +5096,6 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 	     default:	    		 
 	    	 fps = 0;
 	     }
-	   
-	     
-	     if (AutoSelectPanel_ && !pixelHardwareID.substring(0,4).equals("PIXL") && pixelHardwareID.substring(0,4).equals("XXXXX")) { //if auto select is on and it's NOT a PIXEL V2 board AND it's a PIXEL V2.5 or above board
-	    	 	
-	    	 	if (pixelHardwareID.substring(0,4).equals("PIXEL32")) {
-	    	 		matrix_model = 11;
-	    	 		KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x32;
-			    	BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
-			    	frame_length = 2048;
-			    	currentResolution = 32; 
-	    	 	}
-	    	 	else if (pixelHardwareID.substring(0,4).equals("PIXEL64")) {
-	    	 		matrix_model = 14;
-	    	 		KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_64x64;
-			    	BitmapInputStream = getResources().openRawResource(R.raw.select64by64);
-			    	frame_length = 8192;
-			    	currentResolution = 128; 
-	    	 	}
-	    	 	else if (pixelHardwareID.substring(0,4).equals("PIXEL16")) {
-	    	 		matrix_model = 1; 
-	    	 		KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x16;
-			    	BitmapInputStream = getResources().openRawResource(R.raw.selectimage16);
-			    	frame_length = 1024;
-			    	currentResolution = 16;
-	    	 	}
-	    	 	else {
-	    	 		matrix_model = 11;
-	    	 		KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x32;
-			    	BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
-			    	frame_length = 2048;
-			    	currentResolution = 32; 
-	    	 	}
-	     }
-	     
-	     else {
-		     switch (matrix_model) {  //get this from the preferences
-			     case 0:
-			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x16;
-			    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage16);
-			    	 frame_length = 1024;
-			    	 currentResolution = 16;
-			    	 break;
-			     case 1:
-			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x16;
-			    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage16);
-			    	 frame_length = 1024;
-			    	 currentResolution = 16;
-			    	 break;
-			     case 2:
-			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32_NEW; //v1
-			    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
-			    	 frame_length = 2048;
-			    	 currentResolution = 32;
-			    	 break;
-			     case 3:
-			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32; //v2
-			    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
-			    	 frame_length = 2048;
-			    	 currentResolution = 32;
-			    	 break;
-			     case 4:
-			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_64x32; 
-			    	 BitmapInputStream = getResources().openRawResource(R.raw.select64by32);
-			    	 frame_length = 8192;
-			    	 currentResolution = 64; 
-			    	 break;
-			     case 5:
-			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x64; 
-			    	 BitmapInputStream = getResources().openRawResource(R.raw.select32by64);
-			    	 frame_length = 8192;
-			    	 currentResolution = 64; 
-			    	 break;	 
-			     case 6:
-			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_2_MIRRORED; 
-			    	 BitmapInputStream = getResources().openRawResource(R.raw.select32by64);
-			    	 frame_length = 8192;
-			    	 currentResolution = 64; 
-			    	 break;	 	 
-			     case 7:
-			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_4_MIRRORED;
-			    	 BitmapInputStream = getResources().openRawResource(R.raw.select32by64);
-			    	// BitmapInputStream = getResources().openRawResource(R.raw.select32by128);
-			    	 frame_length = 8192; //original 8192
-			    	 currentResolution = 128; //original 128
-			    	 break;
-			     case 8:
-			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_128x32; //horizontal
-			    	 BitmapInputStream = getResources().openRawResource(R.raw.select128by32);
-			    	 frame_length = 8192;
-			    	 currentResolution = 128;  
-			    	 break;	 
-			     case 9:
-			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x128; //vertical mount
-			    	 BitmapInputStream = getResources().openRawResource(R.raw.select32by128);
-			    	 frame_length = 8192;
-			    	 currentResolution = 128; 
-			    	 break;	 
-			     case 10:
-			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_64x64;
-			    	 BitmapInputStream = getResources().openRawResource(R.raw.select64by64);
-			    	 frame_length = 8192;
-			    	 currentResolution = 128; 
-			    	 break;
-			     case 11:
-			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x32;
-			    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
-			    	 frame_length = 2048;
-			    	 currentResolution = 32; 
-			    	 break;	 
-			     case 12:
-			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x32_ColorSwap;
-			    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
-			    	 frame_length = 2048;
-			    	 currentResolution = 32; 
-			    	 break;	 	 
-			     case 13:
-			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_64x32;
-			    	 BitmapInputStream = getResources().openRawResource(R.raw.select64by32);
-			    	 frame_length = 4096;
-			    	 currentResolution = 64; 
-			    	 break;	
-			     case 14:
-			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_64x64;
-			    	 BitmapInputStream = getResources().openRawResource(R.raw.select64by64);
-			    	 frame_length = 8192;
-			    	 currentResolution = 128; 
-			    	 break;	 	 	
-			     default:	    		 
-			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32; //v2 as the default
-			    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
-			    	 frame_length = 2048;
-			    	 currentResolution = 32;
-			     }
-	     }
 	     
 	     switch (slideshowGIFFrameDelay_) {  //get this from the preferences
 	     case 0:
@@ -5226,39 +5128,215 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 	     default:	    		 
 	    	 slideshowGIFFrameDelay = 100;
 	     }
-	     
-	     matrix_number = matrix_model;
-	         
-	     frame_ = new short [KIND.width * KIND.height];
-		 BitmapBytes = new byte[KIND.width * KIND.height *2]; //512 * 2 = 1024 or 1024 * 2 = 2048
-		 
-		 loadRGB565(); //load the select pic raw565 file
-		 
-		// if (imagedisplaydurationTimer != null) imagedisplaydurationTimer.cancel();
-	    // if (pausebetweenimagesdurationTimer != null) pausebetweenimagesdurationTimer.cancel();
-	     
-	     stopTimers();
-		 
-		 imagedisplaydurationTimer = new ImageDisplayDurationTimer(imageDisplayDuration*1000,1000); //how long the image should display
-	 	 pausebetweenimagesdurationTimer = new PauseBetweenImagesDurationTimer(pauseBetweenImagesDuration*1000,1000); //how long to show a blank screen before showing the next image
-	 	 slideShowRunning = 0;
-	 	 
-	 	//int BoardID = Integer.valueOf(pixelBootloader.substring(6,8)); //
-	 	 
-	 	int BoardID = 0;
+	   
+	     /*PIXEL V2 supported panels
+	     I: 32x16 adafruit
+	     P: 32x32 seeed
+	     S: 64x64 seeed
+	     K: 32x32 seeed kiosk no writing
+	     V: 64x64 seeed kiosk no writing
 
-	 	try {
-	 		BoardID = Integer.parseInt(pixelBootloader.substring(6,8));
-	 	} catch(NumberFormatException nfe) {
-	 	  // Handle parse error.
-	 	}
-	 	 
-	 	 //if (matrix_model > 10 && pixelHardwareID.substring(0,4).equals("PIXL")) { //we have a PIXEL V2 board
-	 	 if (matrix_model > 10 && BoardID < 24 && BoardID !=0) { //we have a PIXEL V2 board pixl0025 or IOIO0401   25 or 01 pixl0025 TO DO Change this later to hardware ID
-	 		AlertDialog.Builder alert=new AlertDialog.Builder(this);
-			alert.setTitle(getResources().getString(R.string.unsupportedPanel)).setIcon(R.drawable.icon).setMessage(getResources().getString(R.string.unsupportedPanelMsg)).setNeutralButton(getResources().getString(R.string.OKText), null).show();	
-	 		
-	 	 }
+	     PIXEL V2.5 additional supported panels
+	     Q: 32x32 adafruit d pin
+	     C: 32x32 adafruit color swap
+	     R: 64x32 adafruit d pin
+	     T: 64x64 adafruit
+	     X: 64x64 adafruit kiosk
+	     Y: 32x32 adafruit d pin kiosk*/
+	     
+	     //if (AutoSelectPanel_ && !pixelHardwareID.substring(0,4).equals("PIXL") && pixelHardwareID.substring(0,4).equals("XXXXX")) { //if auto select is on and it's NOT a PIXEL V2 board AND it's a PIXEL V2.5 or above board
+	    
+		  if (AutoSelectPanel_ && pixelHardwareID.substring(0,4).equals("PIXL")) { //TO DO fix this later, need to call this when the IOIO setup is called
+		    	
+		    	 	if (pixelFirmware.substring(4,5).equals("Q")) {
+		    	 		matrix_model = 11;
+		    	 		KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x32;
+				    	BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
+				    	frame_length = 2048;
+				    	currentResolution = 32; 
+		    	 	}
+		    	 	else if (pixelFirmware.substring(4,5).equals("T")) {
+		    	 		matrix_model = 14;
+		    	 		KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_64x64;
+				    	BitmapInputStream = getResources().openRawResource(R.raw.select64by64);
+				    	frame_length = 8192;
+				    	currentResolution = 128; 
+		    	 	}
+		    	 	else if (pixelFirmware.substring(4,5).equals("I")) {
+		    	 		matrix_model = 1; 
+		    	 		KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x16;
+				    	BitmapInputStream = getResources().openRawResource(R.raw.selectimage16);
+				    	frame_length = 1024;
+				    	currentResolution = 16;
+		    	 	}
+		    	 	else if (pixelFirmware.substring(4,5).equals("L")) {
+		    	 		matrix_model = 1; 
+		    	 		KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x16;
+				    	BitmapInputStream = getResources().openRawResource(R.raw.selectimage16);
+				    	frame_length = 1024;
+				    	currentResolution = 16;
+		    	 	}
+		    	 	else if (pixelFirmware.substring(4,5).equals("C")) {
+		    	 		matrix_model = 12; 
+		    	 		KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x32_ColorSwap;
+				    	BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
+				    	frame_length = 2048;
+				    	currentResolution = 32; 
+		    	 	}
+		    	 	else if (pixelFirmware.substring(4,5).equals("R")) {
+		    	 		matrix_model = 13; 
+		    	 		KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_64x32;
+				    	BitmapInputStream = getResources().openRawResource(R.raw.select64by32);
+				    	frame_length = 4096;
+				    	currentResolution = 64; 
+		    	 	}
+		    	 	else {
+		    	 		matrix_model = 11;
+		    	 		KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x32;
+				    	BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
+				    	frame_length = 2048;
+				    	currentResolution = 32; 
+		    	 	}
+		     }
+		     
+		     else {
+			     switch (matrix_model) {  //get this from the preferences
+				     case 0:
+				    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x16;
+				    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage16);
+				    	 frame_length = 1024;
+				    	 currentResolution = 16;
+				    	 break;
+				     case 1:
+				    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x16;
+				    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage16);
+				    	 frame_length = 1024;
+				    	 currentResolution = 16;
+				    	 break;
+				     case 2:
+				    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32_NEW; //v1
+				    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
+				    	 frame_length = 2048;
+				    	 currentResolution = 32;
+				    	 break;
+				     case 3:
+				    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32; //v2
+				    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
+				    	 frame_length = 2048;
+				    	 currentResolution = 32;
+				    	 break;
+				     case 4:
+				    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_64x32; 
+				    	 BitmapInputStream = getResources().openRawResource(R.raw.select64by32);
+				    	 frame_length = 8192;
+				    	 currentResolution = 64; 
+				    	 break;
+				     case 5:
+				    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x64; 
+				    	 BitmapInputStream = getResources().openRawResource(R.raw.select32by64);
+				    	 frame_length = 8192;
+				    	 currentResolution = 64; 
+				    	 break;	 
+				     case 6:
+				    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_2_MIRRORED; 
+				    	 BitmapInputStream = getResources().openRawResource(R.raw.select32by64);
+				    	 frame_length = 8192;
+				    	 currentResolution = 64; 
+				    	 break;	 	 
+				     case 7:
+				    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_4_MIRRORED;
+				    	 BitmapInputStream = getResources().openRawResource(R.raw.select32by64);
+				    	// BitmapInputStream = getResources().openRawResource(R.raw.select32by128);
+				    	 frame_length = 8192; //original 8192
+				    	 currentResolution = 128; //original 128
+				    	 break;
+				     case 8:
+				    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_128x32; //horizontal
+				    	 BitmapInputStream = getResources().openRawResource(R.raw.select128by32);
+				    	 frame_length = 8192;
+				    	 currentResolution = 128;  
+				    	 break;	 
+				     case 9:
+				    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x128; //vertical mount
+				    	 BitmapInputStream = getResources().openRawResource(R.raw.select32by128);
+				    	 frame_length = 8192;
+				    	 currentResolution = 128; 
+				    	 break;	 
+				     case 10:
+				    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_64x64;
+				    	 BitmapInputStream = getResources().openRawResource(R.raw.select64by64);
+				    	 frame_length = 8192;
+				    	 currentResolution = 128; 
+				    	 break;
+				     case 11:
+				    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x32;
+				    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
+				    	 frame_length = 2048;
+				    	 currentResolution = 32; 
+				    	 break;	 
+				     case 12:
+				    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x32_ColorSwap;
+				    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
+				    	 frame_length = 2048;
+				    	 currentResolution = 32; 
+				    	 break;	 	 
+				     case 13:
+				    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_64x32;
+				    	 BitmapInputStream = getResources().openRawResource(R.raw.select64by32);
+				    	 frame_length = 4096;
+				    	 currentResolution = 64; 
+				    	 break;	
+				     case 14:
+				    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_64x64;
+				    	 BitmapInputStream = getResources().openRawResource(R.raw.select64by64);
+				    	 frame_length = 8192;
+				    	 currentResolution = 128; 
+				    	 break;	 	 	
+				     default:	    		 
+				    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32; //v2 as the default
+				    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
+				    	 frame_length = 2048;
+				    	 currentResolution = 32;
+				     }
+		     }
+	    
+		     
+		    // matrix_number = matrix_model;
+		         
+		     frame_ = new short [KIND.width * KIND.height];
+			 BitmapBytes = new byte[KIND.width * KIND.height *2]; //512 * 2 = 1024 or 1024 * 2 = 2048
+			 
+			 loadRGB565(); //load the select pic raw565 file
+			 
+			// if (imagedisplaydurationTimer != null) imagedisplaydurationTimer.cancel();
+		    // if (pausebetweenimagesdurationTimer != null) pausebetweenimagesdurationTimer.cancel();
+			 
+	
+		     
+		     stopTimers();
+			 
+			 imagedisplaydurationTimer = new ImageDisplayDurationTimer(imageDisplayDuration*1000,1000); //how long the image should display
+		 	 pausebetweenimagesdurationTimer = new PauseBetweenImagesDurationTimer(pauseBetweenImagesDuration*1000,1000); //how long to show a blank screen before showing the next image
+		 	 autodetectpanelTimer = new AutoDetectPanelTimer(500,500);
+		 	 
+		 	 slideShowRunning = 0;
+		 	 
+		 	//int BoardID = Integer.valueOf(pixelBootloader.substring(6,8)); //
+		 	 
+		 	int BoardID = 0;
+	
+		 	try {
+		 		BoardID = Integer.parseInt(pixelBootloader.substring(6,8)); //IOIO0401
+		 		//showToast(String.valueOf(BoardID));
+		 	} catch(NumberFormatException nfe) {
+		 	  // Handle parse error.
+		 	}
+		 	 
+		 	 //if (matrix_model > 10 && pixelHardwareID.substring(0,4).equals("PIXL")) { //we have a PIXEL V2 board
+		 	 if (matrix_model > 10 && BoardID < 24 && BoardID !=0) { //we have a PIXEL V2 board pixl0025 or IOIO0401   25 or 01 pixl0025 TO DO Change this later to hardware ID
+		 		AlertDialog.Builder alert=new AlertDialog.Builder(this);
+				alert.setTitle(getResources().getString(R.string.unsupportedPanel)).setIcon(R.drawable.icon).setMessage(getResources().getString(R.string.unsupportedPanelMsg)).setNeutralButton(getResources().getString(R.string.OKText), null).show();	
+		 	 }
 	 	 
 	 	 //need to do this to refresh the slide array
 	    // myAsyncTaskLoadFiles = new AsyncTaskLoadFiles(myImageAdapter, false);
@@ -5285,8 +5363,9 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 	 	     }
 		 	 
 		 	 LoadGridView(false);
-		 	
 	 }
+	    
+    
 	
     
     class IOIOThread extends BaseIOIOLooper {
@@ -5295,8 +5374,8 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
   		@Override
   		protected void setup() throws ConnectionLostException { //we'll always come back here after an intent or loss of connection
   			
-  			matrix_ = ioio_.openRgbLedMatrix(KIND);
-  			deviceFound = 1; //if we went here, then we are connected over bluetooth or USB
+  			//matrix_ = ioio_.openRgbLedMatrix(KIND); //had to move this down because of the auto panel detect code below
+  			deviceFound = true; //if we went here, then we are connected over bluetooth or USB
   			
   			if (connectTimer != null) connectTimer.cancel(); //we can stop this timer since we found PIXEL
   	
@@ -5311,17 +5390,45 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
   			   showToast(pixelHardwareID);
   			}
   			
-  			if (debug_ == true) {  			
-	  			showToast("Bluetooth Connected");
+  			//autoDetectMatrix();
+  			// new autoDetectMatrix().execute((Void[])null);
+  			
+  			
+  		   if (AutoSelectPanel_ && pixelHardwareID.substring(0,4).equals("PIXL")) {
+	  			runOnUiThread(new Runnable() 
+	  			{
+	  			   public void run() 
+	  			   {
+	  				   //autodetectpanelTimer.start();
+	  				   updatePrefs();
+	  				
+	  				   
+	  				   try {
+	  					 matrix_ = ioio_.openRgbLedMatrix(KIND);
+	 	  	  		     matrix_.frame(frame_); //stream "select image" text to PIXEL
+					} catch (ConnectionLostException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	  			      
+	  			   }
+	  			}); 
   			}
+  		   
+  		   else { //we didn't auto-detect so just go the normal way
+  			  matrix_ = ioio_.openRgbLedMatrix(KIND);
+  	  		  matrix_.frame(frame_); //stream "select image" text to PIXEL
+  		   }
   			
-  			matrix_.frame(frame_); //stream "select image" text to PIXEL
-  			
+  		  
+ 			
   			appAlreadyStarted = 1; 
   			
   			if (showStartupMsg_ == true && kioskMode_ == false && pixelHardwareID.substring(0,4).equals("PIXL")) { //if writing is supported
   	        	 showToast(getString(R.string.StartupMessage));
   	        }
+  			
+  			
   			
   		}
 
@@ -5346,7 +5453,7 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 	  			showToast("Bluetooth Disconnected");
   			}	
 			
-			deviceFound = 0;
+			deviceFound = false;
 		}
 
 		@Override
@@ -5408,6 +5515,29 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
    			//not used
    		}
    	}
+    
+    public class AutoDetectPanelTimer extends CountDownTimer
+   	{
+
+   		public AutoDetectPanelTimer(long startTime, long interval)
+   			{
+   				super(startTime, interval);
+   			}
+
+   		@Override
+   		public void onFinish()
+   			{
+   				updatePrefs();
+   				
+   			}
+
+   		@Override
+   		public void onTick(long millisUntilFinished)				{
+   			//not used
+   		}
+   	}
+    
+    
 	 
     public class DecodedTimer extends CountDownTimer
    	{

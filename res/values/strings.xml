@@ -41,7 +41,7 @@
    
     <string name="selected_matrix">selected_matrix</string>
     <string name="matrix">PIXEL Model</string>
-    <string name="matrixSummary">Choose between standard PIXEL, SUPER PIXEL, or other LED Panel types</string>    
+    <string name="matrixSummary">Choose between standard PIXEL, SUPER PIXEL, or other LED panel types</string>    
     <string name="dialogTitleMatrix">PIXEL Model</string>
     <string name="matrix_default_value">3</string>   
     

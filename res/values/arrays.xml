@@ -16,7 +16,7 @@
     <item>Adafruit 32x32</item>
     <item>Adafruit 32x32 Color Swap</item>
     <item>Adafruit 64x32</item>
-    <item>Adafruit 64x32 Mirrored</item>
+    <item>Adafruit 64x64</item>
 </string-array>
 	
 <string-array name="matrix_values">
