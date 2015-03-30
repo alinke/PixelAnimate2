@@ -218,6 +218,8 @@ X: 64x64 adafruit kiosk
 Y: 32x32 adafruit d pin kiosk
 
 L: 32x16 low power and 32x16
+M: 32x32 low power and Seeed 32x32
+N: 32x32 low power and Adafruit 32x32 D-Pin
 
 Possible Hardware IDs: IOIO30 for PIXEL V2, PIXL16 for 16x32, PIXL32 for d-panel 32x32, PIXEL64 for d-panel super pixel
 So auto-detect if one of these BUT let the user turn off auto-detection in the event another panel is needed
@@ -361,7 +363,6 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	private int slideShowRunning = 0;
 	public static ImageDisplayDurationTimer imagedisplaydurationTimer;
 	public static PauseBetweenImagesDurationTimer pausebetweenimagesdurationTimer;
-	private static AutoDetectPanelTimer autodetectpanelTimer;
 	     
 	public int imageDisplayDuration;
 	
@@ -424,15 +425,15 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
     private String unzipLocation = Environment.getExternalStorageDirectory() + "/pixel/"; 
     private SharedPreferences.Editor editor;
     
-    //Edit these variables when updating the APK Expansion files
+    //Edit these variables when updating the patch APK expansion files
 	//*********************************
 	//to do add the byte file sizes too
 	private int mainAPKExpNumFiles = 874;
-    private int patchAPKExpNumFiles = 4;
+    private int patchAPKExpNumFiles = 27;
     private static int APKExpMainVersion = 77;
-    private static int APKExpPatchVersion = 78; //put the version of the APK exp file, not the current version of this code!
+    private static int APKExpPatchVersion = 81; //put the version of the APK exp file, not the current version of this code!
     private static Long APKExpMainFileSize = 44238062L; //old one 32279235L; 44238062
-    private static Long APKExpPatchFileSize = 6785L;  //566985L new test one   502035L the original 63 is 268398L 6785
+    private static Long APKExpPatchFileSize = 684093L;  //566985L new test one   502035L the original 63 is 268398L 6785
     private static Long ArtSpaceMB = 300L; //how much free space to check for
     //***********************************
     
@@ -1134,8 +1135,9 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
             extStorageDirectory = Environment.getExternalStorageDirectory().toString();
             	
             	File artdir = new File(GIFPath);
+            	File PNGdir = new File(PNGPath);
             	
-	            if (!artdir.exists()) { //no directory so let's now start the one time setup
+	            if (!artdir.exists() || !PNGdir.exists()) { //no directory so let's now start the one time setup
 	            
 	            	new copyFilesAsync().execute();
 	            	//note that continueOnCreate() is called after this async task is done
@@ -4756,11 +4758,10 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
   		  DeleteRecursive(pngPath);  
 		  DeleteRecursive(pngPath64); 
 		  DeleteRecursive(pngPath16);  
-		  
-		  //removed this line due to bug with one time setup + APK files not refrehing the screen but it's ok as this section of art is small
-		  /*DeleteRecursive(gifPath);  
+		 
+		  DeleteRecursive(gifPath);  
 		  DeleteRecursive(gifPathDecoded);  
-		  DeleteRecursive(gifPathSource);  */
+		  DeleteRecursive(gifPathSource);  
 		  
 		  DeleteRecursive(gifPath64);  
 		  DeleteRecursive(gifPathDecoded64);  
@@ -5129,10 +5130,10 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 	    	 slideshowGIFFrameDelay = 100;
 	     }
 	   
-	     /*PIXEL V2 supported panels
+	    /* PIXEL V2 supported panels
 	     I: 32x16 adafruit
-	     P: 32x32 seeed
-	     S: 64x64 seeed
+	     P: 32x32 seeed, the panel for PIXEL V2
+	     S: 64x64 seeed, super pixel original
 	     K: 32x32 seeed kiosk no writing
 	     V: 64x64 seeed kiosk no writing
 
@@ -5141,14 +5142,20 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 	     C: 32x32 adafruit color swap
 	     R: 64x32 adafruit d pin
 	     T: 64x64 adafruit
-	     X: 64x64 adafruit kiosk
-	     Y: 32x32 adafruit d pin kiosk*/
+	     X: 64x64 adafruit kiosk no writing
+	     Y: 32x32 adafruit d pin kiosk no writing
+
+	     L: 32x16 low power and 32x16
+	     M: 32x32 low power and Seeed 32x32
+	     N: 32x32 low power and Adafruit 32x32 D-Pin*/
 	     
 	     //if (AutoSelectPanel_ && !pixelHardwareID.substring(0,4).equals("PIXL") && pixelHardwareID.substring(0,4).equals("XXXXX")) { //if auto select is on and it's NOT a PIXEL V2 board AND it's a PIXEL V2.5 or above board
 	    
-		  if (AutoSelectPanel_ && pixelHardwareID.substring(0,4).equals("PIXL")) { //TO DO fix this later, need to call this when the IOIO setup is called
+		  if (AutoSelectPanel_ && pixelHardwareID.substring(0,4).equals("PIXL") && !pixelFirmware.substring(4,5).equals("0")) { // PIXL0008 or PIXL0009 is the normal so if it's just a 0 for the 5th character, then we don't go here
 		    	
-		    	 	if (pixelFirmware.substring(4,5).equals("Q")) {
+		    	 	//let's first check if we have a matching firmware to auto-select and if not, we'll just go what the matrix from preferences
+			  
+			  		if (pixelFirmware.substring(4,5).equals("Q")) {
 		    	 		matrix_model = 11;
 		    	 		KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x32;
 				    	BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
@@ -5169,7 +5176,7 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 				    	frame_length = 1024;
 				    	currentResolution = 16;
 		    	 	}
-		    	 	else if (pixelFirmware.substring(4,5).equals("L")) {
+		    	 	else if (pixelFirmware.substring(4,5).equals("L")) { //low power
 		    	 		matrix_model = 1; 
 		    	 		KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x16;
 				    	BitmapInputStream = getResources().openRawResource(R.raw.selectimage16);
@@ -5190,16 +5197,29 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 				    	frame_length = 4096;
 				    	currentResolution = 64; 
 		    	 	}
-		    	 	else {
-		    	 		matrix_model = 11;
+		    	 	else if (pixelFirmware.substring(4,5).equals("M")) { //low power
+		    	 		 matrix_model = 3;
+		    	 		 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32; //pixel v2
+				    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
+				    	 frame_length = 2048;
+				    	 currentResolution = 32;
+		    	 	}
+		    	 	else if (pixelFirmware.substring(4,5).equals("N")) { //low power
+		    	 		 matrix_model = 11;
+		    	 		 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x32; //pixel v2.5
+				    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
+				    	 frame_length = 2048;
+				    	 currentResolution = 32; 
+		    	 	}
+		    	 	else {  //in theory, we should never go here
 		    	 		KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x32;
 				    	BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
 				    	frame_length = 2048;
 				    	currentResolution = 32; 
 		    	 	}
-		     }
-		     
-		     else {
+		  		}	
+		  
+		       else {
 			     switch (matrix_model) {  //get this from the preferences
 				     case 0:
 				    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x16;
@@ -5214,7 +5234,7 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 				    	 currentResolution = 16;
 				    	 break;
 				     case 2:
-				    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32_NEW; //v1
+				    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32_NEW; //v1, this matrix was never used
 				    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
 				    	 frame_length = 2048;
 				    	 currentResolution = 32;
@@ -5243,10 +5263,9 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 				    	 frame_length = 8192;
 				    	 currentResolution = 64; 
 				    	 break;	 	 
-				     case 7:
+				     case 7: //this one doesn't work and we don't use it rigth now
 				    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_4_MIRRORED;
 				    	 BitmapInputStream = getResources().openRawResource(R.raw.select32by64);
-				    	// BitmapInputStream = getResources().openRawResource(R.raw.select32by128);
 				    	 frame_length = 8192; //original 8192
 				    	 currentResolution = 128; //original 128
 				    	 break;
@@ -5298,10 +5317,7 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 				    	 frame_length = 2048;
 				    	 currentResolution = 32;
 				     }
-		     }
-	    
-		     
-		    // matrix_number = matrix_model;
+		    	 }
 		         
 		     frame_ = new short [KIND.width * KIND.height];
 			 BitmapBytes = new byte[KIND.width * KIND.height *2]; //512 * 2 = 1024 or 1024 * 2 = 2048
@@ -5317,8 +5333,7 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 			 
 			 imagedisplaydurationTimer = new ImageDisplayDurationTimer(imageDisplayDuration*1000,1000); //how long the image should display
 		 	 pausebetweenimagesdurationTimer = new PauseBetweenImagesDurationTimer(pauseBetweenImagesDuration*1000,1000); //how long to show a blank screen before showing the next image
-		 	 autodetectpanelTimer = new AutoDetectPanelTimer(500,500);
-		 	 
+		 	
 		 	 slideShowRunning = 0;
 		 	 
 		 	//int BoardID = Integer.valueOf(pixelBootloader.substring(6,8)); //
@@ -5390,18 +5405,13 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
   			   showToast(pixelHardwareID);
   			}
   			
-  			//autoDetectMatrix();
-  			// new autoDetectMatrix().execute((Void[])null);
-  			
-  			
-  		   if (AutoSelectPanel_ && pixelHardwareID.substring(0,4).equals("PIXL")) {
+  		   if (AutoSelectPanel_ && pixelHardwareID.substring(0,4).equals("PIXL") && !pixelFirmware.substring(4,5).equals("0")) { //only go here if we have a firmware that is set to auto-detect, otherwise we can skip this
 	  			runOnUiThread(new Runnable() 
 	  			{
 	  			   public void run() 
 	  			   {
-	  				   //autodetectpanelTimer.start();
+	  				  
 	  				   updatePrefs();
-	  				
 	  				   
 	  				   try {
 	  					 matrix_ = ioio_.openRgbLedMatrix(KIND);
@@ -5419,10 +5429,8 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
   			  matrix_ = ioio_.openRgbLedMatrix(KIND);
   	  		  matrix_.frame(frame_); //stream "select image" text to PIXEL
   		   }
-  			
-  		  
  			
-  			appAlreadyStarted = 1; 
+  		   appAlreadyStarted = 1; 
   			
   			if (showStartupMsg_ == true && kioskMode_ == false && pixelHardwareID.substring(0,4).equals("PIXL")) { //if writing is supported
   	        	 showToast(getString(R.string.StartupMessage));
@@ -5515,28 +5523,6 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
    			//not used
    		}
    	}
-    
-    public class AutoDetectPanelTimer extends CountDownTimer
-   	{
-
-   		public AutoDetectPanelTimer(long startTime, long interval)
-   			{
-   				super(startTime, interval);
-   			}
-
-   		@Override
-   		public void onFinish()
-   			{
-   				updatePrefs();
-   				
-   			}
-
-   		@Override
-   		public void onTick(long millisUntilFinished)				{
-   			//not used
-   		}
-   	}
-    
     
 	 
     public class DecodedTimer extends CountDownTimer
