@@ -5155,56 +5155,56 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 		    	
 		    	 	//let's first check if we have a matching firmware to auto-select and if not, we'll just go what the matrix from preferences
 			  
-			  		if (pixelFirmware.substring(4,5).equals("Q")) {
+			  		if (pixelHardwareID.substring(4,5).equals("Q")) {
 		    	 		matrix_model = 11;
 		    	 		KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x32;
 				    	BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
 				    	frame_length = 2048;
 				    	currentResolution = 32; 
 		    	 	}
-		    	 	else if (pixelFirmware.substring(4,5).equals("T")) {
+		    	 	else if (pixelHardwareID.substring(4,5).equals("T")) {
 		    	 		matrix_model = 14;
 		    	 		KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_64x64;
 				    	BitmapInputStream = getResources().openRawResource(R.raw.select64by64);
 				    	frame_length = 8192;
 				    	currentResolution = 128; 
 		    	 	}
-		    	 	else if (pixelFirmware.substring(4,5).equals("I")) {
+		    	 	else if (pixelHardwareID.substring(4,5).equals("I")) {
 		    	 		matrix_model = 1; 
 		    	 		KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x16;
 				    	BitmapInputStream = getResources().openRawResource(R.raw.selectimage16);
 				    	frame_length = 1024;
 				    	currentResolution = 16;
 		    	 	}
-		    	 	else if (pixelFirmware.substring(4,5).equals("L")) { //low power
+		    	 	else if (pixelHardwareID.substring(4,5).equals("L")) { //low power
 		    	 		matrix_model = 1; 
 		    	 		KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x16;
 				    	BitmapInputStream = getResources().openRawResource(R.raw.selectimage16);
 				    	frame_length = 1024;
 				    	currentResolution = 16;
 		    	 	}
-		    	 	else if (pixelFirmware.substring(4,5).equals("C")) {
+		    	 	else if (pixelHardwareID.substring(4,5).equals("C")) {
 		    	 		matrix_model = 12; 
 		    	 		KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x32_ColorSwap;
 				    	BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
 				    	frame_length = 2048;
 				    	currentResolution = 32; 
 		    	 	}
-		    	 	else if (pixelFirmware.substring(4,5).equals("R")) {
+		    	 	else if (pixelHardwareID.substring(4,5).equals("R")) {
 		    	 		matrix_model = 13; 
 		    	 		KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_64x32;
 				    	BitmapInputStream = getResources().openRawResource(R.raw.select64by32);
 				    	frame_length = 4096;
 				    	currentResolution = 64; 
 		    	 	}
-		    	 	else if (pixelFirmware.substring(4,5).equals("M")) { //low power
+		    	 	else if (pixelHardwareID.substring(4,5).equals("M")) { //low power
 		    	 		 matrix_model = 3;
 		    	 		 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32; //pixel v2
 				    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
 				    	 frame_length = 2048;
 				    	 currentResolution = 32;
 		    	 	}
-		    	 	else if (pixelFirmware.substring(4,5).equals("N")) { //low power
+		    	 	else if (pixelHardwareID.substring(4,5).equals("N")) { //low power
 		    	 		 matrix_model = 11;
 		    	 		 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x32; //pixel v2.5
 				    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
@@ -5341,7 +5341,8 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 		 	int BoardID = 0;
 	
 		 	try {
-		 		BoardID = Integer.parseInt(pixelBootloader.substring(6,8)); //IOIO0401
+		 		//BoardID = Integer.parseInt(pixelBootloader.substring(6,8)); //IOIO0401  
+		 		BoardID = Integer.parseInt(pixelHardwareID.substring(6,8));  //PIXL0025
 		 		//showToast(String.valueOf(BoardID));
 		 	} catch(NumberFormatException nfe) {
 		 	  // Handle parse error.
@@ -5405,7 +5406,7 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
   			   showToast(pixelHardwareID);
   			}
   			
-  		   if (AutoSelectPanel_ && pixelHardwareID.substring(0,4).equals("PIXL") && !pixelFirmware.substring(4,5).equals("0")) { //only go here if we have a firmware that is set to auto-detect, otherwise we can skip this
+  		   if (AutoSelectPanel_ && pixelHardwareID.substring(0,4).equals("PIXL") && !pixelHardwareID.substring(4,5).equals("0")) { //only go here if we have a firmware that is set to auto-detect, otherwise we can skip this
 	  			runOnUiThread(new Runnable() 
 	  			{
 	  			   public void run() 
