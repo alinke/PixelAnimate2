@@ -429,11 +429,11 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	//*********************************
 	//to do add the byte file sizes too
 	private int mainAPKExpNumFiles = 874;
-    private int patchAPKExpNumFiles = 27;
+    private int patchAPKExpNumFiles = 40;
     private static int APKExpMainVersion = 77;
-    private static int APKExpPatchVersion = 81; //put the version of the APK exp file, not the current version of this code!
+    private static int APKExpPatchVersion = 82; //put the version of the APK exp file, not the current version of this code!
     private static Long APKExpMainFileSize = 44238062L; //old one 32279235L; 44238062
-    private static Long APKExpPatchFileSize = 684093L;  //566985L new test one   502035L the original 63 is 268398L 6785
+    private static Long APKExpPatchFileSize = 703748L;  //566985L new test one   502035L the original 63 is 268398L 6785 
     private static Long ArtSpaceMB = 300L; //how much free space to check for
     //***********************************
     
@@ -5308,6 +5308,18 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 				     case 14:
 				    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_64x64;
 				    	 BitmapInputStream = getResources().openRawResource(R.raw.select64by64);
+				    	 frame_length = 8192;
+				    	 currentResolution = 128; 
+				    	 break;
+				     case 15:
+				    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_128x32;
+				    	 BitmapInputStream = getResources().openRawResource(R.raw.select128by32);
+				    	 frame_length = 8192;
+				    	 currentResolution = 128; 
+				    	 break;	 	 	
+				     case 16:
+				    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x128;
+				    	 BitmapInputStream = getResources().openRawResource(R.raw.select32by128);
 				    	 frame_length = 8192;
 				    	 currentResolution = 128; 
 				    	 break;	 	 	
