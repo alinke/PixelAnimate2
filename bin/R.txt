@@ -105,8 +105,9 @@ int raw selectimage128 0x7f050015
 int raw selectimage16 0x7f050016
 int raw selectimage32 0x7f050017
 int raw selectimage64 0x7f050018
-int raw selectpic 0x7f050019
-int raw selectpic32 0x7f05001a
+int raw selectimage64by16 0x7f050019
+int raw selectpic 0x7f05001a
+int raw selectpic32 0x7f05001b
 int string AreYouSure 0x7f060098
 int string AutoSelectPanel 0x7f0600b8
 int string AutoSelectPanelSummary 0x7f0600bb

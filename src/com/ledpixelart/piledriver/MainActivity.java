@@ -4092,6 +4092,8 @@ public class UnFavoriteGIFMoveAsync extends AsyncTask<Void, Integer, Void>{
 			                     break;
 			            case 32: frame_length = 2048;
 			                     break;
+			            case 6416:frame_length = 2048; //had to add this for the 64x16 matrix, it's the same frame size as the 32x32 but needs to be different so we can decode if that one is picked, this is a quick hack, add a better way later
+	                     		  break;         
 			            case 64: frame_length = 4096;
 			                     break;
 			            case 128: frame_length = 8192;
@@ -4239,6 +4241,8 @@ public class UnFavoriteGIFMoveAsync extends AsyncTask<Void, Integer, Void>{
 		                     break;
 		            case 32: frame_length = 2048;
 		                     break;
+		            case 6416: frame_length = 2048;
+                    		break;
 		            case 64: frame_length = 4096;
 		                     break;
 		            case 128: frame_length = 8192;
@@ -5151,7 +5155,7 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 	     
 	     //if (AutoSelectPanel_ && !pixelHardwareID.substring(0,4).equals("PIXL") && pixelHardwareID.substring(0,4).equals("XXXXX")) { //if auto select is on and it's NOT a PIXEL V2 board AND it's a PIXEL V2.5 or above board
 	    
-		  if (AutoSelectPanel_ && pixelHardwareID.substring(0,4).equals("PIXL") && !pixelFirmware.substring(4,5).equals("0")) { // PIXL0008 or PIXL0009 is the normal so if it's just a 0 for the 5th character, then we don't go here
+		 if (AutoSelectPanel_ && pixelHardwareID.substring(0,4).equals("PIXL") && !pixelFirmware.substring(4,5).equals("0")) { // PIXL0008 or PIXL0009 is the normal so if it's just a 0 for the 5th character, then we don't go here
 		    	
 		    	 	//let's first check if we have a matching firmware to auto-select and if not, we'll just go what the matrix from preferences
 			  
@@ -5322,7 +5326,13 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 				    	 BitmapInputStream = getResources().openRawResource(R.raw.select32by128);
 				    	 frame_length = 8192;
 				    	 currentResolution = 128; 
-				    	 break;	 	 	
+				    	 break;	
+				     case 17:
+				    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_64x16;
+				    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage64by16);
+				    	 frame_length = 2048;
+				    	 currentResolution = 6416; 
+				    	 break;	 	 		 
 				     default:	    		 
 				    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32; //v2 as the default
 				    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
@@ -5423,7 +5433,6 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 	  			{
 	  			   public void run() 
 	  			   {
-	  				  
 	  				   updatePrefs();
 	  				   
 	  				   try {
@@ -5602,6 +5611,8 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 		                     break;
 		            case 32: frame_length = 2048;
 		                     break;
+		            case 6416: frame_length = 2048;
+                    		break;
 		            case 64: frame_length = 4096;
 		                     break;
 		            case 128: frame_length = 8192;
@@ -6386,6 +6397,7 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 		    	  selectedFileResolution = currentResolution;
 		      }
 		      
+		      
 		      Log.i("PixelAnimations ", "Selected File Resoution is: " + selectedFileResolution);
 		      
 		     
@@ -6415,6 +6427,8 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 				                     break;
 				            case 32: frame_length = 2048;
 				                     break;
+				            case 6416: frame_length = 2048;
+		                     		 break;
 				            case 64: frame_length = 4096;
 				                     break;
 				            case 128: frame_length = 8192;
@@ -6782,6 +6796,8 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 				                     break;
 				            case 32: frame_length = 2048;
 				                     break;
+				            case 6416: frame_length = 2048;
+		                     		 break;         
 				            case 64: frame_length = 4096;
 				                     break;
 				            case 128: frame_length = 8192;

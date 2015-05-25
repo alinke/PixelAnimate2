@@ -19,6 +19,7 @@
     <item>Adafruit 64x64</item>
     <item>Adafruit 128x32</item>
     <item>Adafruit 32x128</item>
+    <item>Adafruit 64x16</item>
 </string-array>
 	
 <string-array name="matrix_values">
@@ -38,6 +39,7 @@
     <item>14</item>
     <item>15</item>
     <item>16</item>
+    <item>17</item>
 </string-array>
 
   <string-array name="FPSOverride_options">

@@ -128,8 +128,9 @@ public final class R {
         public static final int selectimage16=0x7f050016;
         public static final int selectimage32=0x7f050017;
         public static final int selectimage64=0x7f050018;
-        public static final int selectpic=0x7f050019;
-        public static final int selectpic32=0x7f05001a;
+        public static final int selectimage64by16=0x7f050019;
+        public static final int selectpic=0x7f05001a;
+        public static final int selectpic32=0x7f05001b;
     }
     public static final class string {
         public static final int AreYouSure=0x7f060098;
