@@ -5155,7 +5155,7 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 	     
 	     //if (AutoSelectPanel_ && !pixelHardwareID.substring(0,4).equals("PIXL") && pixelHardwareID.substring(0,4).equals("XXXXX")) { //if auto select is on and it's NOT a PIXEL V2 board AND it's a PIXEL V2.5 or above board
 	    
-		 if (AutoSelectPanel_ && pixelHardwareID.substring(0,4).equals("PIXL") && !pixelFirmware.substring(4,5).equals("0")) { // PIXL0008 or PIXL0009 is the normal so if it's just a 0 for the 5th character, then we don't go here
+		 if (AutoSelectPanel_ && pixelHardwareID.substring(0,4).equals("PIXL") && !pixelHardwareID.substring(4,5).equals("0")) { // PIXL0008 or PIXL0009 is the normal so if it's just a 0 for the 5th character, then we don't go here
 		    	
 		    	 	//let's first check if we have a matching firmware to auto-select and if not, we'll just go what the matrix from preferences
 			  
@@ -5201,14 +5201,14 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 				    	frame_length = 4096;
 				    	currentResolution = 64; 
 		    	 	}
-		    	 	else if (pixelHardwareID.substring(4,5).equals("M")) { //low power
+		    	 	else if (pixelHardwareID.substring(4,5).equals("M")) { 
 		    	 		 matrix_model = 3;
 		    	 		 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32; //pixel v2
 				    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
 				    	 frame_length = 2048;
 				    	 currentResolution = 32;
 		    	 	}
-		    	 	else if (pixelHardwareID.substring(4,5).equals("N")) { //low power
+		    	 	else if (pixelHardwareID.substring(4,5).equals("N")) { 
 		    	 		 matrix_model = 11;
 		    	 		 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x32; //pixel v2.5
 				    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
@@ -5369,8 +5369,7 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 		 	} catch(NumberFormatException nfe) {
 		 	  // Handle parse error.
 		 	}
-		 	 
-		 	 //if (matrix_model > 10 && pixelHardwareID.substring(0,4).equals("PIXL")) { //we have a PIXEL V2 board
+		 	
 		 	 if (matrix_model > 10 && BoardID < 24 && BoardID !=0) { //we have a PIXEL V2 board pixl0025 or IOIO0401   25 or 01 pixl0025 TO DO Change this later to hardware ID
 		 		AlertDialog.Builder alert=new AlertDialog.Builder(this);
 				alert.setTitle(getResources().getString(R.string.unsupportedPanel)).setIcon(R.drawable.icon).setMessage(getResources().getString(R.string.unsupportedPanelMsg)).setNeutralButton(getResources().getString(R.string.OKText), null).show();	
