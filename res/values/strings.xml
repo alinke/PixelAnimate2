@@ -21,6 +21,8 @@
     <string name="menu_prefs_title">Settings</string>
     <string name="prefSummary">PIXEL:LED ART Settings</string>
     
+    <string name="overlaymenu_instructions_title">Quick Help</string>
+    
     <string name="scanAll">Show All Album Pics</string>
     <string name="pref_scanAll_default">false</string>
     <string name="scanAllSummary">Only animations in the pixel/GIFs directory of your SD card will be displayed. Checking this box displays all SD card pictures.</string>
@@ -67,7 +69,7 @@
     <string name="slideShowModeDefault">false</string>
     <string name="slideShowModeSummary">Slide Show Mode</string>
     
-    <string name="noSleep">Disable Power Savings</string>    
+    <string name="noSleep">Keep App On</string>    
     <string name="pref_noSleepDefault">false</string>
     <string name="noSleepSummary">Forces the app to be always on, your device will not go into power savings mode while this app is running. Good if using as a Kiosk for example. </string>
        

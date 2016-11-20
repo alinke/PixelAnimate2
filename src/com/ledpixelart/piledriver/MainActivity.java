@@ -76,6 +76,7 @@ import ioio.lib.util.IOIOLooper;
 import ioio.lib.util.android.IOIOActivity;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
@@ -140,6 +141,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.graphics.Matrix;
 import android.graphics.Bitmap.Config;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 
@@ -1093,7 +1095,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
       
         Boolean welcomeScreenShown = prefs.getBoolean(welcomeScreenShownPref, false);
 
-        if (!welcomeScreenShown) {
+       /* if (!welcomeScreenShown) {
             // here you can launch another activity if you like
         	// use this to announce new features in future apps
             // the code below will display a popup
@@ -1106,6 +1108,30 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
                             dialog.dismiss();
                         }
                     }).show();
+            editor = prefs.edit();
+            editor.putBoolean(welcomeScreenShownPref, true);
+            editor.commit(); // Very important to save the preference
+        }*/
+        
+        if (!welcomeScreenShown) {
+            // here you can launch another activity if you like
+        	// use this to announce new features in future apps
+            // the code below will display a popup
+
+           /* ******** OLD WELCOME SCREEN ******************
+            * 
+            * String whatsNewTitle = getResources().getString(R.string.whatsNewTitle);
+            String whatsNewText = getResources().getString(R.string.whatsNewText);
+            new AlertDialog.Builder(this).setIcon(R.drawable.ic_action_event).setTitle(whatsNewTitle).setMessage(whatsNewText).setPositiveButton(
+                    R.string.OKText, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).show();*/
+        	
+        	
+        	showCoachMarks();
+        	
             editor = prefs.edit();
             editor.putBoolean(welcomeScreenShownPref, true);
             editor.commit(); // Very important to save the preference
@@ -1190,6 +1216,25 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
         
         
 	}
+	
+	private void showCoachMarks() {  
+		
+	final Dialog dialog = new Dialog(this);
+      dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+      dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+      dialog.setContentView(R.layout.coach_mark);
+      dialog.setCanceledOnTouchOutside(true);
+      //for dismissing anywhere you touch
+      View masterView = dialog.findViewById(R.id.coach_mark_master_view);
+      masterView.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View view) {
+              dialog.dismiss();
+          }
+      });
+      dialog.show();
+      
+	} 
 	
 	 protected void onResume() {
          super.onResume();
@@ -4462,6 +4507,10 @@ public class UnFavoriteGIFMoveAsync extends AsyncTask<Void, Integer, Void>{
 	 	      	alert.setTitle(getResources().getString(R.string.setupInstructionsStringTitle)).setIcon(R.drawable.icon).setMessage(getResources().getString(R.string.setupInstructionsString)).setNeutralButton(getResources().getString(R.string.OKText), null).show();
 	 	   }
 	      
+	      if (item.getItemId() == R.id.overlay_help) {
+	    	  showCoachMarks();
+	 	   }
+	      
 	      if (item.getItemId() == R.id.start_SlideShow) {
 	    	  
 	    	  if (matrix_ != null) {
@@ -5332,7 +5381,19 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 				    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage64by16);
 				    	 frame_length = 2048;
 				    	 currentResolution = 6416; 
-				    	 break;	 	 		 
+				    	 break;	 
+				     case 18:
+				    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_64x32_ColorSwap;
+				    	 BitmapInputStream = getResources().openRawResource(R.raw.select64by32);
+				    	 frame_length = 4096;
+				    	 currentResolution = 64; 
+				    	 break;	
+				     case 19:
+				    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_64x64_ColorSwap;
+				    	 BitmapInputStream = getResources().openRawResource(R.raw.select64by64);
+				    	 frame_length = 8192;
+				    	 currentResolution = 128; 
+				    	 break;
 				     default:	    		 
 				    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32; //v2 as the default
 				    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);

@@ -14,7 +14,7 @@ import android.preference.PreferenceManager;
 public class SplashScreen extends Activity
 {
 	// Set the display time, in milliseconds (or extract it out as a configurable parameter)
-	private final int SPLASH_DISPLAY_LENGTH = 2000;
+	private final int SPLASH_DISPLAY_LENGTH = 1000;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
