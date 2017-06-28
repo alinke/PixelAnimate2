@@ -3,7 +3,7 @@
   <string name="app_name">PIXEL: LED ART</string>
 
     <string name="oneTimeSetupString">Initial Setup: Copying animations to your SD card.</string> 
-    <string name="bluetoothPairingString">Did you Bluetooth pair to PIXEL? The pairing code is: 0000 or 4545 for PIXEL V1."</string>   
+    <string name="bluetoothPairingString">Did you Bluetooth pair to PIXEL? The pairing code is: 0000 or 4545 for PIXEL V1. Also try to unpair and pair again and then re-start this app."</string>   
     <string name="menu_camera_title">Camera Pic to PIXEL</string>  
     <string name="menu_about_title">About</string> 
     <string name="menu_about_summary">http:Slash:/Slash:/ledpixelart.html\n\nDesigned by Open Gadgets LLC</string>
@@ -45,7 +45,7 @@
     <string name="matrix">PIXEL Model</string>
     <string name="matrixSummary">Choose between standard PIXEL, SUPER PIXEL, or other LED panel types</string>    
     <string name="dialogTitleMatrix">PIXEL Model</string>
-    <string name="matrix_default_value">3</string>   
+    <string name="matrix_default_value">11</string>   
     
     <string name="slideshowGIFFPS_key">slideshowGIFFPS_key</string>
     <string name="slideshowGIFFPS_title">GIF Slide Show FPS</string>
@@ -226,6 +226,9 @@
     
     <string name="unsupportedPanel">Incompatible LED Panel</string>    
     <string name="unsupportedPanelMsg">Very Sorry&#8230;\n\nThe LED Panel you have selected is not compatible with your PIXEL board.\n\nYou would need to upgrade to a PIXEL v2.5 or higher board to support this LED panel\n\nPlease now change the LED panel to a supported one.</string>
+    
+    <string name="unsupportedPanelPixeliOS">Incompatible LED Panel</string>    
+    <string name="unsupportedPanelPixeliOSMsg">Very Sorry&#8230;\n\nThe LED Panel you have selected is not compatible with your PIXEL board firmware.\n\nIf you need to support a different LED panel, then you will need to change your firmware to the Android only firmware from ledpixelart.com.\n\n Please turn Auto Select PIXEL back on in Settings...</string>
     
     <string name="newFileAdded">New File Added</string>    
     <string name="newFilesAdded">New Files Added</string>   

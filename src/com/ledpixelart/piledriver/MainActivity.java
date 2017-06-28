@@ -1307,6 +1307,11 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	   			  String newFile = userGIFPath + newfilename_no_extension + "." + uriExtension;
 	   			  //to do think about adding a check if the file name is already there
 	   			  
+	   			 if (newfilename_no_extension.equals("false")) {  //added this as a hack because in previous versions, there would have already been a false.gif , false.txt, and false.rgb565 and since we didn't clean those up in previous code, avoiding that mistake here
+		   				newfilename_no_extension ="false1";
+		   		 }
+	   			  
+	   			  
 	   			  File newGIFfile = new File(userGIFPath + newfilename_no_extension + "." + uriExtension);
 	   			  if (newGIFfile.exists()) {  //if the file is already there, then let's come up with a random filename, had to add this here because attachments in gmail always have the filename of false
 	   				  //newFile = userGIFPath + newfilename_no_extension + "1" + "." + uriExtension;
@@ -1430,6 +1435,10 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	    	   			  incomingStream = cr.openInputStream(imageUris.get(i));
 	    	   			  String newFile = userGIFPath + newfilename_no_extension + "." + uriExtension;
 	    	   			  //to do think about adding a check if the file name is already there
+	    	   			  
+	    	   			 if (newfilename_no_extension.equals("false")) {  //added this as a hack because in previous versions, there would have already been a false.gif , false.txt, and false.rgb565 and since we didn't clean those up in previous code, avoiding that mistake here
+		    	   				newfilename_no_extension ="false1";
+		    	   		 }
 	    	   			  
 	    	   			  File newGIFfile = new File(userGIFPath + newfilename_no_extension + "." + uriExtension);
 	    	   			  if (newGIFfile.exists()) {  //if the file is already there, then let's come up with a random filename, had to add this here because attachments in gmail always have the filename of false
@@ -2921,7 +2930,8 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
 						        		if (kioskMode_ == false) {
 							        		try {
 							        			matrix_.interactive();
-												matrix_.writeFile(1); //since it's only one frame , doesn't matter what fps is
+												//matrix_.writeFile(1); //since it's only one frame , doesn't matter what fps is
+												matrix_.writeFile(100); //had to change to 100 as the new ios firmware doens't like a 1 delay
 						    		        	WriteImagetoMatrix();
 						    		        	matrix_.playFile();
 											} catch (ConnectionLostException e) {
@@ -3189,6 +3199,28 @@ public boolean onItemLongClick(final AdapterView<?> parent, View v, final int po
     							 deleteGIF.delete();
     							 LoadGridView(false);
     					  	}
+    						
+    						//**** added this code to also delete the rgb565 files and gif source too
+    						
+    						String PixelDir = Pixel.getPixelDir(originalImagePath);  //usergif or userpng or gif16
+    						String fname_no_extension = Pixel.getNameOnly(originalImagePath); //get the name of the select file but without the extension
+    					    
+    						File gifSourcePath = new File(Environment.getExternalStorageDirectory() + "/pixel/" + PixelDir + "/gifsource/" + fname_no_extension + ".gif");
+    						if (gifSourcePath.exists()) {
+    							gifSourcePath.delete();
+   							 	//we don't need to update the gridview here, this dir is not used for displaying
+   					  		}
+    						
+    						File decodedTXT = new File(Environment.getExternalStorageDirectory() + "/pixel/" + PixelDir + "/decoded/" + fname_no_extension + ".txt");
+    						if (decodedTXT.exists()) {
+    							decodedTXT.delete();
+   					  		}
+    						
+    						File decodedRGB565 = new File(Environment.getExternalStorageDirectory() + "/pixel/" + PixelDir + "/decoded/" + fname_no_extension + ".rgb565");
+    						if (decodedRGB565.exists()) {
+    							decodedRGB565.delete();
+   					  		}
+    						
     		     	        
     	                    dialog.cancel();
     	                }
@@ -5204,7 +5236,12 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 	     
 	     //if (AutoSelectPanel_ && !pixelHardwareID.substring(0,4).equals("PIXL") && pixelHardwareID.substring(0,4).equals("XXXXX")) { //if auto select is on and it's NOT a PIXEL V2 board AND it's a PIXEL V2.5 or above board
 	    
-		 if (AutoSelectPanel_ && pixelHardwareID.substring(0,4).equals("PIXL") && !pixelHardwareID.substring(4,5).equals("0")) { // PIXL0008 or PIXL0009 is the normal so if it's just a 0 for the 5th character, then we don't go here
+		
+    
+     
+    
+	     
+	     if (AutoSelectPanel_ && pixelHardwareID.substring(0,4).equals("PIXL") && !pixelHardwareID.substring(4,5).equals("0")) { // PIXL0008 or PIXL0009 is the normal so if it's just a 0 for the 5th character, then we don't go here
 		    	
 		    	 	//let's first check if we have a matching firmware to auto-select and if not, we'll just go what the matrix from preferences
 			  
@@ -5263,6 +5300,13 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 				    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
 				    	 frame_length = 2048;
 				    	 currentResolution = 32; 
+		    	 	}
+		    	 	else if (pixelHardwareID.substring(4,5).equals("Z")) {                    //then we have a pixel frame that is ios compatible that only supports adafruit 32x32 panel
+		    	 		matrix_model = 11;
+		    	 		KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x32;
+				    	BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
+				    	frame_length = 2048;
+				    	currentResolution = 32; 
 		    	 	}
 		    	 	else {  //in theory, we should never go here
 		    	 		KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x32;
@@ -5394,6 +5438,19 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 				    	 frame_length = 8192;
 				    	 currentResolution = 128; 
 				    	 break;
+				     case 20:
+				    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32_ColorSwap;
+				    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
+				    	 frame_length = 2048;
+				    	 currentResolution = 32;
+				    	 break;
+				     case 21:
+				    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ALIEXPRESS_RANDOM1_32x32;
+				    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
+				    	 frame_length = 2048;
+				    	 currentResolution = 32;
+				    	 break;	 
+				    	 
 				     default:	    		 
 				    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32; //v2 as the default
 				    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
@@ -5401,6 +5458,20 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 				    	 currentResolution = 32;
 				     }
 		    	 }
+	     
+	     		if (pixelHardwareID.substring(4,5).equals("Z") && AutoSelectPanel_ == false && matrix_model != 11) { //we have an ios pixel frame and the user has picked a non supported led panel
+			 		//if it's an ios pixel, only 32x32 is supported so we'll just set it here and be done with it, doesn't matter if auto-select or anything else is selected
+			 		
+			 		AlertDialog.Builder alert=new AlertDialog.Builder(this);
+					alert.setTitle(getResources().getString(R.string.unsupportedPanelPixeliOS)).setIcon(R.drawable.icon).setMessage(getResources().getString(R.string.unsupportedPanelPixeliOSMsg)).setNeutralButton(getResources().getString(R.string.OKText), null).show();
+					
+					//set the right panel
+			 		matrix_model = 11;
+			 		KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x32;
+			    	BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
+			    	frame_length = 2048;
+			    	currentResolution = 32; 
+	     		}
 		         
 		     frame_ = new short [KIND.width * KIND.height];
 			 BitmapBytes = new byte[KIND.width * KIND.height *2]; //512 * 2 = 1024 or 1024 * 2 = 2048
@@ -5431,11 +5502,16 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 		 	  // Handle parse error.
 		 	}
 		 	
-		 	 if (matrix_model > 10 && BoardID < 24 && BoardID !=0) { //we have a PIXEL V2 board pixl0025 or IOIO0401   25 or 01 pixl0025 TO DO Change this later to hardware ID
+		 	//hack need to fix this later on the matrix model greater than 10 and less than 20
+		 	
+		 	if ((matrix_model > 10 && matrix_model < 20) && BoardID < 24 && BoardID !=0) { //we have a PIXEL V2 board pixl0025 or IOIO0401   25 or 01 pixl0025 TO DO Change this later to hardware ID
 		 		AlertDialog.Builder alert=new AlertDialog.Builder(this);
 				alert.setTitle(getResources().getString(R.string.unsupportedPanel)).setIcon(R.drawable.icon).setMessage(getResources().getString(R.string.unsupportedPanelMsg)).setNeutralButton(getResources().getString(R.string.OKText), null).show();	
 		 	 }
-	 	 
+		 	
+		 	
+		 	
+		 	
 	 	 //need to do this to refresh the slide array
 	    // myAsyncTaskLoadFiles = new AsyncTaskLoadFiles(myImageAdapter, false);
         // myAsyncTaskLoadFiles.execute();

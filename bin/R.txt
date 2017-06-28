@@ -205,11 +205,11 @@ int string menu_refresh_title 0x7f06007c
 int string menu_rescan_title 0x7f06006c
 int string menu_startSlideShow_title 0x7f060089
 int string menu_stopSlideShow_title 0x7f06008a
-int string newArtAdded 0x7f0600ca
-int string newFileAdded 0x7f0600c8
-int string newFilesAdded 0x7f0600c9
-int string noFreeSpace 0x7f0600cb
-int string noFreeSpaceMsg 0x7f0600cc
+int string newArtAdded 0x7f0600cc
+int string newFileAdded 0x7f0600ca
+int string newFilesAdded 0x7f0600cb
+int string noFreeSpace 0x7f0600cd
+int string noFreeSpaceMsg 0x7f0600ce
 int string noSleep 0x7f06004c
 int string noSleepSummary 0x7f06004e
 int string notFoundString 0x7f06002f
@@ -311,6 +311,8 @@ int string time_remaining 0x7f060015
 int string time_remaining_notification 0x7f060016
 int string unsupportedPanel 0x7f0600c6
 int string unsupportedPanelMsg 0x7f0600c7
+int string unsupportedPanelPixeliOS 0x7f0600c8
+int string unsupportedPanelPixeliOSMsg 0x7f0600c9
 int string versionString 0x7f06001d
 int string whatsNewText 0x7f06002d
 int string whatsNewTitle 0x7f06002c
