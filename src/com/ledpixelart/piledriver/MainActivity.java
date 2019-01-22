@@ -430,13 +430,21 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
     //Edit these variables when updating the patch APK expansion files
 	//*********************************
 	//to do add the byte file sizes too
-	private int mainAPKExpNumFiles = 874;
+	/*private int mainAPKExpNumFiles = 874;
     private int patchAPKExpNumFiles = 40;
     private static int APKExpMainVersion = 77;
     private static int APKExpPatchVersion = 82; //put the version of the APK exp file, not the current version of this code!
-    private static Long APKExpMainFileSize = 44238062L; //old one 32279235L; 44238062
+    private static Long APKExpMainFileSize = 44238062L; //old one 32279235L; 44238062; 4
     private static Long APKExpPatchFileSize = 703748L;  //566985L new test one   502035L the original 63 is 268398L 6785 
     private static Long ArtSpaceMB = 300L; //how much free space to check for
+*/  //to do add the byte file sizes too
+  	  private int mainAPKExpNumFiles = 841;
+      private int patchAPKExpNumFiles = 46;
+      private static int APKExpMainVersion = 79;
+      private static int APKExpPatchVersion = 83; //put the version of the APK exp file, not the current version of this code!
+      private static Long APKExpMainFileSize = 38896384L; //old one 32279235L; 44238062 ; 38896384
+      private static Long APKExpPatchFileSize = 808135L;  //566985L new test one   502035L the original 63 is 268398L 6785 ; 808135
+      private static Long ArtSpaceMB = 300L; //how much free space to check for
     //***********************************
     
 	private long APKExpMainFileSizeSDCard;
@@ -1130,7 +1138,10 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
                     }).show();*/
         	
         	
-        	showCoachMarks();
+        	
+        	if(Build.VERSION.SDK_INT >= 14){  //must be equal or greater than android 4.x
+        		showCoachMarks(); //this crashed on a 2.3.4 device so added this line
+        	}
         	
             editor = prefs.edit();
             editor.putBoolean(welcomeScreenShownPref, true);
