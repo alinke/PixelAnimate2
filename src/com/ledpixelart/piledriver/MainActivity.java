@@ -236,7 +236,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 
 	private static GifView gifView;
 	static ioio.lib.api.RgbLedMatrix matrix_;
-	public static ioio.lib.api.RgbLedMatrix.Matrix KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32; //v2;  //have to do it this way because there is a matrix library conflict
+	//public static ioio.lib.api.RgbLedMatrix.Matrix KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32; //v2;  //have to do it this way because there is a matrix library conflict
+	public static ioio.lib.api.RgbLedMatrix.Matrix KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x32; //v2;  //have to do it this way because there is a matrix library conflict
 	private static android.graphics.Matrix matrix2;
     private static final String TAG = "PixelAnimations";	
 	private static short[] frame_;
@@ -438,12 +439,15 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
     private static Long APKExpPatchFileSize = 703748L;  //566985L new test one   502035L the original 63 is 268398L 6785 
     private static Long ArtSpaceMB = 300L; //how much free space to check for
 */  //to do add the byte file sizes too
-  	  private int mainAPKExpNumFiles = 841;
-      private int patchAPKExpNumFiles = 46;
-      private static int APKExpMainVersion = 79;
-      private static int APKExpPatchVersion = 83; //put the version of the APK exp file, not the current version of this code!
-      private static Long APKExpMainFileSize = 38896384L; //old one 32279235L; 44238062 ; 38896384
-      private static Long APKExpPatchFileSize = 808135L;  //566985L new test one   502035L the original 63 is 268398L 6785 ; 808135
+  	  private int mainAPKExpNumFiles = 840;
+      private int patchAPKExpNumFiles = 45;
+      //private static int APKExpMainVersion = 80;
+      //private static int APKExpPatchVersion = 84; //put the version of the APK exp file, not the current version of this code!
+      private static int APKExpMainVersion = 102;
+      private static int APKExpPatchVersion = 102; //put the version of the APK exp file, not the current version of this code!
+      // during a release, somehow google play made both version 100 so just sticking with it
+      private static Long APKExpMainFileSize = 38894444L; //old one 32279235L; 44238062 ; 38896384; 38,896,384
+      private static Long APKExpPatchFileSize = 807094L;  //566985L new test one   502035L the original 63 is 268398L 6785 ; 808135
       private static Long ArtSpaceMB = 300L; //how much free space to check for
     //***********************************
     
@@ -658,7 +662,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	        // Build the full path to the app's expansion files
 		  
 		  
-		 // showToast(String.valueOf(getAvailableSpaceInMB()));
+		   // showToast(String.valueOf(getAvailableSpaceInMB()));
 		  
 		    String packageName = this.getPackageName();
 	 	   

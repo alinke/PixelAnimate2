@@ -6,7 +6,7 @@
     <string name="bluetoothPairingString">Did you Bluetooth pair to PIXEL? The pairing code is: 0000. Also try to unpair and pair again and then re-start this app."</string>   
     <string name="menu_camera_title">Camera Pic to PIXEL</string>  
     <string name="menu_about_title">About</string> 
-    <string name="menu_about_summary">http:Slash:/Slash:/ledpixelart.html\n\nDesigned by Open Gadgets LLC</string>
+    <string name="menu_about_summary">ledpixelart.com\n\nDesigned by Open Gadgets LLC</string>
     <string name="versionString">App Version</string> 
     <string name="BootloaderVersionString">Bootloader Version</string> 
     <string name="FirmwareVersionString">Firmware Version</string> 
@@ -14,7 +14,7 @@
     <string name="HardwareVersionString">Hardware Version</string> 
    
     <string name="menu_instructions_title">Instructions</string>
-    <string name="setupInstructionsString">Bluetooth pair to PIXEL using code 0000.\n\nPIXEL V2 users may long tap to write to PIXEL for stand alone operation.\n\nAdd your own art by sharing to this app from email, gallery, and other apps.\n\nUse the menu to create a slide show of favorites.\n\n64x64 animated GIFs will only show if SUPER PIXEL 64x64 is selected from settings.</string>
+    <string name="setupInstructionsString">Bluetooth pair to PIXEL using code 0000\n\nLong tap an item to write to PIXEL for stand alone operation.\n\nAdd your own art by sharing a GIF or image to this app from email, gallery, camera, or other apps.\n\nUse the menu to create a slide show of favorites.\n\n64x64 animated GIFs will only display if a 64x64 LED panel is selected from this app\u0027s settings.</string>
     <string name="setupInstructionsStringTitle">Instructions</string>   
      
     <string name="prefTitle">PIXEL:LED ART Settings</string>
