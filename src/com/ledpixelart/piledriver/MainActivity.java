@@ -443,8 +443,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
       private int patchAPKExpNumFiles = 44;
       //private static int APKExpMainVersion = 80;
       //private static int APKExpPatchVersion = 84; //put the version of the APK exp file, not the current version of this code!
-      private static int APKExpMainVersion = 103; //102
-      private static int APKExpPatchVersion = 103; //put the version of the APK exp file, not the current version of this code!
+      private static int APKExpMainVersion = 109; //102
+      private static int APKExpPatchVersion = 109; //put the version of the APK exp file, not the current version of this code!
       // during a release, somehow google play made both version 100 so just sticking with it
       private static Long APKExpMainFileSize = 38775464L; //old one 32279235L; 44238062 ; 38896384; 38,896,384, 38775464
       private static Long APKExpPatchFileSize = 799352L;  //566985L new test one   502035L the original 63 is 268398L 6785 ; 808135
