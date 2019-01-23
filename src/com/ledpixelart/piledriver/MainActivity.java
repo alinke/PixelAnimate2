@@ -439,15 +439,15 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
     private static Long APKExpPatchFileSize = 703748L;  //566985L new test one   502035L the original 63 is 268398L 6785 
     private static Long ArtSpaceMB = 300L; //how much free space to check for
 */  //to do add the byte file sizes too
-  	  private int mainAPKExpNumFiles = 840;
-      private int patchAPKExpNumFiles = 45;
+  	  private int mainAPKExpNumFiles = 839;
+      private int patchAPKExpNumFiles = 44;
       //private static int APKExpMainVersion = 80;
       //private static int APKExpPatchVersion = 84; //put the version of the APK exp file, not the current version of this code!
-      private static int APKExpMainVersion = 102;
-      private static int APKExpPatchVersion = 102; //put the version of the APK exp file, not the current version of this code!
+      private static int APKExpMainVersion = 103; //102
+      private static int APKExpPatchVersion = 103; //put the version of the APK exp file, not the current version of this code!
       // during a release, somehow google play made both version 100 so just sticking with it
-      private static Long APKExpMainFileSize = 38894444L; //old one 32279235L; 44238062 ; 38896384; 38,896,384
-      private static Long APKExpPatchFileSize = 807094L;  //566985L new test one   502035L the original 63 is 268398L 6785 ; 808135
+      private static Long APKExpMainFileSize = 38775464L; //old one 32279235L; 44238062 ; 38896384; 38,896,384, 38775464
+      private static Long APKExpPatchFileSize = 799352L;  //566985L new test one   502035L the original 63 is 268398L 6785 ; 808135
       private static Long ArtSpaceMB = 300L; //how much free space to check for
     //***********************************
     
@@ -497,6 +497,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	 	8. set a flag somewhere telling us that we have finished the unzip, do this because it's possible the user has the obbs but didn't have enough free space for the unzip and he/she free'd up some space later and therefore we should try again
 	 	9. then in the future once the primary apk and expansion files are updated again, start from step 3
 	 	10. we could also add a preference that the user can pick if they don't ever want to be prompted for updated art with the rational they will never have enough space?
+	 	
+	 	IMPORTANT: going forward when you need to do a new main or patch APK file, only zip the gif, gif64, png, png64 directory, do not zip the main.ledpixelart.com.obb part!
 	 	
 	*/
 	
@@ -662,7 +664,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	        // Build the full path to the app's expansion files
 		  
 		  
-		   // showToast(String.valueOf(getAvailableSpaceInMB()));
+		    showToast(String.valueOf(getAvailableSpaceInMB()));
 		  
 		    String packageName = this.getPackageName();
 	 	   
