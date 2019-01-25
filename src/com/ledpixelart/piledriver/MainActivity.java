@@ -19,12 +19,17 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.RandomAccessFile;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+//import android.support.v4.app.ActivityCompat;
+//import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.GestureDetector.SimpleOnGestureListener;
@@ -87,6 +92,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
@@ -159,8 +165,9 @@ import android.view.ContextMenu;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 
-import com.android.vending.expansion.zipfile.ZipResourceFile;
-import com.android.vending.expansion.zipfile.ZipResourceFile.ZipEntryRO;
+//import com.android.vending.expansion.zipfile.ZipResourceFile;
+//import com.android.vending.expansion.zipfile.ZipResourceFile.ZipEntryRO;
+
 import com.google.android.vending.expansion.downloader.Constants;
 import com.google.android.vending.expansion.downloader.DownloadProgressInfo;
 import com.google.android.vending.expansion.downloader.DownloaderClientMarshaller;
@@ -443,7 +450,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
       private int patchAPKExpNumFiles = 44;
       //private static int APKExpMainVersion = 80;
       //private static int APKExpPatchVersion = 84; //put the version of the APK exp file, not the current version of this code!
-      private static int APKExpMainVersion = 109; //102
+      private static int APKExpMainVersion = 109; 
       private static int APKExpPatchVersion = 109; //put the version of the APK exp file, not the current version of this code!
       // during a release, somehow google play made both version 100 so just sticking with it
       private static Long APKExpMainFileSize = 38775464L; //old one 32279235L; 44238062 ; 38896384; 38,896,384, 38775464
@@ -466,6 +473,9 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
     //***********************************
 	
 	private boolean AutoSelectPanel_ = true;
+	public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
+	public static final int MY_PERMISSIONS_REQUEST_CAMERA = 456;
+	private boolean sdCardPermission_ = false;
 	
 	
 	/*this next set of code is for the APK expansion downloader service, 
@@ -664,7 +674,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	        // Build the full path to the app's expansion files
 		  
 		  
-		    showToast(String.valueOf(getAvailableSpaceInMB()));
+		    //showToast(String.valueOf(getAvailableSpaceInMB()));
 		  
 		    String packageName = this.getPackageName();
 	 	   
@@ -1012,6 +1022,51 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
      * the case where we have the file and are moving to another activity
      * without downloading.
      */
+    
+    public void onRequestPermissionsResult(int requestCode,
+            String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! Do the
+                    // sd card operations you  need to do
+                	//sdCardPermission_ = true;
+                } else {
+                    //showToast("Very sorry, this app will not function without access to internal storage.");
+                	// permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                	//sdCardPermission_ = false;
+                	//we'll show the user a prompt lettig them know what's going on next
+                	
+                	AlertDialog.Builder alert=new AlertDialog.Builder(this);
+       	 	      	alert.setTitle("Internal Storage Access").setIcon(R.drawable.icon).setMessage("Hey there, sorry this app will not function without access to your internal storage.\n\nRe-install the app and then grant permissions when prompted.\n\n").setNeutralButton("OK", null).show();
+                	
+                }
+                return;
+              
+            }
+            
+            case MY_PERMISSIONS_REQUEST_CAMERA: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! Do the
+                    // camera operations
+                } else {
+                    showToast("This app will still work except for the camera import");
+                	// permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+               return;
+               
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request.
+        }
+    }
 	
 	
 	//**************************************
@@ -1042,7 +1097,10 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}	
-	   
+	      
+	  	//ok here we need to check that the user has granted permissions to the SD card, android api 23 and up requires this at run time and no longer at install time
+	 		
+	  
 	      
 	      this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
 	        //prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext()); //causing crash
@@ -1172,6 +1230,38 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
  	    		   }
  	    	   };*/
  		
+ 	 	
+ 		//Now for Android 6 and above, we need to see if the user has granted permissions to the SD card
+   		
+ 		if (ContextCompat.checkSelfPermission(MainActivity.this,
+   		        Manifest.permission.READ_EXTERNAL_STORAGE)
+   		        != PackageManager.PERMISSION_GRANTED) {
+
+   		    // Permission is not granted
+   		    // Should we show an explanation?
+   		    if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
+   		            Manifest.permission.READ_EXTERNAL_STORAGE)) {
+   		    	//this only gets shown if the user previously denied the request
+   		    	//showToast("This app will copy GIFs to your local storage and will not function without access"); 
+   		    	//AlertDialog.Builder alert=new AlertDialog.Builder(this);
+   	 	      	//alert.setTitle("Internal Storage Access").setIcon(R.drawable.icon).setMessage("Hey there, this app will copy GIF and PNG images to your internal storage in the pixel directory and will not function without this access.\n\nPlease grant access when prompted.\n\n").setNeutralButton("OK", null).show();
+   		        // Show an explanation to the user *asynchronously* -- don't block
+   		        // this thread waiting for the user's response! After the user
+   		        // sees the explanation, try again to request the permission.
+   		    } else {
+   		        // No explanation needed; request the permission
+   		        ActivityCompat.requestPermissions(MainActivity.this,
+   		                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+   		                MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+
+   		        // MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE is an
+   		        // app-defined int constant. The callback method gets the
+   		        // result of the request.
+   		    }
+   		} else {
+   		    // Permission has already been granted so we are good
+   			//sdCardPermission_ = true;
+   		}
  		 
         if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 
