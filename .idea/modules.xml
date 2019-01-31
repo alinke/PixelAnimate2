@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/PixelAnimate2.iml" filepath="$PROJECT_DIR$/PixelAnimate2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/downloader_library/downloader_library.iml" filepath="$PROJECT_DIR$/downloader_library/downloader_library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/library/library.iml" filepath="$PROJECT_DIR$/library/library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pixelPileDriver/pixelPileDriver.iml" filepath="$PROJECT_DIR$/pixelPileDriver/pixelPileDriver.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zip_file/zip_file.iml" filepath="$PROJECT_DIR$/zip_file/zip_file.iml" />
+    </modules>
+  </component>
+</project>

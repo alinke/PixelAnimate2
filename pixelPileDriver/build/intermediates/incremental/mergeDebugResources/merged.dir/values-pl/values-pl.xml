@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:ns1="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="AreYouSure">Czy na pewno?</string>
+    <string name="BluetoothPairInstructionsV1">Bluetooth para do PIKSELA za pomocą kodu: 4545</string>
+    <string name="BluetoothPairInstructionsV2">Bluetooth para do PIKSELA za pomocą kodu: 0000</string>
+    <string name="BootloaderVersionString">Wersji programu inicjującego</string>
+    <string name="Cancel">Anuluj</string>
+    <string name="Delete">Usuń</string>
+    <string name="DoNotInterrupt">Proszę nie przerywać lub opuścić ten ekran.</string>
+    <string name="FPSOverrideDefault">0</string>
+    <string name="FPSOverrideSummary">Zazwyczaj nie trzeba by zmienić to, tylko wtedy, gdy chcesz zastąpić klatek na sekundę, animacje. Ponownie uruchom aplikację po zmianie.</string>
+    <string name="FPSOverrideTitle">Klatek na sekundę</string>
+    <string name="FavoriteText">Ulubione</string>
+    <string name="FirmwareVersionString">Wersja oprogramowania układowego</string>
+    <string name="HardwareVersionString">Wersja sprzętu</string>
+    <string name="LEDPanelChanged">LED panel modelu zmieniono, dekodowanie ponownie...</string>
+    <string name="LibraryVersionString">Wersja biblioteki</string>
+    <string name="LongTapActionTitle">Wybierz opcję Akcja</string>
+    <string name="LongTapActionWrite">Napisz</string>
+    <string name="MovingDown">Przesunięcie w dół</string>
+    <string name="MovingUp">Przesuwa się w górę</string>
+    <string name="NoFavoritesMarked">Nie masz zaznaczone wszelkie ulubionych, długim dotknij, aby znak ulubione</string>
+    <string name="NoWritinginKiosk">Piśmie do pikseli nie jest obsługiwane w trybie kiosku</string>
+    <string name="OKText">Ok</string>
+    <string name="PIXELNotFound">PIKSEL nie stwierdzono, czy Bluetooth para?</string>
+    <string name="PreparingSlideshow">Przygotowanie pokazu slajdów</string>
+    <string name="ProcessingFavorite">Ulubione przetwarzania</string>
+    <string name="StartInstructions">Stuknij, aby animować</string>
+    <string name="StartupMessage">Krótki kranu do strumienia lub długo Stuknij, aby pisać</string>
+    <string name="UnFavoriteText">Unfavorite</string>
+    <string name="WritingOnlyOnV2">Przepraszamy pisanie jest tylko obsługiwane na PIXEL V2 i wyższej ramki</string>
+    <string name="WritingSlideshow">Pisanie pokaz slajdów do PIKSELA</string>
+    <string name="WritingSlideshowGIF">Pisanie pokaz slajdów GIF do PIKSELA</string>
+    <string name="Yes">Tak</string>
+    <string msgid="4600421777120114993" name="abc_action_bar_home_description">"Przejdź do strony głównej"</string>
+    <string msgid="1594238315039666878" name="abc_action_bar_up_description">"Przejdź wyżej"</string>
+    <string msgid="3588849162933574182" name="abc_action_menu_overflow_description">"Więcej opcji"</string>
+    <string msgid="4076576682505996667" name="abc_action_mode_done">"Gotowe"</string>
+    <string msgid="7468859129482906941" name="abc_activity_chooser_view_see_all">"Zobacz wszystkie"</string>
+    <string msgid="2031811694353399454" name="abc_activitychooserview_choose_application">"Wybierz aplikację"</string>
+    <string msgid="121134116657445385" name="abc_capital_off">"WYŁ."</string>
+    <string msgid="3405795526292276155" name="abc_capital_on">"WŁ."</string>
+    <string msgid="1302280443949172191" name="abc_menu_alt_shortcut_label">"Alt+"</string>
+    <string msgid="1324831542140195728" name="abc_menu_ctrl_shortcut_label">"Ctrl+"</string>
+    <string msgid="8362206064229013510" name="abc_menu_delete_shortcut_label">"Delete"</string>
+    <string msgid="8341180395196749340" name="abc_menu_enter_shortcut_label">"Enter"</string>
+    <string msgid="4792426091847145555" name="abc_menu_function_shortcut_label">"Funkcyjny+"</string>
+    <string msgid="7643535737296831317" name="abc_menu_meta_shortcut_label">"Meta+"</string>
+    <string msgid="8126296154200614004" name="abc_menu_shift_shortcut_label">"Shift+"</string>
+    <string msgid="2378550843553983978" name="abc_menu_space_shortcut_label">"spacja"</string>
+    <string msgid="9002602288060866689" name="abc_menu_sym_shortcut_label">"Sym+"</string>
+    <string msgid="1351762916121158029" name="abc_prepend_shortcut_label">"Menu+"</string>
+    <string msgid="7723749260725869598" name="abc_search_hint">"Szukaj…"</string>
+    <string msgid="3691816814315814921" name="abc_searchview_description_clear">"Wyczyść zapytanie"</string>
+    <string msgid="2550479030709304392" name="abc_searchview_description_query">"Wyszukiwane hasło"</string>
+    <string msgid="8264924765203268293" name="abc_searchview_description_search">"Szukaj"</string>
+    <string msgid="8928215447528550784" name="abc_searchview_description_submit">"Wyślij zapytanie"</string>
+    <string msgid="893419373245838918" name="abc_searchview_description_voice">"Wyszukiwanie głosowe"</string>
+    <string msgid="3421042268587513524" name="abc_shareactionprovider_share_with">"Udostępnij dla"</string>
+    <string msgid="3300176832234831527" name="abc_shareactionprovider_share_with_application">"Udostępnij przez: <ns1:g id="APPLICATION_NAME">%s</ns1:g>"</string>
+    <string msgid="1603543279005712093" name="abc_toolbar_collapse_description">"Zwiń"</string>
+    <string name="app_name">PIKSELI: SZTUKA LED</string>
+    <string name="artURL1">PixelJoint.com</string>
+    <string name="artURL2">PixelJoint.com</string>
+    <string name="artURL3">PixelJoint.com</string>
+    <string name="bluetoothPairingString">Zrobił ty Bluetooth para do pikseli? Kod parowania jest: 0000 lub 4545 v1 pikseli. "</string>
+    <string name="bluetooth_pair">Blueooth pary</string>
+    <string name="bluetooth_pairSummary">Skrót do ekranu ustawienia Bluetooth. Para do PIKSELA za pomocą kodu: 0000 lub 4545 dla jednostek PIXEL V1</string>
+    <string name="cannotWriteMsg">Przepraszamy, pisanie jest obsługiwany tylko na PIXEL V2 ramki i powyżej, zamiast streamingu...</string>
+    <string name="debugMode">Tryb debugowania</string>
+    <string name="debugModeSummary">Wyświetla komunikaty, użyj, aby zobaczyć, jak często połączeń Bluetooth są coraz odłączony i podłączony, jak również inne komunikaty</string>
+    <string name="dialogTitleFPSOverride">Klatek na sekundę</string>
+    <string name="dialogTitleMatrix">Model pikseli</string>
+    <string name="downloadURL_32">Pobierz adres URL 32 x 32</string>
+    <string name="downloadURL_32Default">"www.pixeljoint.com/ pixels/new_icons.asp?search=&amp;dimo=%3D&amp;dim=32&amp;colorso=%3E%3D&amp;colors=2&amp;tran=&amp;anim=&amp;iso=&amp;av=&amp;owner=&amp;d=&amp;dosearch=1&amp;ob=search&amp;action=search"</string>
+    <string name="downloadURL_32Summary">Adres URL dla 32 x 32 pikseli sztuki, nie zawierają http:Slash:/Slash:/</string>
+    <string name="downloadURL_64">Pobierz adres URL 64 x 64</string>
+    <string name="downloadURL_64Default">www.PixelJoint.com/ pixels/new_icons.asp?search=&amp;dimo=%3D&amp;dim=64&amp;colorso=%3E%3D&amp;colors=2&amp;tran=&amp;anim=&amp;iso=&amp;av=&amp;owner=&amp;d=&amp;dosearch=1&amp;ob=search&amp;action=search</string>
+    <string name="downloadURL_64Summary">Adres URL dla 64 x 64 pikseli sztuki, nie zawierają http:Slash:/Slash:/</string>
+    <string name="firstTime_instructions">
+  </string>
+    <string name="fps_override">fps_override</string>
+    <string name="gifonly">Gify tylko</string>
+    <string name="gifonlySummary">Pokaż tylko gify</string>
+    <string name="imageDisplayDuration">Czas trwania wyświetlania obrazu</string>
+    <string name="imageDisplayDurationDefault">5</string>
+    <string name="imageDisplayDurationSummary">Liczba sekund, które każdy obraz jest wyświetlany</string>
+    <string name="kioskMode">Tryb kiosku</string>
+    <string name="kioskModeSummary">Piśmie do pikseli jest wyłączona</string>
+    <string name="loadingImagesPlsWait">Ładowanie obrazów, tylko chwilę...</string>
+    <string name="loadingImagesPlsWaitTitle">Czekaj</string>
+    <string name="matrix">Model pikseli</string>
+    <string name="matrixSummary">Wybrać standard pikseli lub SUPER pikseli</string>
+    <string name="matrix_default_value">3</string>
+    <string name="menu_about_summary">http:slash:/slash:/ledpixelart.html\n\nDesigned przez otwarte gadżety LLC</string>
+    <string name="menu_about_title">O</string>
+    <string name="menu_btPair_title">Bluetooth para pikseli | Kod 0000 lub 4545</string>
+    <string name="menu_camera_title">Aparat Pic pikseli</string>
+    <string name="menu_createSlideShowFavs_title">Napisz pokaz slajdów z ulubionych zdjęć</string>
+    <string name="menu_createSlideShowGIFFavs_title">Napisz pokaz slajdów z ulubionych gify</string>
+    <string name="menu_createSlideShow_title">Napisz pokaz wszystkich obrazów</string>
+    <string name="menu_galleryPickTitle">Wybierz z galerii</string>
+    <string name="menu_getART_title">Pikseli sztuki w Internecie</string>
+    <string name="menu_instructions_title">Instrukcje</string>
+    <string name="menu_pixelJoint_title">Pikseli sztuki w Internecie</string>
+    <string name="menu_prefs_title">Ustawienia</string>
+    <string name="menu_refreshArt_title">Czas odświeżyć sztuki</string>
+    <string name="menu_refresh_summary">Proszę wyjść i odnawiać zapas towarów ten aplikacja teraz odświeżyć czas sztuki.</string>
+    <string name="menu_refresh_title">Czas odświeżyć sztuki</string>
+    <string name="menu_rescan_title">Skanuj</string>
+    <string name="menu_startSlideShow_title">Pokaz slajdów</string>
+    <string name="menu_stopSlideShow_title">Zatrzymanie pokazu slajdów</string>
+    <string name="noSleep">Wyłączenie oszczędności energii</string>
+    <string name="noSleepSummary">Siły app, aby być zawsze na, twój pomysł nie przejdzie w tryb oszczędności energii przy tej aplikacji jest uruchomiony. Dobrze, jeśli przy użyciu jako Kiosk na przykład. </string>
+    <string name="notFoundString">PIKSEL nie znaleziono</string>
+    <string name="oneTimeCopyMessage">Nie przerywa lub nie opuścić ekran. Pozostanie na 100% na chwilę więc proszę o cierpliwość.</string>
+    <string name="oneTimeCopyTitle">Ustawienia początkowe</string>
+    <string name="oneTimeDecode">Jeden raz dekodowania w procesie, tylko chwilę...</string>
+    <string name="oneTimeSetupString">Ustawienia początkowe: Kopiowanie animacji z karty SD.</string>
+    <string name="only64">64 x 64 tylko treść</string>
+    <string name="pauseBetweenImagesDuration">Przerwa między Zdjęcia</string>
+    <string name="pauseBetweenImagesDurationDefault">3</string>
+    <string name="pauseBetweenImagesDurationSummary">Liczba sekund, aby wstrzymać od obrazów</string>
+    <string name="prefSummary">PIKSEL: LED sztuki ustawienia</string>
+    <string name="prefTitle">PIKSEL: LED sztuki ustawienia</string>
+    <string name="pref_debugMode">pref_debugMode</string>
+    <string name="pref_debugModeDefault">FAŁSZ</string>
+    <string name="pref_downloadURL_32">pref_downloadURL_32</string>
+    <string name="pref_downloadURL_64">pref_downloadURL_64</string>
+    <string name="pref_gifonly">pref_gifonly</string>
+    <string name="pref_gifonlyDefault">FAŁSZ</string>
+    <string name="pref_imageDisplayDuration">pref_imageDisplayDuration</string>
+    <string name="pref_kioskMode">pref_kioskMode</string>
+    <string name="pref_kioskModeDefault">FAŁSZ</string>
+    <string name="pref_noSleepDefault">FAŁSZ</string>
+    <string name="pref_only64">pref_only64</string>
+    <string name="pref_only64Default">FAŁSZ</string>
+    <string name="pref_only64Summary">Tylko Pokaż 64 x 64 i użytkownika dodane treści</string>
+    <string name="pref_pauseBetweenImagesDuration">pref_pauseBetweenImagesDuration</string>
+    <string name="pref_scanAll_default">FAŁSZ</string>
+    <string name="pref_showStartupMsg">pref_showStartupMsg</string>
+    <string name="pref_slideShowAllPNGs">pref_slideShowAllPNGs</string>
+    <string name="pref_slideShowAllPNGsDefault">FAŁSZ</string>
+    <string name="pref_writeCamera">pref_writeCamera</string>
+    <string name="rescan_screen_verbage">Teraz skanowania karty SD lub wewnętrznej pamięci dla nowych animacji lub usunięcia, tylko chwilę...</string>
+    <string name="scanAll">Pokaż wszystkie zdjęcia w albumie</string>
+    <string name="scanAllSummary">Wyświetlane są tylko animacje w katalogu pikseli/gify karty SD. Zaznaczenie tego pola wyboru powoduje wyświetlenie wszystkich zdjęć karty SD.</string>
+    <string msgid="146198913615257606" name="search_menu_title">"Szukaj"</string>
+    <string name="select_picture">Wybierz obraz</string>
+    <string name="selected_matrix">selected_matrix</string>
+    <string name="setupInstructionsString">Bluetooth para do PIKSELA za pomocą kod 0000 lub 4545 PIXEL V1.\n\nPIXEL V2 użytkownicy może długo Stuknij, aby pisać do pikseli do samodzielnego operation.\n\nAdd własne sztuki przez udostępnianie tej aplikacji e-mail, Galeria, i inne apps.\n\nUse menu, aby utworzyć pokaz slajdów favorites.\n\n64x64 animowane gify tylko będą wyświetlane, jeśli pikseli SUPER 64 x 64 jest wybrane ustawienia.</string>
+    <string name="setupInstructionsStringTitle">Instrukcje</string>
+    <string name="showStartupMsg">Pokaż komunikat startowy</string>
+    <string name="showStartupMsgDefault">prawda</string>
+    <string name="showStartupMsgSummary">
+  </string>
+    <string name="slideShowAllPNGs">Obejmują wszystkie PNG w pokaz slajdów</string>
+    <string name="slideShowAllPNGsSummary">Pokaz slajdów będzie zawierać tylko ulubione (jeśli masz zaznaczone ulubionych). Sprawdź tutaj, aby dołączyć wszystkie PNG w czasie pokazu slajdów, niezależnie od ulubionych.</string>
+    <string name="slideShowMode">Tryb pokazu slajdów</string>
+    <string name="slideShowModeDefault">FAŁSZ</string>
+    <string name="slideShowModeSummary">Tryb pokazu slajdów</string>
+    <string name="slideShowStartInstructions">Wybierz, aby wyświetlić pojedynczy obraz lub uderzenie zadane z rozmachu od lewej do prawej, aby rozpocząć pokaz slajdów</string>
+    <string name="slideShowStartVerbage">Uruchamianie pokazu slajdów...</string>
+    <string name="slideShowStopInstructions">Uderzenie zadane z rozmachu od prawej do lewej, aby zatrzymać pokaz slajdów</string>
+    <string name="slideShowStopVerbage">Pokaz slajdów, zatrzymany</string>
+    <string name="slideShowtitle">Ustawienia pokazu slajdów</string>
+    <string name="slideShowtitleSummary">Ustawienia pokazu slajdów</string>
+    <string name="slideshowGIFFPS_Summary">Klatek na sekundę (klatek na sekundę) dla pokazu slajdów GIF</string>
+    <string name="slideshowGIFFPS_default_value">4</string>
+    <string name="slideshowGIFFPS_dialogTitle">GIF pokaz FPS</string>
+    <string name="slideshowGIFFPS_key">slideshowGIFFPS_key</string>
+    <string name="slideshowGIFFPS_title">GIF pokaz FPS</string>
+    <string name="startup_verbage_1">Ustawienia początkowe</string>
+    <string name="startup_verbage_2">Kopiowanie animacji do swojego lokalnego magazynu...</string>
+    <string msgid="7988687684186075107" name="status_bar_notification_info_overflow">"999+"</string>
+    <string name="stopSlideShowMessage">Jesteś nadal w trybie pokazu slajdów, uderzenie zadane z rozmachu od prawej do lewej, aby zakończyć pokaz slajdów, a następnie wybrać jeden obraz</string>
+    <string name="versionString">Wersja aplikacji</string>
+    <string name="whatsNewText">Pierwsza para Bluetooth do pikseli przy kod 0000 lub 4545 dla pikseli V1 frames\n\nTap ani obrazów GIF do wyświetlania w streamingu mode\n\nLong kranu wgrac PIXEL\n\nThe ostatni element, że piszesz, że będą grać po urządzeniu został odłączony od pikseli</string>
+    <string name="whatsNewTitle">Witamy pikseli użytkownika</string>
+    <string name="writeCamera">Zapisywanie wielu kamery zdjęcia</string>
+    <string name="writeCameraDefault">prawda</string>
+    <string name="writeCameraSummary">Zapisuje wiele zdjęć aparat do tej aplikacji kontra zastępując tylko jeden</string>
+    <string name="writingPIXEL">Piśmie do PIKSELA</string>
+</resources>

@@ -1,0 +1,23 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/zip_file/src/main/AndroidManifest.xml:2:1-12:12
+INJECTED from /Users/al/Documents/workspace 2/PixelAnimate2/zip_file/src/main/AndroidManifest.xml:2:1-12:12
+INJECTED from /Users/al/Documents/workspace 2/PixelAnimate2/zip_file/src/main/AndroidManifest.xml:2:1-12:12
+INJECTED from /Users/al/Documents/workspace 2/PixelAnimate2/zip_file/src/main/AndroidManifest.xml:2:1-12:12
+INJECTED from /Users/al/Documents/workspace 2/PixelAnimate2/zip_file/src/main/AndroidManifest.xml:2:1-12:12
+INJECTED from /Users/al/Documents/workspace 2/PixelAnimate2/zip_file/src/main/AndroidManifest.xml:2:1-12:12
+INJECTED from /Users/al/Documents/workspace 2/PixelAnimate2/zip_file/src/main/AndroidManifest.xml:2:1-12:12
+	package
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/zip_file/src/main/AndroidManifest.xml:3:5-52
+		INJECTED from /Users/al/Documents/workspace 2/PixelAnimate2/zip_file/src/main/AndroidManifest.xml
+		INJECTED from /Users/al/Documents/workspace 2/PixelAnimate2/zip_file/src/main/AndroidManifest.xml
+	android:versionName
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/zip_file/src/main/AndroidManifest.xml:5:5-30
+		INJECTED from /Users/al/Documents/workspace 2/PixelAnimate2/zip_file/src/main/AndroidManifest.xml
+		INJECTED from /Users/al/Documents/workspace 2/PixelAnimate2/zip_file/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/zip_file/src/main/AndroidManifest.xml:2:11-69
+	android:versionCode
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/zip_file/src/main/AndroidManifest.xml:4:5-28
+		INJECTED from /Users/al/Documents/workspace 2/PixelAnimate2/zip_file/src/main/AndroidManifest.xml
+		INJECTED from /Users/al/Documents/workspace 2/PixelAnimate2/zip_file/src/main/AndroidManifest.xml

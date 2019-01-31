@@ -1,0 +1,135 @@
+ECLIPSE ANDROID PROJECT IMPORT SUMMARY
+======================================
+
+Risky Project Location:
+-----------------------
+The tools *should* handle project locations in any directory. However,
+due to bugs, placing projects in directories containing spaces in the
+path, or characters like ", ' and &, have had issues. We're working to
+eliminate these bugs, but to save yourself headaches you may want to
+move your project to a location where this is not a problem.
+/Users/al/Documents/workspace 4/PixelAnimate2AS
+                             -                 
+
+Manifest Merging:
+-----------------
+Your project uses libraries that provide manifests, and your Eclipse
+project did not explicitly turn on manifest merging. In Android Gradle
+projects, manifests are always merged (meaning that contents from your
+libraries' manifests will be merged into the app manifest. If you had
+manually copied contents from library manifests into your app manifest
+you may need to remove these for the app to build correctly.
+
+Ignored Files:
+--------------
+The following files were *not* copied into the new Gradle project; you
+should evaluate whether these are still needed in your project and if
+so manually move them:
+
+From IOIOLibAccessory:
+* IOIOLibAccessory.iml
+* proguard.cfg
+From IOIOLibAndroid:
+* android.iml
+* hs_err_pid2392.log
+* hs_err_pid2394.log
+* proguard.cfg
+From IOIOLibBT:
+* IOIOLibBT.iml
+* proguard.cfg
+From PixelPileDriver:
+* .DS_Store
+* .gitignore
+* README.md
+* readme.txt
+From downloader_library:
+* .DS_Store
+* downloader_library.iml
+From library:
+* .DS_Store
+* aidl/
+* aidl/ILicenseResultListener.aidl
+* aidl/ILicensingService.aidl
+* library.iml
+From zip_file:
+* zip_file.iml
+
+Replaced Jars with Dependencies:
+--------------------------------
+The importer recognized the following .jar files as third party
+libraries and replaced them with Gradle dependencies instead. This has
+the advantage that more explicit version information is known, and the
+libraries can be updated automatically. However, it is possible that
+the .jar file in your project was of an older version than the
+dependency we picked, which could render the project not compileable.
+You can disable the jar replacement in the import wizard and try again:
+
+android-support-v4.jar => com.android.support:support-v4:18.0.0
+android-support-v7-appcompat.jar => com.android.support:appcompat-v7:18.0.0
+
+Moved Files:
+------------
+Android Gradle projects use a different directory structure than ADT
+Eclipse projects. Here's how the projects were restructured:
+
+In IOIOLibAndroid:
+* /Users/al/Documents/code/androidlibs2/ioio/software/IOIOLib/src/ => iOIOLibAndroid/src/main/java/
+* AndroidManifest.xml => iOIOLibAndroid/src/main/AndroidManifest.xml
+* assets/ => iOIOLibAndroid/src/main/assets
+* res/ => iOIOLibAndroid/src/main/res/
+* src/ => iOIOLibAndroid/src/main/java/
+In IOIOLibAccessory:
+* AndroidManifest.xml => iOIOLibAccessory/src/main/AndroidManifest.xml
+* assets/ => iOIOLibAccessory/src/main/assets
+* lint.xml => iOIOLibAccessory/lint.xml
+* res/ => iOIOLibAccessory/src/main/res/
+* src/ => iOIOLibAccessory/src/main/java/
+In IOIOLibBT:
+* AndroidManifest.xml => iOIOLibBT/src/main/AndroidManifest.xml
+* assets/ => iOIOLibBT/src/main/assets
+* res/ => iOIOLibBT/src/main/res/
+* src/ => iOIOLibBT/src/main/java/
+In library:
+* AndroidManifest.xml => library/src/main/AndroidManifest.xml
+* assets/ => library/src/main/assets
+* lint.xml => library/lint.xml
+* res/ => library/src/main/res
+* src/ => library/src/main/java/
+In downloader_library:
+* AndroidManifest.xml => downloader_library/src/main/AndroidManifest.xml
+* assets/ => downloader_library/src/main/assets
+* lint.xml => downloader_library/lint.xml
+* res/ => downloader_library/src/main/res/
+* src/ => downloader_library/src/main/java/
+In zip_file:
+* AndroidManifest.xml => zip_file/src/main/AndroidManifest.xml
+* assets/ => zip_file/src/main/assets
+* res/ => zip_file/src/main/res/
+* src/ => zip_file/src/main/java/
+In PixelPileDriver:
+* AndroidManifest.xml => pixelPileDriver/src/main/AndroidManifest.xml
+* assets/ => pixelPileDriver/src/main/assets/
+* lint.xml => pixelPileDriver/lint.xml
+* res/ => pixelPileDriver/src/main/res/
+* src/ => pixelPileDriver/src/main/java/
+* src/.DS_Store => pixelPileDriver/src/main/resources/.DS_Store
+* src/com/.DS_Store => pixelPileDriver/src/main/resources/com/.DS_Store
+* src/com/ledpixelart/.DS_Store => pixelPileDriver/src/main/resources/com/ledpixelart/.DS_Store
+* src/com/ledpixelart/piledriver/.DS_Store => pixelPileDriver/src/main/resources/com/ledpixelart/piledriver/.DS_Store
+* src/com/ledpixelart/pixel/.DS_Store => pixelPileDriver/src/main/resources/com/ledpixelart/pixel/.DS_Store
+* src/com/ledpixelart/pixel/hardware/.DS_Store => pixelPileDriver/src/main/resources/com/ledpixelart/pixel/hardware/.DS_Store
+
+Next Steps:
+-----------
+You can now build the project. The Gradle project needs network
+connectivity to download dependencies.
+
+Bugs:
+-----
+If for some reason your project does not build, and you determine that
+it is due to a bug or limitation of the Eclipse to Gradle importer,
+please file a bug at http://b.android.com with category
+Component-Tools.
+
+(This import summary is for your information only, and can be deleted
+after import once you are satisfied with the results.)

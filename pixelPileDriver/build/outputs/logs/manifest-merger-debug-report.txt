@@ -1,0 +1,247 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:2:1-117:12
+INJECTED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:2:1-117:12
+INJECTED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:2:1-117:12
+INJECTED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:2:1-117:12
+MERGED from [:downloader_library] /Users/al/Documents/workspace 2/PixelAnimate2/downloader_library/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-9:12
+MERGED from [:library] /Users/al/Documents/workspace 2/PixelAnimate2/library/build/intermediates/library_manifest/debug/AndroidManifest.xml:17:1-27:12
+MERGED from [:zip_file] /Users/al/Documents/workspace 2/PixelAnimate2/zip_file/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-9:12
+MERGED from [com.android.support:appcompat-v7:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/1b9382e9ee5909354650af9942fb9c26/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-fragment:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/support-fragment-28.0.0.aar/52fcd7de130a71eb626c6bd47ba192f0/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:animated-vector-drawable:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-28.0.0.aar/9f1a0fff97966186d241fb70f10eadf0/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-core-ui:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/support-core-ui-28.0.0.aar/36d59dfc344779539206bcec9012706a/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-core-utils:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/support-core-utils-28.0.0.aar/8ac51ea7712664a850a732492006c2f6/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-vector-drawable:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-28.0.0.aar/8864cff606adfa8ff58edfb94bbd2a0e/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:loader:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/loader-28.0.0.aar/0ee78f618626c736109f8822f6621816/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:viewpager:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/viewpager-28.0.0.aar/11618229ff2737ce0a06f6131ee5584f/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:coordinatorlayout:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/coordinatorlayout-28.0.0.aar/bc20456017f2b8913a1f6ce4670825c7/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:drawerlayout:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/drawerlayout-28.0.0.aar/e350b8a18080d6e4dd5d3a424567839a/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:slidingpanelayout:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/slidingpanelayout-28.0.0.aar/d491f60eaa0abf6fec5173bcc0d7962b/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:customview:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/customview-28.0.0.aar/cc110a6f4a58459cf668cfa236edbd81/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:swiperefreshlayout:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/swiperefreshlayout-28.0.0.aar/116a138e26aa0519a4bd4453a4d42e9c/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:asynclayoutinflater:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/asynclayoutinflater-28.0.0.aar/dab869816a3a73d86e92aaebe8f17ccf/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-compat:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/support-compat-28.0.0.aar/4ad5593dd4309d8af16a5e67a17ead4c/AndroidManifest.xml:17:1-24:12
+MERGED from [com.android.support:versionedparcelable:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/versionedparcelable-28.0.0.aar/fc9ff2db85af0642da093c5f3fcb8850/AndroidManifest.xml:17:1-25:12
+MERGED from [com.android.support:cursoradapter:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/cursoradapter-28.0.0.aar/5c2964212b639431b0c1ea0722e03f22/AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:runtime:1.1.1] /Users/al/.gradle/caches/transforms-1/files-1.1/runtime-1.1.1.aar/62445baf65e76a746e19dc91c551fd13/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:documentfile:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/documentfile-28.0.0.aar/c66dd7a424ec1ab72a1328162a105579/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:localbroadcastmanager:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/localbroadcastmanager-28.0.0.aar/5f71ac55150dcea6a0f9726374548366/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:print:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/print-28.0.0.aar/897958af5fa564b3c532fd0ccf71e114/AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:viewmodel:1.1.1] /Users/al/.gradle/caches/transforms-1/files-1.1/viewmodel-1.1.1.aar/302954210cedd7a9f148db9946b5c7ed/AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:livedata:1.1.1] /Users/al/.gradle/caches/transforms-1/files-1.1/livedata-1.1.1.aar/e0aaf0e19b9f2d4c99ef3271cae3a55b/AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:livedata-core:1.1.1] /Users/al/.gradle/caches/transforms-1/files-1.1/livedata-core-1.1.1.aar/5d615c45fcf255d8cf5e3d9b6ac2e0b2/AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.core:runtime:1.1.1] /Users/al/.gradle/caches/transforms-1/files-1.1/runtime-1.1.1.aar/6800cf68a7c0dd5e1c31999e51bad7ae/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:interpolator:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/interpolator-28.0.0.aar/1d039d4235178948e807b78caac00e0b/AndroidManifest.xml:17:1-22:12
+MERGED from [com.github.alinke.PixelAndroidLibrary:iOIOLibAccessory:1.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/iOIOLibAccessory-1.0.0.aar/c93c7bbbb78c879d242f694397b5b150/AndroidManifest.xml:2:1-11:12
+MERGED from [com.github.alinke.PixelAndroidLibrary:iOIOLibBT:1.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/iOIOLibBT-1.0.0.aar/f0aa1adf377e8e85646d818b38e76e64/AndroidManifest.xml:2:1-11:12
+MERGED from [com.github.alinke.PixelAndroidLibrary:iOIOLibAndroid:1.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/iOIOLibAndroid-1.0.0.aar/7e78a12a4c78716ded8ee06a28667187/AndroidManifest.xml:2:1-9:12
+INJECTED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:2:1-117:12
+INJECTED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:2:1-117:12
+INJECTED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:2:1-117:12
+	package
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:3:7-43
+		INJECTED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml
+		INJECTED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml
+	android:versionName
+		INJECTED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:6:5-31
+		INJECTED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml
+	android:versionCode
+		INJECTED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:5:5-30
+		INJECTED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:2:11-69
+uses-permission#android.permission.BLUETOOTH
+ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:8:5-67
+	android:name
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:8:22-65
+uses-permission#android.permission.INTERNET
+ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:9:5-66
+MERGED from [com.github.alinke.PixelAndroidLibrary:iOIOLibAndroid:1.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/iOIOLibAndroid-1.0.0.aar/7e78a12a4c78716ded8ee06a28667187/AndroidManifest.xml:7:5-67
+MERGED from [com.github.alinke.PixelAndroidLibrary:iOIOLibAndroid:1.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/iOIOLibAndroid-1.0.0.aar/7e78a12a4c78716ded8ee06a28667187/AndroidManifest.xml:7:5-67
+	android:name
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:9:22-64
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:10:5-97
+	android:name
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:10:22-78
+uses-permission#android.permission.BLUETOOTH_ADMIN
+ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:11:5-73
+	android:name
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:11:22-71
+uses-permission#com.android.vending.CHECK_LICENSE
+ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:14:5-73
+MERGED from [:library] /Users/al/Documents/workspace 2/PixelAnimate2/library/build/intermediates/library_manifest/debug/AndroidManifest.xml:25:5-73
+MERGED from [:library] /Users/al/Documents/workspace 2/PixelAnimate2/library/build/intermediates/library_manifest/debug/AndroidManifest.xml:25:5-73
+	android:name
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:14:22-70
+uses-permission#android.permission.WAKE_LOCK
+ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:21:5-68
+	android:name
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:21:22-65
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:25:5-26:66
+	android:name
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:26:9-63
+uses-permission#android.permission.ACCESS_WIFI_STATE
+ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:29:5-75
+	android:name
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:29:22-73
+uses-feature#android.hardware.camera
+ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:35:5-84
+	android:required
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:35:58-82
+	android:name
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:35:19-57
+application
+ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:37:5-114:19
+MERGED from [com.android.support:support-compat:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/support-compat-28.0.0.aar/4ad5593dd4309d8af16a5e67a17ead4c/AndroidManifest.xml:22:5-94
+MERGED from [com.android.support:support-compat:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/support-compat-28.0.0.aar/4ad5593dd4309d8af16a5e67a17ead4c/AndroidManifest.xml:22:5-94
+MERGED from [com.android.support:versionedparcelable:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/versionedparcelable-28.0.0.aar/fc9ff2db85af0642da093c5f3fcb8850/AndroidManifest.xml:22:5-23:19
+MERGED from [com.android.support:versionedparcelable:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/versionedparcelable-28.0.0.aar/fc9ff2db85af0642da093c5f3fcb8850/AndroidManifest.xml:22:5-23:19
+	android:appComponentFactory
+		ADDED from [com.android.support:support-compat:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/support-compat-28.0.0.aar/4ad5593dd4309d8af16a5e67a17ead4c/AndroidManifest.xml:22:18-91
+	android:label
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:37:48-80
+	android:icon
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:37:18-47
+service#com.ledpixelart.piledriver.PIXELDownloaderService
+ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:43:9-59
+	android:name
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:43:18-56
+receiver#com.ledpixelart.piledriver.PIXELAlarmReceiver
+ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:49:9-56
+	android:name
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:49:19-53
+activity#com.ledpixelart.piledriver.SplashScreen
+ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:53:12-65:24
+	android:screenOrientation
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:54:19-55
+	android:label
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:55:19-51
+	android:theme
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:56:19-66
+	android:name
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:53:22-50
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:58:19-63:31
+action#android.intent.action.MAIN
+ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:60:25-77
+	android:name
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:60:33-74
+category#android.intent.category.LAUNCHER
+ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:61:25-84
+	android:name
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:61:35-82
+activity#com.ledpixelart.piledriver.MainActivity
+ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:67:12-101:22
+	android:screenOrientation
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:68:12-48
+	android:name
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:67:22-50
+intent-filter#action:name:android.intent.action.SEND+category:name:android.intent.category.DEFAULT+data:mimeType:image/*
+ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:78:21-82:25
+action#android.intent.action.SEND
+ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:79:13-65
+	android:name
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:79:21-62
+category#android.intent.category.DEFAULT
+ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:80:13-72
+	android:name
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:80:23-69
+data
+ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:81:13-48
+	android:mimeType
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:81:19-45
+intent-filter#action:name:android.intent.action.SEND+category:name:android.intent.category.DEFAULT+data:mimeType:text/plain
+ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:84:9-88:25
+intent-filter#action:name:android.intent.action.SEND_MULTIPLE+category:name:android.intent.category.DEFAULT+data:mimeType:image/*
+ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:90:9-94:25
+action#android.intent.action.SEND_MULTIPLE
+ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:91:13-74
+	android:name
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:91:21-71
+activity#com.ledpixelart.piledriver.preferences
+ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:103:12-130
+	android:screenOrientation
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:103:50-86
+	android:launchMode
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:103:87-118
+	android:name
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:103:22-49
+uses-sdk
+INJECTED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml
+INJECTED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml
+MERGED from [com.android.support:appcompat-v7:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/1b9382e9ee5909354650af9942fb9c26/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:appcompat-v7:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/1b9382e9ee5909354650af9942fb9c26/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-fragment:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/support-fragment-28.0.0.aar/52fcd7de130a71eb626c6bd47ba192f0/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-fragment:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/support-fragment-28.0.0.aar/52fcd7de130a71eb626c6bd47ba192f0/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-28.0.0.aar/9f1a0fff97966186d241fb70f10eadf0/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-28.0.0.aar/9f1a0fff97966186d241fb70f10eadf0/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-ui:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/support-core-ui-28.0.0.aar/36d59dfc344779539206bcec9012706a/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-ui:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/support-core-ui-28.0.0.aar/36d59dfc344779539206bcec9012706a/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-utils:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/support-core-utils-28.0.0.aar/8ac51ea7712664a850a732492006c2f6/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-utils:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/support-core-utils-28.0.0.aar/8ac51ea7712664a850a732492006c2f6/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-28.0.0.aar/8864cff606adfa8ff58edfb94bbd2a0e/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-28.0.0.aar/8864cff606adfa8ff58edfb94bbd2a0e/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:loader:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/loader-28.0.0.aar/0ee78f618626c736109f8822f6621816/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:loader:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/loader-28.0.0.aar/0ee78f618626c736109f8822f6621816/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:viewpager:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/viewpager-28.0.0.aar/11618229ff2737ce0a06f6131ee5584f/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:viewpager:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/viewpager-28.0.0.aar/11618229ff2737ce0a06f6131ee5584f/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:coordinatorlayout:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/coordinatorlayout-28.0.0.aar/bc20456017f2b8913a1f6ce4670825c7/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:coordinatorlayout:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/coordinatorlayout-28.0.0.aar/bc20456017f2b8913a1f6ce4670825c7/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:drawerlayout:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/drawerlayout-28.0.0.aar/e350b8a18080d6e4dd5d3a424567839a/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:drawerlayout:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/drawerlayout-28.0.0.aar/e350b8a18080d6e4dd5d3a424567839a/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:slidingpanelayout:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/slidingpanelayout-28.0.0.aar/d491f60eaa0abf6fec5173bcc0d7962b/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:slidingpanelayout:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/slidingpanelayout-28.0.0.aar/d491f60eaa0abf6fec5173bcc0d7962b/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:customview:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/customview-28.0.0.aar/cc110a6f4a58459cf668cfa236edbd81/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:customview:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/customview-28.0.0.aar/cc110a6f4a58459cf668cfa236edbd81/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:swiperefreshlayout:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/swiperefreshlayout-28.0.0.aar/116a138e26aa0519a4bd4453a4d42e9c/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:swiperefreshlayout:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/swiperefreshlayout-28.0.0.aar/116a138e26aa0519a4bd4453a4d42e9c/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:asynclayoutinflater:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/asynclayoutinflater-28.0.0.aar/dab869816a3a73d86e92aaebe8f17ccf/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:asynclayoutinflater:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/asynclayoutinflater-28.0.0.aar/dab869816a3a73d86e92aaebe8f17ccf/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-compat:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/support-compat-28.0.0.aar/4ad5593dd4309d8af16a5e67a17ead4c/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-compat:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/support-compat-28.0.0.aar/4ad5593dd4309d8af16a5e67a17ead4c/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:versionedparcelable:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/versionedparcelable-28.0.0.aar/fc9ff2db85af0642da093c5f3fcb8850/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:versionedparcelable:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/versionedparcelable-28.0.0.aar/fc9ff2db85af0642da093c5f3fcb8850/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:cursoradapter:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/cursoradapter-28.0.0.aar/5c2964212b639431b0c1ea0722e03f22/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:cursoradapter:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/cursoradapter-28.0.0.aar/5c2964212b639431b0c1ea0722e03f22/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:runtime:1.1.1] /Users/al/.gradle/caches/transforms-1/files-1.1/runtime-1.1.1.aar/62445baf65e76a746e19dc91c551fd13/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:runtime:1.1.1] /Users/al/.gradle/caches/transforms-1/files-1.1/runtime-1.1.1.aar/62445baf65e76a746e19dc91c551fd13/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:documentfile:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/documentfile-28.0.0.aar/c66dd7a424ec1ab72a1328162a105579/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:documentfile:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/documentfile-28.0.0.aar/c66dd7a424ec1ab72a1328162a105579/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:localbroadcastmanager:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/localbroadcastmanager-28.0.0.aar/5f71ac55150dcea6a0f9726374548366/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:localbroadcastmanager:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/localbroadcastmanager-28.0.0.aar/5f71ac55150dcea6a0f9726374548366/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:print:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/print-28.0.0.aar/897958af5fa564b3c532fd0ccf71e114/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:print:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/print-28.0.0.aar/897958af5fa564b3c532fd0ccf71e114/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:viewmodel:1.1.1] /Users/al/.gradle/caches/transforms-1/files-1.1/viewmodel-1.1.1.aar/302954210cedd7a9f148db9946b5c7ed/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:viewmodel:1.1.1] /Users/al/.gradle/caches/transforms-1/files-1.1/viewmodel-1.1.1.aar/302954210cedd7a9f148db9946b5c7ed/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:livedata:1.1.1] /Users/al/.gradle/caches/transforms-1/files-1.1/livedata-1.1.1.aar/e0aaf0e19b9f2d4c99ef3271cae3a55b/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:livedata:1.1.1] /Users/al/.gradle/caches/transforms-1/files-1.1/livedata-1.1.1.aar/e0aaf0e19b9f2d4c99ef3271cae3a55b/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:livedata-core:1.1.1] /Users/al/.gradle/caches/transforms-1/files-1.1/livedata-core-1.1.1.aar/5d615c45fcf255d8cf5e3d9b6ac2e0b2/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:livedata-core:1.1.1] /Users/al/.gradle/caches/transforms-1/files-1.1/livedata-core-1.1.1.aar/5d615c45fcf255d8cf5e3d9b6ac2e0b2/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.core:runtime:1.1.1] /Users/al/.gradle/caches/transforms-1/files-1.1/runtime-1.1.1.aar/6800cf68a7c0dd5e1c31999e51bad7ae/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.core:runtime:1.1.1] /Users/al/.gradle/caches/transforms-1/files-1.1/runtime-1.1.1.aar/6800cf68a7c0dd5e1c31999e51bad7ae/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:interpolator:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/interpolator-28.0.0.aar/1d039d4235178948e807b78caac00e0b/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:interpolator:28.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/interpolator-28.0.0.aar/1d039d4235178948e807b78caac00e0b/AndroidManifest.xml:20:5-44
+MERGED from [com.github.alinke.PixelAndroidLibrary:iOIOLibAccessory:1.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/iOIOLibAccessory-1.0.0.aar/c93c7bbbb78c879d242f694397b5b150/AndroidManifest.xml:7:5-9:41
+MERGED from [com.github.alinke.PixelAndroidLibrary:iOIOLibAccessory:1.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/iOIOLibAccessory-1.0.0.aar/c93c7bbbb78c879d242f694397b5b150/AndroidManifest.xml:7:5-9:41
+MERGED from [com.github.alinke.PixelAndroidLibrary:iOIOLibBT:1.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/iOIOLibBT-1.0.0.aar/f0aa1adf377e8e85646d818b38e76e64/AndroidManifest.xml:7:5-9:41
+MERGED from [com.github.alinke.PixelAndroidLibrary:iOIOLibBT:1.0.0] /Users/al/.gradle/caches/transforms-1/files-1.1/iOIOLibBT-1.0.0.aar/f0aa1adf377e8e85646d818b38e76e64/AndroidManifest.xml:7:5-9:41
+INJECTED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml
+INJECTED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml
+		INJECTED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml
+		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml
+		INJECTED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml
+uses-permission#android.permission.READ_PHONE_STATE
+IMPLIED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:2:1-117:12 reason: com.android.vending.expansion.downloader has a targetSdkVersion < 4
+uses-permission#android.permission.READ_EXTERNAL_STORAGE
+IMPLIED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:2:1-117:12 reason: com.android.vending.expansion.downloader requested WRITE_EXTERNAL_STORAGE

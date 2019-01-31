@@ -1,0 +1,915 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AndroidLayouts">
+    <shared>
+      <config />
+    </shared>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="c5985ba6-40c2-488d-86fa-18fd8e1917b6" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.classpath" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.project" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.settings/org.eclipse.jdt.core.prefs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.settings/org.eclipse.ltk.core.refactoring.prefs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AndroidManifest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/gif/0aascension32.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/gif/0adata32.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/gif/0anightmare32.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/gif/0apaulr32.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/gif/0clockworks.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/gif/0fighters_ready32.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/gif/0fire.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/gif/0glitter.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/gif/0matrix.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/gif/0nightdrive.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/gif/0pacghosts.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/gif/0pacman.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/gif/0petit_kitty.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/gif/0pharmacy.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/gif/0rain.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/gif/0robotfactory.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/gif/0tree.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/gif/0wizardcity.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/gif/gifsource/0aascension32.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/gif/gifsource/0adata32.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/gif/gifsource/0anightmare32.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/gif/gifsource/0apaulr32.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/gif/gifsource/0clockworks.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/gif/gifsource/0fighters_ready32.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/gif/gifsource/0fire.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/gif/gifsource/0glitter.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/gif/gifsource/0matrix.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/gif/gifsource/0nightdrive.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/gif/gifsource/0pacghosts.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/gif/gifsource/0pacman.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/gif/gifsource/0petit_kitty.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/gif/gifsource/0pharmacy.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/gif/gifsource/0rain.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/gif/gifsource/0robotfactory.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/gif/gifsource/0tree.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/gif/gifsource/0wizardcity.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/0aafilmgirl32.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/0aagirlwatching32.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/0aagreengirl32.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/0aagreenmonster32.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/0aagtongue32.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/0apinkcat.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/Design0000.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/Design0007.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/Design0008.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/Design0011.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/Design0019.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/Design0020.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/Design0021.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/Design0024.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/Design0025.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/Design0027.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/Design0028.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/Frankenstein-icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/Helm_witch_hat.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/MonaLisa.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/Now open.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/PowerUp2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/QR Pixel.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/Robot.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/agumball.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/american_flag.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/angry.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/bacon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/bball.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/blue hair.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/blue.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/bluelady.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/brain.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/british_flag.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/bus.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/canada_flag.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/closed.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/clown.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/crab.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/defender.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/dinosaur.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/dog.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/elmo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/eremite2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/face.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/face2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/face3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/face4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/fishing.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/fishmen.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/flower2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/flying_pig.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/frog.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/fruit_bowl.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/g01.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/g02.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/g03.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/g04.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/g05.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/g06.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/g07.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/g09.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/g10.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/g11.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/g12.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/g13.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/g14.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/g15.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/g16.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/g17.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/g18.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/g20.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/g21.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/g21a.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/g22.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/g23.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/g24.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/g25.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/g26.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/g27.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/g28.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/g29.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/g31.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/g32.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/g33.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/g34.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/g36.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/g39.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/g40.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/gfahahae.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/girlglasses.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/hVampire.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/hand.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/hbluebanshee.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/hblueskull.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/hghost3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/hpumpkin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/hrising.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/hrising2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/hthe_lakeside_ghost.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/hthe_mean_old_tree.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/htrow.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/hvampire2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/hwarrior.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/hyellow_candy_corn.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/invader5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/little_knight.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/maid.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/miner.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/moai2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/moustache - Copy.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/mushroom.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/music notes.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/niceflowers.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/night_driving.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/night_sky.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/obama.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/ocity.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/ohula.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/orient_beans.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/orient_berries.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/orient_bowl.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/orient_flower2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/orient_food.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/orient_ginseng.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/orient_goodsmall5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/orient_horse.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/orient_lotus.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/orient_plant2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/orient_plant4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/orient_tree.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/owl.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/pacmanpink.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/pacmean.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/pharmacy.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/phonogrph .png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/poker.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/pops.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/possum.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/purple_alien.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/quest.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/question.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/red1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/red10.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/red11.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/red12.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/red13.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/red2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/red3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/red4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/red6.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/red7.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/rlady.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/shake1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/shake2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/skeleton.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/suit.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/sun set.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/t rex.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/trophy.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/vase1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/vase2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/vgame.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/watermelon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/window2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/zTV color bar.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/zthree-circles.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/zzzblank.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/png/zzzwhite.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/AndroidManifest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/R.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/alt/android/os/CountDownTimer$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/alt/android/os/CountDownTimer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/android/vending/expansion/downloader/R$drawable.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/android/vending/expansion/downloader/R$id.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/android/vending/expansion/downloader/R$layout.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/android/vending/expansion/downloader/R$string.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/android/vending/expansion/downloader/R$style.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/android/vending/expansion/downloader/R.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/AsyncTaskFavoriteCopyGIFs.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/BuildConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/GifDecoder$GifFrame.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/GifDecoder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/ImageAdapter2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/ImageDisplayDurationTimer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/ListAdapter$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/ListAdapter$AsyncDrawable.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/ListAdapter$BitmapWorkerTask.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/ListAdapter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$10.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$11.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$12.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$13.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$14.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$15.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$16.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$17.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$18.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$19.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$20$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$20$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$20.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$21.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$22.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$23.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$4.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$5.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$6.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$7.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$8.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$9.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$AsyncRefreshArt.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$ConnectTimer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$DecodedTimer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$FavoriteGIFMoveAsync.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$GifView$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$GifView.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$IOIOThread$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$IOIOThread.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$UnFavoriteGIFMoveAsync.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$XAPKFile.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$copyFilesAsync.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$createSlideShowAsync.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$createSlideShowGIFAsync.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$streamPixelAsync.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$unZipAsync.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$writePixelAsync.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$writePixelAsyncSlideShow.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity$writePixelGIFAsyncSlideShow.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/MainActivity.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/PIXELAlarmReceiver.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/PIXELDownloaderService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/PauseBetweenImagesDurationTimer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/R$array.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/R$attr.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/R$drawable.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/R$id.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/R$layout.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/R$menu.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/R$raw.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/R$string.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/R$style.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/R$xml.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/R.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/SplashScreen$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/SplashScreen.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/piledriver/preferences.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/pixel/hardware/GifDecoder$GifFrame.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/pixel/hardware/GifDecoder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/classes/com/ledpixelart/pixel/hardware/Pixel.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/jarlist.cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gen/com/android/vending/expansion/downloader/R.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gen/com/ledpixelart/piledriver/BuildConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gen/com/ledpixelart/piledriver/R.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/libs/android-support-v4.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/libs/android-support-v7-appcompat.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lint.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/readme.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/ic_action_add_to_queue.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/ic_action_bluetooth.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/ic_action_bluetooth_searching.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/ic_action_camera.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/ic_action_download.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/ic_action_event.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/ic_action_new_event.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/ic_action_new_picture.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/ic_action_refresh.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/ic_action_remove.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/ic_action_search.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/ic_action_settings.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/ic_action_slideshow.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/ic_action_stop.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/ic_action_warning.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/ic_launcher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/ic_menu_database.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/ic_menu_info_details.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/ic_menu_preferences.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/iconcat.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-ldpi/ic_action_bluetooth_searching.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-ldpi/ic_launcher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-ldpi/ic_menu_database.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-ldpi/ic_menu_info_details.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-ldpi/ic_menu_preferences.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-ldpi/icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-ldpi/iconcat.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-mdpi/ic_action_add_to_queue.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-mdpi/ic_action_bluetooth.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-mdpi/ic_action_bluetooth_searching.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-mdpi/ic_action_camera.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-mdpi/ic_action_download.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-mdpi/ic_action_event.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-mdpi/ic_action_new_event.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-mdpi/ic_action_new_picture.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-mdpi/ic_action_refresh.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-mdpi/ic_action_remove.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-mdpi/ic_action_search.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-mdpi/ic_action_settings.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-mdpi/ic_action_slideshow.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-mdpi/ic_action_stop.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-mdpi/ic_action_warning.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-mdpi/ic_launcher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-mdpi/ic_menu_database.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-mdpi/ic_menu_info_details.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-mdpi/ic_menu_preferences.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-mdpi/icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-mdpi/iconcat.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-mdpi/splash.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-xhdpi/ic_action_add_to_queue.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-xhdpi/ic_action_bluetooth.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-xhdpi/ic_action_bluetooth_searching.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-xhdpi/ic_action_camera.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-xhdpi/ic_action_download.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-xhdpi/ic_action_event.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-xhdpi/ic_action_new_event.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-xhdpi/ic_action_new_picture.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-xhdpi/ic_action_refresh.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-xhdpi/ic_action_remove.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-xhdpi/ic_action_search.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-xhdpi/ic_action_settings.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-xhdpi/ic_action_slideshow.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-xhdpi/ic_action_stop.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-xhdpi/ic_action_warning.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-xhdpi/ic_launcher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-xhdpi/icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable-xhdpi/iconcat.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable/black_frame.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable/coach_marks.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable/empty_photo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable/icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable/loading.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/drawable/zzzblank.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/layout/coach_mark.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/layout/main.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/layout/mainold.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/layout/splash.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/menu/mainmenu.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/raw/aargh.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/raw/beware_c.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/raw/beware_i.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/raw/blank.rgb565" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/raw/bzk_chic.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/raw/decoding128.rgb565" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/raw/decoding128by32.rgb565" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/raw/decoding16.rgb565" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/raw/decoding32.rgb565" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/raw/decoding32by128.rgb565" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/raw/decoding32by64.rgb565" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/raw/decoding64.rgb565" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/raw/decoding64by32.rgb565" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/raw/decoding64by64.rgb565" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/raw/pacdies.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/raw/qbertslick.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/raw/select128by32.rgb565" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/raw/select32by128.rgb565" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/raw/select32by64.rgb565" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/raw/select64by32.rgb565" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/raw/select64by64.rgb565" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/raw/selectimage128.rgb565" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/raw/selectimage16.rgb565" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/raw/selectimage32.rgb565" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/raw/selectimage64.rgb565" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/raw/selectimage64by16.rgb565" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/raw/selectpic.rgb565" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/raw/selectpic32.rgb565" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/values-cs/strings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/values-da/strings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/values-de/strings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/values-el/strings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/values-es/strings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/values-et/strings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/values-fa/strings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/values-fi/strings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/values-fr/strings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/values-hi/strings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/values-ht/strings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/values-id/strings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/values-it/strings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/values-ja/strings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/values-ko/strings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/values-nl/strings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/values-no/strings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/values-pl/strings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/values-ro/strings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/values-ru/strings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/values-sk/strings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/values-sl/strings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/values-sv/strings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/values-th/strings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/values-tr/strings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/values-tw/strings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/values-uk/strings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/values-ur/strings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/values-vi/strings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/values-zh/strings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/values/arrays.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/values/strings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/xml/accessory_filter.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/xml/preferences.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/alt/android/os/CountDownTimer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/ledpixelart/piledriver/AsyncTaskFavoriteCopyGIFs.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/ledpixelart/piledriver/GifDecoder.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/ledpixelart/piledriver/ImageAdapter2.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/ledpixelart/piledriver/ImageDisplayDurationTimer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/ledpixelart/piledriver/ListAdapter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/ledpixelart/piledriver/MainActivity.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/ledpixelart/piledriver/PIXELAlarmReceiver.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/ledpixelart/piledriver/PIXELDownloaderService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/ledpixelart/piledriver/PauseBetweenImagesDurationTimer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/ledpixelart/piledriver/SplashScreen.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/ledpixelart/piledriver/preferences.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/ledpixelart/pixel/hardware/GifDecoder.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/ledpixelart/pixel/hardware/Pixel.java" beforeDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view />
+      </state>
+    </system>
+  </component>
+  <component name="FUSProjectUsageTrigger">
+    <session id="2018602135">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.open.time.0" value="1" />
+          <entry key="project.opened" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="gradle" value="11" />
+          <entry key="iml" value="2" />
+          <entry key="java" value="2" />
+          <entry key="properties" value="2" />
+          <entry key="xml" value="8" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="Groovy" value="11" />
+          <entry key="IDEA_MODULE" value="2" />
+          <entry key="JAVA" value="2" />
+          <entry key="Properties" value="2" />
+          <entry key="XML" value="8" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="gradle" value="56" />
+          <entry key="xml" value="66" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="Groovy" value="56" />
+          <entry key="XML" value="66" />
+        </counts>
+      </usages-collector>
+    </session>
+    <session id="1098051483">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="1" />
+          <entry key="project.open.time.0" value="1" />
+          <entry key="project.opened" value="1" />
+        </counts>
+      </usages-collector>
+    </session>
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pixelPileDriver/src/main/AndroidManifest.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="435">
+              <caret line="29" selection-start-line="29" selection-end-line="29" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/build.gradle">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="210">
+              <caret line="14" column="42" selection-start-line="14" selection-start-column="42" selection-end-line="14" selection-end-column="42" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/pixelPileDriver/build.gradle">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="73">
+              <caret line="16" column="9" lean-forward="true" selection-start-line="16" selection-start-column="9" selection-end-line="16" selection-end-column="9" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pixelPileDriver/src/main/java/com/ledpixelart/piledriver/MainActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="15630">
+              <caret line="1217" column="19" selection-start-line="1217" selection-start-column="19" selection-end-line="1217" selection-end-column="19" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pixelPileDriver/src/main/res/values/arrays.xml">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pixelPileDriver/src/main/res/values/strings.xml">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/Library/Android/sdk/sources/android-16/com/android/internal/view/menu/ActionMenuPresenter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="8505">
+              <caret line="614" column="13" selection-start-line="614" selection-start-column="13" selection-end-line="614" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/iOIOLibAccessory/build.gradle" />
+        <option value="$PROJECT_DIR$/build.gradle" />
+        <option value="$PROJECT_DIR$/library/build.gradle" />
+        <option value="$PROJECT_DIR$/zip_file/build.gradle" />
+        <option value="$PROJECT_DIR$/iOIOLibBT/build.gradle" />
+        <option value="$PROJECT_DIR$/downloader_library/build.gradle" />
+        <option value="$PROJECT_DIR$/downloader_library/src/main/AndroidManifest.xml" />
+        <option value="$PROJECT_DIR$/library/src/main/AndroidManifest.xml" />
+        <option value="$PROJECT_DIR$/zip_file/src/main/AndroidManifest.xml" />
+        <option value="$PROJECT_DIR$/iOIOLibAccessory/src/main/AndroidManifest.xml" />
+        <option value="$PROJECT_DIR$/iOIOLibBT/src/main/AndroidManifest.xml" />
+        <option value="$PROJECT_DIR$/pixelPileDriver/src/main/AndroidManifest.xml" />
+        <option value="$PROJECT_DIR$/pixelPileDriver/build.gradle" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="y" value="23" />
+    <option name="width" value="1440" />
+    <option name="height" value="823" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="android.project.structure.last.selected" value="SDK Location" />
+    <property name="android.project.structure.proportion" value="0.15" />
+    <property name="android.sdk.path" value="$USER_HOME$/Library/Android/sdk" />
+    <property name="device.picker.selection" value="PL2GARH872100835" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration name="&lt;template&gt;" type="Applet" default="true" selected="false">
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration name="&lt;template&gt;" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" default="true" selected="false">
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
+    </configuration>
+    <configuration default="true" type="AndroidJUnit" factoryName="Android JUnit">
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="pixelPileDriver" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
+      <module name="pixelPileDriver" />
+      <option name="DEPLOY" value="true" />
+      <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
+      <option name="DEPLOY_AS_INSTANT" value="false" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="PM_INSTALL_OPTIONS" value="" />
+      <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
+      <option name="ACTIVITY_EXTRA_FLAGS" value="" />
+      <option name="MODE" value="default_activity" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
+      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
+      <option name="FORCE_STOP_RUNNING_APP" value="true" />
+      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
+      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
+      <option name="PREFERRED_AVD" value="" />
+      <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
+      <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
+      <option name="DEBUGGER_TYPE" value="Auto" />
+      <Auto>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Auto>
+      <Hybrid>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Hybrid>
+      <Java />
+      <Native>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Native>
+      <Profilers>
+        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Sample Java Methods" />
+      </Profilers>
+      <option name="DEEP_LINK" value="" />
+      <option name="ACTIVITY_CLASS" value="" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application">
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="TestNG" factoryName="TestNG">
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="StructuralSearchPlugin">
+    <searchConfiguration name="user defined" created="1548910549493" text="preserveIconSpacing" recursive="true" caseInsensitive="true" type="JAVA" history="1" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c5985ba6-40c2-488d-86fa-18fd8e1917b6" name="Default Changelist" comment="" />
+      <created>1548908942104</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1548908942104</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="23" width="1440" height="823" extended-state="0" />
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" visible="true" weight="0.3297568" />
+      <window_info id="Structure" side_tool="true" />
+      <window_info id="Build Variants" side_tool="true" />
+      <window_info id="Image Layers" />
+      <window_info id="Designer" />
+      <window_info id="Capture Tool" />
+      <window_info id="Favorites" side_tool="true" />
+      <window_info id="Captures" order="0" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Run" />
+      <window_info anchor="bottom" id="Logcat" />
+      <window_info anchor="bottom" id="Version Control" show_stripe_button="false" />
+      <window_info anchor="bottom" id="TODO" />
+      <window_info anchor="bottom" id="Android Profiler" />
+      <window_info anchor="bottom" id="Find" weight="0.32909605" />
+      <window_info anchor="bottom" id="Debug" />
+      <window_info anchor="bottom" id="Terminal" />
+      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info anchor="bottom" id="Build" visible="true" weight="0.32909605" />
+      <window_info anchor="right" id="Device File Explorer" side_tool="true" />
+      <window_info anchor="right" id="Capture Analysis" />
+      <window_info anchor="right" id="Gradle" />
+      <window_info anchor="right" id="Theme Preview" />
+      <window_info anchor="right" id="Palette&#9;" />
+    </layout>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/import-summary.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/local.properties">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/iOIOLibAccessory/build.gradle" />
+    <entry file="file://$PROJECT_DIR$/settings.gradle">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/zip_file/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="13" selection-start-line="13" selection-end-line="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/iOIOLibBT/build.gradle" />
+    <entry file="file://$PROJECT_DIR$/iOIOLibAndroid/build.gradle" />
+    <entry file="file://$PROJECT_DIR$/downloader_library/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="1" selection-start-line="12" selection-start-column="1" selection-end-line="12" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pixelPileDriver/pixelPileDriver.iml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/downloader_library/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="4" selection-start-line="6" selection-start-column="4" selection-end-line="6" selection-end-column="8" />
+        </state>
+      </provider>
+      <provider editor-type-id="android-manifest" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/library/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="30" selection-start-line="4" selection-start-column="30" selection-end-line="4" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/library/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="265">
+          <caret line="22" column="7" selection-start-line="22" selection-start-column="7" selection-end-line="22" selection-end-column="7" />
+        </state>
+      </provider>
+      <provider editor-type-id="android-manifest" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/zip_file/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="72" selection-start-line="7" selection-start-column="72" selection-end-line="7" selection-end-column="72" />
+        </state>
+      </provider>
+      <provider editor-type-id="android-manifest" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/iOIOLibAccessory/iOIOLibAccessory.iml" />
+    <entry file="file://$PROJECT_DIR$/iOIOLibAccessory/src/main/AndroidManifest.xml" />
+    <entry file="file://$PROJECT_DIR$/iOIOLibBT/src/main/AndroidManifest.xml" />
+    <entry file="file://$PROJECT_DIR$/pixelPileDriver/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="435">
+          <caret line="29" selection-start-line="29" selection-end-line="29" />
+        </state>
+      </provider>
+      <provider editor-type-id="android-manifest" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" column="42" selection-start-line="14" selection-start-column="42" selection-end-line="14" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pixelPileDriver/src/main/java/com/ledpixelart/piledriver/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15630">
+          <caret line="1217" column="19" selection-start-line="1217" selection-start-column="19" selection-end-line="1217" selection-end-column="19" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pixelPileDriver/src/main/res/values/arrays.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pixelPileDriver/src/main/res/values/strings.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$USER_HOME$/Library/Android/sdk/sources/android-16/com/android/internal/view/menu/ActionMenuPresenter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="8505">
+          <caret line="614" column="13" selection-start-line="614" selection-start-column="13" selection-end-line="614" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pixelPileDriver/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="73">
+          <caret line="16" column="9" lean-forward="true" selection-start-line="16" selection-start-column="9" selection-end-line="16" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

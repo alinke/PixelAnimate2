@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:ns1="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="AreYouSure">Oletko varma?</string>
+    <string name="BluetoothPairInstructionsV1">Bluetooth parin PIKSELIN koodilla: 4545</string>
+    <string name="BluetoothPairInstructionsV2">Bluetooth parin PIKSELIN käyttäen koodi: 0000</string>
+    <string name="BootloaderVersionString">Käynnistyslataimen versio</string>
+    <string name="Cancel">Peruuta</string>
+    <string name="Delete">Poista</string>
+    <string name="DoNotInterrupt">Älä keskeytä tai jätä tämä näyttö.</string>
+    <string name="FPSOverrideDefault">0</string>
+    <string name="FPSOverrideSummary">Normaalisti sinun tarvitsisi muuttaa vain, jos haluat ohittaa animaatioita sekunnissa. Käynnistä app muuttamisen jälkeen.</string>
+    <string name="FPSOverrideTitle">Kuvaa sekunnissa</string>
+    <string name="FavoriteText">Suosikki</string>
+    <string name="FirmwareVersionString">Firmware-versio</string>
+    <string name="HardwareVersionString">Laitteistoversio</string>
+    <string name="LEDPanelChanged">LED paneeli malli muuttunut: koodauksen uudelleen...</string>
+    <string name="LibraryVersionString">Kirjasto versio</string>
+    <string name="LongTapActionTitle">Valitse toiminto</string>
+    <string name="LongTapActionWrite">Kirjoittaa</string>
+    <string name="MovingDown">Siirtymistä</string>
+    <string name="MovingUp">Liikkeestä</string>
+    <string name="NoFavoritesMarked">Ei ole merkitty mitään suosikkeja pitkän kosketa merkitä suosikki</string>
+    <string name="NoWritinginKiosk">Kirjoittamista ei tueta näytettäväksi PIKSELIN</string>
+    <string name="OKText">Okei</string>
+    <string name="PIXELNotFound">PIKSELIN ei löytynyt, Oletko Bluetooth pari?</string>
+    <string name="PreparingSlideshow">Valmistellaan diaesitys</string>
+    <string name="ProcessingFavorite">Käsittely suosikki</string>
+    <string name="StartInstructions">Napauttamalla voit animoida</string>
+    <string name="StartupMessage">Lyhyt hana stream tai pitkä hana kirjoittaa</string>
+    <string name="UnFavoriteText">Unfavorite</string>
+    <string name="WritingOnlyOnV2">Valitettavasti kirjoittaminen on tuettu vain PIKSELIN V2 ja korkeampi kehykset</string>
+    <string name="WritingSlideshow">Kirjoittaminen diaesityksen PIKSELIN</string>
+    <string name="WritingSlideshowGIF">Kirjoittaminen diaesityksen PIKSELIN GIF</string>
+    <string name="Yes">Kyllä</string>
+    <string msgid="4600421777120114993" name="abc_action_bar_home_description">"Siirry etusivulle"</string>
+    <string msgid="1594238315039666878" name="abc_action_bar_up_description">"Siirry ylös"</string>
+    <string msgid="3588849162933574182" name="abc_action_menu_overflow_description">"Lisää"</string>
+    <string msgid="4076576682505996667" name="abc_action_mode_done">"Valmis"</string>
+    <string msgid="7468859129482906941" name="abc_activity_chooser_view_see_all">"Näytä kaikki"</string>
+    <string msgid="2031811694353399454" name="abc_activitychooserview_choose_application">"Valitse sovellus"</string>
+    <string msgid="121134116657445385" name="abc_capital_off">"POIS KÄYTÖSTÄ"</string>
+    <string msgid="3405795526292276155" name="abc_capital_on">"KÄYTÖSSÄ"</string>
+    <string msgid="1302280443949172191" name="abc_menu_alt_shortcut_label">"Alt+"</string>
+    <string msgid="1324831542140195728" name="abc_menu_ctrl_shortcut_label">"Ctrl+"</string>
+    <string msgid="8362206064229013510" name="abc_menu_delete_shortcut_label">"delete"</string>
+    <string msgid="8341180395196749340" name="abc_menu_enter_shortcut_label">"enter"</string>
+    <string msgid="4792426091847145555" name="abc_menu_function_shortcut_label">"Fn+"</string>
+    <string msgid="7643535737296831317" name="abc_menu_meta_shortcut_label">"Meta+"</string>
+    <string msgid="8126296154200614004" name="abc_menu_shift_shortcut_label">"Vaihto+"</string>
+    <string msgid="2378550843553983978" name="abc_menu_space_shortcut_label">"välilyönti"</string>
+    <string msgid="9002602288060866689" name="abc_menu_sym_shortcut_label">"Sym+"</string>
+    <string msgid="1351762916121158029" name="abc_prepend_shortcut_label">"Valikko+"</string>
+    <string msgid="7723749260725869598" name="abc_search_hint">"Haku…"</string>
+    <string msgid="3691816814315814921" name="abc_searchview_description_clear">"Tyhjennä kysely"</string>
+    <string msgid="2550479030709304392" name="abc_searchview_description_query">"Hakulauseke"</string>
+    <string msgid="8264924765203268293" name="abc_searchview_description_search">"Haku"</string>
+    <string msgid="8928215447528550784" name="abc_searchview_description_submit">"Lähetä kysely"</string>
+    <string msgid="893419373245838918" name="abc_searchview_description_voice">"Puhehaku"</string>
+    <string msgid="3421042268587513524" name="abc_shareactionprovider_share_with">"Jakaminen:"</string>
+    <string msgid="3300176832234831527" name="abc_shareactionprovider_share_with_application">"Jaa sovelluksessa <ns1:g id="APPLICATION_NAME">%s</ns1:g>"</string>
+    <string msgid="1603543279005712093" name="abc_toolbar_collapse_description">"Kutista"</string>
+    <string name="app_name">PIXEL: LED ART</string>
+    <string name="artURL1">pixeljoint.com</string>
+    <string name="artURL2">pixeljoint.com</string>
+    <string name="artURL3">pixeljoint.com</string>
+    <string name="bluetoothPairingString">Onko sinulla Bluetooth parin PIKSELIN? Laiteparikoodin on: 0000 tai 4545 PIKSELIN V1. "</string>
+    <string name="bluetooth_pair">Blueooth liitettiin</string>
+    <string name="bluetooth_pairSummary">Pikakuvake Bluetooth settings-ikkunassa. Parin PIKSELIN käyttäen koodi: 0000 tai 4545 PIKSELIN V1 yksikköä</string>
+    <string name="cannotWriteMsg">Anteeksi, kirjoittaa vain tukee PIXEL V2 kehyksiä ja edellä, streaming sen sijaan...</string>
+    <string name="debugMode">Debug-tila</string>
+    <string name="debugModeSummary">Näyttää debug viestejä avulla näet, kuinka usein Bluetooth-yhteydet saavat irti ja yhteydet sekä muut debug viestejä</string>
+    <string name="dialogTitleFPSOverride">Kuvaa sekunnissa</string>
+    <string name="dialogTitleMatrix">PIXEL malli</string>
+    <string name="downloadURL_32">Lataa URL 32 x 32</string>
+    <string name="downloadURL_32Default">"www.pixeljoint.com/ pixels/new_icons.asp?search=&amp;dimo=%3D&amp;dim=32&amp;colorso=%3E%3D&amp;colors=2&amp;tran=&amp;anim=&amp;iso=&amp;av=&amp;owner=&amp;d=&amp;dosearch=1&amp;ob=search&amp;action=search"</string>
+    <string name="downloadURL_32Summary">32 x 32 kuvapistettä taiteen, URL-osoite sisällä http:Slash:/Slash:/</string>
+    <string name="downloadURL_64">Lataa URL 64 x 64</string>
+    <string name="downloadURL_64Default">www.pixeljoint.com/ pixels/new_icons.asp?search=&amp;dimo=%3D&amp;dim=64&amp;colorso=%3E%3D&amp;colors=2&amp;tran=&amp;anim=&amp;iso=&amp;av=&amp;owner=&amp;d=&amp;dosearch=1&amp;ob=search&amp;action=search</string>
+    <string name="downloadURL_64Summary">64 x 64 pikselin taiteen, URL-osoite sisällä http:Slash:/Slash:/</string>
+    <string name="firstTime_instructions">
+  </string>
+    <string name="fps_override">fps_override</string>
+    <string name="gifonly">GIF vain</string>
+    <string name="gifonlySummary">Näytä vain GIF</string>
+    <string name="imageDisplayDuration">Kuvan keston</string>
+    <string name="imageDisplayDurationDefault">5</string>
+    <string name="imageDisplayDurationSummary">Monta sekuntia kutakin kuvaa näytetään</string>
+    <string name="kioskMode">Itsenäisen esityksen tilassa</string>
+    <string name="kioskModeSummary">Kirjallisesti PIKSELI on poistettu käytöstä</string>
+    <string name="loadingImagesPlsWait">Ladataan kuvia, hetki...</string>
+    <string name="loadingImagesPlsWaitTitle">Ole hyvä ja odota</string>
+    <string name="matrix">PIXEL malli</string>
+    <string name="matrixSummary">Valita yhden PIKSELIN tai SUPER PIKSELIN</string>
+    <string name="matrix_default_value">3</string>
+    <string name="menu_about_summary">http:Slash:/Slash:/ledpixelart.html\n\nDesigned avoinna gadgetit LLC</string>
+    <string name="menu_about_title">Tietoja</string>
+    <string name="menu_btPair_title">Bluetooth parin PIKSELIN | Koodin 0000 tai 4545</string>
+    <string name="menu_camera_title">Kameran kuva PIKSELIN</string>
+    <string name="menu_createSlideShowFavs_title">Kirjoittaa suosikki kuvia diaesityksenä</string>
+    <string name="menu_createSlideShowGIFFavs_title">Kirjoittaa suosikki GIF diaesityksen</string>
+    <string name="menu_createSlideShow_title">Kirjoittaa kaikki kuvat diaesityksenä</string>
+    <string name="menu_galleryPickTitle">Valitse galleria</string>
+    <string name="menu_getART_title">Pixel Art verkossa</string>
+    <string name="menu_instructions_title">Ohjeet</string>
+    <string name="menu_pixelJoint_title">Pixel Art verkossa</string>
+    <string name="menu_prefs_title">Asetukset</string>
+    <string name="menu_refreshArt_title">Päivitä kalusto Art</string>
+    <string name="menu_refresh_summary">Sulje ja Käynnistä tämä sovellus päivittää varastossa art.</string>
+    <string name="menu_refresh_title">Päivitä kalusto Art</string>
+    <string name="menu_rescan_title">Etsi uudelleen</string>
+    <string name="menu_startSlideShow_title">Slide Show</string>
+    <string name="menu_stopSlideShow_title">Lopeta diaesitys</string>
+    <string name="noSleep">Poista virransäästö</string>
+    <string name="noSleepSummary">Voimia app on aina, laitteen puutu virransäästötila vaikka tämä app on käynnissä. Hyvä jos käyttää kioski esim. </string>
+    <string name="notFoundString">PIKSELIN ei löydy</string>
+    <string name="oneTimeCopyMessage">Älä keskeytä tai jätä tämä näyttö. Se pysyy 100 % jonkin aikaa joten kärsivällisyyttä.</string>
+    <string name="oneTimeCopyTitle">Ensimmäinen asennus</string>
+    <string name="oneTimeDecode">Kerran purkaa prosessin hetki...</string>
+    <string name="oneTimeSetupString">Alustava asennus: Kopioidaan animaatioita SD-kortille.</string>
+    <string name="only64">64 x 64 sisältöä vain</string>
+    <string name="pauseBetweenImagesDuration">Keskeyttää kuvien välillä</string>
+    <string name="pauseBetweenImagesDurationDefault">3</string>
+    <string name="pauseBetweenImagesDurationSummary">Sekunteina keskeyttää välillä kuvia</string>
+    <string name="prefSummary">PIKSELIN: LED ART asetukset</string>
+    <string name="prefTitle">PIKSELIN: LED ART asetukset</string>
+    <string name="pref_debugMode">pref_debugMode</string>
+    <string name="pref_debugModeDefault">False</string>
+    <string name="pref_downloadURL_32">pref_downloadURL_32</string>
+    <string name="pref_downloadURL_64">pref_downloadURL_64</string>
+    <string name="pref_gifonly">pref_gifonly</string>
+    <string name="pref_gifonlyDefault">False</string>
+    <string name="pref_imageDisplayDuration">pref_imageDisplayDuration</string>
+    <string name="pref_kioskMode">pref_kioskMode</string>
+    <string name="pref_kioskModeDefault">False</string>
+    <string name="pref_noSleepDefault">False</string>
+    <string name="pref_only64">pref_only64</string>
+    <string name="pref_only64Default">False</string>
+    <string name="pref_only64Summary">Näytä 64 x 64 ja käyttäjä lisätty sisältöä vain</string>
+    <string name="pref_pauseBetweenImagesDuration">pref_pauseBetweenImagesDuration</string>
+    <string name="pref_scanAll_default">False</string>
+    <string name="pref_showStartupMsg">pref_showStartupMsg</string>
+    <string name="pref_slideShowAllPNGs">pref_slideShowAllPNGs</string>
+    <string name="pref_slideShowAllPNGsDefault">False</string>
+    <string name="pref_writeCamera">pref_writeCamera</string>
+    <string name="rescan_screen_verbage">Nyt skannaus SD kortti or sisäinen muisti uusia animaatioita tai poistoja, hetki...</string>
+    <string name="scanAll">Näytä kaikki albumin kuvat</string>
+    <string name="scanAllSummary">Vain animaatiot/GIF hakemistoon SD-kortti tulee näkyviin. Tämä ruutu näyttää kaikki SD kortin kuvat.</string>
+    <string msgid="146198913615257606" name="search_menu_title">"Haku"</string>
+    <string name="select_picture">Valitse kuva</string>
+    <string name="selected_matrix">selected_matrix</string>
+    <string name="setupInstructionsString">Bluetooth parin PIKSELIN käyttäen koodin 0000 tai 4545 PIKSELIN V1.\n\nPIXEL V2 käyttäjille voi kauan napauttamalla kirjoittaa PIKSELIN irrallisena operation.\n\nAdd oman taiteen jakamalla tälle App sähköposti, Galleria ja muut apps.\n\nUse valikon avulla voit luoda diaesityksen favorites.\n\n64x64 animated GIF näkyy vain, jos SUPER PIKSELIN 64 x 64 valitaan asetukset.</string>
+    <string name="setupInstructionsStringTitle">Ohjeet</string>
+    <string name="showStartupMsg">Näytä Startup-sanoma</string>
+    <string name="showStartupMsgDefault">tosi</string>
+    <string name="showStartupMsgSummary">
+  </string>
+    <string name="slideShowAllPNGs">Sisällyttää kaikki PNGs diaesitys</string>
+    <string name="slideShowAllPNGsSummary">Diaesitykseen kuuluu vain Suosikit (jos sinulla on merkitty Suosikit). Täältä kaikki PNGs sisällyttää diaesitys riippumatta Suosikit.</string>
+    <string name="slideShowMode">Kalvoesitys</string>
+    <string name="slideShowModeDefault">False</string>
+    <string name="slideShowModeSummary">Kalvoesitys</string>
+    <string name="slideShowStartInstructions">Tätä napauttamalla saadaan näkyviin yhden kuvan tai pyyhkäistä vasemmalle oikeus aloittaa diaesityksen</string>
+    <string name="slideShowStartVerbage">Aloitetaan diaesitystä...</string>
+    <string name="slideShowStopInstructions">Pyyhkäisemällä vasemmalta oikealle pysäyttää diaesityksen</string>
+    <string name="slideShowStopVerbage">Dia esitellä keskeytys</string>
+    <string name="slideShowtitle">Diaesityksen asetukset</string>
+    <string name="slideShowtitleSummary">Diaesityksen asetukset</string>
+    <string name="slideshowGIFFPS_Summary">Kehystää arvioida (kehystää kohden avustaa) ajaksi GIF diaesityksen</string>
+    <string name="slideshowGIFFPS_default_value">4</string>
+    <string name="slideshowGIFFPS_dialogTitle">GIF diaesityksen FPS</string>
+    <string name="slideshowGIFFPS_key">slideshowGIFFPS_key</string>
+    <string name="slideshowGIFFPS_title">GIF diaesityksen FPS</string>
+    <string name="startup_verbage_1">Ensimmäinen asennus</string>
+    <string name="startup_verbage_2">Kopioidaan animaatioita paikallinen tallennus...</string>
+    <string msgid="7988687684186075107" name="status_bar_notification_info_overflow">"999+"</string>
+    <string name="stopSlideShowMessage">Olet vielä Kalvoesitys, pyyhkäistä oikealta vasemmalle lopettaa diaesityksen ja sitten voit valita yhden kuvan</string>
+    <string name="versionString">App versio</string>
+    <string name="whatsNewText">Ensimmäinen Bluetooth parin PIKSELIN käyttää koodin 0000 tai 4545 PIKSELIN V1 frames\n\nTap GIF tai kuvan näyttäminen streaming mode\n\nLong tap kirjoittaa PIXEL\n\nThe viimeisen kohteen kirjoitat jatkaa pelata kun laitteeseen on katkaistu PIKSELIN</string>
+    <string name="whatsNewTitle">Tervetuloa PIKSELIN käyttäjä</string>
+    <string name="writeCamera">Tallenna kuvat Mutliple kamerasta</string>
+    <string name="writeCameraDefault">tosi</string>
+    <string name="writeCameraSummary">Tallentaa useita kameran kuvia app vs. päälle vain yksi</string>
+    <string name="writingPIXEL">Kirjallisesti PIKSELIN</string>
+</resources>
