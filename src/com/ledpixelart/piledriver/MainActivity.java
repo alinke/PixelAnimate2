@@ -473,10 +473,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
     //***********************************
 	
 	private boolean AutoSelectPanel_ = true;
-	public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
-	public static final int MY_PERMISSIONS_REQUEST_CAMERA = 456;
-	private boolean sdCardPermission_ = false;
-	
+	public static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 123;
+
 	
 	/*this next set of code is for the APK expansion downloader service, 
 	we need this because APK's in Android can only be 50 MB and
@@ -1026,7 +1024,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
     public void onRequestPermissionsResult(int requestCode,
             String permissions[], int[] grantResults) {
         switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE: {
+            case MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -1047,22 +1045,6 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
                 return;
               
             }
-            
-            case MY_PERMISSIONS_REQUEST_CAMERA: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // permission was granted, yay! Do the
-                    // camera operations
-                } else {
-                    showToast("This app will still work except for the camera import");
-                	// permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-               return;
-               
-            }
-
             // other 'case' lines to check for other
             // permissions this app might request.
         }
@@ -1234,13 +1216,13 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
  		//Now for Android 6 and above, we need to see if the user has granted permissions to the SD card
    		
  		if (ContextCompat.checkSelfPermission(MainActivity.this,
-   		        Manifest.permission.READ_EXTERNAL_STORAGE)
+   		        Manifest.permission.WRITE_EXTERNAL_STORAGE)
    		        != PackageManager.PERMISSION_GRANTED) {
 
-   		    // Permission is not granted
-   		    // Should we show an explanation?
+	   		    // Permission is not granted
+	   		    // Should we show an explanation?
    		    if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
-   		            Manifest.permission.READ_EXTERNAL_STORAGE)) {
+   		            Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
    		    	//this only gets shown if the user previously denied the request
    		    	//showToast("This app will copy GIFs to your local storage and will not function without access"); 
    		    	//AlertDialog.Builder alert=new AlertDialog.Builder(this);
@@ -1251,8 +1233,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
    		    } else {
    		        // No explanation needed; request the permission
    		        ActivityCompat.requestPermissions(MainActivity.this,
-   		                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-   		                MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+   		                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+   		                MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
 
    		        // MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE is an
    		        // app-defined int constant. The callback method gets the
@@ -1260,7 +1242,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
    		    }
    		} else {
    		    // Permission has already been granted so we are good
-   			//sdCardPermission_ = true;
+   			
    		}
  		 
         if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
