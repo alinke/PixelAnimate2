@@ -1,9 +1,9 @@
 PixelAnimate2
 ============
 
-Use this one instead of PixelAnimate. This is a more efficient way to do the animations. Here we are doing a one time de-code of each animated .gif and then saving the decoded native .rgb565 file into Android local storage. Then we simply load the .rgb565 using a timer with a timer to make the animation. We read the animation delay from the initial animated .gif and also store that locally.
+The main Android app for PIXEL:LED ART http://ledpixelart.com
 
-Ex.
+__Explanation of GIF decoding__
 
 Original file is rain.gif
 which is stored like this: pixel/pixelpiledriver/rain.gif
@@ -20,7 +20,6 @@ rain.txt will have this format
 resolution of LED matrix, total frames, time delay
 
 so
-
 
 32,105,60
 
