@@ -1,7 +1,7 @@
 PixelAnimate2
 ============
 
-The main Android app for PIXEL:LED ART http://ledpixelart.com
+The main Android app for PIXEL:LED ART http://ledpixelart.com . Use Android Studio
 
 __Explanation of GIF decoding__
 
