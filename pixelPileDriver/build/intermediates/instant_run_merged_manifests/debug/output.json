@@ -1,0 +1,1 @@
+[{"outputType":{"type":"INSTANT_RUN_MERGED_MANIFESTS"},"apkData":{"type":"MAIN","splits":[],"versionCode":115,"versionName":"12.5","enabled":true,"outputFile":"pixelPileDriver-debug.apk","fullName":"debug","baseName":"debug"},"path":"AndroidManifest.xml","properties":{"packageId":"com.ledpixelart.piledriver","split":"","minSdkVersion":"14"}}]

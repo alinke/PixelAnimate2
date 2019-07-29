@@ -1,0 +1,1 @@
+[{"outputType":{"type":"INSTANT_APP_MANIFEST"},"apkData":{"type":"MAIN","splits":[],"versionCode":116,"versionName":"12.6","enabled":true,"outputFile":"pixelPileDriver-release.apk","fullName":"release","baseName":"release"},"path":"AndroidManifest.xml","properties":{"packageId":"com.ledpixelart.piledriver","split":"","minSdkVersion":"14"}}]

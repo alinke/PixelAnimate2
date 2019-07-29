@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ledpixelart.piledriver"
-    android:versionCode="113"
-    android:versionName="12.3" >
+    android:versionCode="115"
+    android:versionName="12.5" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -135,6 +135,10 @@
             </intent-filter>
         </activity>
         -->
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
 
         <provider
             android:name="com.android.tools.ir.server.InstantRunContentProvider"

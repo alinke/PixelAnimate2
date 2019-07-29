@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:ns1="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="AreYouSure">si prepričan?</string>
+    <string name="BluetoothPairInstructionsV1">Par Bluetooth, da PIXEL kodo: 4545</string>
+    <string name="BluetoothPairInstructionsV2">Par Bluetooth, da PIXEL kodo: 0000</string>
+    <string name="BootloaderVersionString">Bootloader različica</string>
+    <string name="Cancel">Prekliči</string>
+    <string name="Delete">Izbrisati</string>
+    <string name="DoNotInterrupt">Prosim ne prekine ali zapustiti ta zaslon.</string>
+    <string name="FPSOverrideDefault">0</string>
+    <string name="FPSOverrideSummary">Običajno bi ne morate spremeniti to, samo, če želite preglasiti sličic na sekundo animacije. Znova zaženite app po zamenjavi.</string>
+    <string name="FPSOverrideTitle">Sličic na sekundo</string>
+    <string name="FavoriteText">Najljubši</string>
+    <string name="FirmwareVersionString">Firmware prevod</string>
+    <string name="HardwareVersionString">Železnina prevod</string>
+    <string name="LEDPanelChanged">LED panel model je bil spremenjen, dekodiranje spet...</string>
+    <string name="LibraryVersionString">Različica knjižnice</string>
+    <string name="LongTapActionTitle">Izberite dejanje</string>
+    <string name="LongTapActionWrite">Napisati</string>
+    <string name="MovingDown">Gibljejo</string>
+    <string name="MovingUp">Naletu</string>
+    <string name="NoFavoritesMarked">Ne so zaznamovali kakega favorita, dolge pipe označite priljubljene</string>
+    <string name="NoWritinginKiosk">Pisno PIXEL ni podprta v načinu kioska</string>
+    <string name="OKText">v redu</string>
+    <string name="PIXELNotFound">PIXEL ni bilo mogoče najti, si par Bluetooth?</string>
+    <string name="PreparingSlideshow">Priprava diaprojekcije</string>
+    <string name="ProcessingFavorite">Najljubši obdelave</string>
+    <string name="StartInstructions">Tapnite, če želite animirati</string>
+    <string name="StartupMessage">Kratke pipe tok ali dolge pipe pisati</string>
+    <string name="UnFavoriteText">Unfavorite</string>
+    <string name="WritingOnlyOnV2">Žal, pisanje je podprt samo na PIXEL V2 in višje okvirji</string>
+    <string name="WritingSlideshow">Pisanje diaprojekcije na PIXEL</string>
+    <string name="WritingSlideshowGIF">Pisno Slide Show GIF PIXEL</string>
+    <string name="Yes">da</string>
+    <string msgid="4600421777120114993" name="abc_action_bar_home_description">"Krmarjenje domov"</string>
+    <string msgid="1594238315039666878" name="abc_action_bar_up_description">"Krmarjenje navzgor"</string>
+    <string msgid="3588849162933574182" name="abc_action_menu_overflow_description">"Več možnosti"</string>
+    <string msgid="4076576682505996667" name="abc_action_mode_done">"Končano"</string>
+    <string msgid="7468859129482906941" name="abc_activity_chooser_view_see_all">"Pokaži vse"</string>
+    <string msgid="2031811694353399454" name="abc_activitychooserview_choose_application">"Izbira aplikacije"</string>
+    <string msgid="121134116657445385" name="abc_capital_off">"IZKLOPLJENO"</string>
+    <string msgid="3405795526292276155" name="abc_capital_on">"VKLOPLJENO"</string>
+    <string msgid="1302280443949172191" name="abc_menu_alt_shortcut_label">"Alt +"</string>
+    <string msgid="1324831542140195728" name="abc_menu_ctrl_shortcut_label">"Ctrl +"</string>
+    <string msgid="8362206064229013510" name="abc_menu_delete_shortcut_label">"Delete"</string>
+    <string msgid="8341180395196749340" name="abc_menu_enter_shortcut_label">"Enter"</string>
+    <string msgid="4792426091847145555" name="abc_menu_function_shortcut_label">"Fn +"</string>
+    <string msgid="7643535737296831317" name="abc_menu_meta_shortcut_label">"Meta +"</string>
+    <string msgid="8126296154200614004" name="abc_menu_shift_shortcut_label">"Shift +"</string>
+    <string msgid="2378550843553983978" name="abc_menu_space_shortcut_label">"preslednica"</string>
+    <string msgid="9002602288060866689" name="abc_menu_sym_shortcut_label">"Sym +"</string>
+    <string msgid="1351762916121158029" name="abc_prepend_shortcut_label">"Meni +"</string>
+    <string msgid="7723749260725869598" name="abc_search_hint">"Iskanje …"</string>
+    <string msgid="3691816814315814921" name="abc_searchview_description_clear">"Izbris poizvedbe"</string>
+    <string msgid="2550479030709304392" name="abc_searchview_description_query">"Iskalna poizvedba"</string>
+    <string msgid="8264924765203268293" name="abc_searchview_description_search">"Iskanje"</string>
+    <string msgid="8928215447528550784" name="abc_searchview_description_submit">"Pošiljanje poizvedbe"</string>
+    <string msgid="893419373245838918" name="abc_searchview_description_voice">"Glasovno iskanje"</string>
+    <string msgid="3421042268587513524" name="abc_shareactionprovider_share_with">"Deljenje z"</string>
+    <string msgid="3300176832234831527" name="abc_shareactionprovider_share_with_application">"Deljenje z drugimi prek aplikacije <ns1:g id="APPLICATION_NAME">%s</ns1:g>"</string>
+    <string msgid="1603543279005712093" name="abc_toolbar_collapse_description">"Strni"</string>
+    <string name="app_name">PIXEL: LED ART</string>
+    <string name="artURL1">pixeljoint.com</string>
+    <string name="artURL2">pixeljoint.com</string>
+    <string name="artURL3">pixeljoint.com</string>
+    <string name="bluetoothPairingString">Si par Bluetooth za PIXEL? Je seznanjanje kodo: 0000 ali 4545 za PIXEL V1. "</string>
+    <string name="bluetooth_pair">Blueooth seznanjanje</string>
+    <string name="bluetooth_pairSummary">Bližnjica za Bluetooth nastavitve zaslona. Par PIXEL kodo: 0000 ali 4545 za PIXEL V1 enot</string>
+    <string name="cannotWriteMsg">Žal, pisanje je podprt samo na PIXEL V2 okvirji in zgoraj, tok namesto tega...</string>
+    <string name="debugMode">Debug načinu</string>
+    <string name="debugModeSummary">Prikaže debug sporočila, uporabite za prikaz, kako pogosto so Bluetooth povezave pridobivanje ločen in povezan kot tudi drugih debug sporočila</string>
+    <string name="dialogTitleFPSOverride">Sličic na sekundo</string>
+    <string name="dialogTitleMatrix">PIXEL zgled</string>
+    <string name="downloadURL_32">Download URL 32 x 32</string>
+    <string name="downloadURL_32Default">"www.pixeljoint.com/ pixels/new_icons.asp?search=&amp;dimo=%3D&amp;dim=32&amp;colorso=%3E%3D&amp;colors=2&amp;tran=&amp;anim=&amp;iso=&amp;av=&amp;owner=&amp;d=&amp;dosearch=1&amp;ob=search&amp;action=search"</string>
+    <string name="downloadURL_32Summary">URL za 32 x 32 slikovnih pik umetnosti, vključuje http:Slash:/Slash:/</string>
+    <string name="downloadURL_64">Download URL 64 x 64</string>
+    <string name="downloadURL_64Default">www.pixeljoint.com/ pixels/new_icons.asp?search=&amp;dimo=%3D&amp;dim=64&amp;colorso=%3E%3D&amp;colors=2&amp;tran=&amp;anim=&amp;iso=&amp;av=&amp;owner=&amp;d=&amp;dosearch=1&amp;ob=search&amp;action=search</string>
+    <string name="downloadURL_64Summary">URL za 64 x 64 pixel art, ne vključujejo http:Slash:/Slash:/</string>
+    <string name="firstTime_instructions">
+  </string>
+    <string name="fps_override">fps_override</string>
+    <string name="gifonly">GIF le</string>
+    <string name="gifonlySummary">Pokaži le GIF</string>
+    <string name="imageDisplayDuration">Trajanje prikaza slike</string>
+    <string name="imageDisplayDurationDefault">5</string>
+    <string name="imageDisplayDurationSummary">Vsaka slika prikazana v sekundah</string>
+    <string name="kioskMode">Kiosk način</string>
+    <string name="kioskModeSummary">Pisno PIXEL je onemogočen</string>
+    <string name="loadingImagesPlsWait">Nalaganje slike, samo trenutek...</string>
+    <string name="loadingImagesPlsWaitTitle">počakaj, prosim</string>
+    <string name="matrix">PIXEL zgled</string>
+    <string name="matrixSummary">Izbirate lahko med standardno PIXEL ali SUPER PIXEL</string>
+    <string name="matrix_default_value">3</string>
+    <string name="menu_about_summary">http:Slash:/Slash:/ledpixelart.html\n\nDesigned Open Gadgets LLC</string>
+    <string name="menu_about_title">O</string>
+    <string name="menu_btPair_title">Bluetooth par PIXEL | Koda 0000 ali 4545</string>
+    <string name="menu_camera_title">Fotoaparat Pic PIXEL</string>
+    <string name="menu_createSlideShowFavs_title">Napisati diaprojekcijo najljubših slik</string>
+    <string name="menu_createSlideShowGIFFavs_title">Napisati diaprojekcijo najljubših GIF</string>
+    <string name="menu_createSlideShow_title">Napisati Slide Show vse slike</string>
+    <string name="menu_galleryPickTitle">Izberite iz galerije</string>
+    <string name="menu_getART_title">Pixel Art na spletu</string>
+    <string name="menu_instructions_title">Navodila</string>
+    <string name="menu_pixelJoint_title">Pixel Art na spletu</string>
+    <string name="menu_prefs_title">Nastavitve</string>
+    <string name="menu_refreshArt_title">Osveži zalogo Art</string>
+    <string name="menu_refresh_summary">Zaprite in znova zaženite to app zdaj osvežiti zalog art.</string>
+    <string name="menu_refresh_title">Osveži zalogo Art</string>
+    <string name="menu_rescan_title">Znova preveri</string>
+    <string name="menu_startSlideShow_title">Diaprojekcija</string>
+    <string name="menu_stopSlideShow_title">Ustaviti diaprojekcijo</string>
+    <string name="noSleep">Onesposobiti varčevanje z energijo</string>
+    <string name="noSleepSummary">Sile app, da je vedno na, naprava ne bo šel v varčevalni način moč prebiti to app je tekmovanje v teku. Dobro, če uporabljate kot Kiosk na primer. </string>
+    <string name="notFoundString">PIXEL, ni mogoče najti</string>
+    <string name="oneTimeCopyMessage">Ne prekine ali zapustiti ta zaslon. Bo ostal na 100 % za nekaj časa zato bodite potrpežljivi.</string>
+    <string name="oneTimeCopyTitle">Začetna namestitev</string>
+    <string name="oneTimeDecode">En čas dešifrirati v proces, samo trenutek...</string>
+    <string name="oneTimeSetupString">Začetna namestitev: Kopiranje animacije na SD kartico.</string>
+    <string name="only64">64 x 64 vsebino le</string>
+    <string name="pauseBetweenImagesDuration">Pavza med slike</string>
+    <string name="pauseBetweenImagesDurationDefault">3</string>
+    <string name="pauseBetweenImagesDurationSummary">Število sekund premora med slike</string>
+    <string name="prefSummary">PIXEL: LED ART nastavitve</string>
+    <string name="prefTitle">PIXEL: LED ART nastavitve</string>
+    <string name="pref_debugMode">pref_debugMode</string>
+    <string name="pref_debugModeDefault">FALSE</string>
+    <string name="pref_downloadURL_32">pref_downloadURL_32</string>
+    <string name="pref_downloadURL_64">pref_downloadURL_64</string>
+    <string name="pref_gifonly">pref_gifonly</string>
+    <string name="pref_gifonlyDefault">FALSE</string>
+    <string name="pref_imageDisplayDuration">pref_imageDisplayDuration</string>
+    <string name="pref_kioskMode">pref_kioskMode</string>
+    <string name="pref_kioskModeDefault">FALSE</string>
+    <string name="pref_noSleepDefault">FALSE</string>
+    <string name="pref_only64">pref_only64</string>
+    <string name="pref_only64Default">FALSE</string>
+    <string name="pref_only64Summary">Pokaži le 64 x 64 in uporabnik doda vsebine</string>
+    <string name="pref_pauseBetweenImagesDuration">pref_pauseBetweenImagesDuration</string>
+    <string name="pref_scanAll_default">FALSE</string>
+    <string name="pref_showStartupMsg">pref_showStartupMsg</string>
+    <string name="pref_slideShowAllPNGs">pref_slideShowAllPNGs</string>
+    <string name="pref_slideShowAllPNGsDefault">FALSE</string>
+    <string name="pref_writeCamera">pref_writeCamera</string>
+    <string name="rescan_screen_verbage">Zdaj skeniranje kartico SD ali pomnilnik za nove animacije ali izbrisi, samo trenutek...</string>
+    <string name="scanAll">Prikaži vse Album Pics</string>
+    <string name="scanAllSummary">Prikaže samo animacije v imeniku pixel/gif SD kartice. Preverjanje to polje prikaže vse slike SD kartico.</string>
+    <string msgid="146198913615257606" name="search_menu_title">"Iskanje"</string>
+    <string name="select_picture">Izberite sliko</string>
+    <string name="selected_matrix">selected_matrix</string>
+    <string name="setupInstructionsString">Par Bluetooth, da PIXEL kodo 0000 ali 4545 PIXEL V1.\n\nPIXEL V2 uporabniki lahko dolgo tapnite pisati PIXEL za samostojno operation.\n\nAdd svoj umetnost z delitvijo to app od email, galerije in druge apps.\n\nUse v meniju ustvariti diaprojekcijo favorites.\n\n64x64 animirani GIF, bodo prikazani le, če je SUPER PIXEL 64 x 64 izbrana iz nastavitev.</string>
+    <string name="setupInstructionsStringTitle">Navodila</string>
+    <string name="showStartupMsg">Prikaži začetek sporočilo</string>
+    <string name="showStartupMsgDefault">True</string>
+    <string name="showStartupMsgSummary">
+  </string>
+    <string name="slideShowAllPNGs">Vključujejo vse PNGs v diaprojekcijo</string>
+    <string name="slideShowAllPNGsSummary">Diaprojekcija bo vključeval le priljubljene (če ste označili priljubljene). Preverite tukaj, da vključuje vse PNGs v diaprojekcijo, ne glede na priljubljene.</string>
+    <string name="slideShowMode">Način diaprojekcije</string>
+    <string name="slideShowModeDefault">FALSE</string>
+    <string name="slideShowModeSummary">Način diaprojekcije</string>
+    <string name="slideShowStartInstructions">Tapnite, če želite prikazati eno sliko ali močan udarec po žogi od leve proti desni začeti diaprojekcijo</string>
+    <string name="slideShowStartVerbage">Začetek diaprojekcije...</string>
+    <string name="slideShowStopInstructions">Močan udarec po žogi od desne proti levi, ustaviti diaprojekcijo</string>
+    <string name="slideShowStopVerbage">Diaprojekcija ustavil</string>
+    <string name="slideShowtitle">Nastavitve diaprojekcije</string>
+    <string name="slideShowtitleSummary">Nastavitve diaprojekcije</string>
+    <string name="slideshowGIFFPS_Summary">Slikana (slik na sekundo), GIF diaprojekcije</string>
+    <string name="slideshowGIFFPS_default_value">4</string>
+    <string name="slideshowGIFFPS_dialogTitle">GIF Slide Show FPS</string>
+    <string name="slideshowGIFFPS_key">slideshowGIFFPS_key</string>
+    <string name="slideshowGIFFPS_title">GIF Slide Show FPS</string>
+    <string name="startup_verbage_1">Začetna namestitev</string>
+    <string name="startup_verbage_2">Kopiranje animacije na vaš lokalni shranjevanje...</string>
+    <string msgid="7988687684186075107" name="status_bar_notification_info_overflow">"999+"</string>
+    <string name="stopSlideShowMessage">Vi ste še vedno v načinu diaprojekcije, močan udarec po žogi od desne proti levi do konca slide show in potem si lahko izberete eno sliko</string>
+    <string name="versionString">Različica app</string>
+    <string name="whatsNewText">Prvi par Bluetooth, da PIXEL kodo 0000 ali 4545 za PIXEL V1 frames\n\nTap sliko ali GIF razpoložiti v pretakanje mode\n\nLong pipe pisati PIXEL\n\nThe zadnji element pišete, da bo še naprej igrala po napravi povezava je bila prekinjena PIXEL</string>
+    <string name="whatsNewTitle">Dobrodošli PIXEL uporabnik</string>
+    <string name="writeCamera">Shrani slike Mutliple kamero</string>
+    <string name="writeCameraDefault">True</string>
+    <string name="writeCameraSummary">Shrani več slik velblod to app vs prepisovanju le ena</string>
+    <string name="writingPIXEL">Pisno PIXEL</string>
+</resources>

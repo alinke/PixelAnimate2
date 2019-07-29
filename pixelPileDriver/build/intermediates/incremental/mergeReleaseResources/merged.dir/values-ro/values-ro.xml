@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:ns1="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="AreYouSure">eşti sigur?</string>
+    <string name="BluetoothPairInstructionsV1">Pereche de Bluetooth a folosind codul PIXELI: 4545</string>
+    <string name="BluetoothPairInstructionsV2">Pereche de Bluetooth a folosind codul PIXELI: 0000</string>
+    <string name="BootloaderVersionString">Versiunea de bootloader</string>
+    <string name="Cancel">Revocare</string>
+    <string name="Delete">Ştergeţi</string>
+    <string name="DoNotInterrupt">Vă rugăm să întrerupă sau lăsaţi acest ecran.</string>
+    <string name="FPSOverrideDefault">0</string>
+    <string name="FPSOverrideSummary">În mod normal, nu trebuie să schimbe acest lucru, numai dacă doriţi să suprascrieţi cadre pe secundă animaţii. Reporniţi app după schimbarea.</string>
+    <string name="FPSOverrideTitle">Cadre pe secundă</string>
+    <string name="FavoriteText">Favorit</string>
+    <string name="FirmwareVersionString">Versiune de firmware</string>
+    <string name="HardwareVersionString">Versiune hardware</string>
+    <string name="LEDPanelChanged">Modelul de panou LED a fost schimbat, decodare din nou...</string>
+    <string name="LibraryVersionString">Versiunea bibliotecii</string>
+    <string name="LongTapActionTitle">Selectare acţiune</string>
+    <string name="LongTapActionWrite">Scrie</string>
+    <string name="MovingDown">Se deplasează în jos</string>
+    <string name="MovingUp">Se deplasează în sus</string>
+    <string name="NoFavoritesMarked">Nu au marcat orice favorite, lung robinet pentru a marca un favorit</string>
+    <string name="NoWritinginKiosk">Scris la PIXEL nu este acceptată în modul chioșc</string>
+    <string name="OKText">ok</string>
+    <string name="PIXELNotFound">PIXEL a fost nu a fost găsit, te-ai pereche de Bluetooth?</string>
+    <string name="PreparingSlideshow">Pregătirea de diapozitive</string>
+    <string name="ProcessingFavorite">Prelucrare favorit</string>
+    <string name="StartInstructions">Atingeţi pentru a anima</string>
+    <string name="StartupMessage">Atingeţi scurt în flux sau robinet timp pentru a scrie</string>
+    <string name="UnFavoriteText">Unfavorite</string>
+    <string name="WritingOnlyOnV2">Ne pare rau, scris este acceptată numai pe PIXEL V2 şi mai mare de cadre</string>
+    <string name="WritingSlideshow">Scris de diapozitive pixel</string>
+    <string name="WritingSlideshowGIF">Scris de diapozitive GIF pixel</string>
+    <string name="Yes">da</string>
+    <string msgid="4600421777120114993" name="abc_action_bar_home_description">"Navigați la ecranul de pornire"</string>
+    <string msgid="1594238315039666878" name="abc_action_bar_up_description">"Navigați în sus"</string>
+    <string msgid="3588849162933574182" name="abc_action_menu_overflow_description">"Mai multe opțiuni"</string>
+    <string msgid="4076576682505996667" name="abc_action_mode_done">"Terminat"</string>
+    <string msgid="7468859129482906941" name="abc_activity_chooser_view_see_all">"Afișați-le pe toate"</string>
+    <string msgid="2031811694353399454" name="abc_activitychooserview_choose_application">"Alegeți o aplicație"</string>
+    <string msgid="121134116657445385" name="abc_capital_off">"DEZACTIVAȚI"</string>
+    <string msgid="3405795526292276155" name="abc_capital_on">"ACTIVAT"</string>
+    <string msgid="1302280443949172191" name="abc_menu_alt_shortcut_label">"Alt+"</string>
+    <string msgid="1324831542140195728" name="abc_menu_ctrl_shortcut_label">"Ctrl+"</string>
+    <string msgid="8362206064229013510" name="abc_menu_delete_shortcut_label">"delete"</string>
+    <string msgid="8341180395196749340" name="abc_menu_enter_shortcut_label">"enter"</string>
+    <string msgid="4792426091847145555" name="abc_menu_function_shortcut_label">"Funcție+"</string>
+    <string msgid="7643535737296831317" name="abc_menu_meta_shortcut_label">"Meta+"</string>
+    <string msgid="8126296154200614004" name="abc_menu_shift_shortcut_label">"Shift+"</string>
+    <string msgid="2378550843553983978" name="abc_menu_space_shortcut_label">"spațiu"</string>
+    <string msgid="9002602288060866689" name="abc_menu_sym_shortcut_label">"Sym+"</string>
+    <string msgid="1351762916121158029" name="abc_prepend_shortcut_label">"Meniu+"</string>
+    <string msgid="7723749260725869598" name="abc_search_hint">"Căutați…"</string>
+    <string msgid="3691816814315814921" name="abc_searchview_description_clear">"Ștergeți interogarea"</string>
+    <string msgid="2550479030709304392" name="abc_searchview_description_query">"Interogare de căutare"</string>
+    <string msgid="8264924765203268293" name="abc_searchview_description_search">"Căutați"</string>
+    <string msgid="8928215447528550784" name="abc_searchview_description_submit">"Trimiteți interogarea"</string>
+    <string msgid="893419373245838918" name="abc_searchview_description_voice">"Căutare vocală"</string>
+    <string msgid="3421042268587513524" name="abc_shareactionprovider_share_with">"Trimiteți la"</string>
+    <string msgid="3300176832234831527" name="abc_shareactionprovider_share_with_application">"Trimiteți folosind <ns1:g id="APPLICATION_NAME">%s</ns1:g>"</string>
+    <string msgid="1603543279005712093" name="abc_toolbar_collapse_description">"Restrângeți"</string>
+    <string name="app_name">PIXEL: ARTA DE LED</string>
+    <string name="artURL1">pixeljoint.com</string>
+    <string name="artURL2">pixeljoint.com</string>
+    <string name="artURL3">pixeljoint.com</string>
+    <string name="bluetoothPairingString">Te-ai pereche Bluetooth pixel? Cod de cuplare este: 0000 sau 4545 pentru PIXELI V1. "</string>
+    <string name="bluetooth_pair">Asocierea Blueooth</string>
+    <string name="bluetooth_pairSummary">Comandă rapidă la ecranul de setări Bluetooth. Pereche de a folosind codul PIXELI: 0000 sau 4545 pentru unităţile de PIXELI V1</string>
+    <string name="cannotWriteMsg">Ne pare rau, scris este acceptată numai pe V2 PIXELI ramele şi mai sus, în loc de streaming...</string>
+    <string name="debugMode">Modul de depanare</string>
+    <string name="debugModeSummary">Afişează mesaje de depanare, folosi pentru a vedea cât de des conexiunile Bluetooth primesc mesaje de depanare deconectat şi conectat, precum şi alte</string>
+    <string name="dialogTitleFPSOverride">Cadre pe secundă</string>
+    <string name="dialogTitleMatrix">PIXEL Model</string>
+    <string name="downloadURL_32">Descarca URL 32 x 32</string>
+    <string name="downloadURL_32Default">"www.pixeljoint.com/ pixels/new_icons.asp?search=&amp;dimo=%3D&amp;dim=32&amp;colorso=%3E%3D&amp;colors=2&amp;tran=&amp;anim=&amp;iso=&amp;av=&amp;owner=&amp;d=&amp;dosearch=1&amp;ob=search&amp;action=search"</string>
+    <string name="downloadURL_32Summary">URL-ul pentru arta 32 x 32 pixeli, nu include http:Slash:/Slash:/</string>
+    <string name="downloadURL_64">Descarca URL 64 x 64</string>
+    <string name="downloadURL_64Default">www.pixeljoint.com/ pixels/new_icons.asp?search=&amp;dimo=%3D&amp;dim=64&amp;colorso=%3E%3D&amp;colors=2&amp;tran=&amp;anim=&amp;iso=&amp;av=&amp;owner=&amp;d=&amp;dosearch=1&amp;ob=search&amp;action=search</string>
+    <string name="downloadURL_64Summary">URL-ul pentru arta de 64 x 64 pixeli, nu include http:Slash:/Slash:/</string>
+    <string name="firstTime_instructions">
+  </string>
+    <string name="fps_override">fps_override</string>
+    <string name="gifonly">GIF-uri numai</string>
+    <string name="gifonlySummary">Numai Arată GIF-uri</string>
+    <string name="imageDisplayDuration">Durata de afişare imagine</string>
+    <string name="imageDisplayDurationDefault">5</string>
+    <string name="imageDisplayDurationSummary">Numărul de secunde fiecare imagine este afişată</string>
+    <string name="kioskMode">Modul chioșc</string>
+    <string name="kioskModeSummary">Scris pixel este dezactivat</string>
+    <string name="loadingImagesPlsWait">Încărcare imagini, doar o clipă...</string>
+    <string name="loadingImagesPlsWaitTitle">te rog să aştepţi</string>
+    <string name="matrix">PIXEL Model</string>
+    <string name="matrixSummary">Alege între standard PIXEL sau SUPER PIXEL</string>
+    <string name="matrix_default_value">3</string>
+    <string name="menu_about_summary">http:slash:/slash:/ledpixelart.html\n\nDesigned Open Gadgets SRL</string>
+    <string name="menu_about_title">Despre</string>
+    <string name="menu_btPair_title">Bluetooth pereche PIXEL | Cod 0000 sau 4545</string>
+    <string name="menu_camera_title">Aparat de fotografiat Pic pixel</string>
+    <string name="menu_createSlideShowFavs_title">Scrie diapozitive de imaginile preferate</string>
+    <string name="menu_createSlideShowGIFFavs_title">Scrie diapozitive de GIF-uri preferate</string>
+    <string name="menu_createSlideShow_title">Scrie diapozitive de toate imaginile</string>
+    <string name="menu_galleryPickTitle">Selectaţi din Galerie</string>
+    <string name="menu_getART_title">Arta pixel pe Web</string>
+    <string name="menu_instructions_title">Instrucţiuni</string>
+    <string name="menu_pixelJoint_title">Arta pixel pe Web</string>
+    <string name="menu_prefs_title">Setări</string>
+    <string name="menu_refreshArt_title">Reîmprospătare valori de artă</string>
+    <string name="menu_refresh_summary">Vă rugăm să ieşiţi şi reporniţi acum acest app pentru a reîmprospăta arta de stoc.</string>
+    <string name="menu_refresh_title">Reîmprospătare valori de artă</string>
+    <string name="menu_rescan_title">Rescanare</string>
+    <string name="menu_startSlideShow_title">Diapozitive</string>
+    <string name="menu_stopSlideShow_title">Opri diapozitive</string>
+    <string name="noSleep">Dezactivaţi economisirea energiei</string>
+    <string name="noSleepSummary">Forţele app să fie întotdeauna pe, aparatul nu va intra în modul de economii de energie în timp ce acest app se execută. Bună dacă folosind ca un chioşc de exemplu. </string>
+    <string name="notFoundString">PIXEL nu a fost găsit</string>
+    <string name="oneTimeCopyMessage">Întrerupe sau lăsaţi acest ecran. Acesta va rămâne pe 100% pentru un timp astfel încât vă rugăm să fie pacient.</string>
+    <string name="oneTimeCopyTitle">Configurării iniţiale</string>
+    <string name="oneTimeDecode">O singură dată decoda în proces, o clipă...</string>
+    <string name="oneTimeSetupString">Instalarea iniţială: Copierea animaţii la cardul SD.</string>
+    <string name="only64">64 x 64 conţinut numai</string>
+    <string name="pauseBetweenImagesDuration">Pauză între imagini</string>
+    <string name="pauseBetweenImagesDurationDefault">3</string>
+    <string name="pauseBetweenImagesDurationSummary">Numărul de secunde pentru a întrerupe între imagini</string>
+    <string name="prefSummary">PIXEL: LED arta setările</string>
+    <string name="prefTitle">PIXEL: LED arta setările</string>
+    <string name="pref_debugMode">pref_debugMode</string>
+    <string name="pref_debugModeDefault">fals</string>
+    <string name="pref_downloadURL_32">pref_downloadURL_32</string>
+    <string name="pref_downloadURL_64">pref_downloadURL_64</string>
+    <string name="pref_gifonly">pref_gifonly</string>
+    <string name="pref_gifonlyDefault">fals</string>
+    <string name="pref_imageDisplayDuration">pref_imageDisplayDuration</string>
+    <string name="pref_kioskMode">pref_kioskMode</string>
+    <string name="pref_kioskModeDefault">fals</string>
+    <string name="pref_noSleepDefault">fals</string>
+    <string name="pref_only64">pref_only64</string>
+    <string name="pref_only64Default">fals</string>
+    <string name="pref_only64Summary">Arată doar 64 x 64 şi utilizator adăugat conţinut</string>
+    <string name="pref_pauseBetweenImagesDuration">pref_pauseBetweenImagesDuration</string>
+    <string name="pref_scanAll_default">fals</string>
+    <string name="pref_showStartupMsg">pref_showStartupMsg</string>
+    <string name="pref_slideShowAllPNGs">pref_slideShowAllPNGs</string>
+    <string name="pref_slideShowAllPNGsDefault">fals</string>
+    <string name="pref_writeCamera">pref_writeCamera</string>
+    <string name="rescan_screen_verbage">Acum scanare dumneavoastră SD card sau memorie interna pentru animaţii noi sau ştergeri, doar o clipă...</string>
+    <string name="scanAll">Arată toate Album poze</string>
+    <string name="scanAllSummary">Doar animaţii în directorul pixel/GIFs a cardului SD va fi afişat. Verificarea această casetă afişează toate imaginile pe SD card.</string>
+    <string msgid="146198913615257606" name="search_menu_title">"Căutați"</string>
+    <string name="select_picture">Selectați imagine</string>
+    <string name="selected_matrix">selected_matrix</string>
+    <string name="setupInstructionsString">Bluetooth pereche pixel folosind codul 0000 sau 4545 pentru utilizatorii de PIXEL V1.\n\nPIXEL V2 lung poate atinge pentru a scrie la PIXEL pentru stand singur operation.\n\nAdd propria arta de partajare pentru acest app de e-mail, Galerie şi alte apps.\n\nUse meniul pentru a crea un slide show de favorites.\n\n64x64 animate GIF-uri va afişa numai dacă PIXEL SUPER 64 x 64 este selectat din setările.</string>
+    <string name="setupInstructionsStringTitle">Instrucţiuni</string>
+    <string name="showStartupMsg">Afişează un mesaj de Startup</string>
+    <string name="showStartupMsgDefault">adevărat</string>
+    <string name="showStartupMsgSummary">
+  </string>
+    <string name="slideShowAllPNGs">Include toate PNGs în diapozitive</string>
+    <string name="slideShowAllPNGsSummary">Slide show va include numai favorite (în cazul în care aţi marcat favorite). Verificaţi aici pentru a include toate PNGs în diapozitive indiferent de favorite.</string>
+    <string name="slideShowMode">Modul de expunere de diapozitive</string>
+    <string name="slideShowModeDefault">fals</string>
+    <string name="slideShowModeSummary">Modul de expunere de diapozitive</string>
+    <string name="slideShowStartInstructions">Apăsaţi pentru a afişa o singură imagine sau deplasați degetul la stânga la dreapta pentru a începe o expunere de diapozitive</string>
+    <string name="slideShowStartVerbage">Pornire expunere diapozitive...</string>
+    <string name="slideShowStopInstructions">Glisaţi la dreapta la stânga pentru a opri diapozitive</string>
+    <string name="slideShowStopVerbage">Diapozitive oprit</string>
+    <string name="slideShowtitle">Setările de diapozitive</string>
+    <string name="slideShowtitleSummary">Setările de diapozitive</string>
+    <string name="slideshowGIFFPS_Summary">FPS (cadre pe secundă) pentru diapozitive GIF</string>
+    <string name="slideshowGIFFPS_default_value">4</string>
+    <string name="slideshowGIFFPS_dialogTitle">GIF diapozitive FPS</string>
+    <string name="slideshowGIFFPS_key">slideshowGIFFPS_key</string>
+    <string name="slideshowGIFFPS_title">GIF diapozitive FPS</string>
+    <string name="startup_verbage_1">Configurării iniţiale</string>
+    <string name="startup_verbage_2">Copierea animaţii dumneavoastră local magazin...</string>
+    <string msgid="7988687684186075107" name="status_bar_notification_info_overflow">"999+"</string>
+    <string name="stopSlideShowMessage">Eşti încă în modul expunere de diapozitive, glisaţi la dreapta la stânga pentru a termina diapozitive şi apoi selectaţi o singură imagine</string>
+    <string name="versionString">Versiunea App</string>
+    <string name="whatsNewText">Prima pereche de Bluetooth pixel folosind codul 0000 sau 4545 pentru PIXELI V1 frames\n\nTap orice imagine sau GIF pentru a afişa în streaming mode\n\nLong robinet pentru a scrie la PIXEL\n\nThe ultimul element vă scrie va continua să joace după ce aparatul a fost deconectat de PIXEL</string>
+    <string name="whatsNewTitle">Bine ati venit PIXEL utilizator</string>
+    <string name="writeCamera">Salvează imaginile Mutliple Camera</string>
+    <string name="writeCameraDefault">adevărat</string>
+    <string name="writeCameraSummary">Salvează mai multe imagini de aparat de fotografiat pentru acest app vs. suprascrierea doar unul</string>
+    <string name="writingPIXEL">Scris la PIXEL</string>
+</resources>

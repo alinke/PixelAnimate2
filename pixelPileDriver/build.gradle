@@ -6,8 +6,8 @@ android {
         applicationId "com.ledpixelart.piledriver"
         minSdkVersion 14
         targetSdkVersion 28
-        versionCode 113
-        versionName "12.3"
+        versionCode 116
+        versionName "12.6"
         //testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

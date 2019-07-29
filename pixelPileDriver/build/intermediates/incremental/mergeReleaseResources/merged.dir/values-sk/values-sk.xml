@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:ns1="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="AreYouSure">si si istý?</string>
+    <string name="BluetoothPairInstructionsV1">Bluetooth dvojica pixel pomocou kódu: 4545</string>
+    <string name="BluetoothPairInstructionsV2">Bluetooth dvojica pixel pomocou kódu: 0000</string>
+    <string name="BootloaderVersionString">Bootloader verzia</string>
+    <string name="Cancel">Zrušiť</string>
+    <string name="Delete">Odstrániť</string>
+    <string name="DoNotInterrupt">Prosím prerušiť ani opustiť túto obrazovku.</string>
+    <string name="FPSOverrideDefault">0</string>
+    <string name="FPSOverrideSummary">Normálne by nemusíte zmeniť, len ak chcete prepísať snímok za sekundu animácie. Reštart aplikácie po zmene.</string>
+    <string name="FPSOverrideTitle">Snímok za sekundu</string>
+    <string name="FavoriteText">Obľúbené</string>
+    <string name="FirmwareVersionString">Verzia firmvéru</string>
+    <string name="HardwareVersionString">Verzia hardvéru</string>
+    <string name="LEDPanelChanged">LED panel modelu bol zmenený, dekódovanie znova...</string>
+    <string name="LibraryVersionString">Verzia knižnice</string>
+    <string name="LongTapActionTitle">Vybrať akciu</string>
+    <string name="LongTapActionWrite">Písať</string>
+    <string name="MovingDown">Pohybujú</string>
+    <string name="MovingUp">Pohybujúce sa</string>
+    <string name="NoFavoritesMarked">Nie označené žiadne obľúbené, dlhé vodovodu chcete označiť obľúbené</string>
+    <string name="NoWritinginKiosk">Písanie na PIXEL nepodporuje celoobrazovkovom režime</string>
+    <string name="OKText">ok</string>
+    <string name="PIXELNotFound">PIXEL sa nenašiel, jsi Bluetooth páru?</string>
+    <string name="PreparingSlideshow">Príprava prezentácie</string>
+    <string name="ProcessingFavorite">Spracovanie obľúbené</string>
+    <string name="StartInstructions">Klepnite, ak chcete animovať</string>
+    <string name="StartupMessage">Krátke kohútika prúd alebo dlhý kohútik písať</string>
+    <string name="UnFavoriteText">Unfavorite</string>
+    <string name="WritingOnlyOnV2">Ospravedlňujeme sa, ale písanie je podporovaná len na PIXEL V2 a vyššia rámy</string>
+    <string name="WritingSlideshow">Písanie prezentácie na PIXEL</string>
+    <string name="WritingSlideshowGIF">Písanie prezentácie GIF pixel</string>
+    <string name="Yes">áno</string>
+    <string msgid="4600421777120114993" name="abc_action_bar_home_description">"Prejsť na plochu"</string>
+    <string msgid="1594238315039666878" name="abc_action_bar_up_description">"Prejsť hore"</string>
+    <string msgid="3588849162933574182" name="abc_action_menu_overflow_description">"Ďalšie možnosti"</string>
+    <string msgid="4076576682505996667" name="abc_action_mode_done">"Hotovo"</string>
+    <string msgid="7468859129482906941" name="abc_activity_chooser_view_see_all">"Zobraziť všetko"</string>
+    <string msgid="2031811694353399454" name="abc_activitychooserview_choose_application">"Zvoľte aplikáciu"</string>
+    <string msgid="121134116657445385" name="abc_capital_off">"VYPNUTÉ"</string>
+    <string msgid="3405795526292276155" name="abc_capital_on">"ZAPNUTÉ"</string>
+    <string msgid="1302280443949172191" name="abc_menu_alt_shortcut_label">"Alt+"</string>
+    <string msgid="1324831542140195728" name="abc_menu_ctrl_shortcut_label">"Ctrl+"</string>
+    <string msgid="8362206064229013510" name="abc_menu_delete_shortcut_label">"odstrániť"</string>
+    <string msgid="8341180395196749340" name="abc_menu_enter_shortcut_label">"enter"</string>
+    <string msgid="4792426091847145555" name="abc_menu_function_shortcut_label">"Function+"</string>
+    <string msgid="7643535737296831317" name="abc_menu_meta_shortcut_label">"Meta+"</string>
+    <string msgid="8126296154200614004" name="abc_menu_shift_shortcut_label">"Shift+"</string>
+    <string msgid="2378550843553983978" name="abc_menu_space_shortcut_label">"medzerník"</string>
+    <string msgid="9002602288060866689" name="abc_menu_sym_shortcut_label">"Sym+"</string>
+    <string msgid="1351762916121158029" name="abc_prepend_shortcut_label">"Menu+"</string>
+    <string msgid="7723749260725869598" name="abc_search_hint">"Vyhľadať…"</string>
+    <string msgid="3691816814315814921" name="abc_searchview_description_clear">"Vymazať dopyt"</string>
+    <string msgid="2550479030709304392" name="abc_searchview_description_query">"Vyhľadávací dopyt"</string>
+    <string msgid="8264924765203268293" name="abc_searchview_description_search">"Hľadať"</string>
+    <string msgid="8928215447528550784" name="abc_searchview_description_submit">"Odoslať dopyt"</string>
+    <string msgid="893419373245838918" name="abc_searchview_description_voice">"Hlasové vyhľadávanie"</string>
+    <string msgid="3421042268587513524" name="abc_shareactionprovider_share_with">"Zdieľať pomocou"</string>
+    <string msgid="3300176832234831527" name="abc_shareactionprovider_share_with_application">"Zdieľať s aplikáciou <ns1:g id="APPLICATION_NAME">%s</ns1:g>"</string>
+    <string msgid="1603543279005712093" name="abc_toolbar_collapse_description">"Zbaliť"</string>
+    <string name="app_name">PIXEL: LED UMENIE</string>
+    <string name="artURL1">pixeljoint.com</string>
+    <string name="artURL2">pixeljoint.com</string>
+    <string name="artURL3">pixeljoint.com</string>
+    <string name="bluetoothPairingString">Ste pár Bluetooth pixel? Kód pre párovanie je: 0000 alebo 4545 pre PIXEL V1. "</string>
+    <string name="bluetooth_pair">Blueooth párovanie</string>
+    <string name="bluetooth_pairSummary">Odkaz na obrazovke nastavenia Bluetooth. Dvojica pixel pomocou kódu: 0000 alebo 4545 PIXEL V1 jednotiek</string>
+    <string name="cannotWriteMsg">Pardon, písanie je podporovaná iba na PIXEL V2 rámy a vyššie, streamovanie namiesto...</string>
+    <string name="debugMode">Režim ladenia</string>
+    <string name="debugModeSummary">Zobrazuje správy ladenia, použite zistiť ako často Bluetooth spojenie sú stále odpojený a pripojený, rovnako ako ostatné debug správy</string>
+    <string name="dialogTitleFPSOverride">Snímok za sekundu</string>
+    <string name="dialogTitleMatrix">PIXEL Model</string>
+    <string name="downloadURL_32">Stiahnuť URL 32 x 32</string>
+    <string name="downloadURL_32Default">"www.pixeljoint.com/ pixels/new_icons.asp?search=&amp;dimo=%3D&amp;dim=32&amp;colorso=%3E%3D&amp;colors=2&amp;tran=&amp;anim=&amp;iso=&amp;av=&amp;owner=&amp;d=&amp;dosearch=1&amp;ob=search&amp;action=search"</string>
+    <string name="downloadURL_32Summary">Adresa URL pre 32 x 32 pixelov umenie, nezahŕňajú http:Slash:/Slash:/</string>
+    <string name="downloadURL_64">Stiahnuť URL 64 x 64</string>
+    <string name="downloadURL_64Default">www.pixeljoint.com/ pixels/new_icons.asp?search=&amp;dimo=%3D&amp;dim=64&amp;colorso=%3E%3D&amp;colors=2&amp;tran=&amp;anim=&amp;iso=&amp;av=&amp;owner=&amp;d=&amp;dosearch=1&amp;ob=search&amp;action=search</string>
+    <string name="downloadURL_64Summary">Adresa URL pre 64 x 64 pixel umenie, nezahŕňajú http:Slash:/Slash:/</string>
+    <string name="firstTime_instructions">
+  </string>
+    <string name="fps_override">fps_override</string>
+    <string name="gifonly">Iba obrázky vo formáte GIF</string>
+    <string name="gifonlySummary">Zobraziť iba obrázky vo formáte GIF</string>
+    <string name="imageDisplayDuration">Obrázok zobrazenia trvania</string>
+    <string name="imageDisplayDurationDefault">5</string>
+    <string name="imageDisplayDurationSummary">Každý obrázok sa zobrazí v sekundách</string>
+    <string name="kioskMode">KIOSK mód</string>
+    <string name="kioskModeSummary">Písanie na PIXEL je zakázaný</string>
+    <string name="loadingImagesPlsWait">Načítavanie obrázkov, len na chvíľu...</string>
+    <string name="loadingImagesPlsWaitTitle">prosím počkajte</string>
+    <string name="matrix">PIXEL Model</string>
+    <string name="matrixSummary">Vybrať medzi štandardné PIXEL alebo SUPER PIXEL</string>
+    <string name="matrix_default_value">3</string>
+    <string name="menu_about_summary">http:Slash:/Slash:/ledpixelart.html\n\nDesigned otvorené Gadgets LLC</string>
+    <string name="menu_about_title">O</string>
+    <string name="menu_btPair_title">Bluetooth pár pixelov | Kód 0000 alebo 4545</string>
+    <string name="menu_camera_title">Fotoaparát Pic PIXEL</string>
+    <string name="menu_createSlideShowFavs_title">Napísať prezentáciu obľúbených obrázkov</string>
+    <string name="menu_createSlideShowGIFFavs_title">Napísať prezentáciu obľúbené GIFy</string>
+    <string name="menu_createSlideShow_title">Napísať prezentáciu všetkých obrázkov</string>
+    <string name="menu_galleryPickTitle">Vybrať z galérie</string>
+    <string name="menu_getART_title">Pixel umenie na webe</string>
+    <string name="menu_instructions_title">Pokyny</string>
+    <string name="menu_pixelJoint_title">Pixel umenie na webe</string>
+    <string name="menu_prefs_title">Nastavenia</string>
+    <string name="menu_refreshArt_title">Obnoviť zásoby umenie</string>
+    <string name="menu_refresh_summary">Ukončite a reštartujte tento app teraz obnoviť zásoby umenie.</string>
+    <string name="menu_refresh_title">Obnoviť zásoby umenie</string>
+    <string name="menu_rescan_title">Prehľadať</string>
+    <string name="menu_startSlideShow_title">Prezentácia</string>
+    <string name="menu_stopSlideShow_title">Zastaviť prezentáciu</string>
+    <string name="noSleep">Vypnutie úspory energie</string>
+    <string name="noSleepSummary">Sily app sa vždy na prístroji nepôjde do režimu úspory energie pri tejto app je spustený. Je dobré Ak napríklad používate ako kiosku. </string>
+    <string name="notFoundString">PIXEL nebol nájdený</string>
+    <string name="oneTimeCopyMessage">Prerušiť ani opustiť túto obrazovku. To zostane na 100% za chvíľu tak prosím, buďte trpezliví.</string>
+    <string name="oneTimeCopyTitle">Počiatočné nastavenie</string>
+    <string name="oneTimeDecode">Jeden čas dekódovať v procese, len na chvíľu...</string>
+    <string name="oneTimeSetupString">Počiatočné nastavenie: Kopírovanie animácie na SD kartu.</string>
+    <string name="only64">Iba obsah 64 x 64</string>
+    <string name="pauseBetweenImagesDuration">Pauza medzi obrázkami</string>
+    <string name="pauseBetweenImagesDurationDefault">3</string>
+    <string name="pauseBetweenImagesDurationSummary">Počet sekúnd pauza medzi obrázky</string>
+    <string name="prefSummary">PIXEL: LED umenie nastavenia</string>
+    <string name="prefTitle">PIXEL: LED umenie nastavenia</string>
+    <string name="pref_debugMode">pref_debugMode</string>
+    <string name="pref_debugModeDefault">falošné</string>
+    <string name="pref_downloadURL_32">pref_downloadURL_32</string>
+    <string name="pref_downloadURL_64">pref_downloadURL_64</string>
+    <string name="pref_gifonly">pref_gifonly</string>
+    <string name="pref_gifonlyDefault">falošné</string>
+    <string name="pref_imageDisplayDuration">pref_imageDisplayDuration</string>
+    <string name="pref_kioskMode">pref_kioskMode</string>
+    <string name="pref_kioskModeDefault">falošné</string>
+    <string name="pref_noSleepDefault">falošné</string>
+    <string name="pref_only64">pref_only64</string>
+    <string name="pref_only64Default">falošné</string>
+    <string name="pref_only64Summary">Zobraziť iba 64 x 64 a používateľ pridaný obsah</string>
+    <string name="pref_pauseBetweenImagesDuration">pref_pauseBetweenImagesDuration</string>
+    <string name="pref_scanAll_default">falošné</string>
+    <string name="pref_showStartupMsg">pref_showStartupMsg</string>
+    <string name="pref_slideShowAllPNGs">pref_slideShowAllPNGs</string>
+    <string name="pref_slideShowAllPNGsDefault">falošné</string>
+    <string name="pref_writeCamera">pref_writeCamera</string>
+    <string name="rescan_screen_verbage">Teraz skenovanie vašej SD karty alebo internej pamäte pre nové animácie alebo odstránené, len na chvíľu...</string>
+    <string name="scanAll">Zobraziť všetky fotky albumu</string>
+    <string name="scanAllSummary">Zobrazia sa iba animácie v adresári pixel GIF/SD karty. Kontrola tohto poľa zobrazuje všetky SD karty fotky.</string>
+    <string msgid="146198913615257606" name="search_menu_title">"Vyhľadávanie"</string>
+    <string name="select_picture">Vybrať obrázok</string>
+    <string name="selected_matrix">selected_matrix</string>
+    <string name="setupInstructionsString">Bluetooth dvojica pixel PIXEL V1.\n\nPIXEL V2 používateľov pomocou kódu 0000 alebo 4545 môže dlho ťuknite napísať PIXEL pre stand-samotný operation.\n\nAdd vlastné umenie zdieľanie tejto app z e-mailu, galériu a iné apps.\n\nUse menu vytvoriť prezentáciu favorites.\n\n64x64 animované GIFy sa zobrazia iba ak SUPER PIXEL 64 x 64 je vybraté nastavenie.</string>
+    <string name="setupInstructionsStringTitle">Pokyny</string>
+    <string name="showStartupMsg">Zobraziť pri spustení správu</string>
+    <string name="showStartupMsgDefault">pravda</string>
+    <string name="showStartupMsgSummary">
+  </string>
+    <string name="slideShowAllPNGs">Zahrnúť všetky png prezentácia</string>
+    <string name="slideShowAllPNGsSummary">Prezentácia bude obsahovať iba obľúbené (ak ste označili ako obľúbené). Skontrolujte tu patria všetky png v prezentácii bez ohľadu na obľúbené položky.</string>
+    <string name="slideShowMode">Režim prezentácie</string>
+    <string name="slideShowModeDefault">falošné</string>
+    <string name="slideShowModeSummary">Režim prezentácie</string>
+    <string name="slideShowStartInstructions">Klepnite na zobrazenie jedného obrázka alebo výpad zľava doprava na spustenie prezentácie</string>
+    <string name="slideShowStartVerbage">Spustenie prezentácie...</string>
+    <string name="slideShowStopInstructions">Výpad z prava do ľava zastaviť prezentáciu</string>
+    <string name="slideShowStopVerbage">Zastaviť prezentáciu</string>
+    <string name="slideShowtitle">Nastavenia prezentácie</string>
+    <string name="slideShowtitleSummary">Nastavenia prezentácie</string>
+    <string name="slideshowGIFFPS_Summary">Rýchlosť snímok (snímky za sekundu) pre GIF prezentáciu</string>
+    <string name="slideshowGIFFPS_default_value">4</string>
+    <string name="slideshowGIFFPS_dialogTitle">GIF prezentáciu FPS</string>
+    <string name="slideshowGIFFPS_key">slideshowGIFFPS_key</string>
+    <string name="slideshowGIFFPS_title">GIF prezentáciu FPS</string>
+    <string name="startup_verbage_1">Počiatočné nastavenie</string>
+    <string name="startup_verbage_2">Kopírovanie animácie pre váš miestny ukladací priestor...</string>
+    <string msgid="7988687684186075107" name="status_bar_notification_info_overflow">"999+"</string>
+    <string name="stopSlideShowMessage">Ste stále v režime prezentácie, výpad z prava do ľava do konca prezentácie a potom si môžete vybrať jeden obrázok</string>
+    <string name="versionString">App verzia</string>
+    <string name="whatsNewText">Prvá dvojica Bluetooth pixel pomocou kódu 0000 alebo 4545 pre PIXEL V1 frames\n\nTap akýkoľvek obrázok alebo GIF Zobraziť streamovanie mode\n\nLong kohútika napísať PIXEL\n\nThe poslednú položku budete písať aj naďalej hrať po odpojení zariadenia od PIXEL</string>
+    <string name="whatsNewTitle">Vitajte PIXEL používateľa</string>
+    <string name="writeCamera">Uložiť viaceré fotografie</string>
+    <string name="writeCameraDefault">pravda</string>
+    <string name="writeCameraSummary">Ukladá viacero obrázkov fotoaparát k tejto aplikácii vs prepísanie len jeden</string>
+    <string name="writingPIXEL">Písanie na PIXEL</string>
+</resources>

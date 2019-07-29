@@ -3,25 +3,25 @@
 <resources>
 	
 <string-array name="matrix_options">
-    <item>Seeed 32x16</item>
-    <item>Adafruit 32x16</item>
+    <item>Legacy 32x16</item>
+    <item>32x16</item>
     <item>Seeed 32x32</item>
     <item>PIXEL V2 32x32</item>
     <item>64x32 (2x1 horz)</item>
     <item>32x64 (1x2 vert)</item>
     <item>Mirrored (2 displays)</item>
-    <item>128x32 (4x1 horz)</item>
-    <item>32x128 (1x4 vert)</item>
-    <item>SUPER PIXEL 64x64 (2x2 square)</item>
+    <item>128x32</item>
+    <item>32x128</item>
+    <item>Legacy 64x64</item>
     <item>PIXEL V2.5 32x32 (Default)</item>
-    <item>Adafruit 32x32 Color Swap</item>
-    <item>Adafruit 64x32</item>
-    <item>Adafruit 64x64</item>
-    <item>Adafruit 128x32</item>
-    <item>Adafruit 32x128</item>
-    <item>Adafruit 64x16</item>
-    <item>Adafruit 64x32 Color Swap</item>
-    <item>Adafruit 64x64 Color Swap</item>
+    <item>32x32 Color Swap</item>
+    <item>64x32</item>
+    <item>SUPER PIXEL 64x64</item>
+    <item>Arcade Marquee 128x32</item>
+    <item>32x128</item>
+    <item>64x16</item>
+    <item>64x32 Color Swap</item>
+    <item>64x64 Color Swap</item>
     <item>PIXEL V2 Color Swap</item>
     <item>AliExpress 32x32 Random1</item>
 </string-array>

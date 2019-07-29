@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="com.ledpixelart.piledriver"
-      android:versionCode="113"
-      android:versionName="12.3"
+      android:versionCode="115"
+      android:versionName="12.5"
       split="lib_slice_6_apk">
 </manifest>

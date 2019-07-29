@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:ns1="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="AreYouSure">क्या आपको यकीन है?</string>
+    <string name="BluetoothPairInstructionsV1">ब्लूटूथ जोड़ी कोड का उपयोग कर पिक्सेल करने के लिए: 4545</string>
+    <string name="BluetoothPairInstructionsV2">ब्लूटूथ जोड़ी कोड का उपयोग कर पिक्सेल करने के लिए: 0000</string>
+    <string name="BootloaderVersionString">बूटलोडर संस्करण</string>
+    <string name="Cancel">रद्द करें</string>
+    <string name="Delete">हटाएँ</string>
+    <string name="DoNotInterrupt">कृपया इंटरप्ट या नहीं इस स्क्रीन छोड़ दें।</string>
+    <string name="FPSOverrideDefault">0</string>
+    <string name="FPSOverrideSummary">यदि केवल आप एनिमेशन की दूसरी प्रति फ्रेम को ओवरराइड करना चाहते हैं आम तौर पर आप इस, परिवर्तित करने के लिए की आवश्यकता होगी नहीं। बदलने के बाद अनुप्रयोग पुनरारंभ करें।</string>
+    <string name="FPSOverrideTitle">प्रति सेकंड फ़्रेम</string>
+    <string name="FavoriteText">पसंदीदा</string>
+    <string name="FirmwareVersionString">फर्मवेयर संस्करण</string>
+    <string name="HardwareVersionString">हार्डवेयर संस्करण</string>
+    <string name="LEDPanelChanged">एलईडी पैनल मॉडल बदल गया था, फिर decoding...</string>
+    <string name="LibraryVersionString">पुस्तकालय संस्करण</string>
+    <string name="LongTapActionTitle">क्रिया का चयन करें</string>
+    <string name="LongTapActionWrite">लिखना</string>
+    <string name="MovingDown">चलती</string>
+    <string name="MovingUp">तक चलती</string>
+    <string name="NoFavoritesMarked">आप किसी भी पसंदीदा, एक पसंदीदा चिह्नित करने के लिए लंबे समय नल चिह्नित नहीं है</string>
+    <string name="NoWritinginKiosk">पिक्सेल कीओस्क मोड में समर्थित नहीं करने के लिए लेखन</string>
+    <string name="OKText">ठीक है</string>
+    <string name="PIXELNotFound">पिक्सेल नहीं पाया गया था, आप ब्लूटूथ जोड़ी किया था?</string>
+    <string name="PreparingSlideshow">स्लाइड शो की तैयारी</string>
+    <string name="ProcessingFavorite">पसंदीदा प्रसंस्करण</string>
+    <string name="StartInstructions">चेतन करने के लिए टैप करें</string>
+    <string name="StartupMessage">स्ट्रीम या लिखने के लिए लंबे समय नल के लिए लघु नल</string>
+    <string name="UnFavoriteText">Unfavorite</string>
+    <string name="WritingOnlyOnV2">माफ करना, लेखन केवल पिक्सेल V2 और उच्चतर तख्ते पर समर्थित है</string>
+    <string name="WritingSlideshow">लेखन पिक्सेल करने के लिए स्लाइड शो</string>
+    <string name="WritingSlideshowGIF">स्लाइड शो GIF पिक्सेल करने के लिए लेखन</string>
+    <string name="Yes">हाँ</string>
+    <string msgid="4600421777120114993" name="abc_action_bar_home_description">"होम पेज पर जाएं"</string>
+    <string msgid="1594238315039666878" name="abc_action_bar_up_description">"ऊपर जाएं"</string>
+    <string msgid="3588849162933574182" name="abc_action_menu_overflow_description">"ज़्यादा विकल्प"</string>
+    <string msgid="4076576682505996667" name="abc_action_mode_done">"हो गया"</string>
+    <string msgid="7468859129482906941" name="abc_activity_chooser_view_see_all">"सभी देखें"</string>
+    <string msgid="2031811694353399454" name="abc_activitychooserview_choose_application">"कोई एप्‍लिकेशन चुनें"</string>
+    <string msgid="121134116657445385" name="abc_capital_off">"बंद"</string>
+    <string msgid="3405795526292276155" name="abc_capital_on">"चालू"</string>
+    <string msgid="1302280443949172191" name="abc_menu_alt_shortcut_label">"Alt+"</string>
+    <string msgid="1324831542140195728" name="abc_menu_ctrl_shortcut_label">"Ctrl+"</string>
+    <string msgid="8362206064229013510" name="abc_menu_delete_shortcut_label">"delete"</string>
+    <string msgid="8341180395196749340" name="abc_menu_enter_shortcut_label">"enter"</string>
+    <string msgid="4792426091847145555" name="abc_menu_function_shortcut_label">"Function+"</string>
+    <string msgid="7643535737296831317" name="abc_menu_meta_shortcut_label">"Meta+"</string>
+    <string msgid="8126296154200614004" name="abc_menu_shift_shortcut_label">"Shift+"</string>
+    <string msgid="2378550843553983978" name="abc_menu_space_shortcut_label">"space"</string>
+    <string msgid="9002602288060866689" name="abc_menu_sym_shortcut_label">"Sym+"</string>
+    <string msgid="1351762916121158029" name="abc_prepend_shortcut_label">"Menu+"</string>
+    <string msgid="7723749260725869598" name="abc_search_hint">"खोजा जा रहा है…"</string>
+    <string msgid="3691816814315814921" name="abc_searchview_description_clear">"क्‍वेरी साफ़ करें"</string>
+    <string msgid="2550479030709304392" name="abc_searchview_description_query">"सर्च क्वेरी"</string>
+    <string msgid="8264924765203268293" name="abc_searchview_description_search">"सर्च करें"</string>
+    <string msgid="8928215447528550784" name="abc_searchview_description_submit">"क्वेरी सबमिट करें"</string>
+    <string msgid="893419373245838918" name="abc_searchview_description_voice">"आवाज़ सर्च"</string>
+    <string msgid="3421042268587513524" name="abc_shareactionprovider_share_with">"इसके साथ शेयर करें"</string>
+    <string msgid="3300176832234831527" name="abc_shareactionprovider_share_with_application">"<ns1:g id="APPLICATION_NAME">%s</ns1:g> के साथ शेयर करें"</string>
+    <string msgid="1603543279005712093" name="abc_toolbar_collapse_description">"छोटा करें"</string>
+    <string name="app_name">पिक्सेल: एलईडी कला</string>
+    <string name="artURL1">pixeljoint.com</string>
+    <string name="artURL2">pixeljoint.com</string>
+    <string name="artURL3">pixeljoint.com</string>
+    <string name="bluetoothPairingString">आप ब्लूटूथ जोड़ी पिक्सेल करने के लिए किया था? बाँधना कोड है: 0000 या 4545 पिक्सेल V1 के लिए. "</string>
+    <string name="bluetooth_pair">Blueooth बाँधना</string>
+    <string name="bluetooth_pairSummary">ब्लूटूथ सेटिंग्स स्क्रीन करने के लिए शॉर्टकट। जोड़ी कोड का उपयोग कर पिक्सेल करने के लिए: 0000 या 4545 पिक्सेल V1 इकाइयों के लिए</string>
+    <string name="cannotWriteMsg">माफ करना, लेखन केवल पिक्सेल V2 तख्ते पर और ऊपर, इसके बजाय स्ट्रीमिंग समर्थन किया है...</string>
+    <string name="debugMode">डिबग मोड</string>
+    <string name="debugModeSummary">डीबग संदेश प्रदर्शित करता है, का उपयोग देखना है कितनी बार ब्लूटूथ कनेक्शन काट दिया और कनेक् टेड के साथ ही अन्य डीबग संदेश हो रही हैं</string>
+    <string name="dialogTitleFPSOverride">प्रति सेकंड फ़्रेम</string>
+    <string name="dialogTitleMatrix">पिक्सेल मॉडल</string>
+    <string name="downloadURL_32">डाउनलोड यूआरएल 32 x 32</string>
+    <string name="downloadURL_32Default">"www.pixeljoint.com/ pixels/new_icons.asp?search=&amp;dimo=%3D&amp;dim=32&amp;colorso=%3E%3D&amp;colors=2&amp;tran=&amp;anim=&amp;iso=&amp;av=&amp;owner=&amp;d=&amp;dosearch=1&amp;ob=search&amp;action=search"</string>
+    <string name="downloadURL_32Summary">32 x 32 पिक्सेल कला, के लिए URL शामिल नहीं हैं http:Slash:/Slash:/</string>
+    <string name="downloadURL_64">डाउनलोड यूआरएल 64 x 64</string>
+    <string name="downloadURL_64Default">www.pixeljoint.com/ pixels/new_icons.asp?search=&amp;dimo=%3D&amp;dim=64&amp;colorso=%3E%3D&amp;colors=2&amp;tran=&amp;anim=&amp;iso=&amp;av=&amp;owner=&amp;d=&amp;dosearch=1&amp;ob=search&amp;action=search</string>
+    <string name="downloadURL_64Summary">64 x 64 पिक्सेल कला, के लिए URL शामिल नहीं हैं http:Slash:/Slash:/</string>
+    <string name="firstTime_instructions">
+  </string>
+    <string name="fps_override">fps_override</string>
+    <string name="gifonly">GIFs केवल</string>
+    <string name="gifonlySummary">केवल GIFs दिखाएँ</string>
+    <string name="imageDisplayDuration">छवि प्रदर्शन की अवधि</string>
+    <string name="imageDisplayDurationDefault">5</string>
+    <string name="imageDisplayDurationSummary">प्रत्येक छवि प्रदर्शित है सेकंड की संख्या</string>
+    <string name="kioskMode">कीओस्क मोड</string>
+    <string name="kioskModeSummary">लेखन पिक्सेल करने के लिए अक्षम किया गया है</string>
+    <string name="loadingImagesPlsWait">छवियाँ लोड, बस एक पल...</string>
+    <string name="loadingImagesPlsWaitTitle">कृपया प्रतीक्षा करो</string>
+    <string name="matrix">पिक्सेल मॉडल</string>
+    <string name="matrixSummary">मानक पिक्सेल या सुपर पिक्सेल के बीच चुनना</string>
+    <string name="matrix_default_value">3</string>
+    <string name="menu_about_summary">खुला गैजेट्स LLC द्वारा http:Slash:/Slash:/ledpixelart.html\n\nDesigned</string>
+    <string name="menu_about_title">के बारे में</string>
+    <string name="menu_btPair_title">ब्लूटूथ जोड़ी पिक्सेल | कोड 0000 या 4545</string>
+    <string name="menu_camera_title">पिक्सेल करने के लिए कैमरा तस्वीर</string>
+    <string name="menu_createSlideShowFavs_title">लिखने के पसंदीदा चित्रों का स्लाइड शो</string>
+    <string name="menu_createSlideShowGIFFavs_title">लिखने के पसंदीदा GIFs के स्लाइड शो</string>
+    <string name="menu_createSlideShow_title">लिखने के सभी चित्रों के स्लाइड शो</string>
+    <string name="menu_galleryPickTitle">गैलरी से चयन करें</string>
+    <string name="menu_getART_title">वेब पर पिक्सेल कला</string>
+    <string name="menu_instructions_title">निर्देश</string>
+    <string name="menu_pixelJoint_title">वेब पर पिक्सेल कला</string>
+    <string name="menu_prefs_title">सेटिंग्स</string>
+    <string name="menu_refreshArt_title">स्टॉक को ताज़ा कला</string>
+    <string name="menu_refresh_summary">कृपया बाहर निकलें और स्टॉक की कला को ताज़ा करने के लिए इस app अब पुनः आरंभ करें।</string>
+    <string name="menu_refresh_title">स्टॉक को ताज़ा कला</string>
+    <string name="menu_rescan_title">पुन: स्कैन करें</string>
+    <string name="menu_startSlideShow_title">स्लाइड शो</string>
+    <string name="menu_stopSlideShow_title">स्लाइड शो रोकें</string>
+    <string name="noSleep">पावर बचत अक्षम करें</string>
+    <string name="noSleepSummary">बलों होने पर, के लिए हमेशा आपकी डिवाइस इस app करते समय पावर बचत मोड में जाने नहीं होगा अनुप्रयोग चल रहा है। अगर के रूप में एक कीओस्क का उपयोग कर उदाहरण के लिए अच्छा है। </string>
+    <string name="notFoundString">पिक्सेल नहीं पाया</string>
+    <string name="oneTimeCopyMessage">आंतरायन करना या छोड़ इस स्क्रीन। यह 100% पर थोड़ी देर के लिए ऐसा रहेगा कृपया धैर्य रखें।</string>
+    <string name="oneTimeCopyTitle">प्रारंभिक सेटअप</string>
+    <string name="oneTimeDecode">एक बार की प्रक्रिया में, बस एक पल व्याख्या करना...</string>
+    <string name="oneTimeSetupString">प्रारंभिक सेटअप: अपने एसडी कार्ड के लिए एनिमेशन की प्रतिलिपि बनाना।</string>
+    <string name="only64">64 x 64 सामग्री केवल</string>
+    <string name="pauseBetweenImagesDuration">छवियों के बीच विराम दें</string>
+    <string name="pauseBetweenImagesDurationDefault">3</string>
+    <string name="pauseBetweenImagesDurationSummary">बीच में छवियों को थामने के लिए सेकंड की संख्या</string>
+    <string name="prefSummary">पिक्सेल: एलईडी कला सेटिंग्स</string>
+    <string name="prefTitle">पिक्सेल: एलईडी कला सेटिंग्स</string>
+    <string name="pref_debugMode">pref_debugMode</string>
+    <string name="pref_debugModeDefault">झूठी</string>
+    <string name="pref_downloadURL_32">pref_downloadURL_32</string>
+    <string name="pref_downloadURL_64">pref_downloadURL_64</string>
+    <string name="pref_gifonly">pref_gifonly</string>
+    <string name="pref_gifonlyDefault">झूठी</string>
+    <string name="pref_imageDisplayDuration">pref_imageDisplayDuration</string>
+    <string name="pref_kioskMode">pref_kioskMode</string>
+    <string name="pref_kioskModeDefault">झूठी</string>
+    <string name="pref_noSleepDefault">झूठी</string>
+    <string name="pref_only64">pref_only64</string>
+    <string name="pref_only64Default">झूठी</string>
+    <string name="pref_only64Summary">केवल 64 x 64 और जोड़ा गया उपयोगकर्ता सामग्री दिखाएँ</string>
+    <string name="pref_pauseBetweenImagesDuration">pref_pauseBetweenImagesDuration</string>
+    <string name="pref_scanAll_default">झूठी</string>
+    <string name="pref_showStartupMsg">pref_showStartupMsg</string>
+    <string name="pref_slideShowAllPNGs">pref_slideShowAllPNGs</string>
+    <string name="pref_slideShowAllPNGsDefault">झूठी</string>
+    <string name="pref_writeCamera">pref_writeCamera</string>
+    <string name="rescan_screen_verbage">अब अपने एसडी कार्ड या आंतरिक स्मृति के लिए नए एनिमेशन या विलोपन, बस एक पल स्कैनिंग...</string>
+    <string name="scanAll">दिखाएँ सभी एल्बम Pics</string>
+    <string name="scanAllSummary">केवल अपने एसडी कार्ड के पिक्सेल/GIFs निर्देशिका में एनिमेशन प्रदर्शित किया जाएगा। इस बॉक्स की जाँच सभी एसडी कार्ड तस्वीरें प्रदर्शित करता है।</string>
+    <string msgid="146198913615257606" name="search_menu_title">"सर्च"</string>
+    <string name="select_picture">चित्र का चयन करें</string>
+    <string name="selected_matrix">selected_matrix</string>
+    <string name="setupInstructionsString">पिक्सेल संहिता 0000 या 4545 पिक्सेल V1.\n\nPIXEL V2 उपयोगकर्ताओं के लिए का उपयोग करने के लिए ब्लूटूथ जोड़ी लंबे समय पिक्सेल करने के लिए ईमेल, गैलरी, और अन्य apps.\n\nUse favorites.\n\n64x64 एनिमेटेड GIFs के एक स्लाइड शो बनाने के लिए मेनू केवल दिखा देंगे अगर सुपर पिक्सेल 64 x 64 से सेटिंग्स का चयन किया है से इस app करने के लिए साझा करने के द्वारा अपनी कला के लिए अकेले खड़े operation.\n\nAdd लिखने के लिए टैप हो सकता।</string>
+    <string name="setupInstructionsStringTitle">निर्देश</string>
+    <string name="showStartupMsg">स्टार्टअप संदेश दिखाएँ</string>
+    <string name="showStartupMsgDefault">सच है</string>
+    <string name="showStartupMsgSummary">
+  </string>
+    <string name="slideShowAllPNGs">स्लाइड शो में सभी PNGs शामिल</string>
+    <string name="slideShowAllPNGsSummary">अगर (आप पसंद के रूप में चिह्नित है) स्लाइड शो ही पसंदीदा शामिल होंगे। पसंद की परवाह किए बिना इस स्लाइड शो में सभी PNGs शामिल करने के लिए यहाँ की जाँच करें।</string>
+    <string name="slideShowMode">स्लाइड शो मोड</string>
+    <string name="slideShowModeDefault">झूठी</string>
+    <string name="slideShowModeSummary">स्लाइड शो मोड</string>
+    <string name="slideShowStartInstructions">एक एकल छवि या ज़ोर से मारना सही करने के लिए किसी स्लाइड शो प्रारंभ करने के लिए बाईं ओर से प्रदर्शित करने के लिए टैप करें</string>
+    <string name="slideShowStartVerbage">स्लाइड शो शुरू करने...</string>
+    <string name="slideShowStopInstructions">स्लाइड शो रोकें करने के लिए दाईं से बाईं ओर ज़ोर से मारना</string>
+    <string name="slideShowStopVerbage">स्लाइड शो के बंद कर दिया</string>
+    <string name="slideShowtitle">स्लाइड शो सेटिंग्स</string>
+    <string name="slideShowtitleSummary">स्लाइड शो सेटिंग्स</string>
+    <string name="slideshowGIFFPS_Summary">GIF स्लाइड शो के लिए फ्रेम दर (फ्रेम प्रति सेकंड)</string>
+    <string name="slideshowGIFFPS_default_value">4</string>
+    <string name="slideshowGIFFPS_dialogTitle">GIF स्लाइड शो FPS</string>
+    <string name="slideshowGIFFPS_key">slideshowGIFFPS_key</string>
+    <string name="slideshowGIFFPS_title">GIF स्लाइड शो FPS</string>
+    <string name="startup_verbage_1">प्रारंभिक सेटअप</string>
+    <string name="startup_verbage_2">ऐनिमेशंस के लिए अपने स्थानीय भंडारण प्रतिलिपि बनाई जा रही...</string>
+    <string msgid="7988687684186075107" name="status_bar_notification_info_overflow">"999+"</string>
+    <string name="stopSlideShowMessage">आप स्लाइड शो मोड में अब भी कर रहे हैं, अंत में स्लाइड शो और फिर तुम करने के लिए दाईं से बाईं ओर ज़ोर से मारना एक एकल छवि का चयन कर सकते हैं</string>
+    <string name="versionString">अनुप्रयोग का संस्करण</string>
+    <string name="whatsNewText">पिक्सेल संहिता 0000 या 4545 पिक्सेल V1 frames\n\nTap के लिए किसी भी छवि या GIF mode\n\nLong नल स्ट्रीमिंग में प्रदर्शित करने के लिए का उपयोग कर आप लिखने के पिक्सेल से आपकी डिवाइस डिस्कनेक्ट किया गया है के बाद खेलने के लिए जारी रहेगा PIXEL\n\nThe अंतिम आइटम के लिए लिखने के लिए के लिए पहले ब्लूटूथ जोड़ी</string>
+    <string name="whatsNewTitle">आपका स्वागत है पिक्सेल उपयोगकर्ता</string>
+    <string name="writeCamera">Mutliple कैमरा चित्र सहेजें</string>
+    <string name="writeCameraDefault">सच है</string>
+    <string name="writeCameraSummary">इस app बनाम बस एक अधिलेखित करने के लिए एकाधिक कैमरा चित्र सहेजता है</string>
+    <string name="writingPIXEL">पिक्सेल करने के लिए लेखन</string>
+</resources>
