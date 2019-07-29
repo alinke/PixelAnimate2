@@ -286,8 +286,10 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
     public static String GIFPath =  Environment.getExternalStorageDirectory() + "/pixel/gif/"; //put the pngs (for display purposes) and the gifs together in this same dir, code should take the png if it exists, otherwise take the gif
     public static String PNGPath =  Environment.getExternalStorageDirectory() + "/pixel/png/"; //static pngs
     public static String PNG64Path =  Environment.getExternalStorageDirectory() + "/pixel/png64/"; //static pngs 64x64
+	public static String PNG128Path =  Environment.getExternalStorageDirectory() + "/pixel/png128/"; //static pngs 64x64
     public static String GIF64Path =  Environment.getExternalStorageDirectory() + "/pixel/gif64/";  //gifs 64x64, there will be a decoded directory here
-    public static String PNG16Path =  Environment.getExternalStorageDirectory() + "/pixel/png16/"; //static pngs 32x16
+	public static String GIF128Path =  Environment.getExternalStorageDirectory() + "/pixel/gif128/";
+	public static String PNG16Path =  Environment.getExternalStorageDirectory() + "/pixel/png16/"; //static pngs 32x16
     public static String GIF16Path =  Environment.getExternalStorageDirectory() + "/pixel/gif16/";  //gifs 32x16, there will be a decoded directory here
     public static String userPNGPath =  Environment.getExternalStorageDirectory() + "/pixel/userpng/"; //user supplied pngs
     public static String userGIFPath =  Environment.getExternalStorageDirectory() + "/pixel/usergif/";  //user supplied gifs, there will be a decoded directory here
@@ -447,14 +449,14 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
     private static Long ArtSpaceMB = 300L; //how much free space to check for
 */  //to do add the byte file sizes too
   	  private int mainAPKExpNumFiles = 839;
-      private int patchAPKExpNumFiles = 44;
+      private int patchAPKExpNumFiles = 217;  //109 was 44
       //private static int APKExpMainVersion = 80;
       //private static int APKExpPatchVersion = 84; //put the version of the APK exp file, not the current version of this code!
       private static int APKExpMainVersion = 109; 
-      private static int APKExpPatchVersion = 109; //put the version of the APK exp file, not the current version of this code!
+      private static int APKExpPatchVersion = 116; //put the version of the APK exp file, not the current version of this code!
       // during a release, somehow google play made both version 100 so just sticking with it
       private static Long APKExpMainFileSize = 38775464L; //old one 32279235L; 44238062 ; 38896384; 38,896,384, 38775464
-      private static Long APKExpPatchFileSize = 799352L;  //566985L new test one   502035L the original 63 is 268398L 6785 ; 808135
+      private static Long APKExpPatchFileSize = 2681993L;  //799352L for 109, 566985L new test one   502035L the original 63 is 268398L 6785 ; 808135
       private static Long ArtSpaceMB = 300L; //how much free space to check for
     //***********************************
     
@@ -1638,48 +1640,60 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 		  	if (!GIF64dir.exists()) {
 		  		GIF64dir.mkdirs();
 		  	}
+
+		  File PNG128dir = new File(PNG128Path);
+		  if (!PNG128dir.exists()) {
+			  PNG128dir.mkdirs();
+		  }
+
+		  File GIF128dir = new File(GIF128Path);
+		  if (!GIF128dir.exists()) {
+			  GIF128dir.mkdirs();
+		  }
 		  	
-			File PNG16dir = new File(PNG16Path);
-		  	if (!PNG16dir.exists()) {
-		  		PNG16dir.mkdirs();
-		  	}
-		  	
-		  	File GIF16dir = new File(GIF16Path);
-		  	if (!GIF16dir.exists()) {
-		  		GIF16dir.mkdirs();
-		  	}
-		  	
-		  	File gif16Sourcedir = new File(GIF16Path + "gifsource");
-			if (!gif16Sourcedir.exists()) {
-				gif16Sourcedir.mkdirs();
-		  	}
-			
-			File GIF16decodeddir = new File(GIF16Path + "decoded");
-		  	if (!GIF16decodeddir.exists()) {
-		  		GIF16decodeddir.mkdirs();
-		  	}
-		  	
-		  	File gifSourcedir = new File(GIFPath + "gifsource");
-			if (!gifSourcedir.exists()) {
-				gifSourcedir.mkdirs();
-		  	}
-			
-			File gif64Sourcedir = new File(GIF64Path + "gifsource");
-			if (!gif64Sourcedir.exists()) {
-				gif64Sourcedir.mkdirs();
-		  	}
-			
-			File GIF64decodeddir = new File(GIF64Path + "decoded");
-		  	if (!GIF64decodeddir.exists()) {
-		  		GIF64decodeddir.mkdirs();
-		  	}
-			
+		File PNG16dir = new File(PNG16Path);
+		if (!PNG16dir.exists()) {
+			PNG16dir.mkdirs();
+		}
+
+		File GIF16dir = new File(GIF16Path);
+		if (!GIF16dir.exists()) {
+			GIF16dir.mkdirs();
+		}
+
+		File gif16Sourcedir = new File(GIF16Path + "gifsource");
+		if (!gif16Sourcedir.exists()) {
+			gif16Sourcedir.mkdirs();
+		}
+
+		File GIF16decodeddir = new File(GIF16Path + "decoded");
+		if (!GIF16decodeddir.exists()) {
+			GIF16decodeddir.mkdirs();
+		}
+
+		File gifSourcedir = new File(GIFPath + "gifsource");
+		if (!gifSourcedir.exists()) {
+			gifSourcedir.mkdirs();
+		}
+
+		File gif64Sourcedir = new File(GIF64Path + "gifsource");
+		if (!gif64Sourcedir.exists()) {
+			gif64Sourcedir.mkdirs();
+		}
+
+		File GIF64decodeddir = new File(GIF64Path + "decoded");
+		if (!GIF64decodeddir.exists()) {
+			GIF64decodeddir.mkdirs();
+		}
+
 		  	copyArt(); //copy the .png and .gif files (mainly png) because we want to decode first
 		  	copyGIFDecoded();  //copy the decoded files
 			copyPNG();  //copy the png files
 			copyGIF64();
+		    copyGIF128();
 			copyGIF16();
 			copyPNG64();
+		    copyPNG128();
 			copyGIFSource();
 			copyGIF64Source();
 			copyGIF64Decoded();
@@ -1948,6 +1962,40 @@ private void copyGIF64Source() {
            }       
        }
    } //end copyPNG64
+
+	 private void copyPNG128() {
+
+		 AssetManager assetManager = getResources().getAssets();
+		 String[] files = null;
+		 try {
+			 files = assetManager.list("png128");
+		 } catch (Exception e) {
+			 Log.e("read clipart ERROR", e.toString());
+			 e.printStackTrace();
+		 }
+		 for(int i=0; i<files.length; i++) {
+			 progress_status ++;
+			 publishProgress(progress_status);
+			 InputStream in = null;
+			 OutputStream out = null;
+			 try {
+				 in = assetManager.open("png128/" + files[i]);
+				 out = new FileOutputStream(PNG128Path + files[i]);
+				 copyFile(in, out);
+				 in.close();
+				 in = null;
+				 out.flush();
+				 out.close();
+				 out = null;
+
+				 //no need to register these with mediascanner as these are internal gifs , the workaround for the gifs with a black frame as the first frame
+
+			 } catch(Exception e) {
+				 Log.e("copy clipart ERROR", e.toString());
+				 e.printStackTrace();
+			 }
+		 }
+	 } //end copyPNG128
    
    private void copyGIF64() {
 	   	
@@ -1982,6 +2030,40 @@ private void copyGIF64Source() {
 	           }       
 	       }
 	   } //end copyGIF64
+
+		 private void copyGIF128() {
+
+			 AssetManager assetManager = getResources().getAssets();
+			 String[] files = null;
+			 try {
+				 files = assetManager.list("gif128");
+			 } catch (Exception e) {
+				 Log.e("read clipart ERROR", e.toString());
+				 e.printStackTrace();
+			 }
+			 for(int i=0; i<files.length; i++) {
+				 progress_status ++;
+				 publishProgress(progress_status);
+				 InputStream in = null;
+				 OutputStream out = null;
+				 try {
+					 in = assetManager.open("gif128/" + files[i]);
+					 out = new FileOutputStream(GIF128Path + files[i]);
+					 copyFile(in, out);
+					 in.close();
+					 in = null;
+					 out.flush();
+					 out.close();
+					 out = null;
+
+					 //no need to register these with mediascanner as these are internal gifs , the workaround for the gifs with a black frame as the first frame
+
+				 } catch(Exception e) {
+					 Log.e("copy clipart ERROR", e.toString());
+					 e.printStackTrace();
+				 }
+			 }
+		 } //end copyGIF128
    
    private void copyGIF16() {
 	   	
@@ -2056,8 +2138,9 @@ private void copyGIF64Source() {
     	  }
         	  
         	  LoadGridView(false); //let's load this so the user can interact with the assets file while the APK Expansion are downloading
-        	  initializeDownloadUI();
-              try {
+        	 // initializeDownloadUI();
+
+        	  try {
                   Intent launchIntent = MainActivity.this
                           .getIntent();
                   Intent intentToLaunchThisActivityFromNotification = new Intent(
@@ -2083,6 +2166,9 @@ private void copyGIF64Source() {
                   int startResult = DownloaderClientMarshaller.startDownloadServiceIfRequired(this,
                           pendingIntent, PIXELDownloaderService.class);
 
+				 // LoadGridView(false);
+
+
                   if (startResult != DownloaderClientMarshaller.NO_DOWNLOAD_REQUIRED) {
                       // The DownloaderService has started downloading the files,
                       // show progress
@@ -2095,6 +2181,10 @@ private void copyGIF64Source() {
                   	//gridview.setOnItemClickListener(MainActivity.this);
                       //gridview.setOnItemLongClickListener(MainActivity.this);
                   }
+
+
+
+
                     // starting the movie
               } catch (NameNotFoundException e) {
                   Log.e(LOG_TAG, "Cannot find own package! MAYDAY!");
@@ -2614,6 +2704,8 @@ private void copyGIF64Source() {
   	  File UserGIFtargetDirector;
   	  File PNG64targetDirector;
   	  File GIF64targetDirector;
+  	  File PNG128targetDirector;
+  	  File GIF128targetDirector;
   	  File PNG16targetDirector;
  	  File GIF16targetDirector;
   	  
@@ -2652,6 +2744,12 @@ private void copyGIF64Source() {
   	   
   	   String GIF64targetPath = GIF64Path;
   	   GIF64targetDirector = new File(GIF64targetPath);
+
+  	   String PNG128targetPath = PNG128Path;
+  	   PNG128targetDirector = new File(PNG128targetPath);
+
+  	   String GIF128targetPath = GIF128Path;
+  	   GIF128targetDirector = new File(GIF128targetPath);
   	   
   	   String PNG16targetPath = PNG16Path;
 	   PNG16targetDirector = new File(PNG16targetPath);
@@ -2764,10 +2862,27 @@ private void copyGIF64Source() {
   	   }
 		  
 		  
-		  //******** Only load if SUPER PIXEL *************
-		  
-		  if ((currentResolution == 128 || currentResolution == 64) && GIF64targetDirector.exists()) { //gif 64x64 content which we know by current resolution because we could have a super pixel or adafruit built panels, only show if 64x64 led matrix is picked
-		 
+		  //******** Only load if SUPER PIXEL ************* //add led matrix type
+
+		//if ((currentResolution == 129 || currentResolution == 66) && GIF64targetDirector.exists()) {
+			//if ((currentResolution == 128 || currentResolution == 64) && GIF64targetDirector.exists()) { //gif 64x64 content which we know by current resolution because we could have a super pixel or adafruit built panels, only show if 64x64 led matrix is picked
+
+
+		if (currentResolution == 128 && GIF128targetDirector.exists() && (matrix_model == 15 || matrix_model == 8)) {  //GIF 128x32 Content
+			File[] files = GIF128targetDirector.listFiles(new FilenameFilter() {
+				public boolean accept(File dir, String name) {
+					return name.toLowerCase().endsWith(".gif") || name.toLowerCase().endsWith(".png");
+				}
+			});
+
+			if (files != null) {
+				for (File file : files) {
+					items.add(file.getAbsolutePath());
+				}
+			}
+		}
+
+		if ((currentResolution == 128 || currentResolution == 64) && GIF64targetDirector.exists() && (matrix_model == 10 || matrix_model == 14 || matrix_model == 19)) {
 	    	   File[] files = GIF64targetDirector.listFiles(new FilenameFilter() {
 	   		    public boolean accept(File dir, String name) {
 	   		        return name.toLowerCase().endsWith(".gif") || name.toLowerCase().endsWith(".png");
@@ -2780,10 +2895,31 @@ private void copyGIF64Source() {
 			   	   }
 	    		}
 		   }
+
+
+
+
+		if (currentResolution == 128 && PNG128targetDirector.exists() && (matrix_model == 15 || matrix_model == 8 )) {   //PNG 128x32 Content
+			File[] files = PNG128targetDirector.listFiles(new FilenameFilter() {
+				public boolean accept(File dir, String name) {
+					return name.toLowerCase().endsWith(".png") || name.toLowerCase().endsWith(".jpg") || name.toLowerCase().endsWith(".jpeg");
+				}
+			});
+
+			if (files != null) {
+
+				for (File file : files) {
+					items.add(file.getAbsolutePath());
+					SlideShowArrayAll[a] = file.getAbsolutePath(); //array starts at 0
+					a++;
+				}
+
+			}
+		}
 		  
-		  if ((currentResolution == 128 || currentResolution == 64) && gifonly_ == false && PNG64targetDirector.exists()) { //png 64x64 content but don't show for 32x32
-		
-	    	   File[] files = PNG64targetDirector.listFiles(new FilenameFilter() {
+		  //if ((currentResolution == 128 || currentResolution == 64) && gifonly_ == false && PNG64targetDirector.exists()) { //png 64x64 content but don't show for 32x32
+		if ((currentResolution == 128 || currentResolution == 64) && gifonly_ == false && PNG64targetDirector.exists() && (matrix_model == 10 || matrix_model == 14 || matrix_model == 19)) {
+				  File[] files = PNG64targetDirector.listFiles(new FilenameFilter() {
 	   		    public boolean accept(File dir, String name) {
 	   		        return name.toLowerCase().endsWith(".png") || name.toLowerCase().endsWith(".jpg") || name.toLowerCase().endsWith(".jpeg");
 	   		    }
@@ -5548,7 +5684,7 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 				     }
 		    	 }
 	     
-	     		if (pixelHardwareID.substring(4,5).equals("Z") && AutoSelectPanel_ == false && matrix_model != 11) { //we have an ios pixel frame and the user has picked a non supported led panel
+	     		/*if (pixelHardwareID.substring(4,5).equals("Z") && AutoSelectPanel_ == false && matrix_model != 11) { //we have an ios pixel frame and the user has picked a non supported led panel
 			 		//if it's an ios pixel, only 32x32 is supported so we'll just set it here and be done with it, doesn't matter if auto-select or anything else is selected
 			 		
 			 		AlertDialog.Builder alert=new AlertDialog.Builder(this);
@@ -5560,7 +5696,7 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 			    	BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
 			    	frame_length = 2048;
 			    	currentResolution = 32; 
-	     		}
+	     		}*/
 		         
 		     frame_ = new short [KIND.width * KIND.height];
 			 BitmapBytes = new byte[KIND.width * KIND.height *2]; //512 * 2 = 1024 or 1024 * 2 = 2048
