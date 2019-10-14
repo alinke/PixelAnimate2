@@ -75,6 +75,7 @@ import java.util.Vector;
 
 import ioio.lib.api.AnalogInput;
 import ioio.lib.api.IOIO.VersionType;
+import ioio.lib.api.RgbLedMatrix;
 import ioio.lib.api.exception.ConnectionLostException;
 import ioio.lib.util.BaseIOIOLooper;
 import ioio.lib.util.IOIOLooper;
@@ -2868,7 +2869,7 @@ private void copyGIF64Source() {
 			//if ((currentResolution == 128 || currentResolution == 64) && GIF64targetDirector.exists()) { //gif 64x64 content which we know by current resolution because we could have a super pixel or adafruit built panels, only show if 64x64 led matrix is picked
 
 
-		if (currentResolution == 128 && GIF128targetDirector.exists() && (matrix_model == 15 || matrix_model == 8)) {  //GIF 128x32 Content
+		if (currentResolution == 128 && GIF128targetDirector.exists() && (matrix_model == 24 || matrix_model == 15 || matrix_model == 8)) {  //GIF 128x32 Content
 			File[] files = GIF128targetDirector.listFiles(new FilenameFilter() {
 				public boolean accept(File dir, String name) {
 					return name.toLowerCase().endsWith(".gif") || name.toLowerCase().endsWith(".png");
@@ -2882,7 +2883,7 @@ private void copyGIF64Source() {
 			}
 		}
 
-		if ((currentResolution == 128 || currentResolution == 64) && GIF64targetDirector.exists() && (matrix_model == 10 || matrix_model == 14 || matrix_model == 19)) {
+		if ((currentResolution == 128 || currentResolution == 64) && GIF64targetDirector.exists() && (matrix_model == 10 || matrix_model == 14 || matrix_model == 19 || matrix_model == 23)) { //64x64 content
 	    	   File[] files = GIF64targetDirector.listFiles(new FilenameFilter() {
 	   		    public boolean accept(File dir, String name) {
 	   		        return name.toLowerCase().endsWith(".gif") || name.toLowerCase().endsWith(".png");
@@ -2899,7 +2900,7 @@ private void copyGIF64Source() {
 
 
 
-		if (currentResolution == 128 && PNG128targetDirector.exists() && (matrix_model == 15 || matrix_model == 8 )) {   //PNG 128x32 Content
+		if (currentResolution == 128 || currentResolution == 64 && PNG128targetDirector.exists() && (matrix_model == 24 || matrix_model == 15 || matrix_model == 8 || matrix_model == 22 || matrix_model == 13 || matrix_model == 18)) {   //PNG 128x32 Content
 			File[] files = PNG128targetDirector.listFiles(new FilenameFilter() {
 				public boolean accept(File dir, String name) {
 					return name.toLowerCase().endsWith(".png") || name.toLowerCase().endsWith(".jpg") || name.toLowerCase().endsWith(".jpeg");
@@ -5674,7 +5675,25 @@ public class AsyncRefreshArt extends AsyncTask<Void, String, Void> {
 				    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
 				    	 frame_length = 2048;
 				    	 currentResolution = 32;
-				    	 break;	 
+				    	 break;
+					 case 22:
+						 KIND = RgbLedMatrix.Matrix.SRYLED_P25_64x32;
+						 BitmapInputStream = getResources().openRawResource(R.raw.select64by32);
+						 frame_length = 4096;
+						 currentResolution = 64;
+						 break;
+					 case 23:
+						 KIND = RgbLedMatrix.Matrix.SRYLED_P25_64x64;
+						 BitmapInputStream = getResources().openRawResource(R.raw.select64by64);
+						 frame_length = 8192;
+						 currentResolution = 128;
+						 break;
+					 case 24:
+						 KIND = RgbLedMatrix.Matrix.SRYLED_P25_128x32;
+						 BitmapInputStream = getResources().openRawResource(R.raw.select128by32);
+						 frame_length = 8192;
+						 currentResolution = 128;
+						 break;
 				    	 
 				     default:	    		 
 				    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32; //v2 as the default
