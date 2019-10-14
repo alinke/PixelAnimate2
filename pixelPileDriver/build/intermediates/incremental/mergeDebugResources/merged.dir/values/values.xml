@@ -54,6 +54,9 @@
     <item>64x64 Color Swap</item>
     <item>PIXEL V2 Color Swap</item>
     <item>AliExpress 32x32 Random1</item>
+    <item>64x32 P2.5</item>
+    <item>64x64 P2.5</item>
+    <item>PINDMD 128x32 P2.5</item>
 </string-array>
     <string-array name="matrix_values">
     <item>0</item>
@@ -77,6 +80,9 @@
     <item>19</item>
     <item>20</item>
     <item>21</item>
+    <item>22</item>
+    <item>23</item>
+    <item>24</item>
 </string-array>
     <attr format="reference" name="coordinatorLayoutStyle"/>
     <attr format="reference" name="drawerArrowStyle"/>

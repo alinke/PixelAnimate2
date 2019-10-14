@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ledpixelart.piledriver"
     android:targetSandboxVersion="2"
-    android:versionCode="115"
-    android:versionName="12.5" >
+    android:versionCode="116"
+    android:versionName="12.7" >
 
     <uses-sdk
         android:minSdkVersion="14"

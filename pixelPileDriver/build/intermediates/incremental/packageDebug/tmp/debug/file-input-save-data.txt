@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Sun Jul 28 01:40:40 PDT 2019
+#Sun Oct 13 19:50:51 PDT 2019
 210.set=ASSET
 2.path=png/maid.png
 14.set=ASSET
@@ -115,7 +115,7 @@
 98.set=ASSET
 209.set=ASSET
 87.base=/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/merged_assets/debug/out
-10.base=/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/merged_assets/debug/out
+10.base=/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/transforms/dexMerger/debug/13
 57.path=png/MonaLisa.jpg
 32.path=png/g40.png
 196.set=ASSET
@@ -302,7 +302,7 @@
 21.path=png/hrising2.png
 93.set=ASSET
 204.set=ASSET
-9.base=/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/transforms/dexMerger/debug/13
+9.base=/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/merged_assets/debug/out
 73.path=png/g21.png
 105.baseType=DIRECTORY
 191.set=ASSET
@@ -348,7 +348,7 @@
 58.baseType=DIRECTORY
 35.path=png/red13.png
 87.path=png/g32.png
-10.path=png/red1.png
+10.path=classes.dex
 89.set=ASSET
 161.baseType=DIRECTORY
 41.baseType=DIRECTORY
@@ -444,7 +444,7 @@
 155.baseType=DIRECTORY
 26.base=/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/merged_assets/debug/out
 67.set=DEX
-9.set=DEX
+9.set=ASSET
 78.base=/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/merged_assets/debug/out
 48.path=png/pharmacy.png
 53.base=/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/merged_assets/debug/out
@@ -492,7 +492,7 @@
 15.base=/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/merged_assets/debug/out
 177.baseType=DIRECTORY
 57.baseType=DIRECTORY
-10.set=ASSET
+10.set=DEX
 37.path=png/ohula.png
 215.baseType=DIRECTORY
 89.path=png/PowerUp2.png
@@ -534,7 +534,7 @@ count=216
 51.path=png/pops.png
 137.baseType=DIRECTORY
 17.baseType=DIRECTORY
-9.path=classes.dex
+9.path=png/red1.png
 84.set=ASSET
 193.base=/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/merged_assets/debug/out
 182.set=ASSET

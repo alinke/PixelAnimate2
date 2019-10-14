@@ -33,9 +33,9 @@ MERGED from [android.arch.lifecycle:livedata:1.1.1] /Users/al/.gradle/caches/tra
 MERGED from [android.arch.lifecycle:livedata-core:1.1.1] /Users/al/.gradle/caches/transforms-2/files-2.1/16f09a3a8ba5fe783bfb78c9e908f7ad/AndroidManifest.xml:17:1-22:12
 MERGED from [android.arch.core:runtime:1.1.1] /Users/al/.gradle/caches/transforms-2/files-2.1/2f3b3fe93f81007882b724f696b65262/AndroidManifest.xml:17:1-22:12
 MERGED from [com.android.support:interpolator:28.0.0] /Users/al/.gradle/caches/transforms-2/files-2.1/d5009477923e13215ca572d55cf32381/AndroidManifest.xml:17:1-22:12
-MERGED from [com.github.alinke.PixelAndroidLibrary:iOIOLibAccessory:1.0.0] /Users/al/.gradle/caches/transforms-2/files-2.1/fbd3ac488d94877c60cdcf1e96710254/AndroidManifest.xml:2:1-11:12
-MERGED from [com.github.alinke.PixelAndroidLibrary:iOIOLibBT:1.0.0] /Users/al/.gradle/caches/transforms-2/files-2.1/8e50cbc07065507f848f4e28a19995de/AndroidManifest.xml:2:1-11:12
-MERGED from [com.github.alinke.PixelAndroidLibrary:iOIOLibAndroid:1.0.0] /Users/al/.gradle/caches/transforms-2/files-2.1/f09192c80e121f54fd73261bac855fc0/AndroidManifest.xml:2:1-9:12
+MERGED from [com.github.alinke.PixelAndroidLibrary:iOIOLibAccessory:2.0.0] /Users/al/.gradle/caches/transforms-2/files-2.1/e3212c31f3311da9dbd1447d4e4c6e9c/AndroidManifest.xml:2:1-11:12
+MERGED from [com.github.alinke.PixelAndroidLibrary:iOIOLibBT:2.0.0] /Users/al/.gradle/caches/transforms-2/files-2.1/85eea66422a0319204215d4882e35667/AndroidManifest.xml:2:1-11:12
+MERGED from [com.github.alinke.PixelAndroidLibrary:iOIOLibAndroid:2.0.0] /Users/al/.gradle/caches/transforms-2/files-2.1/2da660f1dcf84cff90f57a7767119065/AndroidManifest.xml:2:1-9:12
 INJECTED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:2:1-121:12
 INJECTED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:2:1-121:12
 INJECTED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:2:1-121:12
@@ -59,8 +59,8 @@ ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/mai
 		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:8:22-65
 uses-permission#android.permission.INTERNET
 ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:9:5-66
-MERGED from [com.github.alinke.PixelAndroidLibrary:iOIOLibAndroid:1.0.0] /Users/al/.gradle/caches/transforms-2/files-2.1/f09192c80e121f54fd73261bac855fc0/AndroidManifest.xml:7:5-67
-MERGED from [com.github.alinke.PixelAndroidLibrary:iOIOLibAndroid:1.0.0] /Users/al/.gradle/caches/transforms-2/files-2.1/f09192c80e121f54fd73261bac855fc0/AndroidManifest.xml:7:5-67
+MERGED from [com.github.alinke.PixelAndroidLibrary:iOIOLibAndroid:2.0.0] /Users/al/.gradle/caches/transforms-2/files-2.1/2da660f1dcf84cff90f57a7767119065/AndroidManifest.xml:7:5-67
+MERGED from [com.github.alinke.PixelAndroidLibrary:iOIOLibAndroid:2.0.0] /Users/al/.gradle/caches/transforms-2/files-2.1/2da660f1dcf84cff90f57a7767119065/AndroidManifest.xml:7:5-67
 	android:name
 		ADDED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml:9:22-64
 uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
@@ -233,10 +233,10 @@ MERGED from [android.arch.core:runtime:1.1.1] /Users/al/.gradle/caches/transform
 MERGED from [android.arch.core:runtime:1.1.1] /Users/al/.gradle/caches/transforms-2/files-2.1/2f3b3fe93f81007882b724f696b65262/AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:interpolator:28.0.0] /Users/al/.gradle/caches/transforms-2/files-2.1/d5009477923e13215ca572d55cf32381/AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:interpolator:28.0.0] /Users/al/.gradle/caches/transforms-2/files-2.1/d5009477923e13215ca572d55cf32381/AndroidManifest.xml:20:5-44
-MERGED from [com.github.alinke.PixelAndroidLibrary:iOIOLibAccessory:1.0.0] /Users/al/.gradle/caches/transforms-2/files-2.1/fbd3ac488d94877c60cdcf1e96710254/AndroidManifest.xml:7:5-9:41
-MERGED from [com.github.alinke.PixelAndroidLibrary:iOIOLibAccessory:1.0.0] /Users/al/.gradle/caches/transforms-2/files-2.1/fbd3ac488d94877c60cdcf1e96710254/AndroidManifest.xml:7:5-9:41
-MERGED from [com.github.alinke.PixelAndroidLibrary:iOIOLibBT:1.0.0] /Users/al/.gradle/caches/transforms-2/files-2.1/8e50cbc07065507f848f4e28a19995de/AndroidManifest.xml:7:5-9:41
-MERGED from [com.github.alinke.PixelAndroidLibrary:iOIOLibBT:1.0.0] /Users/al/.gradle/caches/transforms-2/files-2.1/8e50cbc07065507f848f4e28a19995de/AndroidManifest.xml:7:5-9:41
+MERGED from [com.github.alinke.PixelAndroidLibrary:iOIOLibAccessory:2.0.0] /Users/al/.gradle/caches/transforms-2/files-2.1/e3212c31f3311da9dbd1447d4e4c6e9c/AndroidManifest.xml:7:5-9:41
+MERGED from [com.github.alinke.PixelAndroidLibrary:iOIOLibAccessory:2.0.0] /Users/al/.gradle/caches/transforms-2/files-2.1/e3212c31f3311da9dbd1447d4e4c6e9c/AndroidManifest.xml:7:5-9:41
+MERGED from [com.github.alinke.PixelAndroidLibrary:iOIOLibBT:2.0.0] /Users/al/.gradle/caches/transforms-2/files-2.1/85eea66422a0319204215d4882e35667/AndroidManifest.xml:7:5-9:41
+MERGED from [com.github.alinke.PixelAndroidLibrary:iOIOLibBT:2.0.0] /Users/al/.gradle/caches/transforms-2/files-2.1/85eea66422a0319204215d4882e35667/AndroidManifest.xml:7:5-9:41
 INJECTED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml
 INJECTED from /Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/src/main/AndroidManifest.xml
 	android:targetSdkVersion

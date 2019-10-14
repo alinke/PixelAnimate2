@@ -1,32 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <instant-run
-    abi="arm64-v8a,armeabi-v7a,armeabi"
-    api-level="28"
+    abi="x86,armeabi-v7a,armeabi"
+    api-level="21"
     build-mode="FULL"
-    density="420dpi"
+    density="xxhdpi"
     format="10"
     ir-eligibility="FIELD_TYPE_CHANGE"
     plugin-version="3.4.2"
-    timestamp="1564354610509"
+    timestamp="1571021449488"
     token="5586406173480539346"
     verifier="COLD_SWAP_REQUESTED" >
 
     <task
         name="javac"
-        duration="423" />
+        duration="389" />
     <task
         name="instant-run-dex"
         duration="0" />
     <task
         name="instant-run-transform"
-        duration="5" />
+        duration="4" />
     <task
         name="verifier"
-        duration="0" />
+        duration="1" />
 
-    <artifact
-        location="/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/resources/instant-run/debug/resources-debug.apk"
-        type="SPLIT" />
     <artifact
         location="/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/split-apk/debug/dep/dependencies.apk"
         type="SPLIT" />
@@ -34,31 +31,31 @@
         location="/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/split-apk/debug/slices/slice_1.apk"
         type="SPLIT" />
     <artifact
-        location="/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/split-apk/debug/slices/slice_2.apk"
-        type="SPLIT" />
-    <artifact
         location="/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/split-apk/debug/slices/slice_6.apk"
-        type="SPLIT" />
-    <artifact
-        location="/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/split-apk/debug/slices/slice_0.apk"
         type="SPLIT" />
     <artifact
         location="/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/split-apk/debug/slices/slice_3.apk"
         type="SPLIT" />
     <artifact
-        location="/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/split-apk/debug/slices/slice_4.apk"
+        location="/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/split-apk/debug/slices/slice_0.apk"
         type="SPLIT" />
     <artifact
-        location="/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/split-apk/debug/slices/slice_5.apk"
+        location="/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/split-apk/debug/slices/slice_2.apk"
+        type="SPLIT" />
+    <artifact
+        location="/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/split-apk/debug/slices/slice_4.apk"
         type="SPLIT" />
     <artifact
         location="/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/split-apk/debug/slices/slice_7.apk"
         type="SPLIT" />
     <artifact
+        location="/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/split-apk/debug/slices/slice_8.apk"
+        type="SPLIT" />
+    <artifact
         location="/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/split-apk/debug/slices/slice_9.apk"
         type="SPLIT" />
     <artifact
-        location="/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/split-apk/debug/slices/slice_8.apk"
+        location="/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/split-apk/debug/slices/slice_5.apk"
         type="SPLIT" />
     <artifact
         location="/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/instant-run-apk/debug/pixelPileDriver-debug.apk"
@@ -67,11 +64,8 @@
     <build
         build-mode="FULL"
         ir-eligibility="FIELD_TYPE_CHANGE"
-        timestamp="1564354610509"
+        timestamp="1571021449488"
         verifier="COLD_SWAP_REQUESTED" >
-        <artifact
-            location="/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/resources/instant-run/debug/resources-debug.apk"
-            type="SPLIT" />
         <artifact
             location="/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/split-apk/debug/dep/dependencies.apk"
             type="SPLIT" />
@@ -79,31 +73,31 @@
             location="/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/split-apk/debug/slices/slice_1.apk"
             type="SPLIT" />
         <artifact
-            location="/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/split-apk/debug/slices/slice_2.apk"
-            type="SPLIT" />
-        <artifact
             location="/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/split-apk/debug/slices/slice_6.apk"
-            type="SPLIT" />
-        <artifact
-            location="/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/split-apk/debug/slices/slice_0.apk"
             type="SPLIT" />
         <artifact
             location="/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/split-apk/debug/slices/slice_3.apk"
             type="SPLIT" />
         <artifact
-            location="/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/split-apk/debug/slices/slice_4.apk"
+            location="/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/split-apk/debug/slices/slice_0.apk"
             type="SPLIT" />
         <artifact
-            location="/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/split-apk/debug/slices/slice_5.apk"
+            location="/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/split-apk/debug/slices/slice_2.apk"
+            type="SPLIT" />
+        <artifact
+            location="/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/split-apk/debug/slices/slice_4.apk"
             type="SPLIT" />
         <artifact
             location="/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/split-apk/debug/slices/slice_7.apk"
             type="SPLIT" />
         <artifact
+            location="/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/split-apk/debug/slices/slice_8.apk"
+            type="SPLIT" />
+        <artifact
             location="/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/split-apk/debug/slices/slice_9.apk"
             type="SPLIT" />
         <artifact
-            location="/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/split-apk/debug/slices/slice_8.apk"
+            location="/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/split-apk/debug/slices/slice_5.apk"
             type="SPLIT" />
         <artifact
             location="/Users/al/Documents/workspace 2/PixelAnimate2/pixelPileDriver/build/intermediates/instant-run-apk/debug/pixelPileDriver-debug.apk"
