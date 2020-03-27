@@ -454,7 +454,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
       //private static int APKExpMainVersion = 80;
       //private static int APKExpPatchVersion = 84; //put the version of the APK exp file, not the current version of this code!
       private static int APKExpMainVersion = 109; 
-      private static int APKExpPatchVersion = 116; //put the version of the APK exp file, not the current version of this code!
+      private static int APKExpPatchVersion = 115; //put the version of the APK exp file, not the current version of this code!
       // during a release, somehow google play made both version 100 so just sticking with it
       private static Long APKExpMainFileSize = 38775464L; //old one 32279235L; 44238062 ; 38896384; 38,896,384, 38775464
       private static Long APKExpPatchFileSize = 2681993L;  //799352L for 109, 566985L new test one   502035L the original 63 is 268398L 6785 ; 808135
@@ -1112,6 +1112,13 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	     gridview = (GridView) findViewById(R.id.gridview);
 	     list = new ListAdapter(this, items);
 	     gridview.setAdapter(list);
+
+
+		//ViewGroup.LayoutParams layoutParams = gridview.getLayoutParams();
+		//layoutParams.height = 100; //this is in pixels
+		//layoutParams.width = 128; //this is in pixels
+		//gridview.setLayoutParams(layoutParams);
+
 	     
 	     int numColumns = 2; //default
 	     if (targetScreenResolution < 481) {  //my droidX is 480 width as an example, samsung gs4 and gs4 is 1080 width, nexus 4 is 768, nexus 7 original is 800
@@ -1127,7 +1134,11 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	     //nexus4 is 800
 	  
 	    // gridview.setFastScrollEnabled(true);  //with this one, we're getting a CRASH
-	     
+
+
+
+
+
 	      gridview.setKeepScreenOn(false);
 	      gifView = (GifView) findViewById(R.id.gifView); //gifview takes care of the gif decoding
 	      gifView.setGif(R.drawable.zzzblank);  //code will crash if a dummy gif is not loaded initially
@@ -1651,6 +1662,11 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 		  if (!GIF128dir.exists()) {
 			  GIF128dir.mkdirs();
 		  }
+
+		  File gif128Sourcedir = new File(GIF128Path + "gifsource");
+		  if (!gif128Sourcedir.exists()) {
+			  gif128Sourcedir.mkdirs();
+		  }
 		  	
 		File PNG16dir = new File(PNG16Path);
 		if (!PNG16dir.exists()) {
@@ -1687,11 +1703,18 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 			GIF64decodeddir.mkdirs();
 		}
 
+	   File GIF128decodeddir = new File(GIF128Path + "decoded");
+	   if (!GIF128decodeddir.exists()) {
+		  GIF128decodeddir.mkdirs();
+	   }
+
 		  	copyArt(); //copy the .png and .gif files (mainly png) because we want to decode first
 		  	copyGIFDecoded();  //copy the decoded files
 			copyPNG();  //copy the png files
 			copyGIF64();
 		    copyGIF128();
+		    copyGIF128Source();
+		    copyGIF128Decoded();
 			copyGIF16();
 			copyPNG64();
 		    copyPNG128();
@@ -1720,7 +1743,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	  }
 	  
 		//********** the copy functions
-	  
+
 		private void copyArt() {
 	    	
 	    	AssetManager assetManager = getResources().getAssets();
@@ -1828,7 +1851,39 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	            }       
 	        }
 	    } //end copy gifsource
-		
+
+		 private void copyGIF128Source() {
+
+			 AssetManager assetManager = getResources().getAssets();
+			 String[] files = null;
+			 try {
+				 files = assetManager.list("gif128/gifsource");
+			 } catch (Exception e) {
+				 Log.e("read clipart ERROR", e.toString());
+				 e.printStackTrace();
+			 }
+			 for(int i=0; i<files.length; i++) {
+				 progress_status ++;
+				 publishProgress(progress_status);
+				 InputStream in = null;
+				 OutputStream out = null;
+				 try {
+					 in = assetManager.open("gif128/gifsource/" + files[i]);
+					 out = new FileOutputStream(GIF128Path + "gifsource/" + files[i]);
+					 copyFile(in, out);
+					 in.close();
+					 in = null;
+					 out.flush();
+					 out.close();
+					 out = null;
+
+				 } catch(Exception e) {
+					 Log.e("copy clipart ERROR", e.toString());
+					 e.printStackTrace();
+				 }
+			 }
+		 }
+
 private void copyGIF64Source() {
 	    	
 	    	AssetManager assetManager = getResources().getAssets();
@@ -1895,6 +1950,40 @@ private void copyGIF64Source() {
 	            }       
 	        }
 	    } //end copy gif decoded
+
+		 private void copyGIF128Decoded() {
+
+			 AssetManager assetManager = getResources().getAssets();
+			 String[] files = null;
+			 try {
+				 files = assetManager.list("gif128/decoded");
+			 } catch (Exception e) {
+				 Log.e("read clipart ERROR", e.toString());
+				 e.printStackTrace();
+			 }
+			 for(int i=0; i<files.length; i++) {
+				 progress_status ++;
+				 publishProgress(progress_status);
+				 InputStream in = null;
+				 OutputStream out = null;
+				 try {
+					 in = assetManager.open("gif128/decoded/" + files[i]);
+					 out = new FileOutputStream(GIF128Path + "decoded/" + files[i]);
+					 copyFile(in, out);
+					 in.close();
+					 in = null;
+					 out.flush();
+					 out.close();
+					 out = null;
+
+					 //no need to register these with mediascanner as these are internal gifs , the workaround for the gifs with a black frame as the first frame
+
+				 } catch(Exception e) {
+					 Log.e("copy clipart ERROR", e.toString());
+					 e.printStackTrace();
+				 }
+			 }
+		 }
 		
    private void copyPNG() {
 	    	
@@ -3833,15 +3922,21 @@ public class UnFavoriteGIFMoveAsync extends AsyncTask<Void, Integer, Void>{
 			        	decodedDirPath = userGIFPath + "decoded";
 			        	gifPath_ = userGIFPath;
 			        }
+
 			        else if (PixelDirName_.equals("gif64")) {
 			        	decodedDirPath = GIF64Path + "decoded";
 			        	gifPath_ = GIF64Path;
 			        }
+
+					else if (PixelDirName_.equals("gif128")) {
+						decodedDirPath = GIF128Path + "decoded";
+						gifPath_ = GIF128Path;
+					}
 			        
 			        else if (PixelDirName_.equals("gif16")) {
 			        	decodedDirPath = GIF16Path + "decoded";
 			        	gifPath_ = GIF16Path;
-			      }
+			        }
 			        
 			        else if (PixelDirName_.equals("favgif")) {
 			        	decodedDirPath = FavGIFPath + "decoded";
@@ -4667,7 +4762,7 @@ public class UnFavoriteGIFMoveAsync extends AsyncTask<Void, Integer, Void>{
 	private static void showDecoding()  {
 		
 	     //TO DO change this later, it's not a good design, we should do a bitmap auto resize instead, for now we have to remember to change this if we add a matrix panel
-		
+
 		// switch (matrix_number) {  //get this from the preferences
 		 switch (matrix_model) {  //get this from the preferences
 	     case 0:
@@ -4714,8 +4809,36 @@ public class UnFavoriteGIFMoveAsync extends AsyncTask<Void, Integer, Void>{
 	    	 break;
 	     case 14:
 	    	 BitmapInputStream = context.getResources().openRawResource(R.raw.decoding64by64); 
-	    	 break;	 
-	     default:	    		 
+	    	 break;
+		 case 15:
+			 BitmapInputStream = context.getResources().openRawResource(R.raw.decoding128by32);
+			 break;
+		 case 16:
+			 BitmapInputStream = context.getResources().openRawResource(R.raw.decoding128by32);
+			 break;
+		 case 18:
+			 BitmapInputStream = context.getResources().openRawResource(R.raw.decoding64by32);
+			 break;
+		 case 19:
+			 BitmapInputStream = context.getResources().openRawResource(R.raw.decoding64by64);
+			 break;
+		 case 20:
+			 BitmapInputStream = context.getResources().openRawResource(R.raw.decoding32);
+			 break;
+		 case 21:
+			 BitmapInputStream = context.getResources().openRawResource(R.raw.decoding32);
+			 break;
+		 case 22:
+			 BitmapInputStream = context.getResources().openRawResource(R.raw.decoding64by32);
+			 break;
+		 case 23:
+			 BitmapInputStream = context.getResources().openRawResource(R.raw.decoding64by64);
+			 break;
+		 case 24:
+			 BitmapInputStream = context.getResources().openRawResource(R.raw.decoding128by32);
+			 break;
+
+			 default:
 	    	 BitmapInputStream = context.getResources().openRawResource(R.raw.decoding32);
 	     }
 		

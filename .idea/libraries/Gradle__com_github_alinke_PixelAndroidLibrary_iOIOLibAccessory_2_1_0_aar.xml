@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.alinke.PixelAndroidLibrary:iOIOLibAccessory:2.1.0@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/f475da9858e6d2480ee4e348dd7f77f9/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/f475da9858e6d2480ee4e348dd7f77f9/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.alinke.PixelAndroidLibrary/iOIOLibAccessory/2.1.0/70fa12b52d3aac8159f59efd628d827adee0d175/iOIOLibAccessory-2.1.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
