@@ -1277,12 +1277,12 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	            	//now let's check if our APK Exp files are in order
 	            	//expansionFileVersion();
 	            	
-	            	if (DisableNewArtCheck_) {  //then the user doesn't want us to check for new art so just continue the program
+	            	//if (DisableNewArtCheck_) {  //then the user doesn't want us to check for new art so just continue the program
 	            		continueOnCreate();
-	            	}
-	            	else {
-	            		LookForAPKExpFiles();
-	            	}
+	            	//}
+	            	//else {
+	            	//	LookForAPKExpFiles();
+	            	//}
 	            }
    
         } else  {
@@ -3103,7 +3103,11 @@ private void copyGIF64Source() {
 	   SlideShowLengthGIFFavs = b;
 	  
 	   list = new ListAdapter(this, items);
+
 	   gridview.setAdapter(list);
+
+
+
 	   gridview.setKeepScreenOn(false);
 	   //??? added these two lines, did it break something?
 	   gridview.setOnItemClickListener(MainActivity.this);
